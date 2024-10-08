@@ -8,6 +8,7 @@ class Api {
   final String name;
   final sw.Spec _spec;
   final _complexTypes = <ComplexType>[];
+  final _aliasTypes = <AliasType>[];
   final _topLevelEnums = <String, EnumDartType>{};
   final TypeAliases typeAliases;
   late Service _service;
@@ -54,12 +55,15 @@ class Api {
       }
     }
 
-    // Search for top-level enum first
+    // Search for top-level enum first & aliases
     for (var definition in _spec.components.schemas.entries) {
       var schema = definition.value;
       if (schema.enums != null) {
         var enumName = definition.key;
         _topLevelEnums[enumName] = EnumDartType(this, null, enumName, schema);
+      } else if (AliasType.types.keys.contains(schema.type)) {
+        _aliasTypes
+            .add(AliasType(this, _typeNameToDartType(definition.key), schema));
       }
     }
 
@@ -67,7 +71,7 @@ class Api {
       var definitionName = definitionEntry.key;
       var definition = definitionEntry.value;
 
-      if (definition.type != 'string') {
+      if (!AliasType.types.keys.contains(definition.type)) {
         _complexTypes.add(
             ComplexType(this, _typeNameToDartType(definitionName), definition));
       }
@@ -79,6 +83,11 @@ class Api {
     if (topEnum != null) {
       return topEnum;
     }
+    var aliasType = _aliasTypes.firstWhereOrNull((a) => a.name == raw);
+    if (aliasType != null) {
+      return aliasType;
+    }
+
     return DartType(this, _typeNameToDartType(raw));
   }
 
@@ -93,12 +102,13 @@ class Api {
       }
 
       var typeName = ref.replaceAll('#/components/schemas/', '');
-      var complexType = _spec.components.schemas[typeName]!;
-      if (const ['string'].contains(complexType.type)) {
-        return parseDartType(complexType.type!);
-      } else {
-        return parseDartType(typeName);
+
+      var aliasType = _aliasTypes.firstWhereOrNull((e) => e.name == typeName);
+      if (aliasType != null) {
+        return aliasType;
       }
+
+      return parseDartType(typeName);
     } else if (type == 'array') {
       return ListDartType(this, typeFromSchema(schema.items!));
     } else if (type == 'object') {
@@ -158,8 +168,6 @@ class Api {
   String toCode() {
     final buffer = StringBuffer();
 
-    var className = '${name.words.toUpperCamel()}Api';
-
     buffer.writeln('''
 // Generated code - Do not edit manually
 
@@ -171,15 +179,18 @@ import 'api_utils.dart';
     buffer.writeln(_service.toCode());
     buffer.writeln();
 
-    var generatedClasses = <String>[];
     for (var topLevelEnum
         in _topLevelEnums.values.stableSortedBy((e) => e.name)) {
       buffer.writeln(topLevelEnum.toCode());
       buffer.writeln();
     }
     for (var complexType in _complexTypes.stableSortedBy((e) => e.className)) {
-      generatedClasses.add(complexType.className);
       buffer.writeln(complexType.toCode());
+      buffer.writeln();
+    }
+
+    for (var aliasType in _aliasTypes.stableSortedBy((e) => e.name)) {
+      buffer.writeln(aliasType.toCode());
       buffer.writeln();
     }
 
@@ -220,7 +231,7 @@ class Service {
   late final String _className;
 
   Service(this.info, String serviceName, this.tag, TypeAliases aliases) {
-    var name = '${serviceName.words.toUpperCamel()}Api';
+    var name = '${serviceName.words.toUpperCamel()}Client';
     _className = aliases[name] ?? name;
   }
 
@@ -235,9 +246,10 @@ class Service {
     buffer.writeln('''
 
 class $_className {
-    final ApiClient _client;
+  final ApiClient _client;
   
-  $_className(this._client);
+  $_className(Client httpClient, Uri baseUri, {required String? apiKey}):
+    _client = ApiClient(baseUri, httpClient, authorization: apiKey);
 ''');
 
     for (var operation in operations) {
@@ -302,8 +314,14 @@ class Operation {
     for (final parameter in allParameters) {
       var parameterType = _api.typeFromParameter(parameter);
 
+      var parameterName = parameter.name;
+      if (parameter.location == sw.ParameterLocation.header) {
+        parameterName = _parameterNameForHeader(parameterName);
+      }
+      parameterName = dartIdentifier(parameterName);
+
       encodedParameters.add(
-          "${parameter.required && namedParameterMode ? 'required' : ''} ${parameterType.toString()}${parameter.required ? '' : '?'} ${dartIdentifier(parameter.name)}");
+          "${parameter.required && namedParameterMode ? 'required' : ''} ${parameterType.toString()}${parameter.required ? '' : '?'} $parameterName");
     }
     if (body != null) {
       encodedParameters.add(
@@ -433,9 +451,12 @@ class Operation {
     if (parameters.isNotEmpty) {
       queryParametersCode = ', headers: {';
       for (var parameter in parameters) {
-        var defaultValue = parameter.schema?.defaultValue;
-
-        queryParametersCode += "'${parameter.name}': '$defaultValue', \n";
+        var parameterName =
+            dartIdentifier(_parameterNameForHeader(parameter.name));
+        if (!parameter.required) {
+          queryParametersCode += 'if ($parameterName != null)';
+        }
+        queryParametersCode += "'${parameter.name}': $parameterName, \n";
       }
       queryParametersCode += '}';
     }
@@ -517,7 +538,7 @@ class ComplexType extends DartType {
   String get className => name;
 
   static String _toClassName(String name) {
-    return name.replaceAll(RegExp(r'[^a-z0-9_\$]', caseSensitive: false), '');
+    return name.replaceAll(RegExp(r'[^a-z0-9_$]', caseSensitive: false), '');
   }
 
   bool _isPropertyRequired(Property property) {
@@ -660,6 +681,89 @@ class ComplexType extends DartType {
     }
 
     return buffer.toString();
+  }
+}
+
+class AliasableType {
+  final String type;
+  final String defaultValue;
+  final String Function(String) castNullable;
+  final String Function(String) castNonNullable;
+
+  AliasableType(
+    this.type, {
+    required this.defaultValue,
+    String Function(String)? castNullable,
+    String Function(String)? castNonNullable,
+    String Function(String)? identifierToString,
+  })  : castNullable = castNullable ?? _defaultNullableCasting(type),
+        castNonNullable = castNonNullable ?? _defaultNonNullableCasting(type);
+
+  static AliasableType fromName(String type, String dartType) {
+    return switch (dartType) {
+      'int' => AliasableType(
+          type,
+          defaultValue: '0',
+          castNullable: (a) => '($a as num?)?.toInt() as $type?',
+          castNonNullable: (a) => '($a! as num).toInt() as $type',
+        ),
+      'num' => AliasableType(type, defaultValue: '0'),
+      'String' => AliasableType(
+          type,
+          defaultValue: "''",
+          identifierToString: (id) => id,
+        ),
+      _ => throw UnimplementedError(),
+    };
+  }
+
+  static String Function(String) _defaultNullableCasting(String type) {
+    return (accessor) => '$accessor as $type?';
+  }
+
+  static String Function(String) _defaultNonNullableCasting(String type) {
+    return (accessor) => '$accessor as $type';
+  }
+}
+
+class AliasType extends DartType {
+  final sw.Schema definition;
+
+  static const types = {'integer': 'int', 'number': 'num', 'string': 'String'};
+
+  AliasType(super.api, super.name, this.definition);
+
+  String toCode() {
+    var buffer = StringBuffer();
+    var dartType = types[definition.type]!;
+    buffer.writeln('''extension type $name($dartType value) {
+  $name.fromJson(this.value);
+  $dartType toJson() => value;
+}    
+''');
+
+    return '$buffer';
+  }
+
+  @override
+  String fromJsonCode(String accessor, Map<DartType, String> genericTypes,
+      {required bool accessorIsNullable, required bool targetIsNullable}) {
+    var dartType = types[definition.type]!;
+    var simpleType = AliasableType.fromName(name, dartType);
+
+    if (targetIsNullable && accessorIsNullable) {
+      return simpleType.castNullable(accessor);
+    } else if (!targetIsNullable && accessorIsNullable) {
+      var code = simpleType.castNullable(accessor);
+      var defaultValue = simpleType.defaultValue;
+      if (defaultValue.isNotEmpty) {
+        return '($code ?? ${simpleType.defaultValue}) as $name';
+      } else {
+        return code;
+      }
+    } else {
+      return simpleType.castNonNullable(accessor);
+    }
   }
 }
 
@@ -1061,11 +1165,10 @@ class PropertyName {
 
 String _normalizeOperationId(sw.Path path) {
   var id = path.operationId;
-  String? name;
   if (id != null) {
-    name = id.split('.').last.split('_').first;
+    return id;
   }
-  name ??= path.summary;
+  var name = path.summary;
   return name.words.toLowerCamel();
 }
 
@@ -1075,8 +1178,12 @@ bool _isObsolete(String? comment) =>
 extension<T> on Iterable<T> {
   List<T> stableSortedBy<K extends Comparable<K>>(K Function(T element) keyOf) {
     var elements = [...this];
-    mergeSort(elements,
-        compare: (a, b) => keyOf(a as T).compareTo(keyOf(b as T)));
+    mergeSort(elements, compare: (a, b) => keyOf(a).compareTo(keyOf(b)));
     return elements;
   }
+}
+
+String _parameterNameForHeader(String name) {
+  assert(name == 'X-FusionAuth-TenantId');
+  return 'tenantIdScope';
 }

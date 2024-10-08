@@ -1,11 +1,10 @@
 name: fusionauth_api
-description: A starting point for Dart libraries or applications.
+description: A Fusionauth Dart client library generated from the OpenApi Specification.
 version: 1.0.0
 
 environment:
   sdk: ^3.5.3
 
-# Add regular dependencies here.
 dependencies:
   http:
   path:
