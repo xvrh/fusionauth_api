@@ -706,7 +706,7 @@ class FusionauthApi {
   }
 
   /// Updates the OAuth scope with the given Id for the application.
-  Future<ApplicationOAuthScopeResponse> updateoAuthScopeWithId(
+  Future<ApplicationOAuthScopeResponse> updateOAuthScopeWithId(
       {required String applicationId,
       required String scopeId,
       String? tenantIdScope,
@@ -6575,11 +6575,13 @@ class APIKey {
   factory APIKey.fromJson(Map<String, Object?> json) {
     return APIKey(
       id: json[r'id'] as String?,
-      insertInstant: (json[r'insertInstant'] as num?)?.toInt(),
+      insertInstant:
+          (json[r'insertInstant'] as num?)?.toInt() as ZonedDateTime?,
       ipAccessControlListId: json[r'ipAccessControlListId'] as String?,
       key: json[r'key'] as String?,
       keyManager: json[r'keyManager'] as bool? ?? false,
-      lastUpdateInstant: (json[r'lastUpdateInstant'] as num?)?.toInt(),
+      lastUpdateInstant:
+          (json[r'lastUpdateInstant'] as num?)?.toInt() as ZonedDateTime?,
       metaData: json[r'metaData'] != null
           ? APIKeyMetaData.fromJson(json[r'metaData']! as Map<String, Object?>)
           : null,
@@ -6913,7 +6915,7 @@ class ActionData {
           [],
       comment: json[r'comment'] as String?,
       emailUser: json[r'emailUser'] as bool? ?? false,
-      expiry: (json[r'expiry'] as num?)?.toInt(),
+      expiry: (json[r'expiry'] as num?)?.toInt() as ZonedDateTime?,
       notifyUser: json[r'notifyUser'] as bool? ?? false,
       option: json[r'option'] as String?,
       reasonId: json[r'reasonId'] as String?,
@@ -7220,12 +7222,14 @@ class AppleIdentityProvider {
           json[r'applicationConfiguration'] as Map<String, Object?>?,
       debug: json[r'debug'] as bool? ?? false,
       id: json[r'id'] as String?,
-      insertInstant: (json[r'insertInstant'] as num?)?.toInt(),
+      insertInstant:
+          (json[r'insertInstant'] as num?)?.toInt() as ZonedDateTime?,
       lambdaConfiguration: json[r'lambdaConfiguration'] != null
           ? ProviderLambdaConfiguration.fromJson(
               json[r'lambdaConfiguration']! as Map<String, Object?>)
           : null,
-      lastUpdateInstant: (json[r'lastUpdateInstant'] as num?)?.toInt(),
+      lastUpdateInstant:
+          (json[r'lastUpdateInstant'] as num?)?.toInt() as ZonedDateTime?,
       linkingStrategy: json[r'linkingStrategy'] != null
           ? IdentityProviderLinkingStrategy.fromValue(
               json[r'linkingStrategy']! as String)
@@ -7456,7 +7460,8 @@ class Application {
               json[r'formConfiguration']! as Map<String, Object?>)
           : null,
       id: json[r'id'] as String?,
-      insertInstant: (json[r'insertInstant'] as num?)?.toInt(),
+      insertInstant:
+          (json[r'insertInstant'] as num?)?.toInt() as ZonedDateTime?,
       jwtConfiguration: json[r'jwtConfiguration'] != null
           ? JWTConfiguration.fromJson(
               json[r'jwtConfiguration']! as Map<String, Object?>)
@@ -7465,7 +7470,8 @@ class Application {
           ? LambdaConfiguration.fromJson(
               json[r'lambdaConfiguration']! as Map<String, Object?>)
           : null,
-      lastUpdateInstant: (json[r'lastUpdateInstant'] as num?)?.toInt(),
+      lastUpdateInstant:
+          (json[r'lastUpdateInstant'] as num?)?.toInt() as ZonedDateTime?,
       loginConfiguration: json[r'loginConfiguration'] != null
           ? LoginConfiguration.fromJson(
               json[r'loginConfiguration']! as Map<String, Object?>)
@@ -8159,8 +8165,10 @@ class ApplicationOAuthScope {
       defaultConsentMessage: json[r'defaultConsentMessage'] as String?,
       description: json[r'description'] as String?,
       id: json[r'id'] as String?,
-      insertInstant: (json[r'insertInstant'] as num?)?.toInt(),
-      lastUpdateInstant: (json[r'lastUpdateInstant'] as num?)?.toInt(),
+      insertInstant:
+          (json[r'insertInstant'] as num?)?.toInt() as ZonedDateTime?,
+      lastUpdateInstant:
+          (json[r'lastUpdateInstant'] as num?)?.toInt() as ZonedDateTime?,
       name: json[r'name'] as String?,
       required: json[r'required'] as bool? ?? false,
     );
@@ -8475,10 +8483,12 @@ class ApplicationRole {
     return ApplicationRole(
       description: json[r'description'] as String?,
       id: json[r'id'] as String?,
-      insertInstant: (json[r'insertInstant'] as num?)?.toInt(),
+      insertInstant:
+          (json[r'insertInstant'] as num?)?.toInt() as ZonedDateTime?,
       isDefault: json[r'isDefault'] as bool? ?? false,
       isSuperRole: json[r'isSuperRole'] as bool? ?? false,
-      lastUpdateInstant: (json[r'lastUpdateInstant'] as num?)?.toInt(),
+      lastUpdateInstant:
+          (json[r'lastUpdateInstant'] as num?)?.toInt() as ZonedDateTime?,
       name: json[r'name'] as String?,
     );
   }
@@ -8852,7 +8862,8 @@ class AuditLog {
     return AuditLog(
       data: json[r'data'] as Map<String, Object?>?,
       id: (json[r'id'] as num?)?.toInt(),
-      insertInstant: (json[r'insertInstant'] as num?)?.toInt(),
+      insertInstant:
+          (json[r'insertInstant'] as num?)?.toInt() as ZonedDateTime?,
       insertUser: json[r'insertUser'] as String?,
       message: json[r'message'] as String?,
       newValue: json[r'newValue'] as Map<String, Object?>?,
@@ -8974,7 +8985,8 @@ class AuditLogCreateEvent {
       auditLog: json[r'auditLog'] != null
           ? AuditLog.fromJson(json[r'auditLog']! as Map<String, Object?>)
           : null,
-      createInstant: (json[r'createInstant'] as num?)?.toInt(),
+      createInstant:
+          (json[r'createInstant'] as num?)?.toInt() as ZonedDateTime?,
       id: json[r'id'] as String?,
       info: json[r'info'] != null
           ? EventInfo.fromJson(json[r'info']! as Map<String, Object?>)
@@ -9049,7 +9061,7 @@ class AuditLogExportRequest {
               json[r'criteria']! as Map<String, Object?>)
           : null,
       dateTimeSecondsFormat: json[r'dateTimeSecondsFormat'] as String?,
-      zoneId: json[r'zoneId'] as String?,
+      zoneId: json[r'zoneId'] as ZoneId?,
     );
   }
 
@@ -9180,12 +9192,12 @@ class AuditLogSearchCriteria {
 
   factory AuditLogSearchCriteria.fromJson(Map<String, Object?> json) {
     return AuditLogSearchCriteria(
-      end: (json[r'end'] as num?)?.toInt(),
+      end: (json[r'end'] as num?)?.toInt() as ZonedDateTime?,
       message: json[r'message'] as String?,
       newValue: json[r'newValue'] as String?,
       oldValue: json[r'oldValue'] as String?,
       reason: json[r'reason'] as String?,
-      start: (json[r'start'] as num?)?.toInt(),
+      start: (json[r'start'] as num?)?.toInt() as ZonedDateTime?,
       user: json[r'user'] as String?,
       numberOfResults: (json[r'numberOfResults'] as num?)?.toInt(),
       orderBy: json[r'orderBy'] as String?,
@@ -9502,8 +9514,10 @@ class BaseConnectorConfiguration {
       data: json[r'data'] as Map<String, Object?>?,
       debug: json[r'debug'] as bool? ?? false,
       id: json[r'id'] as String?,
-      insertInstant: (json[r'insertInstant'] as num?)?.toInt(),
-      lastUpdateInstant: (json[r'lastUpdateInstant'] as num?)?.toInt(),
+      insertInstant:
+          (json[r'insertInstant'] as num?)?.toInt() as ZonedDateTime?,
+      lastUpdateInstant:
+          (json[r'lastUpdateInstant'] as num?)?.toInt() as ZonedDateTime?,
       name: json[r'name'] as String?,
       type: json[r'type'] != null
           ? ConnectorType.fromValue(json[r'type']! as String)
@@ -9681,7 +9695,8 @@ class BaseEvent {
 
   factory BaseEvent.fromJson(Map<String, Object?> json) {
     return BaseEvent(
-      createInstant: (json[r'createInstant'] as num?)?.toInt(),
+      createInstant:
+          (json[r'createInstant'] as num?)?.toInt() as ZonedDateTime?,
       id: json[r'id'] as String?,
       info: json[r'info'] != null
           ? EventInfo.fromJson(json[r'info']! as Map<String, Object?>)
@@ -9778,7 +9793,7 @@ class BaseExportRequest {
   factory BaseExportRequest.fromJson(Map<String, Object?> json) {
     return BaseExportRequest(
       dateTimeSecondsFormat: json[r'dateTimeSecondsFormat'] as String?,
-      zoneId: json[r'zoneId'] as String?,
+      zoneId: json[r'zoneId'] as ZoneId?,
     );
   }
 
@@ -9827,7 +9842,8 @@ class BaseGroupEvent {
       group: json[r'group'] != null
           ? Group.fromJson(json[r'group']! as Map<String, Object?>)
           : null,
-      createInstant: (json[r'createInstant'] as num?)?.toInt(),
+      createInstant:
+          (json[r'createInstant'] as num?)?.toInt() as ZonedDateTime?,
       id: json[r'id'] as String?,
       info: json[r'info'] != null
           ? EventInfo.fromJson(json[r'info']! as Map<String, Object?>)
@@ -10035,8 +10051,10 @@ class BaseMessengerConfiguration {
       data: json[r'data'] as Map<String, Object?>?,
       debug: json[r'debug'] as bool? ?? false,
       id: json[r'id'] as String?,
-      insertInstant: (json[r'insertInstant'] as num?)?.toInt(),
-      lastUpdateInstant: (json[r'lastUpdateInstant'] as num?)?.toInt(),
+      insertInstant:
+          (json[r'insertInstant'] as num?)?.toInt() as ZonedDateTime?,
+      lastUpdateInstant:
+          (json[r'lastUpdateInstant'] as num?)?.toInt() as ZonedDateTime?,
       name: json[r'name'] as String?,
       transport: json[r'transport'] as String?,
       type: json[r'type'] != null
@@ -10168,7 +10186,8 @@ class BaseUserEvent {
       user: json[r'user'] != null
           ? User.fromJson(json[r'user']! as Map<String, Object?>)
           : null,
-      createInstant: (json[r'createInstant'] as num?)?.toInt(),
+      createInstant:
+          (json[r'createInstant'] as num?)?.toInt() as ZonedDateTime?,
       id: json[r'id'] as String?,
       info: json[r'info'] != null
           ? EventInfo.fromJson(json[r'info']! as Map<String, Object?>)
@@ -10442,8 +10461,8 @@ class CertificateInformation {
       sha256Fingerprint: json[r'sha256Fingerprint'] as String?,
       sha256Thumbprint: json[r'sha256Thumbprint'] as String?,
       subject: json[r'subject'] as String?,
-      validFrom: (json[r'validFrom'] as num?)?.toInt(),
-      validTo: (json[r'validTo'] as num?)?.toInt(),
+      validFrom: (json[r'validFrom'] as num?)?.toInt() as ZonedDateTime?,
+      validTo: (json[r'validTo'] as num?)?.toInt() as ZonedDateTime?,
     );
   }
 
@@ -10933,8 +10952,10 @@ class Consent {
           ? EmailPlus.fromJson(json[r'emailPlus']! as Map<String, Object?>)
           : null,
       id: json[r'id'] as String?,
-      insertInstant: (json[r'insertInstant'] as num?)?.toInt(),
-      lastUpdateInstant: (json[r'lastUpdateInstant'] as num?)?.toInt(),
+      insertInstant:
+          (json[r'insertInstant'] as num?)?.toInt() as ZonedDateTime?,
+      lastUpdateInstant:
+          (json[r'lastUpdateInstant'] as num?)?.toInt() as ZonedDateTime?,
       multipleValuesAllowed: json[r'multipleValuesAllowed'] as bool? ?? false,
       name: json[r'name'] as String?,
       values: (json[r'values'] as List<Object?>?)
@@ -11445,7 +11466,8 @@ class DeviceInfo {
     return DeviceInfo(
       description: json[r'description'] as String?,
       lastAccessedAddress: json[r'lastAccessedAddress'] as String?,
-      lastAccessedInstant: (json[r'lastAccessedInstant'] as num?)?.toInt(),
+      lastAccessedInstant:
+          (json[r'lastAccessedInstant'] as num?)?.toInt() as ZonedDateTime?,
       name: json[r'name'] as String?,
       type: json[r'type'] as String?,
     );
@@ -12345,8 +12367,10 @@ class EmailTemplate {
       defaultTextTemplate: json[r'defaultTextTemplate'] as String?,
       fromEmail: json[r'fromEmail'] as String?,
       id: json[r'id'] as String?,
-      insertInstant: (json[r'insertInstant'] as num?)?.toInt(),
-      lastUpdateInstant: (json[r'lastUpdateInstant'] as num?)?.toInt(),
+      insertInstant:
+          (json[r'insertInstant'] as num?)?.toInt() as ZonedDateTime?,
+      lastUpdateInstant:
+          (json[r'lastUpdateInstant'] as num?)?.toInt() as ZonedDateTime?,
       localizedFromNames: json[r'localizedFromNames'] != null
           ? LocalizedStrings.fromJson(
               json[r'localizedFromNames']! as Map<String, Object?>)
@@ -12793,8 +12817,10 @@ class Entity {
       clientId: json[r'clientId'] as String?,
       clientSecret: json[r'clientSecret'] as String?,
       id: json[r'id'] as String?,
-      insertInstant: (json[r'insertInstant'] as num?)?.toInt(),
-      lastUpdateInstant: (json[r'lastUpdateInstant'] as num?)?.toInt(),
+      insertInstant:
+          (json[r'insertInstant'] as num?)?.toInt() as ZonedDateTime?,
+      lastUpdateInstant:
+          (json[r'lastUpdateInstant'] as num?)?.toInt() as ZonedDateTime?,
       name: json[r'name'] as String?,
       parentId: json[r'parentId'] as String?,
       tenantId: json[r'tenantId'] as String?,
@@ -12905,8 +12931,10 @@ class EntityGrant {
           ? Entity.fromJson(json[r'entity']! as Map<String, Object?>)
           : null,
       id: json[r'id'] as String?,
-      insertInstant: (json[r'insertInstant'] as num?)?.toInt(),
-      lastUpdateInstant: (json[r'lastUpdateInstant'] as num?)?.toInt(),
+      insertInstant:
+          (json[r'insertInstant'] as num?)?.toInt() as ZonedDateTime?,
+      lastUpdateInstant:
+          (json[r'lastUpdateInstant'] as num?)?.toInt() as ZonedDateTime?,
       permissions:
           (json[r'permissions'] as List<Object?>?)?.map((i) => i).toList() ??
               [],
@@ -13484,12 +13512,14 @@ class EntityType {
     return EntityType(
       data: json[r'data'] as Map<String, Object?>?,
       id: json[r'id'] as String?,
-      insertInstant: (json[r'insertInstant'] as num?)?.toInt(),
+      insertInstant:
+          (json[r'insertInstant'] as num?)?.toInt() as ZonedDateTime?,
       jwtConfiguration: json[r'jwtConfiguration'] != null
           ? EntityJWTConfiguration.fromJson(
               json[r'jwtConfiguration']! as Map<String, Object?>)
           : null,
-      lastUpdateInstant: (json[r'lastUpdateInstant'] as num?)?.toInt(),
+      lastUpdateInstant:
+          (json[r'lastUpdateInstant'] as num?)?.toInt() as ZonedDateTime?,
       name: json[r'name'] as String?,
       permissions: (json[r'permissions'] as List<Object?>?)
               ?.map((i) => EntityTypePermission.fromJson(
@@ -13577,9 +13607,11 @@ class EntityTypePermission {
       data: json[r'data'] as Map<String, Object?>?,
       description: json[r'description'] as String?,
       id: json[r'id'] as String?,
-      insertInstant: (json[r'insertInstant'] as num?)?.toInt(),
+      insertInstant:
+          (json[r'insertInstant'] as num?)?.toInt() as ZonedDateTime?,
       isDefault: json[r'isDefault'] as bool? ?? false,
-      lastUpdateInstant: (json[r'lastUpdateInstant'] as num?)?.toInt(),
+      lastUpdateInstant:
+          (json[r'lastUpdateInstant'] as num?)?.toInt() as ZonedDateTime?,
       name: json[r'name'] as String?,
     );
   }
@@ -13979,12 +14011,14 @@ class EpicGamesIdentityProvider {
           json[r'applicationConfiguration'] as Map<String, Object?>?,
       debug: json[r'debug'] as bool? ?? false,
       id: json[r'id'] as String?,
-      insertInstant: (json[r'insertInstant'] as num?)?.toInt(),
+      insertInstant:
+          (json[r'insertInstant'] as num?)?.toInt() as ZonedDateTime?,
       lambdaConfiguration: json[r'lambdaConfiguration'] != null
           ? ProviderLambdaConfiguration.fromJson(
               json[r'lambdaConfiguration']! as Map<String, Object?>)
           : null,
-      lastUpdateInstant: (json[r'lastUpdateInstant'] as num?)?.toInt(),
+      lastUpdateInstant:
+          (json[r'lastUpdateInstant'] as num?)?.toInt() as ZonedDateTime?,
       linkingStrategy: json[r'linkingStrategy'] != null
           ? IdentityProviderLinkingStrategy.fromValue(
               json[r'linkingStrategy']! as String)
@@ -14360,7 +14394,8 @@ class EventLog {
   factory EventLog.fromJson(Map<String, Object?> json) {
     return EventLog(
       id: (json[r'id'] as num?)?.toInt(),
-      insertInstant: (json[r'insertInstant'] as num?)?.toInt(),
+      insertInstant:
+          (json[r'insertInstant'] as num?)?.toInt() as ZonedDateTime?,
       message: json[r'message'] as String?,
       type: json[r'type'] != null
           ? EventLogType.fromValue(json[r'type']! as String)
@@ -14454,7 +14489,8 @@ class EventLogCreateEvent {
       eventLog: json[r'eventLog'] != null
           ? EventLog.fromJson(json[r'eventLog']! as Map<String, Object?>)
           : null,
-      createInstant: (json[r'createInstant'] as num?)?.toInt(),
+      createInstant:
+          (json[r'createInstant'] as num?)?.toInt() as ZonedDateTime?,
       id: json[r'id'] as String?,
       info: json[r'info'] != null
           ? EventInfo.fromJson(json[r'info']! as Map<String, Object?>)
@@ -14566,9 +14602,9 @@ class EventLogSearchCriteria {
 
   factory EventLogSearchCriteria.fromJson(Map<String, Object?> json) {
     return EventLogSearchCriteria(
-      end: (json[r'end'] as num?)?.toInt(),
+      end: (json[r'end'] as num?)?.toInt() as ZonedDateTime?,
       message: json[r'message'] as String?,
-      start: (json[r'start'] as num?)?.toInt(),
+      start: (json[r'start'] as num?)?.toInt() as ZonedDateTime?,
       type: json[r'type'] != null
           ? EventLogType.fromValue(json[r'type']! as String)
           : null,
@@ -15306,12 +15342,14 @@ class ExternalJWTIdentityProvider {
           json[r'applicationConfiguration'] as Map<String, Object?>?,
       debug: json[r'debug'] as bool? ?? false,
       id: json[r'id'] as String?,
-      insertInstant: (json[r'insertInstant'] as num?)?.toInt(),
+      insertInstant:
+          (json[r'insertInstant'] as num?)?.toInt() as ZonedDateTime?,
       lambdaConfiguration: json[r'lambdaConfiguration'] != null
           ? ProviderLambdaConfiguration.fromJson(
               json[r'lambdaConfiguration']! as Map<String, Object?>)
           : null,
-      lastUpdateInstant: (json[r'lastUpdateInstant'] as num?)?.toInt(),
+      lastUpdateInstant:
+          (json[r'lastUpdateInstant'] as num?)?.toInt() as ZonedDateTime?,
       linkingStrategy: json[r'linkingStrategy'] != null
           ? IdentityProviderLinkingStrategy.fromValue(
               json[r'linkingStrategy']! as String)
@@ -15587,12 +15625,14 @@ class FacebookIdentityProvider {
           json[r'applicationConfiguration'] as Map<String, Object?>?,
       debug: json[r'debug'] as bool? ?? false,
       id: json[r'id'] as String?,
-      insertInstant: (json[r'insertInstant'] as num?)?.toInt(),
+      insertInstant:
+          (json[r'insertInstant'] as num?)?.toInt() as ZonedDateTime?,
       lambdaConfiguration: json[r'lambdaConfiguration'] != null
           ? ProviderLambdaConfiguration.fromJson(
               json[r'lambdaConfiguration']! as Map<String, Object?>)
           : null,
-      lastUpdateInstant: (json[r'lastUpdateInstant'] as num?)?.toInt(),
+      lastUpdateInstant:
+          (json[r'lastUpdateInstant'] as num?)?.toInt() as ZonedDateTime?,
       linkingStrategy: json[r'linkingStrategy'] != null
           ? IdentityProviderLinkingStrategy.fromValue(
               json[r'linkingStrategy']! as String)
@@ -15862,8 +15902,10 @@ class Family {
               .toList() ??
           [],
       id: json[r'id'] as String?,
-      insertInstant: (json[r'insertInstant'] as num?)?.toInt(),
-      lastUpdateInstant: (json[r'lastUpdateInstant'] as num?)?.toInt(),
+      insertInstant:
+          (json[r'insertInstant'] as num?)?.toInt() as ZonedDateTime?,
+      lastUpdateInstant:
+          (json[r'lastUpdateInstant'] as num?)?.toInt() as ZonedDateTime?,
     );
   }
 
@@ -16071,8 +16113,10 @@ class FamilyMember {
   factory FamilyMember.fromJson(Map<String, Object?> json) {
     return FamilyMember(
       data: json[r'data'] as Map<String, Object?>?,
-      insertInstant: (json[r'insertInstant'] as num?)?.toInt(),
-      lastUpdateInstant: (json[r'lastUpdateInstant'] as num?)?.toInt(),
+      insertInstant:
+          (json[r'insertInstant'] as num?)?.toInt() as ZonedDateTime?,
+      lastUpdateInstant:
+          (json[r'lastUpdateInstant'] as num?)?.toInt() as ZonedDateTime?,
       owner: json[r'owner'] as bool? ?? false,
       role: json[r'role'] != null
           ? FamilyRole.fromValue(json[r'role']! as String)
@@ -16349,8 +16393,10 @@ class Form {
     return Form(
       data: json[r'data'] as Map<String, Object?>?,
       id: json[r'id'] as String?,
-      insertInstant: (json[r'insertInstant'] as num?)?.toInt(),
-      lastUpdateInstant: (json[r'lastUpdateInstant'] as num?)?.toInt(),
+      insertInstant:
+          (json[r'insertInstant'] as num?)?.toInt() as ZonedDateTime?,
+      lastUpdateInstant:
+          (json[r'lastUpdateInstant'] as num?)?.toInt() as ZonedDateTime?,
       name: json[r'name'] as String?,
       steps: (json[r'steps'] as List<Object?>?)
               ?.map((i) =>
@@ -16460,9 +16506,11 @@ class FormField {
       data: json[r'data'] as Map<String, Object?>?,
       description: json[r'description'] as String?,
       id: json[r'id'] as String?,
-      insertInstant: (json[r'insertInstant'] as num?)?.toInt(),
+      insertInstant:
+          (json[r'insertInstant'] as num?)?.toInt() as ZonedDateTime?,
       key: json[r'key'] as String?,
-      lastUpdateInstant: (json[r'lastUpdateInstant'] as num?)?.toInt(),
+      lastUpdateInstant:
+          (json[r'lastUpdateInstant'] as num?)?.toInt() as ZonedDateTime?,
       name: json[r'name'] as String?,
       options: (json[r'options'] as List<Object?>?)
               ?.map((i) => i as String? ?? '')
@@ -16810,8 +16858,10 @@ class FusionAuthConnectorConfiguration {
       data: json[r'data'] as Map<String, Object?>?,
       debug: json[r'debug'] as bool? ?? false,
       id: json[r'id'] as String?,
-      insertInstant: (json[r'insertInstant'] as num?)?.toInt(),
-      lastUpdateInstant: (json[r'lastUpdateInstant'] as num?)?.toInt(),
+      insertInstant:
+          (json[r'insertInstant'] as num?)?.toInt() as ZonedDateTime?,
+      lastUpdateInstant:
+          (json[r'lastUpdateInstant'] as num?)?.toInt() as ZonedDateTime?,
       name: json[r'name'] as String?,
       type: json[r'type'] != null
           ? ConnectorType.fromValue(json[r'type']! as String)
@@ -16921,8 +16971,10 @@ class GenericConnectorConfiguration {
       data: json[r'data'] as Map<String, Object?>?,
       debug: json[r'debug'] as bool? ?? false,
       id: json[r'id'] as String?,
-      insertInstant: (json[r'insertInstant'] as num?)?.toInt(),
-      lastUpdateInstant: (json[r'lastUpdateInstant'] as num?)?.toInt(),
+      insertInstant:
+          (json[r'insertInstant'] as num?)?.toInt() as ZonedDateTime?,
+      lastUpdateInstant:
+          (json[r'lastUpdateInstant'] as num?)?.toInt() as ZonedDateTime?,
       name: json[r'name'] as String?,
       type: json[r'type'] != null
           ? ConnectorType.fromValue(json[r'type']! as String)
@@ -17077,8 +17129,10 @@ class GenericMessengerConfiguration {
       data: json[r'data'] as Map<String, Object?>?,
       debug: json[r'debug'] as bool? ?? false,
       id: json[r'id'] as String?,
-      insertInstant: (json[r'insertInstant'] as num?)?.toInt(),
-      lastUpdateInstant: (json[r'lastUpdateInstant'] as num?)?.toInt(),
+      insertInstant:
+          (json[r'insertInstant'] as num?)?.toInt() as ZonedDateTime?,
+      lastUpdateInstant:
+          (json[r'lastUpdateInstant'] as num?)?.toInt() as ZonedDateTime?,
       name: json[r'name'] as String?,
       transport: json[r'transport'] as String?,
       type: json[r'type'] != null
@@ -17346,12 +17400,14 @@ class GoogleIdentityProvider {
           json[r'applicationConfiguration'] as Map<String, Object?>?,
       debug: json[r'debug'] as bool? ?? false,
       id: json[r'id'] as String?,
-      insertInstant: (json[r'insertInstant'] as num?)?.toInt(),
+      insertInstant:
+          (json[r'insertInstant'] as num?)?.toInt() as ZonedDateTime?,
       lambdaConfiguration: json[r'lambdaConfiguration'] != null
           ? ProviderLambdaConfiguration.fromJson(
               json[r'lambdaConfiguration']! as Map<String, Object?>)
           : null,
-      lastUpdateInstant: (json[r'lastUpdateInstant'] as num?)?.toInt(),
+      lastUpdateInstant:
+          (json[r'lastUpdateInstant'] as num?)?.toInt() as ZonedDateTime?,
       linkingStrategy: json[r'linkingStrategy'] != null
           ? IdentityProviderLinkingStrategy.fromValue(
               json[r'linkingStrategy']! as String)
@@ -17537,8 +17593,10 @@ class Group {
     return Group(
       data: json[r'data'] as Map<String, Object?>?,
       id: json[r'id'] as String?,
-      insertInstant: (json[r'insertInstant'] as num?)?.toInt(),
-      lastUpdateInstant: (json[r'lastUpdateInstant'] as num?)?.toInt(),
+      insertInstant:
+          (json[r'insertInstant'] as num?)?.toInt() as ZonedDateTime?,
+      lastUpdateInstant:
+          (json[r'lastUpdateInstant'] as num?)?.toInt() as ZonedDateTime?,
       name: json[r'name'] as String?,
       roles: (json[r'roles'] as List<Object?>?)
               ?.map((i) => ApplicationRole.fromJson(
@@ -17747,7 +17805,8 @@ class GroupMember {
       data: json[r'data'] as Map<String, Object?>?,
       groupId: json[r'groupId'] as String?,
       id: json[r'id'] as String?,
-      insertInstant: (json[r'insertInstant'] as num?)?.toInt(),
+      insertInstant:
+          (json[r'insertInstant'] as num?)?.toInt() as ZonedDateTime?,
       user: json[r'user'] != null
           ? User.fromJson(json[r'user']! as Map<String, Object?>)
           : null,
@@ -18607,12 +18666,14 @@ class HYPRIdentityProvider {
           json[r'applicationConfiguration'] as Map<String, Object?>?,
       debug: json[r'debug'] as bool? ?? false,
       id: json[r'id'] as String?,
-      insertInstant: (json[r'insertInstant'] as num?)?.toInt(),
+      insertInstant:
+          (json[r'insertInstant'] as num?)?.toInt() as ZonedDateTime?,
       lambdaConfiguration: json[r'lambdaConfiguration'] != null
           ? ProviderLambdaConfiguration.fromJson(
               json[r'lambdaConfiguration']! as Map<String, Object?>)
           : null,
-      lastUpdateInstant: (json[r'lastUpdateInstant'] as num?)?.toInt(),
+      lastUpdateInstant:
+          (json[r'lastUpdateInstant'] as num?)?.toInt() as ZonedDateTime?,
       linkingStrategy: json[r'linkingStrategy'] != null
           ? IdentityProviderLinkingStrategy.fromValue(
               json[r'linkingStrategy']! as String)
@@ -18729,8 +18790,9 @@ class HistoryItem {
     return HistoryItem(
       actionerUserId: json[r'actionerUserId'] as String?,
       comment: json[r'comment'] as String?,
-      createInstant: (json[r'createInstant'] as num?)?.toInt(),
-      expiry: (json[r'expiry'] as num?)?.toInt(),
+      createInstant:
+          (json[r'createInstant'] as num?)?.toInt() as ZonedDateTime?,
+      expiry: (json[r'expiry'] as num?)?.toInt() as ZonedDateTime?,
     );
   }
 
@@ -18843,8 +18905,10 @@ class IPAccessControlList {
               .toList() ??
           [],
       id: json[r'id'] as String?,
-      insertInstant: (json[r'insertInstant'] as num?)?.toInt(),
-      lastUpdateInstant: (json[r'lastUpdateInstant'] as num?)?.toInt(),
+      insertInstant:
+          (json[r'insertInstant'] as num?)?.toInt() as ZonedDateTime?,
+      lastUpdateInstant:
+          (json[r'lastUpdateInstant'] as num?)?.toInt() as ZonedDateTime?,
       name: json[r'name'] as String?,
     );
   }
@@ -19268,8 +19332,10 @@ class IdentityProviderLink {
               json[r'identityProviderType']! as String)
           : null,
       identityProviderUserId: json[r'identityProviderUserId'] as String?,
-      insertInstant: (json[r'insertInstant'] as num?)?.toInt(),
-      lastLoginInstant: (json[r'lastLoginInstant'] as num?)?.toInt(),
+      insertInstant:
+          (json[r'insertInstant'] as num?)?.toInt() as ZonedDateTime?,
+      lastLoginInstant:
+          (json[r'lastLoginInstant'] as num?)?.toInt() as ZonedDateTime?,
       tenantId: json[r'tenantId'] as String?,
       token: json[r'token'] as String?,
       userId: json[r'userId'] as String?,
@@ -20669,10 +20735,10 @@ class JWT {
   factory JWT.fromJson(Map<String, Object?> json) {
     return JWT(
       aud: json[r'aud'] as Map<String, Object?>?,
-      exp: (json[r'exp'] as num?)?.toInt(),
-      iat: (json[r'iat'] as num?)?.toInt(),
+      exp: (json[r'exp'] as num?)?.toInt() as ZonedDateTime?,
+      iat: (json[r'iat'] as num?)?.toInt() as ZonedDateTime?,
       iss: json[r'iss'] as String?,
-      nbf: (json[r'nbf'] as num?)?.toInt(),
+      nbf: (json[r'nbf'] as num?)?.toInt() as ZonedDateTime?,
       otherClaims: json[r'otherClaims'] as Map<String, Object?>?,
       sub: json[r'sub'] as String?,
       jti: json[r'jti'] as String?,
@@ -20897,7 +20963,8 @@ class JWTPublicKeyUpdateEvent {
       applicationIds:
           (json[r'applicationIds'] as List<Object?>?)?.map((i) => i).toList() ??
               [],
-      createInstant: (json[r'createInstant'] as num?)?.toInt(),
+      createInstant:
+          (json[r'createInstant'] as num?)?.toInt() as ZonedDateTime?,
       id: json[r'id'] as String?,
       info: json[r'info'] != null
           ? EventInfo.fromJson(json[r'info']! as Map<String, Object?>)
@@ -20988,7 +21055,8 @@ class JWTRefreshEvent {
       refreshToken: json[r'refreshToken'] as String?,
       token: json[r'token'] as String?,
       userId: json[r'userId'] as String?,
-      createInstant: (json[r'createInstant'] as num?)?.toInt(),
+      createInstant:
+          (json[r'createInstant'] as num?)?.toInt() as ZonedDateTime?,
       id: json[r'id'] as String?,
       info: json[r'info'] != null
           ? EventInfo.fromJson(json[r'info']! as Map<String, Object?>)
@@ -21157,7 +21225,8 @@ class JWTRefreshTokenRevokeEvent {
           ? User.fromJson(json[r'user']! as Map<String, Object?>)
           : null,
       userId: json[r'userId'] as String?,
-      createInstant: (json[r'createInstant'] as num?)?.toInt(),
+      createInstant:
+          (json[r'createInstant'] as num?)?.toInt() as ZonedDateTime?,
       id: json[r'id'] as String?,
       info: json[r'info'] != null
           ? EventInfo.fromJson(json[r'info']! as Map<String, Object?>)
@@ -21387,8 +21456,10 @@ class KafkaMessengerConfiguration {
       data: json[r'data'] as Map<String, Object?>?,
       debug: json[r'debug'] as bool? ?? false,
       id: json[r'id'] as String?,
-      insertInstant: (json[r'insertInstant'] as num?)?.toInt(),
-      lastUpdateInstant: (json[r'lastUpdateInstant'] as num?)?.toInt(),
+      insertInstant:
+          (json[r'insertInstant'] as num?)?.toInt() as ZonedDateTime?,
+      lastUpdateInstant:
+          (json[r'lastUpdateInstant'] as num?)?.toInt() as ZonedDateTime?,
       name: json[r'name'] as String?,
       transport: json[r'transport'] as String?,
       type: json[r'type'] != null
@@ -21516,13 +21587,16 @@ class Key {
           ? CertificateInformation.fromJson(
               json[r'certificateInformation']! as Map<String, Object?>)
           : null,
-      expirationInstant: (json[r'expirationInstant'] as num?)?.toInt(),
+      expirationInstant:
+          (json[r'expirationInstant'] as num?)?.toInt() as ZonedDateTime?,
       hasPrivateKey: json[r'hasPrivateKey'] as bool? ?? false,
       id: json[r'id'] as String?,
-      insertInstant: (json[r'insertInstant'] as num?)?.toInt(),
+      insertInstant:
+          (json[r'insertInstant'] as num?)?.toInt() as ZonedDateTime?,
       issuer: json[r'issuer'] as String?,
       kid: json[r'kid'] as String?,
-      lastUpdateInstant: (json[r'lastUpdateInstant'] as num?)?.toInt(),
+      lastUpdateInstant:
+          (json[r'lastUpdateInstant'] as num?)?.toInt() as ZonedDateTime?,
       length: (json[r'length'] as num?)?.toInt(),
       name: json[r'name'] as String?,
       privateKey: json[r'privateKey'] as String?,
@@ -21879,7 +21953,8 @@ class KickstartSuccessEvent {
   factory KickstartSuccessEvent.fromJson(Map<String, Object?> json) {
     return KickstartSuccessEvent(
       instanceId: json[r'instanceId'] as String?,
-      createInstant: (json[r'createInstant'] as num?)?.toInt(),
+      createInstant:
+          (json[r'createInstant'] as num?)?.toInt() as ZonedDateTime?,
       id: json[r'id'] as String?,
       info: json[r'info'] != null
           ? EventInfo.fromJson(json[r'info']! as Map<String, Object?>)
@@ -22006,8 +22081,10 @@ class LDAPConnectorConfiguration {
       data: json[r'data'] as Map<String, Object?>?,
       debug: json[r'debug'] as bool? ?? false,
       id: json[r'id'] as String?,
-      insertInstant: (json[r'insertInstant'] as num?)?.toInt(),
-      lastUpdateInstant: (json[r'lastUpdateInstant'] as num?)?.toInt(),
+      insertInstant:
+          (json[r'insertInstant'] as num?)?.toInt() as ZonedDateTime?,
+      lastUpdateInstant:
+          (json[r'lastUpdateInstant'] as num?)?.toInt() as ZonedDateTime?,
       name: json[r'name'] as String?,
       type: json[r'type'] != null
           ? ConnectorType.fromValue(json[r'type']! as String)
@@ -22163,8 +22240,10 @@ class Lambda {
           ? LambdaEngineType.fromValue(json[r'engineType']! as String)
           : null,
       id: json[r'id'] as String?,
-      insertInstant: (json[r'insertInstant'] as num?)?.toInt(),
-      lastUpdateInstant: (json[r'lastUpdateInstant'] as num?)?.toInt(),
+      insertInstant:
+          (json[r'insertInstant'] as num?)?.toInt() as ZonedDateTime?,
+      lastUpdateInstant:
+          (json[r'lastUpdateInstant'] as num?)?.toInt() as ZonedDateTime?,
       name: json[r'name'] as String?,
       type: json[r'type'] != null
           ? LambdaType.fromValue(json[r'type']! as String)
@@ -22643,12 +22722,14 @@ class LinkedInIdentityProvider {
           json[r'applicationConfiguration'] as Map<String, Object?>?,
       debug: json[r'debug'] as bool? ?? false,
       id: json[r'id'] as String?,
-      insertInstant: (json[r'insertInstant'] as num?)?.toInt(),
+      insertInstant:
+          (json[r'insertInstant'] as num?)?.toInt() as ZonedDateTime?,
       lambdaConfiguration: json[r'lambdaConfiguration'] != null
           ? ProviderLambdaConfiguration.fromJson(
               json[r'lambdaConfiguration']! as Map<String, Object?>)
           : null,
-      lastUpdateInstant: (json[r'lastUpdateInstant'] as num?)?.toInt(),
+      lastUpdateInstant:
+          (json[r'lastUpdateInstant'] as num?)?.toInt() as ZonedDateTime?,
       linkingStrategy: json[r'linkingStrategy'] != null
           ? IdentityProviderLinkingStrategy.fromValue(
               json[r'linkingStrategy']! as String)
@@ -23097,7 +23178,7 @@ class LoginPreventedResponse {
     return LoginPreventedResponse(
       actionId: json[r'actionId'] as String?,
       actionerUserId: json[r'actionerUserId'] as String?,
-      expiry: (json[r'expiry'] as num?)?.toInt(),
+      expiry: (json[r'expiry'] as num?)?.toInt() as ZonedDateTime?,
       localizedName: json[r'localizedName'] as String?,
       localizedOption: json[r'localizedOption'] as String?,
       localizedReason: json[r'localizedReason'] as String?,
@@ -23226,7 +23307,7 @@ class LoginRecordExportRequest {
               json[r'criteria']! as Map<String, Object?>)
           : null,
       dateTimeSecondsFormat: json[r'dateTimeSecondsFormat'] as String?,
-      zoneId: json[r'zoneId'] as String?,
+      zoneId: json[r'zoneId'] as ZoneId?,
     );
   }
 
@@ -23282,8 +23363,8 @@ class LoginRecordSearchCriteria {
   factory LoginRecordSearchCriteria.fromJson(Map<String, Object?> json) {
     return LoginRecordSearchCriteria(
       applicationId: json[r'applicationId'] as String?,
-      end: (json[r'end'] as num?)?.toInt(),
-      start: (json[r'start'] as num?)?.toInt(),
+      end: (json[r'end'] as num?)?.toInt() as ZonedDateTime?,
+      start: (json[r'start'] as num?)?.toInt() as ZonedDateTime?,
       userId: json[r'userId'] as String?,
       numberOfResults: (json[r'numberOfResults'] as num?)?.toInt(),
       orderBy: json[r'orderBy'] as String?,
@@ -23643,7 +23724,7 @@ class LoginResponse {
           [],
       token: json[r'token'] as String?,
       tokenExpirationInstant:
-          (json[r'tokenExpirationInstant'] as num?)?.toInt(),
+          (json[r'tokenExpirationInstant'] as num?)?.toInt() as ZonedDateTime?,
       trustToken: json[r'trustToken'] as String?,
       twoFactorId: json[r'twoFactorId'] as String?,
       twoFactorTrustId: json[r'twoFactorTrustId'] as String?,
@@ -24032,8 +24113,10 @@ class MessageTemplate {
     return MessageTemplate(
       data: json[r'data'] as Map<String, Object?>?,
       id: json[r'id'] as String?,
-      insertInstant: (json[r'insertInstant'] as num?)?.toInt(),
-      lastUpdateInstant: (json[r'lastUpdateInstant'] as num?)?.toInt(),
+      insertInstant:
+          (json[r'insertInstant'] as num?)?.toInt() as ZonedDateTime?,
+      lastUpdateInstant:
+          (json[r'lastUpdateInstant'] as num?)?.toInt() as ZonedDateTime?,
       name: json[r'name'] as String?,
       type: json[r'type'] != null
           ? MessageType.fromValue(json[r'type']! as String)
@@ -24717,12 +24800,14 @@ class NintendoIdentityProvider {
           json[r'applicationConfiguration'] as Map<String, Object?>?,
       debug: json[r'debug'] as bool? ?? false,
       id: json[r'id'] as String?,
-      insertInstant: (json[r'insertInstant'] as num?)?.toInt(),
+      insertInstant:
+          (json[r'insertInstant'] as num?)?.toInt() as ZonedDateTime?,
       lambdaConfiguration: json[r'lambdaConfiguration'] != null
           ? ProviderLambdaConfiguration.fromJson(
               json[r'lambdaConfiguration']! as Map<String, Object?>)
           : null,
-      lastUpdateInstant: (json[r'lastUpdateInstant'] as num?)?.toInt(),
+      lastUpdateInstant:
+          (json[r'lastUpdateInstant'] as num?)?.toInt() as ZonedDateTime?,
       linkingStrategy: json[r'linkingStrategy'] != null
           ? IdentityProviderLinkingStrategy.fromValue(
               json[r'linkingStrategy']! as String)
@@ -25635,12 +25720,14 @@ class OpenIdConnectIdentityProvider {
           json[r'applicationConfiguration'] as Map<String, Object?>?,
       debug: json[r'debug'] as bool? ?? false,
       id: json[r'id'] as String?,
-      insertInstant: (json[r'insertInstant'] as num?)?.toInt(),
+      insertInstant:
+          (json[r'insertInstant'] as num?)?.toInt() as ZonedDateTime?,
       lambdaConfiguration: json[r'lambdaConfiguration'] != null
           ? ProviderLambdaConfiguration.fromJson(
               json[r'lambdaConfiguration']! as Map<String, Object?>)
           : null,
-      lastUpdateInstant: (json[r'lastUpdateInstant'] as num?)?.toInt(),
+      lastUpdateInstant:
+          (json[r'lastUpdateInstant'] as num?)?.toInt() as ZonedDateTime?,
       linkingStrategy: json[r'linkingStrategy'] != null
           ? IdentityProviderLinkingStrategy.fromValue(
               json[r'linkingStrategy']! as String)
@@ -26419,7 +26506,7 @@ class PreviewMessageTemplateRequest {
 
   factory PreviewMessageTemplateRequest.fromJson(Map<String, Object?> json) {
     return PreviewMessageTemplateRequest(
-      locale: json[r'locale'] as String?,
+      locale: json[r'locale'] as Locale?,
       messageTemplate: json[r'messageTemplate'] != null
           ? MessageTemplate.fromJson(
               json[r'messageTemplate']! as Map<String, Object?>)
@@ -26502,7 +26589,7 @@ class PreviewRequest {
           ? EmailTemplate.fromJson(
               json[r'emailTemplate']! as Map<String, Object?>)
           : null,
-      locale: json[r'locale'] as String?,
+      locale: json[r'locale'] as Locale?,
     );
   }
 
@@ -27157,7 +27244,7 @@ class RawLogin {
   factory RawLogin.fromJson(Map<String, Object?> json) {
     return RawLogin(
       applicationId: json[r'applicationId'] as String?,
-      instant: (json[r'instant'] as num?)?.toInt(),
+      instant: (json[r'instant'] as num?)?.toInt() as ZonedDateTime?,
       ipAddress: json[r'ipAddress'] as String?,
       userId: json[r'userId'] as String?,
     );
@@ -27421,7 +27508,7 @@ class ReactorStatus {
       entityManagement: json[r'entityManagement'] != null
           ? ReactorFeatureStatus.fromValue(json[r'entityManagement']! as String)
           : null,
-      expiration: json[r'expiration'] as String?,
+      expiration: json[r'expiration'] as LocalDate?,
       licenseAttributes: json[r'licenseAttributes'] as Map<String, Object?>?,
       licensed: json[r'licensed'] as bool? ?? false,
       scimServer: json[r'scimServer'] != null
@@ -27713,11 +27800,12 @@ class RefreshToken {
       applicationId: json[r'applicationId'] as String?,
       data: json[r'data'] as Map<String, Object?>?,
       id: json[r'id'] as String?,
-      insertInstant: (json[r'insertInstant'] as num?)?.toInt(),
+      insertInstant:
+          (json[r'insertInstant'] as num?)?.toInt() as ZonedDateTime?,
       metaData: json[r'metaData'] != null
           ? MetaData.fromJson(json[r'metaData']! as Map<String, Object?>)
           : null,
-      startInstant: (json[r'startInstant'] as num?)?.toInt(),
+      startInstant: (json[r'startInstant'] as num?)?.toInt() as ZonedDateTime?,
       tenantId: json[r'tenantId'] as String?,
       token: json[r'token'] as String?,
       userId: json[r'userId'] as String?,
@@ -28357,7 +28445,7 @@ class RegistrationResponse {
           json[r'registrationVerificationOneTimeCode'] as String?,
       token: json[r'token'] as String?,
       tokenExpirationInstant:
-          (json[r'tokenExpirationInstant'] as num?)?.toInt(),
+          (json[r'tokenExpirationInstant'] as num?)?.toInt() as ZonedDateTime?,
       user: json[r'user'] != null
           ? User.fromJson(json[r'user']! as Map<String, Object?>)
           : null,
@@ -29885,7 +29973,8 @@ class SecureIdentity {
   factory SecureIdentity.fromJson(Map<String, Object?> json) {
     return SecureIdentity(
       breachedPasswordLastCheckedInstant:
-          (json[r'breachedPasswordLastCheckedInstant'] as num?)?.toInt(),
+          (json[r'breachedPasswordLastCheckedInstant'] as num?)?.toInt()
+              as ZonedDateTime?,
       breachedPasswordStatus: json[r'breachedPasswordStatus'] != null
           ? BreachedPasswordStatus.fromValue(
               json[r'breachedPasswordStatus']! as String)
@@ -29894,15 +29983,16 @@ class SecureIdentity {
       encryptionScheme: json[r'encryptionScheme'] as String?,
       factor: (json[r'factor'] as num?)?.toInt(),
       id: json[r'id'] as String?,
-      lastLoginInstant: (json[r'lastLoginInstant'] as num?)?.toInt(),
+      lastLoginInstant:
+          (json[r'lastLoginInstant'] as num?)?.toInt() as ZonedDateTime?,
       password: json[r'password'] as String?,
       passwordChangeReason: json[r'passwordChangeReason'] != null
           ? ChangePasswordReason.fromValue(
               json[r'passwordChangeReason']! as String)
           : null,
       passwordChangeRequired: json[r'passwordChangeRequired'] as bool? ?? false,
-      passwordLastUpdateInstant:
-          (json[r'passwordLastUpdateInstant'] as num?)?.toInt(),
+      passwordLastUpdateInstant: (json[r'passwordLastUpdateInstant'] as num?)
+          ?.toInt() as ZonedDateTime?,
       salt: json[r'salt'] as String?,
       uniqueUsername: json[r'uniqueUsername'] as String?,
       username: json[r'username'] as String?,
@@ -29910,7 +30000,8 @@ class SecureIdentity {
           ? ContentStatus.fromValue(json[r'usernameStatus']! as String)
           : null,
       verified: json[r'verified'] as bool? ?? false,
-      verifiedInstant: (json[r'verifiedInstant'] as num?)?.toInt(),
+      verifiedInstant:
+          (json[r'verifiedInstant'] as num?)?.toInt() as ZonedDateTime?,
     );
   }
 
@@ -30099,7 +30190,7 @@ class SendRequest {
               .toList() ??
           [],
       preferredLanguages: (json[r'preferredLanguages'] as List<Object?>?)
-              ?.map((i) => (i as String? ?? '') as Locale)
+              ?.map((i) => (i as Locale? ?? '') as Locale)
               .toList() ??
           [],
       requestData: json[r'requestData'] as Map<String, Object?>?,
@@ -30634,12 +30725,14 @@ class SonyPSNIdentityProvider {
           json[r'applicationConfiguration'] as Map<String, Object?>?,
       debug: json[r'debug'] as bool? ?? false,
       id: json[r'id'] as String?,
-      insertInstant: (json[r'insertInstant'] as num?)?.toInt(),
+      insertInstant:
+          (json[r'insertInstant'] as num?)?.toInt() as ZonedDateTime?,
       lambdaConfiguration: json[r'lambdaConfiguration'] != null
           ? ProviderLambdaConfiguration.fromJson(
               json[r'lambdaConfiguration']! as Map<String, Object?>)
           : null,
-      lastUpdateInstant: (json[r'lastUpdateInstant'] as num?)?.toInt(),
+      lastUpdateInstant:
+          (json[r'lastUpdateInstant'] as num?)?.toInt() as ZonedDateTime?,
       linkingStrategy: json[r'linkingStrategy'] != null
           ? IdentityProviderLinkingStrategy.fromValue(
               json[r'linkingStrategy']! as String)
@@ -30949,12 +31042,14 @@ class SteamIdentityProvider {
           json[r'applicationConfiguration'] as Map<String, Object?>?,
       debug: json[r'debug'] as bool? ?? false,
       id: json[r'id'] as String?,
-      insertInstant: (json[r'insertInstant'] as num?)?.toInt(),
+      insertInstant:
+          (json[r'insertInstant'] as num?)?.toInt() as ZonedDateTime?,
       lambdaConfiguration: json[r'lambdaConfiguration'] != null
           ? ProviderLambdaConfiguration.fromJson(
               json[r'lambdaConfiguration']! as Map<String, Object?>)
           : null,
-      lastUpdateInstant: (json[r'lastUpdateInstant'] as num?)?.toInt(),
+      lastUpdateInstant:
+          (json[r'lastUpdateInstant'] as num?)?.toInt() as ZonedDateTime?,
       linkingStrategy: json[r'linkingStrategy'] != null
           ? IdentityProviderLinkingStrategy.fromValue(
               json[r'linkingStrategy']! as String)
@@ -31131,13 +31226,15 @@ class SystemConfiguration {
           ? EventLogConfiguration.fromJson(
               json[r'eventLogConfiguration']! as Map<String, Object?>)
           : null,
-      insertInstant: (json[r'insertInstant'] as num?)?.toInt(),
-      lastUpdateInstant: (json[r'lastUpdateInstant'] as num?)?.toInt(),
+      insertInstant:
+          (json[r'insertInstant'] as num?)?.toInt() as ZonedDateTime?,
+      lastUpdateInstant:
+          (json[r'lastUpdateInstant'] as num?)?.toInt() as ZonedDateTime?,
       loginRecordConfiguration: json[r'loginRecordConfiguration'] != null
           ? LoginRecordConfiguration.fromJson(
               json[r'loginRecordConfiguration']! as Map<String, Object?>)
           : null,
-      reportTimezone: json[r'reportTimezone'] as String?,
+      reportTimezone: json[r'reportTimezone'] as ZoneId?,
       trustedProxyConfiguration: json[r'trustedProxyConfiguration'] != null
           ? SystemTrustedProxyConfiguration.fromJson(
               json[r'trustedProxyConfiguration']! as Map<String, Object?>)
@@ -31322,7 +31419,7 @@ class SystemLogsExportRequest {
       includeArchived: json[r'includeArchived'] as bool? ?? false,
       lastnBytes: (json[r'lastNBytes'] as num?)?.toInt(),
       dateTimeSecondsFormat: json[r'dateTimeSecondsFormat'] as String?,
-      zoneId: json[r'zoneId'] as String?,
+      zoneId: json[r'zoneId'] as ZoneId?,
     );
   }
 
@@ -32010,7 +32107,8 @@ class Tenant {
       httpSessionMaxInactiveInterval:
           (json[r'httpSessionMaxInactiveInterval'] as num?)?.toInt(),
       id: json[r'id'] as String?,
-      insertInstant: (json[r'insertInstant'] as num?)?.toInt(),
+      insertInstant:
+          (json[r'insertInstant'] as num?)?.toInt() as ZonedDateTime?,
       issuer: json[r'issuer'] as String?,
       jwtConfiguration: json[r'jwtConfiguration'] != null
           ? JWTConfiguration.fromJson(
@@ -32020,7 +32118,8 @@ class Tenant {
           ? TenantLambdaConfiguration.fromJson(
               json[r'lambdaConfiguration']! as Map<String, Object?>)
           : null,
-      lastUpdateInstant: (json[r'lastUpdateInstant'] as num?)?.toInt(),
+      lastUpdateInstant:
+          (json[r'lastUpdateInstant'] as num?)?.toInt() as ZonedDateTime?,
       loginConfiguration: json[r'loginConfiguration'] != null
           ? TenantLoginConfiguration.fromJson(
               json[r'loginConfiguration']! as Map<String, Object?>)
@@ -33434,7 +33533,8 @@ class TestEvent {
   factory TestEvent.fromJson(Map<String, Object?> json) {
     return TestEvent(
       message: json[r'message'] as String?,
-      createInstant: (json[r'createInstant'] as num?)?.toInt(),
+      createInstant:
+          (json[r'createInstant'] as num?)?.toInt() as ZonedDateTime?,
       id: json[r'id'] as String?,
       info: json[r'info'] != null
           ? EventInfo.fromJson(json[r'info']! as Map<String, Object?>)
@@ -33525,8 +33625,10 @@ class Theme {
       data: json[r'data'] as Map<String, Object?>?,
       defaultMessages: json[r'defaultMessages'] as String?,
       id: json[r'id'] as String?,
-      insertInstant: (json[r'insertInstant'] as num?)?.toInt(),
-      lastUpdateInstant: (json[r'lastUpdateInstant'] as num?)?.toInt(),
+      insertInstant:
+          (json[r'insertInstant'] as num?)?.toInt() as ZonedDateTime?,
+      lastUpdateInstant:
+          (json[r'lastUpdateInstant'] as num?)?.toInt() as ZonedDateTime?,
       localizedMessages: json[r'localizedMessages'] != null
           ? LocalizedStrings.fromJson(
               json[r'localizedMessages']! as Map<String, Object?>)
@@ -33854,7 +33956,8 @@ class TimeBasedDeletePolicy {
 
   factory TimeBasedDeletePolicy.fromJson(Map<String, Object?> json) {
     return TimeBasedDeletePolicy(
-      enabledInstant: (json[r'enabledInstant'] as num?)?.toInt(),
+      enabledInstant:
+          (json[r'enabledInstant'] as num?)?.toInt() as ZonedDateTime?,
       numberOfDaysToRetain: (json[r'numberOfDaysToRetain'] as num?)?.toInt(),
       enabled: json[r'enabled'] as bool? ?? false,
     );
@@ -34023,8 +34126,10 @@ class TwilioMessengerConfiguration {
       data: json[r'data'] as Map<String, Object?>?,
       debug: json[r'debug'] as bool? ?? false,
       id: json[r'id'] as String?,
-      insertInstant: (json[r'insertInstant'] as num?)?.toInt(),
-      lastUpdateInstant: (json[r'lastUpdateInstant'] as num?)?.toInt(),
+      insertInstant:
+          (json[r'insertInstant'] as num?)?.toInt() as ZonedDateTime?,
+      lastUpdateInstant:
+          (json[r'lastUpdateInstant'] as num?)?.toInt() as ZonedDateTime?,
       name: json[r'name'] as String?,
       transport: json[r'transport'] as String?,
       type: json[r'type'] != null
@@ -34242,12 +34347,14 @@ class TwitchIdentityProvider {
           json[r'applicationConfiguration'] as Map<String, Object?>?,
       debug: json[r'debug'] as bool? ?? false,
       id: json[r'id'] as String?,
-      insertInstant: (json[r'insertInstant'] as num?)?.toInt(),
+      insertInstant:
+          (json[r'insertInstant'] as num?)?.toInt() as ZonedDateTime?,
       lambdaConfiguration: json[r'lambdaConfiguration'] != null
           ? ProviderLambdaConfiguration.fromJson(
               json[r'lambdaConfiguration']! as Map<String, Object?>)
           : null,
-      lastUpdateInstant: (json[r'lastUpdateInstant'] as num?)?.toInt(),
+      lastUpdateInstant:
+          (json[r'lastUpdateInstant'] as num?)?.toInt() as ZonedDateTime?,
       linkingStrategy: json[r'linkingStrategy'] != null
           ? IdentityProviderLinkingStrategy.fromValue(
               json[r'linkingStrategy']! as String)
@@ -34471,12 +34578,14 @@ class TwitterIdentityProvider {
           json[r'applicationConfiguration'] as Map<String, Object?>?,
       debug: json[r'debug'] as bool? ?? false,
       id: json[r'id'] as String?,
-      insertInstant: (json[r'insertInstant'] as num?)?.toInt(),
+      insertInstant:
+          (json[r'insertInstant'] as num?)?.toInt() as ZonedDateTime?,
       lambdaConfiguration: json[r'lambdaConfiguration'] != null
           ? ProviderLambdaConfiguration.fromJson(
               json[r'lambdaConfiguration']! as Map<String, Object?>)
           : null,
-      lastUpdateInstant: (json[r'lastUpdateInstant'] as num?)?.toInt(),
+      lastUpdateInstant:
+          (json[r'lastUpdateInstant'] as num?)?.toInt() as ZonedDateTime?,
       linkingStrategy: json[r'linkingStrategy'] != null
           ? IdentityProviderLinkingStrategy.fromValue(
               json[r'linkingStrategy']! as String)
@@ -35306,8 +35415,8 @@ class TwoFactorTrust {
   factory TwoFactorTrust.fromJson(Map<String, Object?> json) {
     return TwoFactorTrust(
       applicationId: json[r'applicationId'] as String?,
-      expiration: (json[r'expiration'] as num?)?.toInt(),
-      startInstant: (json[r'startInstant'] as num?)?.toInt(),
+      expiration: (json[r'expiration'] as num?)?.toInt() as ZonedDateTime?,
+      startInstant: (json[r'startInstant'] as num?)?.toInt() as ZonedDateTime?,
     );
   }
 
@@ -35531,26 +35640,28 @@ class User {
   factory User.fromJson(Map<String, Object?> json) {
     return User(
       preferredLanguages: (json[r'preferredLanguages'] as List<Object?>?)
-              ?.map((i) => (i as String? ?? '') as Locale)
+              ?.map((i) => (i as Locale? ?? '') as Locale)
               .toList() ??
           [],
       active: json[r'active'] as bool? ?? false,
-      birthDate: json[r'birthDate'] as String?,
+      birthDate: json[r'birthDate'] as LocalDate?,
       cleanSpeakId: json[r'cleanSpeakId'] as String?,
       data: json[r'data'] as Map<String, Object?>?,
       email: json[r'email'] as String?,
-      expiry: (json[r'expiry'] as num?)?.toInt(),
+      expiry: (json[r'expiry'] as num?)?.toInt() as ZonedDateTime?,
       firstName: json[r'firstName'] as String?,
       fullName: json[r'fullName'] as String?,
       imageUrl: json[r'imageUrl'] as String?,
-      insertInstant: (json[r'insertInstant'] as num?)?.toInt(),
+      insertInstant:
+          (json[r'insertInstant'] as num?)?.toInt() as ZonedDateTime?,
       lastName: json[r'lastName'] as String?,
-      lastUpdateInstant: (json[r'lastUpdateInstant'] as num?)?.toInt(),
+      lastUpdateInstant:
+          (json[r'lastUpdateInstant'] as num?)?.toInt() as ZonedDateTime?,
       middleName: json[r'middleName'] as String?,
       mobilePhone: json[r'mobilePhone'] as String?,
       parentEmail: json[r'parentEmail'] as String?,
       tenantId: json[r'tenantId'] as String?,
-      timezone: json[r'timezone'] as String?,
+      timezone: json[r'timezone'] as ZoneId?,
       twoFactor: json[r'twoFactor'] != null
           ? UserTwoFactorConfiguration.fromJson(
               json[r'twoFactor']! as Map<String, Object?>)
@@ -35566,7 +35677,8 @@ class User {
               .toList() ??
           [],
       breachedPasswordLastCheckedInstant:
-          (json[r'breachedPasswordLastCheckedInstant'] as num?)?.toInt(),
+          (json[r'breachedPasswordLastCheckedInstant'] as num?)?.toInt()
+              as ZonedDateTime?,
       breachedPasswordStatus: json[r'breachedPasswordStatus'] != null
           ? BreachedPasswordStatus.fromValue(
               json[r'breachedPasswordStatus']! as String)
@@ -35575,15 +35687,16 @@ class User {
       encryptionScheme: json[r'encryptionScheme'] as String?,
       factor: (json[r'factor'] as num?)?.toInt(),
       id: json[r'id'] as String?,
-      lastLoginInstant: (json[r'lastLoginInstant'] as num?)?.toInt(),
+      lastLoginInstant:
+          (json[r'lastLoginInstant'] as num?)?.toInt() as ZonedDateTime?,
       password: json[r'password'] as String?,
       passwordChangeReason: json[r'passwordChangeReason'] != null
           ? ChangePasswordReason.fromValue(
               json[r'passwordChangeReason']! as String)
           : null,
       passwordChangeRequired: json[r'passwordChangeRequired'] as bool? ?? false,
-      passwordLastUpdateInstant:
-          (json[r'passwordLastUpdateInstant'] as num?)?.toInt(),
+      passwordLastUpdateInstant: (json[r'passwordLastUpdateInstant'] as num?)
+          ?.toInt() as ZonedDateTime?,
       salt: json[r'salt'] as String?,
       uniqueUsername: json[r'uniqueUsername'] as String?,
       username: json[r'username'] as String?,
@@ -35591,7 +35704,8 @@ class User {
           ? ContentStatus.fromValue(json[r'usernameStatus']! as String)
           : null,
       verified: json[r'verified'] as bool? ?? false,
-      verifiedInstant: (json[r'verifiedInstant'] as num?)?.toInt(),
+      verifiedInstant:
+          (json[r'verifiedInstant'] as num?)?.toInt() as ZonedDateTime?,
     );
   }
 
@@ -35887,8 +36001,10 @@ class UserAction {
       id: json[r'id'] as String?,
       includeEmailInEventJson:
           json[r'includeEmailInEventJSON'] as bool? ?? false,
-      insertInstant: (json[r'insertInstant'] as num?)?.toInt(),
-      lastUpdateInstant: (json[r'lastUpdateInstant'] as num?)?.toInt(),
+      insertInstant:
+          (json[r'insertInstant'] as num?)?.toInt() as ZonedDateTime?,
+      lastUpdateInstant:
+          (json[r'lastUpdateInstant'] as num?)?.toInt() as ZonedDateTime?,
       localizedNames: json[r'localizedNames'] != null
           ? LocalizedStrings.fromJson(
               json[r'localizedNames']! as Map<String, Object?>)
@@ -36090,7 +36206,7 @@ class UserActionEvent {
           ? Email.fromJson(json[r'email']! as Map<String, Object?>)
           : null,
       emailedUser: json[r'emailedUser'] as bool? ?? false,
-      expiry: (json[r'expiry'] as num?)?.toInt(),
+      expiry: (json[r'expiry'] as num?)?.toInt() as ZonedDateTime?,
       localizedAction: json[r'localizedAction'] as String?,
       localizedDuration: json[r'localizedDuration'] as String?,
       localizedOption: json[r'localizedOption'] as String?,
@@ -36102,7 +36218,8 @@ class UserActionEvent {
           : null,
       reason: json[r'reason'] as String?,
       reasonCode: json[r'reasonCode'] as String?,
-      createInstant: (json[r'createInstant'] as num?)?.toInt(),
+      createInstant:
+          (json[r'createInstant'] as num?)?.toInt() as ZonedDateTime?,
       id: json[r'id'] as String?,
       info: json[r'info'] != null
           ? EventInfo.fromJson(json[r'info']! as Map<String, Object?>)
@@ -36316,12 +36433,13 @@ class UserActionLog {
       comment: json[r'comment'] as String?,
       emailUserOnEnd: json[r'emailUserOnEnd'] as bool? ?? false,
       endEventSent: json[r'endEventSent'] as bool? ?? false,
-      expiry: (json[r'expiry'] as num?)?.toInt(),
+      expiry: (json[r'expiry'] as num?)?.toInt() as ZonedDateTime?,
       history: json[r'history'] != null
           ? LogHistory.fromJson(json[r'history']! as Map<String, Object?>)
           : null,
       id: json[r'id'] as String?,
-      insertInstant: (json[r'insertInstant'] as num?)?.toInt(),
+      insertInstant:
+          (json[r'insertInstant'] as num?)?.toInt() as ZonedDateTime?,
       localizedName: json[r'localizedName'] as String?,
       localizedOption: json[r'localizedOption'] as String?,
       localizedReason: json[r'localizedReason'] as String?,
@@ -36512,8 +36630,10 @@ class UserActionReason {
     return UserActionReason(
       code: json[r'code'] as String?,
       id: json[r'id'] as String?,
-      insertInstant: (json[r'insertInstant'] as num?)?.toInt(),
-      lastUpdateInstant: (json[r'lastUpdateInstant'] as num?)?.toInt(),
+      insertInstant:
+          (json[r'insertInstant'] as num?)?.toInt() as ZonedDateTime?,
+      lastUpdateInstant:
+          (json[r'lastUpdateInstant'] as num?)?.toInt() as ZonedDateTime?,
       localizedTexts: json[r'localizedTexts'] != null
           ? LocalizedStrings.fromJson(
               json[r'localizedTexts']! as Map<String, Object?>)
@@ -36746,7 +36866,8 @@ class UserBulkCreateEvent {
                   (i) => User.fromJson(i as Map<String, Object?>? ?? const {}))
               .toList() ??
           [],
-      createInstant: (json[r'createInstant'] as num?)?.toInt(),
+      createInstant:
+          (json[r'createInstant'] as num?)?.toInt() as ZonedDateTime?,
       id: json[r'id'] as String?,
       info: json[r'info'] != null
           ? EventInfo.fromJson(json[r'info']! as Map<String, Object?>)
@@ -36824,7 +36945,8 @@ class UserComment {
       comment: json[r'comment'] as String?,
       commenterId: json[r'commenterId'] as String?,
       id: json[r'id'] as String?,
-      insertInstant: (json[r'insertInstant'] as num?)?.toInt(),
+      insertInstant:
+          (json[r'insertInstant'] as num?)?.toInt() as ZonedDateTime?,
       userId: json[r'userId'] as String?,
     );
   }
@@ -37135,8 +37257,10 @@ class UserConsent {
       consentId: json[r'consentId'] as String?,
       giverUserId: json[r'giverUserId'] as String?,
       id: json[r'id'] as String?,
-      insertInstant: (json[r'insertInstant'] as num?)?.toInt(),
-      lastUpdateInstant: (json[r'lastUpdateInstant'] as num?)?.toInt(),
+      insertInstant:
+          (json[r'insertInstant'] as num?)?.toInt() as ZonedDateTime?,
+      lastUpdateInstant:
+          (json[r'lastUpdateInstant'] as num?)?.toInt() as ZonedDateTime?,
       status: json[r'status'] != null
           ? ConsentStatus.fromValue(json[r'status']! as String)
           : null,
@@ -38504,7 +38628,7 @@ class UserRegistration {
     return UserRegistration(
       data: json[r'data'] as Map<String, Object?>?,
       preferredLanguages: (json[r'preferredLanguages'] as List<Object?>?)
-              ?.map((i) => (i as String? ?? '') as Locale)
+              ?.map((i) => (i as Locale? ?? '') as Locale)
               .toList() ??
           [],
       tokens: json[r'tokens'] as Map<String, Object?>?,
@@ -38512,17 +38636,21 @@ class UserRegistration {
       authenticationToken: json[r'authenticationToken'] as String?,
       cleanSpeakId: json[r'cleanSpeakId'] as String?,
       id: json[r'id'] as String?,
-      insertInstant: (json[r'insertInstant'] as num?)?.toInt(),
-      lastLoginInstant: (json[r'lastLoginInstant'] as num?)?.toInt(),
-      lastUpdateInstant: (json[r'lastUpdateInstant'] as num?)?.toInt(),
+      insertInstant:
+          (json[r'insertInstant'] as num?)?.toInt() as ZonedDateTime?,
+      lastLoginInstant:
+          (json[r'lastLoginInstant'] as num?)?.toInt() as ZonedDateTime?,
+      lastUpdateInstant:
+          (json[r'lastUpdateInstant'] as num?)?.toInt() as ZonedDateTime?,
       roles: (json[r'roles'] as List<Object?>?)?.map((i) => i).toList() ?? [],
-      timezone: json[r'timezone'] as String?,
+      timezone: json[r'timezone'] as ZoneId?,
       username: json[r'username'] as String?,
       usernameStatus: json[r'usernameStatus'] != null
           ? ContentStatus.fromValue(json[r'usernameStatus']! as String)
           : null,
       verified: json[r'verified'] as bool? ?? false,
-      verifiedInstant: (json[r'verifiedInstant'] as num?)?.toInt(),
+      verifiedInstant:
+          (json[r'verifiedInstant'] as num?)?.toInt() as ZonedDateTime?,
     );
   }
 
@@ -39131,7 +39259,7 @@ class UserResponse {
               as Map<String, Object?>?,
       token: json[r'token'] as String?,
       tokenExpirationInstant:
-          (json[r'tokenExpirationInstant'] as num?)?.toInt(),
+          (json[r'tokenExpirationInstant'] as num?)?.toInt() as ZonedDateTime?,
       user: json[r'user'] != null
           ? User.fromJson(json[r'user']! as Map<String, Object?>)
           : null,
@@ -39955,8 +40083,10 @@ class WebAuthnCredential {
       discoverable: json[r'discoverable'] as bool? ?? false,
       displayName: json[r'displayName'] as String?,
       id: json[r'id'] as String?,
-      insertInstant: (json[r'insertInstant'] as num?)?.toInt(),
-      lastUseInstant: (json[r'lastUseInstant'] as num?)?.toInt(),
+      insertInstant:
+          (json[r'insertInstant'] as num?)?.toInt() as ZonedDateTime?,
+      lastUseInstant:
+          (json[r'lastUseInstant'] as num?)?.toInt() as ZonedDateTime?,
       name: json[r'name'] as String?,
       publicKey: json[r'publicKey'] as String?,
       relyingPartyId: json[r'relyingPartyId'] as String?,
@@ -40864,8 +40994,10 @@ class Webhook {
       httpAuthenticationUsername:
           json[r'httpAuthenticationUsername'] as String?,
       id: json[r'id'] as String?,
-      insertInstant: (json[r'insertInstant'] as num?)?.toInt(),
-      lastUpdateInstant: (json[r'lastUpdateInstant'] as num?)?.toInt(),
+      insertInstant:
+          (json[r'insertInstant'] as num?)?.toInt() as ZonedDateTime?,
+      lastUpdateInstant:
+          (json[r'lastUpdateInstant'] as num?)?.toInt() as ZonedDateTime?,
       readTimeout: (json[r'readTimeout'] as num?)?.toInt(),
       signatureConfiguration: json[r'signatureConfiguration'] != null
           ? WebhookSignatureConfiguration.fromJson(
@@ -41018,9 +41150,9 @@ class WebhookAttemptLog {
   factory WebhookAttemptLog.fromJson(Map<String, Object?> json) {
     return WebhookAttemptLog(
       data: json[r'data'] as Map<String, Object?>?,
-      endInstant: (json[r'endInstant'] as num?)?.toInt(),
+      endInstant: (json[r'endInstant'] as num?)?.toInt() as ZonedDateTime?,
       id: json[r'id'] as String?,
-      startInstant: (json[r'startInstant'] as num?)?.toInt(),
+      startInstant: (json[r'startInstant'] as num?)?.toInt() as ZonedDateTime?,
       webhookCallResponse: json[r'webhookCallResponse'] != null
           ? WebhookCallResponse.fromJson(
               json[r'webhookCallResponse']! as Map<String, Object?>)
@@ -41218,9 +41350,12 @@ class WebhookEventLog {
           ? EventType.fromValue(json[r'eventType']! as String)
           : null,
       id: json[r'id'] as String?,
-      insertInstant: (json[r'insertInstant'] as num?)?.toInt(),
-      lastAttemptInstant: (json[r'lastAttemptInstant'] as num?)?.toInt(),
-      lastUpdateInstant: (json[r'lastUpdateInstant'] as num?)?.toInt(),
+      insertInstant:
+          (json[r'insertInstant'] as num?)?.toInt() as ZonedDateTime?,
+      lastAttemptInstant:
+          (json[r'lastAttemptInstant'] as num?)?.toInt() as ZonedDateTime?,
+      lastUpdateInstant:
+          (json[r'lastUpdateInstant'] as num?)?.toInt() as ZonedDateTime?,
       linkedObjectId: json[r'linkedObjectId'] as String?,
       sequence: (json[r'sequence'] as num?)?.toInt(),
       failedAttempts: (json[r'failedAttempts'] as num?)?.toInt(),
@@ -41403,7 +41538,7 @@ class WebhookEventLogSearchCriteria {
 
   factory WebhookEventLogSearchCriteria.fromJson(Map<String, Object?> json) {
     return WebhookEventLogSearchCriteria(
-      end: (json[r'end'] as num?)?.toInt(),
+      end: (json[r'end'] as num?)?.toInt() as ZonedDateTime?,
       event: json[r'event'] as String?,
       eventResult: json[r'eventResult'] != null
           ? WebhookEventResult.fromValue(json[r'eventResult']! as String)
@@ -41411,7 +41546,7 @@ class WebhookEventLogSearchCriteria {
       eventType: json[r'eventType'] != null
           ? EventType.fromValue(json[r'eventType']! as String)
           : null,
-      start: (json[r'start'] as num?)?.toInt(),
+      start: (json[r'start'] as num?)?.toInt() as ZonedDateTime?,
       numberOfResults: (json[r'numberOfResults'] as num?)?.toInt(),
       orderBy: json[r'orderBy'] as String?,
       startRow: (json[r'startRow'] as num?)?.toInt(),
@@ -41929,12 +42064,14 @@ class XboxIdentityProvider {
           json[r'applicationConfiguration'] as Map<String, Object?>?,
       debug: json[r'debug'] as bool? ?? false,
       id: json[r'id'] as String?,
-      insertInstant: (json[r'insertInstant'] as num?)?.toInt(),
+      insertInstant:
+          (json[r'insertInstant'] as num?)?.toInt() as ZonedDateTime?,
       lambdaConfiguration: json[r'lambdaConfiguration'] != null
           ? ProviderLambdaConfiguration.fromJson(
               json[r'lambdaConfiguration']! as Map<String, Object?>)
           : null,
-      lastUpdateInstant: (json[r'lastUpdateInstant'] as num?)?.toInt(),
+      lastUpdateInstant:
+          (json[r'lastUpdateInstant'] as num?)?.toInt() as ZonedDateTime?,
       linkingStrategy: json[r'linkingStrategy'] != null
           ? IdentityProviderLinkingStrategy.fromValue(
               json[r'linkingStrategy']! as String)

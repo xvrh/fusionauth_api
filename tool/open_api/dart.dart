@@ -102,18 +102,13 @@ class Api {
       }
 
       var typeName = ref.replaceAll('#/components/schemas/', '');
-      var complexType = _spec.components.schemas[typeName]!;
 
       var aliasType = _aliasTypes.firstWhereOrNull((e) => e.name == typeName);
       if (aliasType != null) {
         return aliasType;
       }
 
-      if (const ['string'].contains(complexType.type)) {
-        return parseDartType(complexType.type!);
-      } else {
-        return parseDartType(typeName);
-      }
+      return parseDartType(typeName);
     } else if (type == 'array') {
       return ListDartType(this, typeFromSchema(schema.items!));
     } else if (type == 'object') {
@@ -458,7 +453,7 @@ class Operation {
         var parameterName =
             dartIdentifier(_parameterNameForHeader(parameter.name));
         if (!parameter.required) {
-          queryParametersCode += "if ($parameterName != null)";
+          queryParametersCode += 'if ($parameterName != null)';
         }
         queryParametersCode += "'${parameter.name}': $parameterName, \n";
       }
@@ -688,14 +683,54 @@ class ComplexType extends DartType {
   }
 }
 
+class AliasableType {
+  final String type;
+  final String defaultValue;
+  final String Function(String) castNullable;
+  final String Function(String) castNonNullable;
+
+  AliasableType(
+    this.type, {
+    required this.defaultValue,
+    String Function(String)? castNullable,
+    String Function(String)? castNonNullable,
+    String Function(String)? identifierToString,
+  })  : castNullable = castNullable ?? _defaultNullableCasting(type),
+        castNonNullable = castNonNullable ?? _defaultNonNullableCasting(type);
+
+  static AliasableType fromName(String type, String dartType) {
+    return switch (dartType) {
+      'int' => AliasableType(
+          type,
+          defaultValue: '0',
+          castNullable: (a) => '($a as num?)?.toInt() as $type?',
+          castNonNullable: (a) => '($a! as num).toInt() as $type',
+        ),
+      'num' => AliasableType(type, defaultValue: '0'),
+      'String' => AliasableType(
+          type,
+          defaultValue: "''",
+          identifierToString: (id) => id,
+        ),
+      _ => throw UnimplementedError(),
+    };
+  }
+
+  static String Function(String) _defaultNullableCasting(String type) {
+    return (accessor) => '$accessor as $type?';
+  }
+
+  static String Function(String) _defaultNonNullableCasting(String type) {
+    return (accessor) => '$accessor as $type';
+  }
+}
+
 class AliasType extends DartType {
   final sw.Schema definition;
-  late final List<Property> _properties;
 
   static const types = {
     'integer': 'int',
     'number': 'num',
-    'boolean': 'bool',
     'string': 'String'
   };
 
@@ -717,32 +752,20 @@ class AliasType extends DartType {
   String fromJsonCode(String accessor, Map<DartType, String> genericTypes,
       {required bool accessorIsNullable, required bool targetIsNullable}) {
     var dartType = types[definition.type]!;
-    var simpleType = SimpleType.all[dartType];
+    var simpleType = AliasableType.fromName(name, dartType);
 
     if (targetIsNullable && accessorIsNullable) {
-      if (simpleType != null) {
-        return simpleType.castNullable(accessor);
-      } else {
-        return '$accessor != null ? $name.fromJson($accessor! as $dartType) : null';
-      }
+      return simpleType.castNullable(accessor);
     } else if (!targetIsNullable && accessorIsNullable) {
-      if (simpleType != null) {
-        var code = simpleType.castNullable(accessor);
-        var defaultValue = simpleType.defaultValue;
-        if (defaultValue.isNotEmpty) {
-          return '($code ?? ${simpleType.defaultValue}) as $name';
-        } else {
-          return code;
-        }
+      var code = simpleType.castNullable(accessor);
+      var defaultValue = simpleType.defaultValue;
+      if (defaultValue.isNotEmpty) {
+        return '($code ?? ${simpleType.defaultValue}) as $name';
       } else {
-        throw UnimplementedError();
+        return code;
       }
     } else {
-      if (simpleType != null) {
-        return simpleType.castNonNullable(accessor);
-      } else {
-        return '$name.fromJson($accessor as $dartType)';
-      }
+      return simpleType.castNonNullable(accessor);
     }
   }
 }
@@ -1160,7 +1183,7 @@ extension<T> on Iterable<T> {
   List<T> stableSortedBy<K extends Comparable<K>>(K Function(T element) keyOf) {
     var elements = [...this];
     mergeSort(elements,
-        compare: (a, b) => keyOf(a as T).compareTo(keyOf(b as T)));
+        compare: (a, b) => keyOf(a).compareTo(keyOf(b)));
     return elements;
   }
 }
