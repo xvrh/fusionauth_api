@@ -13,7 +13,7 @@ class FusionauthApi {
 
   /// Retrieves all the members of a family by the unique Family Id.
   Future<FamilyResponse> retrieveFamilyMembersByFamilyIdWithId(
-      {required String familyId, String? xFusionAuthTenantId}) async {
+      {required String familyId, String? tenantIdScope}) async {
     return FamilyResponse.fromJson(await _client.send(
       'get',
       'api/user/family/{familyId}',
@@ -21,7 +21,7 @@ class FusionauthApi {
         'familyId': familyId,
       },
       headers: {
-        'X-FusionAuth-TenantId': 'null',
+        if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
       },
     ));
   }
@@ -29,7 +29,7 @@ class FusionauthApi {
   /// Adds a user to an existing family. The family Id must be specified.
   Future<FamilyResponse> addUserToFamilyWithId(
       {required String familyId,
-      String? xFusionAuthTenantId,
+      String? tenantIdScope,
       required FamilyRequest body}) async {
     return FamilyResponse.fromJson(await _client.send(
       'put',
@@ -38,7 +38,7 @@ class FusionauthApi {
         'familyId': familyId,
       },
       headers: {
-        'X-FusionAuth-TenantId': 'null',
+        if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
       },
       body: body.toJson(),
     ));
@@ -49,7 +49,7 @@ class FusionauthApi {
   /// not provided one will be generated.
   Future<FamilyResponse> createFamilyWithId(
       {required String familyId,
-      String? xFusionAuthTenantId,
+      String? tenantIdScope,
       required FamilyRequest body}) async {
     return FamilyResponse.fromJson(await _client.send(
       'post',
@@ -58,7 +58,7 @@ class FusionauthApi {
         'familyId': familyId,
       },
       headers: {
-        'X-FusionAuth-TenantId': 'null',
+        if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
       },
       body: body.toJson(),
     ));
@@ -106,13 +106,13 @@ class FusionauthApi {
   /// Handles login via third-parties including Social login, external OAuth and
   /// OpenID Connect, and other login systems.
   Future<LoginResponse> identityProviderLoginWithId(
-      {String? xFusionAuthTenantId,
+      {String? tenantIdScope,
       required IdentityProviderLoginRequest body}) async {
     return LoginResponse.fromJson(await _client.send(
       'post',
       'api/identity-provider/login',
       headers: {
-        'X-FusionAuth-TenantId': 'null',
+        if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
       },
       body: body.toJson(),
     ));
@@ -231,7 +231,7 @@ class FusionauthApi {
   Future<UserActionResponse> updateUserActionWithId(
       {String? reactivate,
       required String userActionId,
-      String? xFusionAuthTenantId,
+      String? tenantIdScope,
       required UserActionRequest body}) async {
     return UserActionResponse.fromJson(await _client.send(
       'put',
@@ -243,7 +243,7 @@ class FusionauthApi {
         if (reactivate != null) 'reactivate': reactivate,
       },
       headers: {
-        'X-FusionAuth-TenantId': 'null',
+        if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
       },
       body: body.toJson(),
     ));
@@ -254,7 +254,7 @@ class FusionauthApi {
   /// history and logs of the action being applied to any users.
   Future<void> deleteUserActionWithId(
       {required String userActionId,
-      String? xFusionAuthTenantId,
+      String? tenantIdScope,
       String? hardDelete}) async {
     await _client.send(
       'delete',
@@ -266,7 +266,7 @@ class FusionauthApi {
         if (hardDelete != null) 'hardDelete': hardDelete,
       },
       headers: {
-        'X-FusionAuth-TenantId': 'null',
+        if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
       },
     );
   }
@@ -274,7 +274,7 @@ class FusionauthApi {
   /// Retrieves the user action for the given Id. If you pass in null for the
   /// id, this will return all the user actions.
   Future<UserActionResponse> retrieveUserActionWithId(
-      {required String userActionId, String? xFusionAuthTenantId}) async {
+      {required String userActionId, String? tenantIdScope}) async {
     return UserActionResponse.fromJson(await _client.send(
       'get',
       'api/user-action/{userActionId}',
@@ -282,7 +282,7 @@ class FusionauthApi {
         'userActionId': userActionId,
       },
       headers: {
-        'X-FusionAuth-TenantId': 'null',
+        if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
       },
     ));
   }
@@ -292,7 +292,7 @@ class FusionauthApi {
   /// applied to any user.
   Future<UserActionResponse> createUserActionWithId(
       {required String userActionId,
-      String? xFusionAuthTenantId,
+      String? tenantIdScope,
       required UserActionRequest body}) async {
     return UserActionResponse.fromJson(await _client.send(
       'post',
@@ -301,7 +301,7 @@ class FusionauthApi {
         'userActionId': userActionId,
       },
       headers: {
-        'X-FusionAuth-TenantId': 'null',
+        if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
       },
       body: body.toJson(),
     ));
@@ -535,7 +535,7 @@ class FusionauthApi {
   /// loginId. The loginId can be either the username or the email.
   Future<UserResponse> retrieveUser(
       {String? username,
-      String? xFusionAuthTenantId,
+      String? tenantIdScope,
       String? verificationId,
       String? changePasswordId,
       String? email,
@@ -551,7 +551,7 @@ class FusionauthApi {
         if (loginId != null) 'loginId': loginId,
       },
       headers: {
-        'X-FusionAuth-TenantId': 'null',
+        if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
       },
     ));
   }
@@ -559,12 +559,12 @@ class FusionauthApi {
   /// Creates a user. You can optionally specify an Id for the user, if not
   /// provided one will be generated.
   Future<UserResponse> createUser(
-      {String? xFusionAuthTenantId, required UserRequest body}) async {
+      {String? tenantIdScope, required UserRequest body}) async {
     return UserResponse.fromJson(await _client.send(
       'post',
       'api/user',
       headers: {
-        'X-FusionAuth-TenantId': 'null',
+        if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
       },
       body: body.toJson(),
     ));
@@ -590,7 +590,7 @@ class FusionauthApi {
   Future<ApplicationResponse> createApplicationRoleWithId(
       {required String applicationId,
       required String roleId,
-      String? xFusionAuthTenantId,
+      String? tenantIdScope,
       required ApplicationRequest body}) async {
     return ApplicationResponse.fromJson(await _client.send(
       'post',
@@ -600,7 +600,7 @@ class FusionauthApi {
         'roleId': roleId,
       },
       headers: {
-        'X-FusionAuth-TenantId': 'null',
+        if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
       },
       body: body.toJson(),
     ));
@@ -612,7 +612,7 @@ class FusionauthApi {
   Future<void> deleteApplicationRoleWithId(
       {required String applicationId,
       required String roleId,
-      String? xFusionAuthTenantId}) async {
+      String? tenantIdScope}) async {
     await _client.send(
       'delete',
       'api/application/{applicationId}/role/{roleId}',
@@ -621,7 +621,7 @@ class FusionauthApi {
         'roleId': roleId,
       },
       headers: {
-        'X-FusionAuth-TenantId': 'null',
+        if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
       },
     );
   }
@@ -630,7 +630,7 @@ class FusionauthApi {
   Future<ApplicationResponse> updateApplicationRoleWithId(
       {required String applicationId,
       required String roleId,
-      String? xFusionAuthTenantId,
+      String? tenantIdScope,
       required ApplicationRequest body}) async {
     return ApplicationResponse.fromJson(await _client.send(
       'put',
@@ -640,7 +640,7 @@ class FusionauthApi {
         'roleId': roleId,
       },
       headers: {
-        'X-FusionAuth-TenantId': 'null',
+        if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
       },
       body: body.toJson(),
     ));
@@ -652,7 +652,7 @@ class FusionauthApi {
   /// one will be generated.
   Future<ApplicationResponse> createApplicationRole(
       {required String applicationId,
-      String? xFusionAuthTenantId,
+      String? tenantIdScope,
       required ApplicationRequest body}) async {
     return ApplicationResponse.fromJson(await _client.send(
       'post',
@@ -661,7 +661,7 @@ class FusionauthApi {
         'applicationId': applicationId,
       },
       headers: {
-        'X-FusionAuth-TenantId': 'null',
+        if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
       },
       body: body.toJson(),
     ));
@@ -671,7 +671,7 @@ class FusionauthApi {
   Future<ApplicationOAuthScopeResponse> retrieveoAuthScopeWithId(
       {required String applicationId,
       required String scopeId,
-      String? xFusionAuthTenantId}) async {
+      String? tenantIdScope}) async {
     return ApplicationOAuthScopeResponse.fromJson(await _client.send(
       'get',
       'api/application/{applicationId}/scope/{scopeId}',
@@ -680,7 +680,7 @@ class FusionauthApi {
         'scopeId': scopeId,
       },
       headers: {
-        'X-FusionAuth-TenantId': 'null',
+        if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
       },
     ));
   }
@@ -691,7 +691,7 @@ class FusionauthApi {
   Future<void> deleteoAuthScopeWithId(
       {required String applicationId,
       required String scopeId,
-      String? xFusionAuthTenantId}) async {
+      String? tenantIdScope}) async {
     await _client.send(
       'delete',
       'api/application/{applicationId}/scope/{scopeId}',
@@ -700,7 +700,7 @@ class FusionauthApi {
         'scopeId': scopeId,
       },
       headers: {
-        'X-FusionAuth-TenantId': 'null',
+        if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
       },
     );
   }
@@ -709,7 +709,7 @@ class FusionauthApi {
   Future<ApplicationOAuthScopeResponse> updateoAuthScopeWithId(
       {required String applicationId,
       required String scopeId,
-      String? xFusionAuthTenantId,
+      String? tenantIdScope,
       required ApplicationOAuthScopeRequest body}) async {
     return ApplicationOAuthScopeResponse.fromJson(await _client.send(
       'put',
@@ -719,7 +719,7 @@ class FusionauthApi {
         'scopeId': scopeId,
       },
       headers: {
-        'X-FusionAuth-TenantId': 'null',
+        if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
       },
       body: body.toJson(),
     ));
@@ -732,7 +732,7 @@ class FusionauthApi {
   Future<ApplicationOAuthScopeResponse> createoAuthScopeWithId(
       {required String applicationId,
       required String scopeId,
-      String? xFusionAuthTenantId,
+      String? tenantIdScope,
       required ApplicationOAuthScopeRequest body}) async {
     return ApplicationOAuthScopeResponse.fromJson(await _client.send(
       'post',
@@ -742,7 +742,7 @@ class FusionauthApi {
         'scopeId': scopeId,
       },
       headers: {
-        'X-FusionAuth-TenantId': 'null',
+        if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
       },
       body: body.toJson(),
     ));
@@ -995,7 +995,7 @@ class FusionauthApi {
   /// consent type, if not provided one will be generated.
   Future<ConsentResponse> createConsentWithId(
       {required String consentId,
-      String? xFusionAuthTenantId,
+      String? tenantIdScope,
       required ConsentRequest body}) async {
     return ConsentResponse.fromJson(await _client.send(
       'post',
@@ -1004,7 +1004,7 @@ class FusionauthApi {
         'consentId': consentId,
       },
       headers: {
-        'X-FusionAuth-TenantId': 'null',
+        if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
       },
       body: body.toJson(),
     ));
@@ -1012,7 +1012,7 @@ class FusionauthApi {
 
   /// Deletes the consent for the given Id.
   Future<void> deleteConsentWithId(
-      {required String consentId, String? xFusionAuthTenantId}) async {
+      {required String consentId, String? tenantIdScope}) async {
     await _client.send(
       'delete',
       'api/consent/{consentId}',
@@ -1020,7 +1020,7 @@ class FusionauthApi {
         'consentId': consentId,
       },
       headers: {
-        'X-FusionAuth-TenantId': 'null',
+        if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
       },
     );
   }
@@ -1028,7 +1028,7 @@ class FusionauthApi {
   /// Updates the consent with the given Id.
   Future<ConsentResponse> updateConsentWithId(
       {required String consentId,
-      String? xFusionAuthTenantId,
+      String? tenantIdScope,
       required ConsentRequest body}) async {
     return ConsentResponse.fromJson(await _client.send(
       'put',
@@ -1037,7 +1037,7 @@ class FusionauthApi {
         'consentId': consentId,
       },
       headers: {
-        'X-FusionAuth-TenantId': 'null',
+        if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
       },
       body: body.toJson(),
     ));
@@ -1045,7 +1045,7 @@ class FusionauthApi {
 
   /// Retrieves the Consent for the given Id.
   Future<ConsentResponse> retrieveConsentWithId(
-      {required String consentId, String? xFusionAuthTenantId}) async {
+      {required String consentId, String? tenantIdScope}) async {
     return ConsentResponse.fromJson(await _client.send(
       'get',
       'api/consent/{consentId}',
@@ -1053,7 +1053,7 @@ class FusionauthApi {
         'consentId': consentId,
       },
       headers: {
-        'X-FusionAuth-TenantId': 'null',
+        if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
       },
     ));
   }
@@ -1317,7 +1317,7 @@ class FusionauthApi {
   Future<UserResponse> updateUserWithId(
       {String? reactivate,
       required String userId,
-      String? xFusionAuthTenantId,
+      String? tenantIdScope,
       required UserRequest body}) async {
     return UserResponse.fromJson(await _client.send(
       'put',
@@ -1329,7 +1329,7 @@ class FusionauthApi {
         if (reactivate != null) 'reactivate': reactivate,
       },
       headers: {
-        'X-FusionAuth-TenantId': 'null',
+        if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
       },
       body: body.toJson(),
     ));
@@ -1342,7 +1342,7 @@ class FusionauthApi {
   /// with the user. OR Deactivates the user with the given Id.
   Future<void> deleteUserWithId(
       {required String userId,
-      String? xFusionAuthTenantId,
+      String? tenantIdScope,
       String? hardDelete,
       required UserDeleteSingleRequest body}) async {
     await _client.send(
@@ -1355,7 +1355,7 @@ class FusionauthApi {
         if (hardDelete != null) 'hardDelete': hardDelete,
       },
       headers: {
-        'X-FusionAuth-TenantId': 'null',
+        if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
       },
       body: body.toJson(),
     );
@@ -1365,7 +1365,7 @@ class FusionauthApi {
   /// provided one will be generated.
   Future<UserResponse> createUserWithId(
       {required String userId,
-      String? xFusionAuthTenantId,
+      String? tenantIdScope,
       required UserRequest body}) async {
     return UserResponse.fromJson(await _client.send(
       'post',
@@ -1374,7 +1374,7 @@ class FusionauthApi {
         'userId': userId,
       },
       headers: {
-        'X-FusionAuth-TenantId': 'null',
+        if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
       },
       body: body.toJson(),
     ));
@@ -1382,7 +1382,7 @@ class FusionauthApi {
 
   /// Retrieves the user for the given Id.
   Future<UserResponse> retrieveUserWithId(
-      {required String userId, String? xFusionAuthTenantId}) async {
+      {required String userId, String? tenantIdScope}) async {
     return UserResponse.fromJson(await _client.send(
       'get',
       'api/user/{userId}',
@@ -1390,7 +1390,7 @@ class FusionauthApi {
         'userId': userId,
       },
       headers: {
-        'X-FusionAuth-TenantId': 'null',
+        if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
       },
     ));
   }
@@ -1479,7 +1479,7 @@ class FusionauthApi {
   Future<void> deleteApplicationWithId(
       {String? hardDelete,
       required String applicationId,
-      String? xFusionAuthTenantId}) async {
+      String? tenantIdScope}) async {
     await _client.send(
       'delete',
       'api/application/{applicationId}',
@@ -1490,7 +1490,7 @@ class FusionauthApi {
         if (hardDelete != null) 'hardDelete': hardDelete,
       },
       headers: {
-        'X-FusionAuth-TenantId': 'null',
+        if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
       },
     );
   }
@@ -1499,7 +1499,7 @@ class FusionauthApi {
   /// application, if not provided one will be generated.
   Future<ApplicationResponse> createApplicationWithId(
       {required String applicationId,
-      String? xFusionAuthTenantId,
+      String? tenantIdScope,
       required ApplicationRequest body}) async {
     return ApplicationResponse.fromJson(await _client.send(
       'post',
@@ -1508,7 +1508,7 @@ class FusionauthApi {
         'applicationId': applicationId,
       },
       headers: {
-        'X-FusionAuth-TenantId': 'null',
+        if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
       },
       body: body.toJson(),
     ));
@@ -1518,7 +1518,7 @@ class FusionauthApi {
   /// with the given Id.
   Future<ApplicationResponse> updateApplicationWithId(
       {required String applicationId,
-      String? xFusionAuthTenantId,
+      String? tenantIdScope,
       String? reactivate,
       required ApplicationRequest body}) async {
     return ApplicationResponse.fromJson(await _client.send(
@@ -1531,7 +1531,7 @@ class FusionauthApi {
         if (reactivate != null) 'reactivate': reactivate,
       },
       headers: {
-        'X-FusionAuth-TenantId': 'null',
+        if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
       },
       body: body.toJson(),
     ));
@@ -1540,7 +1540,7 @@ class FusionauthApi {
   /// Retrieves the application for the given Id or all the applications if the
   /// Id is null.
   Future<ApplicationResponse> retrieveApplicationWithId(
-      {required String applicationId, String? xFusionAuthTenantId}) async {
+      {required String applicationId, String? tenantIdScope}) async {
     return ApplicationResponse.fromJson(await _client.send(
       'get',
       'api/application/{applicationId}',
@@ -1548,14 +1548,14 @@ class FusionauthApi {
         'applicationId': applicationId,
       },
       headers: {
-        'X-FusionAuth-TenantId': 'null',
+        if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
       },
     ));
   }
 
   /// Retrieves the Entity for the given Id.
   Future<EntityResponse> retrieveEntityWithId(
-      {required String entityId, String? xFusionAuthTenantId}) async {
+      {required String entityId, String? tenantIdScope}) async {
     return EntityResponse.fromJson(await _client.send(
       'get',
       'api/entity/{entityId}',
@@ -1563,7 +1563,7 @@ class FusionauthApi {
         'entityId': entityId,
       },
       headers: {
-        'X-FusionAuth-TenantId': 'null',
+        if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
       },
     ));
   }
@@ -1571,7 +1571,7 @@ class FusionauthApi {
   /// Updates the Entity with the given Id.
   Future<EntityResponse> updateEntityWithId(
       {required String entityId,
-      String? xFusionAuthTenantId,
+      String? tenantIdScope,
       required EntityRequest body}) async {
     return EntityResponse.fromJson(await _client.send(
       'put',
@@ -1580,7 +1580,7 @@ class FusionauthApi {
         'entityId': entityId,
       },
       headers: {
-        'X-FusionAuth-TenantId': 'null',
+        if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
       },
       body: body.toJson(),
     ));
@@ -1590,7 +1590,7 @@ class FusionauthApi {
   /// provided one will be generated.
   Future<EntityResponse> createEntityWithId(
       {required String entityId,
-      String? xFusionAuthTenantId,
+      String? tenantIdScope,
       required EntityRequest body}) async {
     return EntityResponse.fromJson(await _client.send(
       'post',
@@ -1599,7 +1599,7 @@ class FusionauthApi {
         'entityId': entityId,
       },
       headers: {
-        'X-FusionAuth-TenantId': 'null',
+        if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
       },
       body: body.toJson(),
     ));
@@ -1607,7 +1607,7 @@ class FusionauthApi {
 
   /// Deletes the Entity for the given Id.
   Future<void> deleteEntityWithId(
-      {required String entityId, String? xFusionAuthTenantId}) async {
+      {required String entityId, String? tenantIdScope}) async {
     await _client.send(
       'delete',
       'api/entity/{entityId}',
@@ -1615,7 +1615,7 @@ class FusionauthApi {
         'entityId': entityId,
       },
       headers: {
-        'X-FusionAuth-TenantId': 'null',
+        if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
       },
     );
   }
@@ -1746,7 +1746,7 @@ class FusionauthApi {
   /// Retrieves the email template for the given Id. If you don't specify the
   /// id, this will return all the email templates.
   Future<EmailTemplateResponse> retrieveEmailTemplateWithId(
-      {required String emailTemplateId, String? xFusionAuthTenantId}) async {
+      {required String emailTemplateId, String? tenantIdScope}) async {
     return EmailTemplateResponse.fromJson(await _client.send(
       'get',
       'api/email/template/{emailTemplateId}',
@@ -1754,14 +1754,14 @@ class FusionauthApi {
         'emailTemplateId': emailTemplateId,
       },
       headers: {
-        'X-FusionAuth-TenantId': 'null',
+        if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
       },
     ));
   }
 
   /// Deletes the email template for the given Id.
   Future<void> deleteEmailTemplateWithId(
-      {required String emailTemplateId, String? xFusionAuthTenantId}) async {
+      {required String emailTemplateId, String? tenantIdScope}) async {
     await _client.send(
       'delete',
       'api/email/template/{emailTemplateId}',
@@ -1769,7 +1769,7 @@ class FusionauthApi {
         'emailTemplateId': emailTemplateId,
       },
       headers: {
-        'X-FusionAuth-TenantId': 'null',
+        if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
       },
     );
   }
@@ -1777,7 +1777,7 @@ class FusionauthApi {
   /// Updates the email template with the given Id.
   Future<EmailTemplateResponse> updateEmailTemplateWithId(
       {required String emailTemplateId,
-      String? xFusionAuthTenantId,
+      String? tenantIdScope,
       required EmailTemplateRequest body}) async {
     return EmailTemplateResponse.fromJson(await _client.send(
       'put',
@@ -1786,7 +1786,7 @@ class FusionauthApi {
         'emailTemplateId': emailTemplateId,
       },
       headers: {
-        'X-FusionAuth-TenantId': 'null',
+        if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
       },
       body: body.toJson(),
     ));
@@ -1796,7 +1796,7 @@ class FusionauthApi {
   /// template, if not provided one will be generated.
   Future<EmailTemplateResponse> createEmailTemplateWithId(
       {required String emailTemplateId,
-      String? xFusionAuthTenantId,
+      String? tenantIdScope,
       required EmailTemplateRequest body}) async {
     return EmailTemplateResponse.fromJson(await _client.send(
       'post',
@@ -1805,7 +1805,7 @@ class FusionauthApi {
         'emailTemplateId': emailTemplateId,
       },
       headers: {
-        'X-FusionAuth-TenantId': 'null',
+        if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
       },
       body: body.toJson(),
     ));
@@ -1814,12 +1814,12 @@ class FusionauthApi {
   /// Retrieves the email template for the given Id. If you don't specify the
   /// id, this will return all the email templates.
   Future<EmailTemplateResponse> retrieveEmailTemplate(
-      {String? xFusionAuthTenantId}) async {
+      {String? tenantIdScope}) async {
     return EmailTemplateResponse.fromJson(await _client.send(
       'get',
       'api/email/template',
       headers: {
-        'X-FusionAuth-TenantId': 'null',
+        if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
       },
     ));
   }
@@ -1827,12 +1827,12 @@ class FusionauthApi {
   /// Creates an email template. You can optionally specify an Id for the
   /// template, if not provided one will be generated.
   Future<EmailTemplateResponse> createEmailTemplate(
-      {String? xFusionAuthTenantId, required EmailTemplateRequest body}) async {
+      {String? tenantIdScope, required EmailTemplateRequest body}) async {
     return EmailTemplateResponse.fromJson(await _client.send(
       'post',
       'api/email/template',
       headers: {
-        'X-FusionAuth-TenantId': 'null',
+        if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
       },
       body: body.toJson(),
     ));
@@ -1840,7 +1840,7 @@ class FusionauthApi {
 
   /// Retrieves the tenant for the given Id.
   Future<TenantResponse> retrieveTenantWithId(
-      {required String tenantId, String? xFusionAuthTenantId}) async {
+      {required String tenantId, String? tenantIdScope}) async {
     return TenantResponse.fromJson(await _client.send(
       'get',
       'api/tenant/{tenantId}',
@@ -1848,7 +1848,7 @@ class FusionauthApi {
         'tenantId': tenantId,
       },
       headers: {
-        'X-FusionAuth-TenantId': 'null',
+        if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
       },
     ));
   }
@@ -1864,7 +1864,7 @@ class FusionauthApi {
   /// users, etc).
   Future<void> deleteTenantWithId(
       {required String tenantId,
-      String? xFusionAuthTenantId,
+      String? tenantIdScope,
       String? async$,
       required TenantDeleteRequest body}) async {
     await _client.send(
@@ -1877,7 +1877,7 @@ class FusionauthApi {
         if (async$ != null) 'async': async$,
       },
       headers: {
-        'X-FusionAuth-TenantId': 'null',
+        if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
       },
       body: body.toJson(),
     );
@@ -1886,7 +1886,7 @@ class FusionauthApi {
   /// Updates the tenant with the given Id.
   Future<TenantResponse> updateTenantWithId(
       {required String tenantId,
-      String? xFusionAuthTenantId,
+      String? tenantIdScope,
       required TenantRequest body}) async {
     return TenantResponse.fromJson(await _client.send(
       'put',
@@ -1895,7 +1895,7 @@ class FusionauthApi {
         'tenantId': tenantId,
       },
       headers: {
-        'X-FusionAuth-TenantId': 'null',
+        if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
       },
       body: body.toJson(),
     ));
@@ -1905,7 +1905,7 @@ class FusionauthApi {
   /// provided one will be generated.
   Future<TenantResponse> createTenantWithId(
       {required String tenantId,
-      String? xFusionAuthTenantId,
+      String? tenantIdScope,
       required TenantRequest body}) async {
     return TenantResponse.fromJson(await _client.send(
       'post',
@@ -1914,7 +1914,7 @@ class FusionauthApi {
         'tenantId': tenantId,
       },
       headers: {
-        'X-FusionAuth-TenantId': 'null',
+        if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
       },
       body: body.toJson(),
     ));
@@ -2043,7 +2043,7 @@ class FusionauthApi {
 
   /// Retrieves all the families that a user belongs to.
   Future<FamilyResponse> retrieveFamiliesWithId(
-      {String? userId, String? xFusionAuthTenantId}) async {
+      {String? userId, String? tenantIdScope}) async {
     return FamilyResponse.fromJson(await _client.send(
       'get',
       'api/user/family',
@@ -2051,7 +2051,7 @@ class FusionauthApi {
         if (userId != null) 'userId': userId,
       },
       headers: {
-        'X-FusionAuth-TenantId': 'null',
+        if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
       },
     ));
   }
@@ -2060,12 +2060,12 @@ class FusionauthApi {
   /// member of the family. You can optionally specify an Id for the family, if
   /// not provided one will be generated.
   Future<FamilyResponse> createFamily(
-      {String? xFusionAuthTenantId, required FamilyRequest body}) async {
+      {String? tenantIdScope, required FamilyRequest body}) async {
     return FamilyResponse.fromJson(await _client.send(
       'post',
       'api/user/family',
       headers: {
-        'X-FusionAuth-TenantId': 'null',
+        if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
       },
       body: body.toJson(),
     ));
@@ -2107,7 +2107,7 @@ class FusionauthApi {
   Future<void> removeUserFromFamilyWithId(
       {required String familyId,
       required String userId,
-      String? xFusionAuthTenantId}) async {
+      String? tenantIdScope}) async {
     await _client.send(
       'delete',
       'api/user/family/{familyId}/{userId}',
@@ -2116,7 +2116,7 @@ class FusionauthApi {
         'userId': userId,
       },
       headers: {
-        'X-FusionAuth-TenantId': 'null',
+        if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
       },
     );
   }
@@ -2161,7 +2161,7 @@ class FusionauthApi {
   /// application defined in the request.
   Future<RegistrationResponse> updateRegistrationWithId(
       {required String userId,
-      String? xFusionAuthTenantId,
+      String? tenantIdScope,
       required RegistrationRequest body}) async {
     return RegistrationResponse.fromJson(await _client.send(
       'put',
@@ -2170,7 +2170,7 @@ class FusionauthApi {
         'userId': userId,
       },
       headers: {
-        'X-FusionAuth-TenantId': 'null',
+        if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
       },
       body: body.toJson(),
     ));
@@ -2185,7 +2185,7 @@ class FusionauthApi {
   /// existing user or it will be used for the newly created User.
   Future<RegistrationResponse> registerWithId(
       {required String userId,
-      String? xFusionAuthTenantId,
+      String? tenantIdScope,
       required RegistrationRequest body}) async {
     return RegistrationResponse.fromJson(await _client.send(
       'post',
@@ -2194,7 +2194,7 @@ class FusionauthApi {
         'userId': userId,
       },
       headers: {
-        'X-FusionAuth-TenantId': 'null',
+        if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
       },
       body: body.toJson(),
     ));
@@ -2244,7 +2244,7 @@ class FusionauthApi {
 
   /// Retrieves the group for the given Id.
   Future<GroupResponse> retrieveGroupWithId(
-      {required String groupId, String? xFusionAuthTenantId}) async {
+      {required String groupId, String? tenantIdScope}) async {
     return GroupResponse.fromJson(await _client.send(
       'get',
       'api/group/{groupId}',
@@ -2252,14 +2252,14 @@ class FusionauthApi {
         'groupId': groupId,
       },
       headers: {
-        'X-FusionAuth-TenantId': 'null',
+        if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
       },
     ));
   }
 
   /// Deletes the group for the given Id.
   Future<void> deleteGroupWithId(
-      {required String groupId, String? xFusionAuthTenantId}) async {
+      {required String groupId, String? tenantIdScope}) async {
     await _client.send(
       'delete',
       'api/group/{groupId}',
@@ -2267,7 +2267,7 @@ class FusionauthApi {
         'groupId': groupId,
       },
       headers: {
-        'X-FusionAuth-TenantId': 'null',
+        if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
       },
     );
   }
@@ -2276,7 +2276,7 @@ class FusionauthApi {
   /// provided one will be generated.
   Future<GroupResponse> createGroupWithId(
       {required String groupId,
-      String? xFusionAuthTenantId,
+      String? tenantIdScope,
       required GroupRequest body}) async {
     return GroupResponse.fromJson(await _client.send(
       'post',
@@ -2285,7 +2285,7 @@ class FusionauthApi {
         'groupId': groupId,
       },
       headers: {
-        'X-FusionAuth-TenantId': 'null',
+        if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
       },
       body: body.toJson(),
     ));
@@ -2294,7 +2294,7 @@ class FusionauthApi {
   /// Updates the group with the given Id.
   Future<GroupResponse> updateGroupWithId(
       {required String groupId,
-      String? xFusionAuthTenantId,
+      String? tenantIdScope,
       required GroupRequest body}) async {
     return GroupResponse.fromJson(await _client.send(
       'put',
@@ -2303,7 +2303,7 @@ class FusionauthApi {
         'groupId': groupId,
       },
       headers: {
-        'X-FusionAuth-TenantId': 'null',
+        if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
       },
       body: body.toJson(),
     ));
@@ -2326,7 +2326,7 @@ class FusionauthApi {
   Future<void> deleteUserRegistrationWithId(
       {required String userId,
       required String applicationId,
-      String? xFusionAuthTenantId,
+      String? tenantIdScope,
       required RegistrationDeleteRequest body}) async {
     await _client.send(
       'delete',
@@ -2336,7 +2336,7 @@ class FusionauthApi {
         'applicationId': applicationId,
       },
       headers: {
-        'X-FusionAuth-TenantId': 'null',
+        if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
       },
       body: body.toJson(),
     );
@@ -2347,7 +2347,7 @@ class FusionauthApi {
   Future<RegistrationResponse> retrieveRegistrationWithId(
       {required String userId,
       required String applicationId,
-      String? xFusionAuthTenantId}) async {
+      String? tenantIdScope}) async {
     return RegistrationResponse.fromJson(await _client.send(
       'get',
       'api/user/registration/{userId}/{applicationId}',
@@ -2356,7 +2356,7 @@ class FusionauthApi {
         'applicationId': applicationId,
       },
       headers: {
-        'X-FusionAuth-TenantId': 'null',
+        if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
       },
     ));
   }
@@ -2531,12 +2531,12 @@ class FusionauthApi {
   /// an application where they no longer have a session. This helps correctly
   /// track login counts, times and helps with reporting.
   Future<LoginResponse> loginPingWithRequestWithId(
-      {String? xFusionAuthTenantId, required LoginPingRequest body}) async {
+      {String? tenantIdScope, required LoginPingRequest body}) async {
     return LoginResponse.fromJson(await _client.send(
       'put',
       'api/login',
       headers: {
-        'X-FusionAuth-TenantId': 'null',
+        if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
       },
       body: body.toJson(),
     ));
@@ -2545,12 +2545,12 @@ class FusionauthApi {
   /// Authenticates a user to FusionAuth.   This API optionally requires an API
   /// key. See `Application.loginConfiguration.requireAuthentication`.
   Future<LoginResponse> loginWithId(
-      {String? xFusionAuthTenantId, required LoginRequest body}) async {
+      {String? tenantIdScope, required LoginRequest body}) async {
     return LoginResponse.fromJson(await _client.send(
       'post',
       'api/login',
       headers: {
-        'X-FusionAuth-TenantId': 'null',
+        if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
       },
       body: body.toJson(),
     ));
@@ -2749,7 +2749,7 @@ class FusionauthApi {
   /// Retrieves the application for the given Id or all the applications if the
   /// Id is null. OR Retrieves all the applications that are currently inactive.
   Future<ApplicationResponse> retrieveApplication(
-      {String? xFusionAuthTenantId, String? inactive}) async {
+      {String? tenantIdScope, String? inactive}) async {
     return ApplicationResponse.fromJson(await _client.send(
       'get',
       'api/application',
@@ -2757,7 +2757,7 @@ class FusionauthApi {
         if (inactive != null) 'inactive': inactive,
       },
       headers: {
-        'X-FusionAuth-TenantId': 'null',
+        if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
       },
     ));
   }
@@ -2765,12 +2765,12 @@ class FusionauthApi {
   /// Creates an application. You can optionally specify an Id for the
   /// application, if not provided one will be generated.
   Future<ApplicationResponse> createApplication(
-      {String? xFusionAuthTenantId, required ApplicationRequest body}) async {
+      {String? tenantIdScope, required ApplicationRequest body}) async {
     return ApplicationResponse.fromJson(await _client.send(
       'post',
       'api/application',
       headers: {
-        'X-FusionAuth-TenantId': 'null',
+        if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
       },
       body: body.toJson(),
     ));
@@ -2843,7 +2843,7 @@ class FusionauthApi {
   /// the user action for the given Id. If you pass in null for the id, this
   /// will return all the user actions.
   Future<UserActionResponse> retrieveUserAction(
-      {String? inactive, String? xFusionAuthTenantId}) async {
+      {String? inactive, String? tenantIdScope}) async {
     return UserActionResponse.fromJson(await _client.send(
       'get',
       'api/user-action',
@@ -2851,7 +2851,7 @@ class FusionauthApi {
         if (inactive != null) 'inactive': inactive,
       },
       headers: {
-        'X-FusionAuth-TenantId': 'null',
+        if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
       },
     ));
   }
@@ -2860,12 +2860,12 @@ class FusionauthApi {
   /// call successfully returns. Anytime after that the user action can be
   /// applied to any user.
   Future<UserActionResponse> createUserAction(
-      {String? xFusionAuthTenantId, required UserActionRequest body}) async {
+      {String? tenantIdScope, required UserActionRequest body}) async {
     return UserActionResponse.fromJson(await _client.send(
       'post',
       'api/user-action',
       headers: {
-        'X-FusionAuth-TenantId': 'null',
+        if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
       },
       body: body.toJson(),
     ));
@@ -2873,7 +2873,7 @@ class FusionauthApi {
 
   /// Retrieves all the comments for the user with the given Id.
   Future<UserCommentResponse> retrieveUserCommentsWithId(
-      {required String userId, String? xFusionAuthTenantId}) async {
+      {required String userId, String? tenantIdScope}) async {
     return UserCommentResponse.fromJson(await _client.send(
       'get',
       'api/user/comment/{userId}',
@@ -2881,7 +2881,7 @@ class FusionauthApi {
         'userId': userId,
       },
       headers: {
-        'X-FusionAuth-TenantId': 'null',
+        if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
       },
     ));
   }
@@ -3194,12 +3194,12 @@ class FusionauthApi {
   /// user Id can also be provided and it will either be used to look up an
   /// existing user or it will be used for the newly created User.
   Future<RegistrationResponse> register(
-      {String? xFusionAuthTenantId, required RegistrationRequest body}) async {
+      {String? tenantIdScope, required RegistrationRequest body}) async {
     return RegistrationResponse.fromJson(await _client.send(
       'post',
       'api/user/registration',
       headers: {
-        'X-FusionAuth-TenantId': 'null',
+        if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
       },
       body: body.toJson(),
     ));
@@ -3259,7 +3259,7 @@ class FusionauthApi {
   /// generated.
   Future<ApplicationOAuthScopeResponse> createoAuthScope(
       {required String applicationId,
-      String? xFusionAuthTenantId,
+      String? tenantIdScope,
       required ApplicationOAuthScopeRequest body}) async {
     return ApplicationOAuthScopeResponse.fromJson(await _client.send(
       'post',
@@ -3268,7 +3268,7 @@ class FusionauthApi {
         'applicationId': applicationId,
       },
       headers: {
-        'X-FusionAuth-TenantId': 'null',
+        if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
       },
       body: body.toJson(),
     ));
@@ -3279,7 +3279,7 @@ class FusionauthApi {
       {String? recipientEntityId,
       String? userId,
       required String entityId,
-      String? xFusionAuthTenantId}) async {
+      String? tenantIdScope}) async {
     await _client.send(
       'delete',
       'api/entity/{entityId}/grant',
@@ -3291,7 +3291,7 @@ class FusionauthApi {
         if (userId != null) 'userId': userId,
       },
       headers: {
-        'X-FusionAuth-TenantId': 'null',
+        if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
       },
     );
   }
@@ -3300,7 +3300,7 @@ class FusionauthApi {
   /// permissions to an Entity.
   Future<void> upsertEntityGrantWithId(
       {required String entityId,
-      String? xFusionAuthTenantId,
+      String? tenantIdScope,
       required EntityGrantRequest body}) async {
     await _client.send(
       'post',
@@ -3309,7 +3309,7 @@ class FusionauthApi {
         'entityId': entityId,
       },
       headers: {
-        'X-FusionAuth-TenantId': 'null',
+        if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
       },
       body: body.toJson(),
     );
@@ -3320,7 +3320,7 @@ class FusionauthApi {
       {String? recipientEntityId,
       String? userId,
       required String entityId,
-      String? xFusionAuthTenantId}) async {
+      String? tenantIdScope}) async {
     return EntityGrantResponse.fromJson(await _client.send(
       'get',
       'api/entity/{entityId}/grant',
@@ -3332,7 +3332,7 @@ class FusionauthApi {
         if (userId != null) 'userId': userId,
       },
       headers: {
-        'X-FusionAuth-TenantId': 'null',
+        if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
       },
     ));
   }
@@ -3352,12 +3352,12 @@ class FusionauthApi {
   /// Creates a user consent type. You can optionally specify an Id for the
   /// consent type, if not provided one will be generated.
   Future<ConsentResponse> createConsent(
-      {String? xFusionAuthTenantId, required ConsentRequest body}) async {
+      {String? tenantIdScope, required ConsentRequest body}) async {
     return ConsentResponse.fromJson(await _client.send(
       'post',
       'api/consent',
       headers: {
-        'X-FusionAuth-TenantId': 'null',
+        if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
       },
       body: body.toJson(),
     ));
@@ -3366,7 +3366,7 @@ class FusionauthApi {
   /// Retrieves the Oauth2 configuration for the application for the given
   /// Application Id.
   Future<OAuthConfigurationResponse> retrieveOauthConfigurationWithId(
-      {required String applicationId, String? xFusionAuthTenantId}) async {
+      {required String applicationId, String? tenantIdScope}) async {
     return OAuthConfigurationResponse.fromJson(await _client.send(
       'get',
       'api/application/{applicationId}/oauth-configuration',
@@ -3374,7 +3374,7 @@ class FusionauthApi {
         'applicationId': applicationId,
       },
       headers: {
-        'X-FusionAuth-TenantId': 'null',
+        if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
       },
     ));
   }
@@ -3459,12 +3459,12 @@ class FusionauthApi {
   /// Creates a group. You can optionally specify an Id for the group, if not
   /// provided one will be generated.
   Future<GroupResponse> createGroup(
-      {String? xFusionAuthTenantId, required GroupRequest body}) async {
+      {String? tenantIdScope, required GroupRequest body}) async {
     return GroupResponse.fromJson(await _client.send(
       'post',
       'api/group',
       headers: {
-        'X-FusionAuth-TenantId': 'null',
+        if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
       },
       body: body.toJson(),
     ));
@@ -3657,12 +3657,12 @@ class FusionauthApi {
   /// Creates a tenant. You can optionally specify an Id for the tenant, if not
   /// provided one will be generated.
   Future<TenantResponse> createTenant(
-      {String? xFusionAuthTenantId, required TenantRequest body}) async {
+      {String? tenantIdScope, required TenantRequest body}) async {
     return TenantResponse.fromJson(await _client.send(
       'post',
       'api/tenant',
       headers: {
-        'X-FusionAuth-TenantId': 'null',
+        if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
       },
       body: body.toJson(),
     ));
@@ -3670,12 +3670,12 @@ class FusionauthApi {
 
   /// Adds a comment to the user's account.
   Future<UserCommentResponse> commentOnUserWithId(
-      {String? xFusionAuthTenantId, required UserCommentRequest body}) async {
+      {String? tenantIdScope, required UserCommentRequest body}) async {
     return UserCommentResponse.fromJson(await _client.send(
       'post',
       'api/user/comment',
       headers: {
-        'X-FusionAuth-TenantId': 'null',
+        if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
       },
       body: body.toJson(),
     ));
@@ -3765,7 +3765,7 @@ class FusionauthApi {
       {String? callerIpAddress,
       required String userId,
       required String applicationId,
-      String? xFusionAuthTenantId}) async {
+      String? tenantIdScope}) async {
     return LoginResponse.fromJson(await _client.send(
       'put',
       'api/login/{userId}/{applicationId}',
@@ -3777,7 +3777,7 @@ class FusionauthApi {
         if (callerIpAddress != null) 'callerIPAddress': callerIpAddress,
       },
       headers: {
-        'X-FusionAuth-TenantId': 'null',
+        if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
       },
     ));
   }
@@ -3796,12 +3796,12 @@ class FusionauthApi {
   /// Creates an Entity. You can optionally specify an Id for the Entity. If not
   /// provided one will be generated.
   Future<EntityResponse> createEntity(
-      {String? xFusionAuthTenantId, required EntityRequest body}) async {
+      {String? tenantIdScope, required EntityRequest body}) async {
     return EntityResponse.fromJson(await _client.send(
       'post',
       'api/entity',
       headers: {
-        'X-FusionAuth-TenantId': 'null',
+        if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
       },
       body: body.toJson(),
     ));
@@ -6575,17 +6575,11 @@ class APIKey {
   factory APIKey.fromJson(Map<String, Object?> json) {
     return APIKey(
       id: json[r'id'] as String?,
-      insertInstant: json[r'insertInstant'] != null
-          ? ZonedDateTime.fromJson(
-              json[r'insertInstant']! as Map<String, Object?>)
-          : null,
+      insertInstant: (json[r'insertInstant'] as num?)?.toInt(),
       ipAccessControlListId: json[r'ipAccessControlListId'] as String?,
       key: json[r'key'] as String?,
       keyManager: json[r'keyManager'] as bool? ?? false,
-      lastUpdateInstant: json[r'lastUpdateInstant'] != null
-          ? ZonedDateTime.fromJson(
-              json[r'lastUpdateInstant']! as Map<String, Object?>)
-          : null,
+      lastUpdateInstant: (json[r'lastUpdateInstant'] as num?)?.toInt(),
       metaData: json[r'metaData'] != null
           ? APIKeyMetaData.fromJson(json[r'metaData']! as Map<String, Object?>)
           : null,
@@ -6794,7 +6788,7 @@ class AccessToken {
   final String? refreshTokenId;
   final String? scope;
   final String? accessToken;
-  final String? tokenType;
+  final TokenType? tokenType;
   final String? userId;
 
   AccessToken(
@@ -6815,7 +6809,9 @@ class AccessToken {
       refreshTokenId: json[r'refresh_token_id'] as String?,
       scope: json[r'scope'] as String?,
       accessToken: json[r'access_token'] as String?,
-      tokenType: json[r'token_type'] as String?,
+      tokenType: json[r'token_type'] != null
+          ? TokenType.fromValue(json[r'token_type']! as String)
+          : null,
       userId: json[r'userId'] as String?,
     );
   }
@@ -6850,7 +6846,7 @@ class AccessToken {
       json[r'access_token'] = accessToken;
     }
     if (tokenType != null) {
-      json[r'token_type'] = tokenType;
+      json[r'token_type'] = tokenType.value;
     }
     if (userId != null) {
       json[r'userId'] = userId;
@@ -6865,7 +6861,7 @@ class AccessToken {
       String? refreshTokenId,
       String? scope,
       String? accessToken,
-      String? tokenType,
+      TokenType? tokenType,
       String? userId}) {
     return AccessToken(
       expiresIn: expiresIn ?? this.expiresIn,
@@ -6917,9 +6913,7 @@ class ActionData {
           [],
       comment: json[r'comment'] as String?,
       emailUser: json[r'emailUser'] as bool? ?? false,
-      expiry: json[r'expiry'] != null
-          ? ZonedDateTime.fromJson(json[r'expiry']! as Map<String, Object?>)
-          : null,
+      expiry: (json[r'expiry'] as num?)?.toInt(),
       notifyUser: json[r'notifyUser'] as bool? ?? false,
       option: json[r'option'] as String?,
       reasonId: json[r'reasonId'] as String?,
@@ -7188,10 +7182,10 @@ class AppleIdentityProvider {
   final ZonedDateTime? insertInstant;
   final ProviderLambdaConfiguration? lambdaConfiguration;
   final ZonedDateTime? lastUpdateInstant;
-  final String? linkingStrategy;
+  final IdentityProviderLinkingStrategy? linkingStrategy;
   final String? name;
   final Map<String, dynamic>? tenantConfiguration;
-  final String? type;
+  final IdentityProviderType? type;
 
   AppleIdentityProvider(
       {this.bundleId,
@@ -7226,23 +7220,22 @@ class AppleIdentityProvider {
           json[r'applicationConfiguration'] as Map<String, Object?>?,
       debug: json[r'debug'] as bool? ?? false,
       id: json[r'id'] as String?,
-      insertInstant: json[r'insertInstant'] != null
-          ? ZonedDateTime.fromJson(
-              json[r'insertInstant']! as Map<String, Object?>)
-          : null,
+      insertInstant: (json[r'insertInstant'] as num?)?.toInt(),
       lambdaConfiguration: json[r'lambdaConfiguration'] != null
           ? ProviderLambdaConfiguration.fromJson(
               json[r'lambdaConfiguration']! as Map<String, Object?>)
           : null,
-      lastUpdateInstant: json[r'lastUpdateInstant'] != null
-          ? ZonedDateTime.fromJson(
-              json[r'lastUpdateInstant']! as Map<String, Object?>)
+      lastUpdateInstant: (json[r'lastUpdateInstant'] as num?)?.toInt(),
+      linkingStrategy: json[r'linkingStrategy'] != null
+          ? IdentityProviderLinkingStrategy.fromValue(
+              json[r'linkingStrategy']! as String)
           : null,
-      linkingStrategy: json[r'linkingStrategy'] as String?,
       name: json[r'name'] as String?,
       tenantConfiguration:
           json[r'tenantConfiguration'] as Map<String, Object?>?,
-      type: json[r'type'] as String?,
+      type: json[r'type'] != null
+          ? IdentityProviderType.fromValue(json[r'type']! as String)
+          : null,
     );
   }
 
@@ -7304,7 +7297,7 @@ class AppleIdentityProvider {
       json[r'lastUpdateInstant'] = lastUpdateInstant.toJson();
     }
     if (linkingStrategy != null) {
-      json[r'linkingStrategy'] = linkingStrategy;
+      json[r'linkingStrategy'] = linkingStrategy.value;
     }
     if (name != null) {
       json[r'name'] = name;
@@ -7313,7 +7306,7 @@ class AppleIdentityProvider {
       json[r'tenantConfiguration'] = tenantConfiguration;
     }
     if (type != null) {
-      json[r'type'] = type;
+      json[r'type'] = type.value;
     }
     return json;
   }
@@ -7332,10 +7325,10 @@ class AppleIdentityProvider {
       ZonedDateTime? insertInstant,
       ProviderLambdaConfiguration? lambdaConfiguration,
       ZonedDateTime? lastUpdateInstant,
-      String? linkingStrategy,
+      IdentityProviderLinkingStrategy? linkingStrategy,
       String? name,
       Map<String, dynamic>? tenantConfiguration,
-      String? type}) {
+      IdentityProviderType? type}) {
     return AppleIdentityProvider(
       bundleId: bundleId ?? this.bundleId,
       buttonText: buttonText ?? this.buttonText,
@@ -7384,12 +7377,12 @@ class Application {
   final List<ApplicationRole> roles;
   final SAMLv2Configuration? samlv2Configuration;
   final List<ApplicationOAuthScope> scopes;
-  final String? state;
+  final ObjectState? state;
   final String? tenantId;
   final String? themeId;
   final RegistrationUnverifiedOptions? unverified;
   final String? verificationEmailTemplateId;
-  final String? verificationStrategy;
+  final VerificationStrategy? verificationStrategy;
   final bool verifyRegistration;
   final ApplicationWebAuthnConfiguration? webAuthnConfiguration;
 
@@ -7463,10 +7456,7 @@ class Application {
               json[r'formConfiguration']! as Map<String, Object?>)
           : null,
       id: json[r'id'] as String?,
-      insertInstant: json[r'insertInstant'] != null
-          ? ZonedDateTime.fromJson(
-              json[r'insertInstant']! as Map<String, Object?>)
-          : null,
+      insertInstant: (json[r'insertInstant'] as num?)?.toInt(),
       jwtConfiguration: json[r'jwtConfiguration'] != null
           ? JWTConfiguration.fromJson(
               json[r'jwtConfiguration']! as Map<String, Object?>)
@@ -7475,10 +7465,7 @@ class Application {
           ? LambdaConfiguration.fromJson(
               json[r'lambdaConfiguration']! as Map<String, Object?>)
           : null,
-      lastUpdateInstant: json[r'lastUpdateInstant'] != null
-          ? ZonedDateTime.fromJson(
-              json[r'lastUpdateInstant']! as Map<String, Object?>)
-          : null,
+      lastUpdateInstant: (json[r'lastUpdateInstant'] as num?)?.toInt(),
       loginConfiguration: json[r'loginConfiguration'] != null
           ? LoginConfiguration.fromJson(
               json[r'loginConfiguration']! as Map<String, Object?>)
@@ -7518,7 +7505,9 @@ class Application {
                   i as Map<String, Object?>? ?? const {}))
               .toList() ??
           [],
-      state: json[r'state'] as String?,
+      state: json[r'state'] != null
+          ? ObjectState.fromValue(json[r'state']! as String)
+          : null,
       tenantId: json[r'tenantId'] as String?,
       themeId: json[r'themeId'] as String?,
       unverified: json[r'unverified'] != null
@@ -7527,7 +7516,10 @@ class Application {
           : null,
       verificationEmailTemplateId:
           json[r'verificationEmailTemplateId'] as String?,
-      verificationStrategy: json[r'verificationStrategy'] as String?,
+      verificationStrategy: json[r'verificationStrategy'] != null
+          ? VerificationStrategy.fromValue(
+              json[r'verificationStrategy']! as String)
+          : null,
       verifyRegistration: json[r'verifyRegistration'] as bool? ?? false,
       webAuthnConfiguration: json[r'webAuthnConfiguration'] != null
           ? ApplicationWebAuthnConfiguration.fromJson(
@@ -7637,7 +7629,7 @@ class Application {
     }
     json[r'scopes'] = scopes.map((i) => i.toJson()).toList();
     if (state != null) {
-      json[r'state'] = state;
+      json[r'state'] = state.value;
     }
     if (tenantId != null) {
       json[r'tenantId'] = tenantId;
@@ -7652,7 +7644,7 @@ class Application {
       json[r'verificationEmailTemplateId'] = verificationEmailTemplateId;
     }
     if (verificationStrategy != null) {
-      json[r'verificationStrategy'] = verificationStrategy;
+      json[r'verificationStrategy'] = verificationStrategy.value;
     }
     json[r'verifyRegistration'] = verifyRegistration;
     if (webAuthnConfiguration != null) {
@@ -7686,12 +7678,12 @@ class Application {
       List<ApplicationRole>? roles,
       SAMLv2Configuration? samlv2Configuration,
       List<ApplicationOAuthScope>? scopes,
-      String? state,
+      ObjectState? state,
       String? tenantId,
       String? themeId,
       RegistrationUnverifiedOptions? unverified,
       String? verificationEmailTemplateId,
-      String? verificationStrategy,
+      VerificationStrategy? verificationStrategy,
       bool? verifyRegistration,
       ApplicationWebAuthnConfiguration? webAuthnConfiguration}) {
     return Application(
@@ -8069,9 +8061,9 @@ class ApplicationFormConfiguration {
 
 class ApplicationMultiFactorConfiguration {
   final MultiFactorEmailTemplate? email;
-  final String? loginPolicy;
+  final MultiFactorLoginPolicy? loginPolicy;
   final MultiFactorSMSTemplate? sms;
-  final String? trustPolicy;
+  final ApplicationMultiFactorTrustPolicy? trustPolicy;
 
   ApplicationMultiFactorConfiguration(
       {this.email, this.loginPolicy, this.sms, this.trustPolicy});
@@ -8083,12 +8075,17 @@ class ApplicationMultiFactorConfiguration {
           ? MultiFactorEmailTemplate.fromJson(
               json[r'email']! as Map<String, Object?>)
           : null,
-      loginPolicy: json[r'loginPolicy'] as String?,
+      loginPolicy: json[r'loginPolicy'] != null
+          ? MultiFactorLoginPolicy.fromValue(json[r'loginPolicy']! as String)
+          : null,
       sms: json[r'sms'] != null
           ? MultiFactorSMSTemplate.fromJson(
               json[r'sms']! as Map<String, Object?>)
           : null,
-      trustPolicy: json[r'trustPolicy'] as String?,
+      trustPolicy: json[r'trustPolicy'] != null
+          ? ApplicationMultiFactorTrustPolicy.fromValue(
+              json[r'trustPolicy']! as String)
+          : null,
     );
   }
 
@@ -8103,22 +8100,22 @@ class ApplicationMultiFactorConfiguration {
       json[r'email'] = email.toJson();
     }
     if (loginPolicy != null) {
-      json[r'loginPolicy'] = loginPolicy;
+      json[r'loginPolicy'] = loginPolicy.value;
     }
     if (sms != null) {
       json[r'sms'] = sms.toJson();
     }
     if (trustPolicy != null) {
-      json[r'trustPolicy'] = trustPolicy;
+      json[r'trustPolicy'] = trustPolicy.value;
     }
     return json;
   }
 
   ApplicationMultiFactorConfiguration copyWith(
       {MultiFactorEmailTemplate? email,
-      String? loginPolicy,
+      MultiFactorLoginPolicy? loginPolicy,
       MultiFactorSMSTemplate? sms,
-      String? trustPolicy}) {
+      ApplicationMultiFactorTrustPolicy? trustPolicy}) {
     return ApplicationMultiFactorConfiguration(
       email: email ?? this.email,
       loginPolicy: loginPolicy ?? this.loginPolicy,
@@ -8162,14 +8159,8 @@ class ApplicationOAuthScope {
       defaultConsentMessage: json[r'defaultConsentMessage'] as String?,
       description: json[r'description'] as String?,
       id: json[r'id'] as String?,
-      insertInstant: json[r'insertInstant'] != null
-          ? ZonedDateTime.fromJson(
-              json[r'insertInstant']! as Map<String, Object?>)
-          : null,
-      lastUpdateInstant: json[r'lastUpdateInstant'] != null
-          ? ZonedDateTime.fromJson(
-              json[r'lastUpdateInstant']! as Map<String, Object?>)
-          : null,
+      insertInstant: (json[r'insertInstant'] as num?)?.toInt(),
+      lastUpdateInstant: (json[r'lastUpdateInstant'] as num?)?.toInt(),
       name: json[r'name'] as String?,
       required: json[r'required'] as bool? ?? false,
     );
@@ -8484,16 +8475,10 @@ class ApplicationRole {
     return ApplicationRole(
       description: json[r'description'] as String?,
       id: json[r'id'] as String?,
-      insertInstant: json[r'insertInstant'] != null
-          ? ZonedDateTime.fromJson(
-              json[r'insertInstant']! as Map<String, Object?>)
-          : null,
+      insertInstant: (json[r'insertInstant'] as num?)?.toInt(),
       isDefault: json[r'isDefault'] as bool? ?? false,
       isSuperRole: json[r'isSuperRole'] as bool? ?? false,
-      lastUpdateInstant: json[r'lastUpdateInstant'] != null
-          ? ZonedDateTime.fromJson(
-              json[r'lastUpdateInstant']! as Map<String, Object?>)
-          : null,
+      lastUpdateInstant: (json[r'lastUpdateInstant'] as num?)?.toInt(),
       name: json[r'name'] as String?,
     );
   }
@@ -8551,7 +8536,7 @@ class ApplicationRole {
 /// Search criteria for Applications
 class ApplicationSearchCriteria {
   final String? name;
-  final String? state;
+  final ObjectState? state;
   final String? tenantId;
   final int? numberOfResults;
   final String? orderBy;
@@ -8568,7 +8553,9 @@ class ApplicationSearchCriteria {
   factory ApplicationSearchCriteria.fromJson(Map<String, Object?> json) {
     return ApplicationSearchCriteria(
       name: json[r'name'] as String?,
-      state: json[r'state'] as String?,
+      state: json[r'state'] != null
+          ? ObjectState.fromValue(json[r'state']! as String)
+          : null,
       tenantId: json[r'tenantId'] as String?,
       numberOfResults: (json[r'numberOfResults'] as num?)?.toInt(),
       orderBy: json[r'orderBy'] as String?,
@@ -8589,7 +8576,7 @@ class ApplicationSearchCriteria {
       json[r'name'] = name;
     }
     if (state != null) {
-      json[r'state'] = state;
+      json[r'state'] = state.value;
     }
     if (tenantId != null) {
       json[r'tenantId'] = tenantId;
@@ -8608,7 +8595,7 @@ class ApplicationSearchCriteria {
 
   ApplicationSearchCriteria copyWith(
       {String? name,
-      String? state,
+      ObjectState? state,
       String? tenantId,
       int? numberOfResults,
       String? orderBy,
@@ -8865,10 +8852,7 @@ class AuditLog {
     return AuditLog(
       data: json[r'data'] as Map<String, Object?>?,
       id: (json[r'id'] as num?)?.toInt(),
-      insertInstant: json[r'insertInstant'] != null
-          ? ZonedDateTime.fromJson(
-              json[r'insertInstant']! as Map<String, Object?>)
-          : null,
+      insertInstant: (json[r'insertInstant'] as num?)?.toInt(),
       insertUser: json[r'insertUser'] as String?,
       message: json[r'message'] as String?,
       newValue: json[r'newValue'] as Map<String, Object?>?,
@@ -8975,7 +8959,7 @@ class AuditLogCreateEvent {
   final String? id;
   final EventInfo? info;
   final String? tenantId;
-  final String? type;
+  final EventType? type;
 
   AuditLogCreateEvent(
       {this.auditLog,
@@ -8990,16 +8974,15 @@ class AuditLogCreateEvent {
       auditLog: json[r'auditLog'] != null
           ? AuditLog.fromJson(json[r'auditLog']! as Map<String, Object?>)
           : null,
-      createInstant: json[r'createInstant'] != null
-          ? ZonedDateTime.fromJson(
-              json[r'createInstant']! as Map<String, Object?>)
-          : null,
+      createInstant: (json[r'createInstant'] as num?)?.toInt(),
       id: json[r'id'] as String?,
       info: json[r'info'] != null
           ? EventInfo.fromJson(json[r'info']! as Map<String, Object?>)
           : null,
       tenantId: json[r'tenantId'] as String?,
-      type: json[r'type'] as String?,
+      type: json[r'type'] != null
+          ? EventType.fromValue(json[r'type']! as String)
+          : null,
     );
   }
 
@@ -9028,7 +9011,7 @@ class AuditLogCreateEvent {
       json[r'tenantId'] = tenantId;
     }
     if (type != null) {
-      json[r'type'] = type;
+      json[r'type'] = type.value;
     }
     return json;
   }
@@ -9039,7 +9022,7 @@ class AuditLogCreateEvent {
       String? id,
       EventInfo? info,
       String? tenantId,
-      String? type}) {
+      EventType? type}) {
     return AuditLogCreateEvent(
       auditLog: auditLog ?? this.auditLog,
       createInstant: createInstant ?? this.createInstant,
@@ -9054,7 +9037,7 @@ class AuditLogCreateEvent {
 class AuditLogExportRequest {
   final AuditLogSearchCriteria? criteria;
   final String? dateTimeSecondsFormat;
-  final String? zoneId;
+  final ZoneId? zoneId;
 
   AuditLogExportRequest(
       {this.criteria, this.dateTimeSecondsFormat, this.zoneId});
@@ -9083,7 +9066,7 @@ class AuditLogExportRequest {
       json[r'dateTimeSecondsFormat'] = dateTimeSecondsFormat;
     }
     if (zoneId != null) {
-      json[r'zoneId'] = zoneId;
+      json[r'zoneId'] = zoneId.toJson();
     }
     return json;
   }
@@ -9091,7 +9074,7 @@ class AuditLogExportRequest {
   AuditLogExportRequest copyWith(
       {AuditLogSearchCriteria? criteria,
       String? dateTimeSecondsFormat,
-      String? zoneId}) {
+      ZoneId? zoneId}) {
     return AuditLogExportRequest(
       criteria: criteria ?? this.criteria,
       dateTimeSecondsFormat:
@@ -9197,16 +9180,12 @@ class AuditLogSearchCriteria {
 
   factory AuditLogSearchCriteria.fromJson(Map<String, Object?> json) {
     return AuditLogSearchCriteria(
-      end: json[r'end'] != null
-          ? ZonedDateTime.fromJson(json[r'end']! as Map<String, Object?>)
-          : null,
+      end: (json[r'end'] as num?)?.toInt(),
       message: json[r'message'] as String?,
       newValue: json[r'newValue'] as String?,
       oldValue: json[r'oldValue'] as String?,
       reason: json[r'reason'] as String?,
-      start: json[r'start'] != null
-          ? ZonedDateTime.fromJson(json[r'start']! as Map<String, Object?>)
-          : null,
+      start: (json[r'start'] as num?)?.toInt(),
       user: json[r'user'] as String?,
       numberOfResults: (json[r'numberOfResults'] as num?)?.toInt(),
       orderBy: json[r'orderBy'] as String?,
@@ -9384,7 +9363,7 @@ class AuthenticationTokenConfiguration {
 }
 
 class AuthenticatorConfiguration {
-  final String? algorithm;
+  final TOTPAlgorithm? algorithm;
   final int? codeLength;
   final int? timeStep;
 
@@ -9392,7 +9371,9 @@ class AuthenticatorConfiguration {
 
   factory AuthenticatorConfiguration.fromJson(Map<String, Object?> json) {
     return AuthenticatorConfiguration(
-      algorithm: json[r'algorithm'] as String?,
+      algorithm: json[r'algorithm'] != null
+          ? TOTPAlgorithm.fromValue(json[r'algorithm']! as String)
+          : null,
       codeLength: (json[r'codeLength'] as num?)?.toInt(),
       timeStep: (json[r'timeStep'] as num?)?.toInt(),
     );
@@ -9405,7 +9386,7 @@ class AuthenticatorConfiguration {
 
     final json = <String, Object?>{};
     if (algorithm != null) {
-      json[r'algorithm'] = algorithm;
+      json[r'algorithm'] = algorithm.value;
     }
     if (codeLength != null) {
       json[r'codeLength'] = codeLength;
@@ -9417,7 +9398,7 @@ class AuthenticatorConfiguration {
   }
 
   AuthenticatorConfiguration copyWith(
-      {String? algorithm, int? codeLength, int? timeStep}) {
+      {TOTPAlgorithm? algorithm, int? codeLength, int? timeStep}) {
     return AuthenticatorConfiguration(
       algorithm: algorithm ?? this.algorithm,
       codeLength: codeLength ?? this.codeLength,
@@ -9431,10 +9412,10 @@ class AuthenticatorConfiguration {
 /// to client-side discoverable credentials to maintain backwards compatibility
 /// with WebAuthn Level 1.
 class AuthenticatorSelectionCriteria {
-  final String? authenticatorAttachment;
+  final AuthenticatorAttachment? authenticatorAttachment;
   final bool requireResidentKey;
-  final String? residentKey;
-  final String? userVerification;
+  final ResidentKeyRequirement? residentKey;
+  final UserVerificationRequirement? userVerification;
 
   AuthenticatorSelectionCriteria(
       {this.authenticatorAttachment,
@@ -9445,10 +9426,18 @@ class AuthenticatorSelectionCriteria {
 
   factory AuthenticatorSelectionCriteria.fromJson(Map<String, Object?> json) {
     return AuthenticatorSelectionCriteria(
-      authenticatorAttachment: json[r'authenticatorAttachment'] as String?,
+      authenticatorAttachment: json[r'authenticatorAttachment'] != null
+          ? AuthenticatorAttachment.fromValue(
+              json[r'authenticatorAttachment']! as String)
+          : null,
       requireResidentKey: json[r'requireResidentKey'] as bool? ?? false,
-      residentKey: json[r'residentKey'] as String?,
-      userVerification: json[r'userVerification'] as String?,
+      residentKey: json[r'residentKey'] != null
+          ? ResidentKeyRequirement.fromValue(json[r'residentKey']! as String)
+          : null,
+      userVerification: json[r'userVerification'] != null
+          ? UserVerificationRequirement.fromValue(
+              json[r'userVerification']! as String)
+          : null,
     );
   }
 
@@ -9460,23 +9449,23 @@ class AuthenticatorSelectionCriteria {
 
     final json = <String, Object?>{};
     if (authenticatorAttachment != null) {
-      json[r'authenticatorAttachment'] = authenticatorAttachment;
+      json[r'authenticatorAttachment'] = authenticatorAttachment.value;
     }
     json[r'requireResidentKey'] = requireResidentKey;
     if (residentKey != null) {
-      json[r'residentKey'] = residentKey;
+      json[r'residentKey'] = residentKey.value;
     }
     if (userVerification != null) {
-      json[r'userVerification'] = userVerification;
+      json[r'userVerification'] = userVerification.value;
     }
     return json;
   }
 
   AuthenticatorSelectionCriteria copyWith(
-      {String? authenticatorAttachment,
+      {AuthenticatorAttachment? authenticatorAttachment,
       bool? requireResidentKey,
-      String? residentKey,
-      String? userVerification}) {
+      ResidentKeyRequirement? residentKey,
+      UserVerificationRequirement? userVerification}) {
     return AuthenticatorSelectionCriteria(
       authenticatorAttachment:
           authenticatorAttachment ?? this.authenticatorAttachment,
@@ -9496,7 +9485,7 @@ class BaseConnectorConfiguration {
   final ZonedDateTime? insertInstant;
   final ZonedDateTime? lastUpdateInstant;
   final String? name;
-  final String? type;
+  final ConnectorType? type;
 
   BaseConnectorConfiguration(
       {this.data,
@@ -9513,16 +9502,12 @@ class BaseConnectorConfiguration {
       data: json[r'data'] as Map<String, Object?>?,
       debug: json[r'debug'] as bool? ?? false,
       id: json[r'id'] as String?,
-      insertInstant: json[r'insertInstant'] != null
-          ? ZonedDateTime.fromJson(
-              json[r'insertInstant']! as Map<String, Object?>)
-          : null,
-      lastUpdateInstant: json[r'lastUpdateInstant'] != null
-          ? ZonedDateTime.fromJson(
-              json[r'lastUpdateInstant']! as Map<String, Object?>)
-          : null,
+      insertInstant: (json[r'insertInstant'] as num?)?.toInt(),
+      lastUpdateInstant: (json[r'lastUpdateInstant'] as num?)?.toInt(),
       name: json[r'name'] as String?,
-      type: json[r'type'] as String?,
+      type: json[r'type'] != null
+          ? ConnectorType.fromValue(json[r'type']! as String)
+          : null,
     );
   }
 
@@ -9553,7 +9538,7 @@ class BaseConnectorConfiguration {
       json[r'name'] = name;
     }
     if (type != null) {
-      json[r'type'] = type;
+      json[r'type'] = type.value;
     }
     return json;
   }
@@ -9565,7 +9550,7 @@ class BaseConnectorConfiguration {
       ZonedDateTime? insertInstant,
       ZonedDateTime? lastUpdateInstant,
       String? name,
-      String? type}) {
+      ConnectorType? type}) {
     return BaseConnectorConfiguration(
       data: data ?? this.data,
       debug: debug ?? this.debug,
@@ -9690,22 +9675,21 @@ class BaseEvent {
   final String? id;
   final EventInfo? info;
   final String? tenantId;
-  final String? type;
+  final EventType? type;
 
   BaseEvent({this.createInstant, this.id, this.info, this.tenantId, this.type});
 
   factory BaseEvent.fromJson(Map<String, Object?> json) {
     return BaseEvent(
-      createInstant: json[r'createInstant'] != null
-          ? ZonedDateTime.fromJson(
-              json[r'createInstant']! as Map<String, Object?>)
-          : null,
+      createInstant: (json[r'createInstant'] as num?)?.toInt(),
       id: json[r'id'] as String?,
       info: json[r'info'] != null
           ? EventInfo.fromJson(json[r'info']! as Map<String, Object?>)
           : null,
       tenantId: json[r'tenantId'] as String?,
-      type: json[r'type'] as String?,
+      type: json[r'type'] != null
+          ? EventType.fromValue(json[r'type']! as String)
+          : null,
     );
   }
 
@@ -9730,7 +9714,7 @@ class BaseEvent {
       json[r'tenantId'] = tenantId;
     }
     if (type != null) {
-      json[r'type'] = type;
+      json[r'type'] = type.value;
     }
     return json;
   }
@@ -9740,7 +9724,7 @@ class BaseEvent {
       String? id,
       EventInfo? info,
       String? tenantId,
-      String? type}) {
+      EventType? type}) {
     return BaseEvent(
       createInstant: createInstant ?? this.createInstant,
       id: id ?? this.id,
@@ -9787,7 +9771,7 @@ class BaseEventRequest {
 
 class BaseExportRequest {
   final String? dateTimeSecondsFormat;
-  final String? zoneId;
+  final ZoneId? zoneId;
 
   BaseExportRequest({this.dateTimeSecondsFormat, this.zoneId});
 
@@ -9807,12 +9791,12 @@ class BaseExportRequest {
       json[r'dateTimeSecondsFormat'] = dateTimeSecondsFormat;
     }
     if (zoneId != null) {
-      json[r'zoneId'] = zoneId;
+      json[r'zoneId'] = zoneId.toJson();
     }
     return json;
   }
 
-  BaseExportRequest copyWith({String? dateTimeSecondsFormat, String? zoneId}) {
+  BaseExportRequest copyWith({String? dateTimeSecondsFormat, ZoneId? zoneId}) {
     return BaseExportRequest(
       dateTimeSecondsFormat:
           dateTimeSecondsFormat ?? this.dateTimeSecondsFormat,
@@ -9828,7 +9812,7 @@ class BaseGroupEvent {
   final String? id;
   final EventInfo? info;
   final String? tenantId;
-  final String? type;
+  final EventType? type;
 
   BaseGroupEvent(
       {this.group,
@@ -9843,16 +9827,15 @@ class BaseGroupEvent {
       group: json[r'group'] != null
           ? Group.fromJson(json[r'group']! as Map<String, Object?>)
           : null,
-      createInstant: json[r'createInstant'] != null
-          ? ZonedDateTime.fromJson(
-              json[r'createInstant']! as Map<String, Object?>)
-          : null,
+      createInstant: (json[r'createInstant'] as num?)?.toInt(),
       id: json[r'id'] as String?,
       info: json[r'info'] != null
           ? EventInfo.fromJson(json[r'info']! as Map<String, Object?>)
           : null,
       tenantId: json[r'tenantId'] as String?,
-      type: json[r'type'] as String?,
+      type: json[r'type'] != null
+          ? EventType.fromValue(json[r'type']! as String)
+          : null,
     );
   }
 
@@ -9881,7 +9864,7 @@ class BaseGroupEvent {
       json[r'tenantId'] = tenantId;
     }
     if (type != null) {
-      json[r'type'] = type;
+      json[r'type'] = type.value;
     }
     return json;
   }
@@ -9892,7 +9875,7 @@ class BaseGroupEvent {
       String? id,
       EventInfo? info,
       String? tenantId,
-      String? type}) {
+      EventType? type}) {
     return BaseGroupEvent(
       group: group ?? this.group,
       createInstant: createInstant ?? this.createInstant,
@@ -10034,7 +10017,7 @@ class BaseMessengerConfiguration {
   final ZonedDateTime? lastUpdateInstant;
   final String? name;
   final String? transport;
-  final String? type;
+  final MessengerType? type;
 
   BaseMessengerConfiguration(
       {this.data,
@@ -10052,17 +10035,13 @@ class BaseMessengerConfiguration {
       data: json[r'data'] as Map<String, Object?>?,
       debug: json[r'debug'] as bool? ?? false,
       id: json[r'id'] as String?,
-      insertInstant: json[r'insertInstant'] != null
-          ? ZonedDateTime.fromJson(
-              json[r'insertInstant']! as Map<String, Object?>)
-          : null,
-      lastUpdateInstant: json[r'lastUpdateInstant'] != null
-          ? ZonedDateTime.fromJson(
-              json[r'lastUpdateInstant']! as Map<String, Object?>)
-          : null,
+      insertInstant: (json[r'insertInstant'] as num?)?.toInt(),
+      lastUpdateInstant: (json[r'lastUpdateInstant'] as num?)?.toInt(),
       name: json[r'name'] as String?,
       transport: json[r'transport'] as String?,
-      type: json[r'type'] as String?,
+      type: json[r'type'] != null
+          ? MessengerType.fromValue(json[r'type']! as String)
+          : null,
     );
   }
 
@@ -10097,7 +10076,7 @@ class BaseMessengerConfiguration {
       json[r'transport'] = transport;
     }
     if (type != null) {
-      json[r'type'] = type;
+      json[r'type'] = type.value;
     }
     return json;
   }
@@ -10110,7 +10089,7 @@ class BaseMessengerConfiguration {
       ZonedDateTime? lastUpdateInstant,
       String? name,
       String? transport,
-      String? type}) {
+      MessengerType? type}) {
     return BaseMessengerConfiguration(
       data: data ?? this.data,
       debug: debug ?? this.debug,
@@ -10174,7 +10153,7 @@ class BaseUserEvent {
   final String? id;
   final EventInfo? info;
   final String? tenantId;
-  final String? type;
+  final EventType? type;
 
   BaseUserEvent(
       {this.user,
@@ -10189,16 +10168,15 @@ class BaseUserEvent {
       user: json[r'user'] != null
           ? User.fromJson(json[r'user']! as Map<String, Object?>)
           : null,
-      createInstant: json[r'createInstant'] != null
-          ? ZonedDateTime.fromJson(
-              json[r'createInstant']! as Map<String, Object?>)
-          : null,
+      createInstant: (json[r'createInstant'] as num?)?.toInt(),
       id: json[r'id'] as String?,
       info: json[r'info'] != null
           ? EventInfo.fromJson(json[r'info']! as Map<String, Object?>)
           : null,
       tenantId: json[r'tenantId'] as String?,
-      type: json[r'type'] as String?,
+      type: json[r'type'] != null
+          ? EventType.fromValue(json[r'type']! as String)
+          : null,
     );
   }
 
@@ -10227,7 +10205,7 @@ class BaseUserEvent {
       json[r'tenantId'] = tenantId;
     }
     if (type != null) {
-      json[r'type'] = type;
+      json[r'type'] = type.value;
     }
     return json;
   }
@@ -10238,7 +10216,7 @@ class BaseUserEvent {
       String? id,
       EventInfo? info,
       String? tenantId,
-      String? type}) {
+      EventType? type}) {
     return BaseUserEvent(
       user: user ?? this.user,
       createInstant: createInstant ?? this.createInstant,
@@ -10333,7 +10311,7 @@ class BreachedPasswordTenantMetric {
 class CORSConfiguration {
   final bool allowCredentials;
   final List<String> allowedHeaders;
-  final List<String> allowedMethods;
+  final List<HTTPMethod> allowedMethods;
   final List<String> allowedOrigins;
   final bool debug;
   final List<String> exposedHeaders;
@@ -10343,7 +10321,7 @@ class CORSConfiguration {
   CORSConfiguration(
       {bool? allowCredentials,
       List<String>? allowedHeaders,
-      List<String>? allowedMethods,
+      List<HTTPMethod>? allowedMethods,
       List<String>? allowedOrigins,
       bool? debug,
       List<String>? exposedHeaders,
@@ -10365,7 +10343,7 @@ class CORSConfiguration {
               .toList() ??
           [],
       allowedMethods: (json[r'allowedMethods'] as List<Object?>?)
-              ?.map((i) => i as String? ?? '')
+              ?.map((i) => HTTPMethod.fromValue(i as String? ?? ''))
               .toList() ??
           [],
       allowedOrigins: (json[r'allowedOrigins'] as List<Object?>?)
@@ -10396,7 +10374,7 @@ class CORSConfiguration {
     final json = <String, Object?>{};
     json[r'allowCredentials'] = allowCredentials;
     json[r'allowedHeaders'] = allowedHeaders;
-    json[r'allowedMethods'] = allowedMethods;
+    json[r'allowedMethods'] = allowedMethods.map((i) => i.value).toList();
     json[r'allowedOrigins'] = allowedOrigins;
     json[r'debug'] = debug;
     json[r'exposedHeaders'] = exposedHeaders;
@@ -10410,7 +10388,7 @@ class CORSConfiguration {
   CORSConfiguration copyWith(
       {bool? allowCredentials,
       List<String>? allowedHeaders,
-      List<String>? allowedMethods,
+      List<HTTPMethod>? allowedMethods,
       List<String>? allowedOrigins,
       bool? debug,
       List<String>? exposedHeaders,
@@ -10464,12 +10442,8 @@ class CertificateInformation {
       sha256Fingerprint: json[r'sha256Fingerprint'] as String?,
       sha256Thumbprint: json[r'sha256Thumbprint'] as String?,
       subject: json[r'subject'] as String?,
-      validFrom: json[r'validFrom'] != null
-          ? ZonedDateTime.fromJson(json[r'validFrom']! as Map<String, Object?>)
-          : null,
-      validTo: json[r'validTo'] != null
-          ? ZonedDateTime.fromJson(json[r'validTo']! as Map<String, Object?>)
-          : null,
+      validFrom: (json[r'validFrom'] as num?)?.toInt(),
+      validTo: (json[r'validTo'] as num?)?.toInt(),
     );
   }
 
@@ -10959,14 +10933,8 @@ class Consent {
           ? EmailPlus.fromJson(json[r'emailPlus']! as Map<String, Object?>)
           : null,
       id: json[r'id'] as String?,
-      insertInstant: json[r'insertInstant'] != null
-          ? ZonedDateTime.fromJson(
-              json[r'insertInstant']! as Map<String, Object?>)
-          : null,
-      lastUpdateInstant: json[r'lastUpdateInstant'] != null
-          ? ZonedDateTime.fromJson(
-              json[r'lastUpdateInstant']! as Map<String, Object?>)
-          : null,
+      insertInstant: (json[r'insertInstant'] as num?)?.toInt(),
+      lastUpdateInstant: (json[r'lastUpdateInstant'] as num?)?.toInt(),
       multipleValuesAllowed: json[r'multipleValuesAllowed'] as bool? ?? false,
       name: json[r'name'] as String?,
       values: (json[r'values'] as List<Object?>?)
@@ -11477,10 +11445,7 @@ class DeviceInfo {
     return DeviceInfo(
       description: json[r'description'] as String?,
       lastAccessedAddress: json[r'lastAccessedAddress'] as String?,
-      lastAccessedInstant: json[r'lastAccessedInstant'] != null
-          ? ZonedDateTime.fromJson(
-              json[r'lastAccessedInstant']! as Map<String, Object?>)
-          : null,
+      lastAccessedInstant: (json[r'lastAccessedInstant'] as num?)?.toInt(),
       name: json[r'name'] as String?,
       type: json[r'type'] as String?,
     );
@@ -11928,14 +11893,14 @@ class EmailConfiguration {
   final String? passwordlessEmailTemplateId;
   final int? port;
   final String? properties;
-  final String? security;
+  final EmailSecurityType? security;
   final String? setPasswordEmailTemplateId;
   final String? twoFactorMethodAddEmailTemplateId;
   final String? twoFactorMethodRemoveEmailTemplateId;
   final EmailUnverifiedOptions? unverified;
   final String? username;
   final String? verificationEmailTemplateId;
-  final String? verificationStrategy;
+  final VerificationStrategy? verificationStrategy;
   final bool verifyEmail;
   final bool verifyEmailWhenChanged;
 
@@ -12012,7 +11977,9 @@ class EmailConfiguration {
           json[r'passwordlessEmailTemplateId'] as String?,
       port: (json[r'port'] as num?)?.toInt(),
       properties: json[r'properties'] as String?,
-      security: json[r'security'] as String?,
+      security: json[r'security'] != null
+          ? EmailSecurityType.fromValue(json[r'security']! as String)
+          : null,
       setPasswordEmailTemplateId:
           json[r'setPasswordEmailTemplateId'] as String?,
       twoFactorMethodAddEmailTemplateId:
@@ -12026,7 +11993,10 @@ class EmailConfiguration {
       username: json[r'username'] as String?,
       verificationEmailTemplateId:
           json[r'verificationEmailTemplateId'] as String?,
-      verificationStrategy: json[r'verificationStrategy'] as String?,
+      verificationStrategy: json[r'verificationStrategy'] != null
+          ? VerificationStrategy.fromValue(
+              json[r'verificationStrategy']! as String)
+          : null,
       verifyEmail: json[r'verifyEmail'] as bool? ?? false,
       verifyEmailWhenChanged: json[r'verifyEmailWhenChanged'] as bool? ?? false,
     );
@@ -12127,7 +12097,7 @@ class EmailConfiguration {
       json[r'properties'] = properties;
     }
     if (security != null) {
-      json[r'security'] = security;
+      json[r'security'] = security.value;
     }
     if (setPasswordEmailTemplateId != null) {
       json[r'setPasswordEmailTemplateId'] = setPasswordEmailTemplateId;
@@ -12150,7 +12120,7 @@ class EmailConfiguration {
       json[r'verificationEmailTemplateId'] = verificationEmailTemplateId;
     }
     if (verificationStrategy != null) {
-      json[r'verificationStrategy'] = verificationStrategy;
+      json[r'verificationStrategy'] = verificationStrategy.value;
     }
     json[r'verifyEmail'] = verifyEmail;
     json[r'verifyEmailWhenChanged'] = verifyEmailWhenChanged;
@@ -12177,14 +12147,14 @@ class EmailConfiguration {
       String? passwordlessEmailTemplateId,
       int? port,
       String? properties,
-      String? security,
+      EmailSecurityType? security,
       String? setPasswordEmailTemplateId,
       String? twoFactorMethodAddEmailTemplateId,
       String? twoFactorMethodRemoveEmailTemplateId,
       EmailUnverifiedOptions? unverified,
       String? username,
       String? verificationEmailTemplateId,
-      String? verificationStrategy,
+      VerificationStrategy? verificationStrategy,
       bool? verifyEmail,
       bool? verifyEmailWhenChanged}) {
     return EmailConfiguration(
@@ -12375,14 +12345,8 @@ class EmailTemplate {
       defaultTextTemplate: json[r'defaultTextTemplate'] as String?,
       fromEmail: json[r'fromEmail'] as String?,
       id: json[r'id'] as String?,
-      insertInstant: json[r'insertInstant'] != null
-          ? ZonedDateTime.fromJson(
-              json[r'insertInstant']! as Map<String, Object?>)
-          : null,
-      lastUpdateInstant: json[r'lastUpdateInstant'] != null
-          ? ZonedDateTime.fromJson(
-              json[r'lastUpdateInstant']! as Map<String, Object?>)
-          : null,
+      insertInstant: (json[r'insertInstant'] as num?)?.toInt(),
+      lastUpdateInstant: (json[r'lastUpdateInstant'] as num?)?.toInt(),
       localizedFromNames: json[r'localizedFromNames'] != null
           ? LocalizedStrings.fromJson(
               json[r'localizedFromNames']! as Map<String, Object?>)
@@ -12733,7 +12697,7 @@ class EmailTemplateSearchResponse {
 
 class EmailUnverifiedOptions {
   final bool allowEmailChangeWhenGated;
-  final String? behavior;
+  final UnverifiedBehavior? behavior;
 
   EmailUnverifiedOptions({bool? allowEmailChangeWhenGated, this.behavior})
       : allowEmailChangeWhenGated = allowEmailChangeWhenGated ?? false;
@@ -12742,7 +12706,9 @@ class EmailUnverifiedOptions {
     return EmailUnverifiedOptions(
       allowEmailChangeWhenGated:
           json[r'allowEmailChangeWhenGated'] as bool? ?? false,
-      behavior: json[r'behavior'] as String?,
+      behavior: json[r'behavior'] != null
+          ? UnverifiedBehavior.fromValue(json[r'behavior']! as String)
+          : null,
     );
   }
 
@@ -12753,13 +12719,13 @@ class EmailUnverifiedOptions {
     final json = <String, Object?>{};
     json[r'allowEmailChangeWhenGated'] = allowEmailChangeWhenGated;
     if (behavior != null) {
-      json[r'behavior'] = behavior;
+      json[r'behavior'] = behavior.value;
     }
     return json;
   }
 
   EmailUnverifiedOptions copyWith(
-      {bool? allowEmailChangeWhenGated, String? behavior}) {
+      {bool? allowEmailChangeWhenGated, UnverifiedBehavior? behavior}) {
     return EmailUnverifiedOptions(
       allowEmailChangeWhenGated:
           allowEmailChangeWhenGated ?? this.allowEmailChangeWhenGated,
@@ -12827,14 +12793,8 @@ class Entity {
       clientId: json[r'clientId'] as String?,
       clientSecret: json[r'clientSecret'] as String?,
       id: json[r'id'] as String?,
-      insertInstant: json[r'insertInstant'] != null
-          ? ZonedDateTime.fromJson(
-              json[r'insertInstant']! as Map<String, Object?>)
-          : null,
-      lastUpdateInstant: json[r'lastUpdateInstant'] != null
-          ? ZonedDateTime.fromJson(
-              json[r'lastUpdateInstant']! as Map<String, Object?>)
-          : null,
+      insertInstant: (json[r'insertInstant'] as num?)?.toInt(),
+      lastUpdateInstant: (json[r'lastUpdateInstant'] as num?)?.toInt(),
       name: json[r'name'] as String?,
       parentId: json[r'parentId'] as String?,
       tenantId: json[r'tenantId'] as String?,
@@ -12945,14 +12905,8 @@ class EntityGrant {
           ? Entity.fromJson(json[r'entity']! as Map<String, Object?>)
           : null,
       id: json[r'id'] as String?,
-      insertInstant: json[r'insertInstant'] != null
-          ? ZonedDateTime.fromJson(
-              json[r'insertInstant']! as Map<String, Object?>)
-          : null,
-      lastUpdateInstant: json[r'lastUpdateInstant'] != null
-          ? ZonedDateTime.fromJson(
-              json[r'lastUpdateInstant']! as Map<String, Object?>)
-          : null,
+      insertInstant: (json[r'insertInstant'] as num?)?.toInt(),
+      lastUpdateInstant: (json[r'lastUpdateInstant'] as num?)?.toInt(),
       permissions:
           (json[r'permissions'] as List<Object?>?)?.map((i) => i).toList() ??
               [],
@@ -13530,18 +13484,12 @@ class EntityType {
     return EntityType(
       data: json[r'data'] as Map<String, Object?>?,
       id: json[r'id'] as String?,
-      insertInstant: json[r'insertInstant'] != null
-          ? ZonedDateTime.fromJson(
-              json[r'insertInstant']! as Map<String, Object?>)
-          : null,
+      insertInstant: (json[r'insertInstant'] as num?)?.toInt(),
       jwtConfiguration: json[r'jwtConfiguration'] != null
           ? EntityJWTConfiguration.fromJson(
               json[r'jwtConfiguration']! as Map<String, Object?>)
           : null,
-      lastUpdateInstant: json[r'lastUpdateInstant'] != null
-          ? ZonedDateTime.fromJson(
-              json[r'lastUpdateInstant']! as Map<String, Object?>)
-          : null,
+      lastUpdateInstant: (json[r'lastUpdateInstant'] as num?)?.toInt(),
       name: json[r'name'] as String?,
       permissions: (json[r'permissions'] as List<Object?>?)
               ?.map((i) => EntityTypePermission.fromJson(
@@ -13629,15 +13577,9 @@ class EntityTypePermission {
       data: json[r'data'] as Map<String, Object?>?,
       description: json[r'description'] as String?,
       id: json[r'id'] as String?,
-      insertInstant: json[r'insertInstant'] != null
-          ? ZonedDateTime.fromJson(
-              json[r'insertInstant']! as Map<String, Object?>)
-          : null,
+      insertInstant: (json[r'insertInstant'] as num?)?.toInt(),
       isDefault: json[r'isDefault'] as bool? ?? false,
-      lastUpdateInstant: json[r'lastUpdateInstant'] != null
-          ? ZonedDateTime.fromJson(
-              json[r'lastUpdateInstant']! as Map<String, Object?>)
-          : null,
+      lastUpdateInstant: (json[r'lastUpdateInstant'] as num?)?.toInt(),
       name: json[r'name'] as String?,
     );
   }
@@ -14003,10 +13945,10 @@ class EpicGamesIdentityProvider {
   final ZonedDateTime? insertInstant;
   final ProviderLambdaConfiguration? lambdaConfiguration;
   final ZonedDateTime? lastUpdateInstant;
-  final String? linkingStrategy;
+  final IdentityProviderLinkingStrategy? linkingStrategy;
   final String? name;
   final Map<String, dynamic>? tenantConfiguration;
-  final String? type;
+  final IdentityProviderType? type;
 
   EpicGamesIdentityProvider(
       {this.buttonText,
@@ -14037,23 +13979,22 @@ class EpicGamesIdentityProvider {
           json[r'applicationConfiguration'] as Map<String, Object?>?,
       debug: json[r'debug'] as bool? ?? false,
       id: json[r'id'] as String?,
-      insertInstant: json[r'insertInstant'] != null
-          ? ZonedDateTime.fromJson(
-              json[r'insertInstant']! as Map<String, Object?>)
-          : null,
+      insertInstant: (json[r'insertInstant'] as num?)?.toInt(),
       lambdaConfiguration: json[r'lambdaConfiguration'] != null
           ? ProviderLambdaConfiguration.fromJson(
               json[r'lambdaConfiguration']! as Map<String, Object?>)
           : null,
-      lastUpdateInstant: json[r'lastUpdateInstant'] != null
-          ? ZonedDateTime.fromJson(
-              json[r'lastUpdateInstant']! as Map<String, Object?>)
+      lastUpdateInstant: (json[r'lastUpdateInstant'] as num?)?.toInt(),
+      linkingStrategy: json[r'linkingStrategy'] != null
+          ? IdentityProviderLinkingStrategy.fromValue(
+              json[r'linkingStrategy']! as String)
           : null,
-      linkingStrategy: json[r'linkingStrategy'] as String?,
       name: json[r'name'] as String?,
       tenantConfiguration:
           json[r'tenantConfiguration'] as Map<String, Object?>?,
-      type: json[r'type'] as String?,
+      type: json[r'type'] != null
+          ? IdentityProviderType.fromValue(json[r'type']! as String)
+          : null,
     );
   }
 
@@ -14107,7 +14048,7 @@ class EpicGamesIdentityProvider {
       json[r'lastUpdateInstant'] = lastUpdateInstant.toJson();
     }
     if (linkingStrategy != null) {
-      json[r'linkingStrategy'] = linkingStrategy;
+      json[r'linkingStrategy'] = linkingStrategy.value;
     }
     if (name != null) {
       json[r'name'] = name;
@@ -14116,7 +14057,7 @@ class EpicGamesIdentityProvider {
       json[r'tenantConfiguration'] = tenantConfiguration;
     }
     if (type != null) {
-      json[r'type'] = type;
+      json[r'type'] = type.value;
     }
     return json;
   }
@@ -14133,10 +14074,10 @@ class EpicGamesIdentityProvider {
       ZonedDateTime? insertInstant,
       ProviderLambdaConfiguration? lambdaConfiguration,
       ZonedDateTime? lastUpdateInstant,
-      String? linkingStrategy,
+      IdentityProviderLinkingStrategy? linkingStrategy,
       String? name,
       Map<String, dynamic>? tenantConfiguration,
-      String? type}) {
+      IdentityProviderType? type}) {
     return EpicGamesIdentityProvider(
       buttonText: buttonText ?? this.buttonText,
       clientId: clientId ?? this.clientId,
@@ -14273,7 +14214,7 @@ class EventConfiguration {
 }
 
 class EventConfigurationData {
-  final String? transactionType;
+  final TransactionType? transactionType;
   final bool enabled;
 
   EventConfigurationData({this.transactionType, bool? enabled})
@@ -14281,7 +14222,9 @@ class EventConfigurationData {
 
   factory EventConfigurationData.fromJson(Map<String, Object?> json) {
     return EventConfigurationData(
-      transactionType: json[r'transactionType'] as String?,
+      transactionType: json[r'transactionType'] != null
+          ? TransactionType.fromValue(json[r'transactionType']! as String)
+          : null,
       enabled: json[r'enabled'] as bool? ?? false,
     );
   }
@@ -14292,13 +14235,14 @@ class EventConfigurationData {
 
     final json = <String, Object?>{};
     if (transactionType != null) {
-      json[r'transactionType'] = transactionType;
+      json[r'transactionType'] = transactionType.value;
     }
     json[r'enabled'] = enabled;
     return json;
   }
 
-  EventConfigurationData copyWith({String? transactionType, bool? enabled}) {
+  EventConfigurationData copyWith(
+      {TransactionType? transactionType, bool? enabled}) {
     return EventConfigurationData(
       transactionType: transactionType ?? this.transactionType,
       enabled: enabled ?? this.enabled,
@@ -14409,19 +14353,18 @@ class EventLog {
   final int? id;
   final ZonedDateTime? insertInstant;
   final String? message;
-  final String? type;
+  final EventLogType? type;
 
   EventLog({this.id, this.insertInstant, this.message, this.type});
 
   factory EventLog.fromJson(Map<String, Object?> json) {
     return EventLog(
       id: (json[r'id'] as num?)?.toInt(),
-      insertInstant: json[r'insertInstant'] != null
-          ? ZonedDateTime.fromJson(
-              json[r'insertInstant']! as Map<String, Object?>)
-          : null,
+      insertInstant: (json[r'insertInstant'] as num?)?.toInt(),
       message: json[r'message'] as String?,
-      type: json[r'type'] as String?,
+      type: json[r'type'] != null
+          ? EventLogType.fromValue(json[r'type']! as String)
+          : null,
     );
   }
 
@@ -14442,13 +14385,16 @@ class EventLog {
       json[r'message'] = message;
     }
     if (type != null) {
-      json[r'type'] = type;
+      json[r'type'] = type.value;
     }
     return json;
   }
 
   EventLog copyWith(
-      {int? id, ZonedDateTime? insertInstant, String? message, String? type}) {
+      {int? id,
+      ZonedDateTime? insertInstant,
+      String? message,
+      EventLogType? type}) {
     return EventLog(
       id: id ?? this.id,
       insertInstant: insertInstant ?? this.insertInstant,
@@ -14493,7 +14439,7 @@ class EventLogCreateEvent {
   final String? id;
   final EventInfo? info;
   final String? tenantId;
-  final String? type;
+  final EventType? type;
 
   EventLogCreateEvent(
       {this.eventLog,
@@ -14508,16 +14454,15 @@ class EventLogCreateEvent {
       eventLog: json[r'eventLog'] != null
           ? EventLog.fromJson(json[r'eventLog']! as Map<String, Object?>)
           : null,
-      createInstant: json[r'createInstant'] != null
-          ? ZonedDateTime.fromJson(
-              json[r'createInstant']! as Map<String, Object?>)
-          : null,
+      createInstant: (json[r'createInstant'] as num?)?.toInt(),
       id: json[r'id'] as String?,
       info: json[r'info'] != null
           ? EventInfo.fromJson(json[r'info']! as Map<String, Object?>)
           : null,
       tenantId: json[r'tenantId'] as String?,
-      type: json[r'type'] as String?,
+      type: json[r'type'] != null
+          ? EventType.fromValue(json[r'type']! as String)
+          : null,
     );
   }
 
@@ -14546,7 +14491,7 @@ class EventLogCreateEvent {
       json[r'tenantId'] = tenantId;
     }
     if (type != null) {
-      json[r'type'] = type;
+      json[r'type'] = type.value;
     }
     return json;
   }
@@ -14557,7 +14502,7 @@ class EventLogCreateEvent {
       String? id,
       EventInfo? info,
       String? tenantId,
-      String? type}) {
+      EventType? type}) {
     return EventLogCreateEvent(
       eventLog: eventLog ?? this.eventLog,
       createInstant: createInstant ?? this.createInstant,
@@ -14605,7 +14550,7 @@ class EventLogSearchCriteria {
   final ZonedDateTime? end;
   final String? message;
   final ZonedDateTime? start;
-  final String? type;
+  final EventLogType? type;
   final int? numberOfResults;
   final String? orderBy;
   final int? startRow;
@@ -14621,14 +14566,12 @@ class EventLogSearchCriteria {
 
   factory EventLogSearchCriteria.fromJson(Map<String, Object?> json) {
     return EventLogSearchCriteria(
-      end: json[r'end'] != null
-          ? ZonedDateTime.fromJson(json[r'end']! as Map<String, Object?>)
-          : null,
+      end: (json[r'end'] as num?)?.toInt(),
       message: json[r'message'] as String?,
-      start: json[r'start'] != null
-          ? ZonedDateTime.fromJson(json[r'start']! as Map<String, Object?>)
+      start: (json[r'start'] as num?)?.toInt(),
+      type: json[r'type'] != null
+          ? EventLogType.fromValue(json[r'type']! as String)
           : null,
-      type: json[r'type'] as String?,
       numberOfResults: (json[r'numberOfResults'] as num?)?.toInt(),
       orderBy: json[r'orderBy'] as String?,
       startRow: (json[r'startRow'] as num?)?.toInt(),
@@ -14655,7 +14598,7 @@ class EventLogSearchCriteria {
       json[r'start'] = start.toJson();
     }
     if (type != null) {
-      json[r'type'] = type;
+      json[r'type'] = type.value;
     }
     if (numberOfResults != null) {
       json[r'numberOfResults'] = numberOfResults;
@@ -14673,7 +14616,7 @@ class EventLogSearchCriteria {
       {ZonedDateTime? end,
       String? message,
       ZonedDateTime? start,
-      String? type,
+      EventLogType? type,
       int? numberOfResults,
       String? orderBy,
       int? startRow}) {
@@ -15320,10 +15263,10 @@ class ExternalJWTIdentityProvider {
   final ZonedDateTime? insertInstant;
   final ProviderLambdaConfiguration? lambdaConfiguration;
   final ZonedDateTime? lastUpdateInstant;
-  final String? linkingStrategy;
+  final IdentityProviderLinkingStrategy? linkingStrategy;
   final String? name;
   final Map<String, dynamic>? tenantConfiguration;
-  final String? type;
+  final IdentityProviderType? type;
 
   ExternalJWTIdentityProvider(
       {this.claimMap,
@@ -15363,23 +15306,22 @@ class ExternalJWTIdentityProvider {
           json[r'applicationConfiguration'] as Map<String, Object?>?,
       debug: json[r'debug'] as bool? ?? false,
       id: json[r'id'] as String?,
-      insertInstant: json[r'insertInstant'] != null
-          ? ZonedDateTime.fromJson(
-              json[r'insertInstant']! as Map<String, Object?>)
-          : null,
+      insertInstant: (json[r'insertInstant'] as num?)?.toInt(),
       lambdaConfiguration: json[r'lambdaConfiguration'] != null
           ? ProviderLambdaConfiguration.fromJson(
               json[r'lambdaConfiguration']! as Map<String, Object?>)
           : null,
-      lastUpdateInstant: json[r'lastUpdateInstant'] != null
-          ? ZonedDateTime.fromJson(
-              json[r'lastUpdateInstant']! as Map<String, Object?>)
+      lastUpdateInstant: (json[r'lastUpdateInstant'] as num?)?.toInt(),
+      linkingStrategy: json[r'linkingStrategy'] != null
+          ? IdentityProviderLinkingStrategy.fromValue(
+              json[r'linkingStrategy']! as String)
           : null,
-      linkingStrategy: json[r'linkingStrategy'] as String?,
       name: json[r'name'] as String?,
       tenantConfiguration:
           json[r'tenantConfiguration'] as Map<String, Object?>?,
-      type: json[r'type'] as String?,
+      type: json[r'type'] != null
+          ? IdentityProviderType.fromValue(json[r'type']! as String)
+          : null,
     );
   }
 
@@ -15439,7 +15381,7 @@ class ExternalJWTIdentityProvider {
       json[r'lastUpdateInstant'] = lastUpdateInstant.toJson();
     }
     if (linkingStrategy != null) {
-      json[r'linkingStrategy'] = linkingStrategy;
+      json[r'linkingStrategy'] = linkingStrategy.value;
     }
     if (name != null) {
       json[r'name'] = name;
@@ -15448,7 +15390,7 @@ class ExternalJWTIdentityProvider {
       json[r'tenantConfiguration'] = tenantConfiguration;
     }
     if (type != null) {
-      json[r'type'] = type;
+      json[r'type'] = type.value;
     }
     return json;
   }
@@ -15467,10 +15409,10 @@ class ExternalJWTIdentityProvider {
       ZonedDateTime? insertInstant,
       ProviderLambdaConfiguration? lambdaConfiguration,
       ZonedDateTime? lastUpdateInstant,
-      String? linkingStrategy,
+      IdentityProviderLinkingStrategy? linkingStrategy,
       String? name,
       Map<String, dynamic>? tenantConfiguration,
-      String? type}) {
+      IdentityProviderType? type}) {
     return ExternalJWTIdentityProvider(
       claimMap: claimMap ?? this.claimMap,
       domains: domains ?? this.domains,
@@ -15499,7 +15441,7 @@ class FacebookApplicationConfiguration {
   final String? buttonText;
   final String? clientSecret;
   final String? fields;
-  final String? loginMethod;
+  final IdentityProviderLoginMethod? loginMethod;
   final String? permissions;
   final Map<String, dynamic>? data;
   final bool createRegistration;
@@ -15521,7 +15463,10 @@ class FacebookApplicationConfiguration {
       buttonText: json[r'buttonText'] as String?,
       clientSecret: json[r'client_secret'] as String?,
       fields: json[r'fields'] as String?,
-      loginMethod: json[r'loginMethod'] as String?,
+      loginMethod: json[r'loginMethod'] != null
+          ? IdentityProviderLoginMethod.fromValue(
+              json[r'loginMethod']! as String)
+          : null,
       permissions: json[r'permissions'] as String?,
       data: json[r'data'] as Map<String, Object?>?,
       createRegistration: json[r'createRegistration'] as bool? ?? false,
@@ -15552,7 +15497,7 @@ class FacebookApplicationConfiguration {
       json[r'fields'] = fields;
     }
     if (loginMethod != null) {
-      json[r'loginMethod'] = loginMethod;
+      json[r'loginMethod'] = loginMethod.value;
     }
     if (permissions != null) {
       json[r'permissions'] = permissions;
@@ -15569,7 +15514,7 @@ class FacebookApplicationConfiguration {
       String? buttonText,
       String? clientSecret,
       String? fields,
-      String? loginMethod,
+      IdentityProviderLoginMethod? loginMethod,
       String? permissions,
       Map<String, dynamic>? data,
       bool? createRegistration}) {
@@ -15592,7 +15537,7 @@ class FacebookIdentityProvider {
   final String? buttonText;
   final String? clientSecret;
   final String? fields;
-  final String? loginMethod;
+  final IdentityProviderLoginMethod? loginMethod;
   final String? permissions;
   final Map<String, dynamic>? data;
   final Map<String, dynamic>? applicationConfiguration;
@@ -15601,10 +15546,10 @@ class FacebookIdentityProvider {
   final ZonedDateTime? insertInstant;
   final ProviderLambdaConfiguration? lambdaConfiguration;
   final ZonedDateTime? lastUpdateInstant;
-  final String? linkingStrategy;
+  final IdentityProviderLinkingStrategy? linkingStrategy;
   final String? name;
   final Map<String, dynamic>? tenantConfiguration;
-  final String? type;
+  final IdentityProviderType? type;
 
   FacebookIdentityProvider(
       {this.appId,
@@ -15632,30 +15577,32 @@ class FacebookIdentityProvider {
       buttonText: json[r'buttonText'] as String?,
       clientSecret: json[r'client_secret'] as String?,
       fields: json[r'fields'] as String?,
-      loginMethod: json[r'loginMethod'] as String?,
+      loginMethod: json[r'loginMethod'] != null
+          ? IdentityProviderLoginMethod.fromValue(
+              json[r'loginMethod']! as String)
+          : null,
       permissions: json[r'permissions'] as String?,
       data: json[r'data'] as Map<String, Object?>?,
       applicationConfiguration:
           json[r'applicationConfiguration'] as Map<String, Object?>?,
       debug: json[r'debug'] as bool? ?? false,
       id: json[r'id'] as String?,
-      insertInstant: json[r'insertInstant'] != null
-          ? ZonedDateTime.fromJson(
-              json[r'insertInstant']! as Map<String, Object?>)
-          : null,
+      insertInstant: (json[r'insertInstant'] as num?)?.toInt(),
       lambdaConfiguration: json[r'lambdaConfiguration'] != null
           ? ProviderLambdaConfiguration.fromJson(
               json[r'lambdaConfiguration']! as Map<String, Object?>)
           : null,
-      lastUpdateInstant: json[r'lastUpdateInstant'] != null
-          ? ZonedDateTime.fromJson(
-              json[r'lastUpdateInstant']! as Map<String, Object?>)
+      lastUpdateInstant: (json[r'lastUpdateInstant'] as num?)?.toInt(),
+      linkingStrategy: json[r'linkingStrategy'] != null
+          ? IdentityProviderLinkingStrategy.fromValue(
+              json[r'linkingStrategy']! as String)
           : null,
-      linkingStrategy: json[r'linkingStrategy'] as String?,
       name: json[r'name'] as String?,
       tenantConfiguration:
           json[r'tenantConfiguration'] as Map<String, Object?>?,
-      type: json[r'type'] as String?,
+      type: json[r'type'] != null
+          ? IdentityProviderType.fromValue(json[r'type']! as String)
+          : null,
     );
   }
 
@@ -15692,7 +15639,7 @@ class FacebookIdentityProvider {
       json[r'fields'] = fields;
     }
     if (loginMethod != null) {
-      json[r'loginMethod'] = loginMethod;
+      json[r'loginMethod'] = loginMethod.value;
     }
     if (permissions != null) {
       json[r'permissions'] = permissions;
@@ -15717,7 +15664,7 @@ class FacebookIdentityProvider {
       json[r'lastUpdateInstant'] = lastUpdateInstant.toJson();
     }
     if (linkingStrategy != null) {
-      json[r'linkingStrategy'] = linkingStrategy;
+      json[r'linkingStrategy'] = linkingStrategy.value;
     }
     if (name != null) {
       json[r'name'] = name;
@@ -15726,7 +15673,7 @@ class FacebookIdentityProvider {
       json[r'tenantConfiguration'] = tenantConfiguration;
     }
     if (type != null) {
-      json[r'type'] = type;
+      json[r'type'] = type.value;
     }
     return json;
   }
@@ -15736,7 +15683,7 @@ class FacebookIdentityProvider {
       String? buttonText,
       String? clientSecret,
       String? fields,
-      String? loginMethod,
+      IdentityProviderLoginMethod? loginMethod,
       String? permissions,
       Map<String, dynamic>? data,
       Map<String, dynamic>? applicationConfiguration,
@@ -15745,10 +15692,10 @@ class FacebookIdentityProvider {
       ZonedDateTime? insertInstant,
       ProviderLambdaConfiguration? lambdaConfiguration,
       ZonedDateTime? lastUpdateInstant,
-      String? linkingStrategy,
+      IdentityProviderLinkingStrategy? linkingStrategy,
       String? name,
       Map<String, dynamic>? tenantConfiguration,
-      String? type}) {
+      IdentityProviderType? type}) {
     return FacebookIdentityProvider(
       appId: appId ?? this.appId,
       buttonText: buttonText ?? this.buttonText,
@@ -15807,7 +15754,7 @@ class FailedAuthenticationActionCancelPolicy {
 class FailedAuthenticationConfiguration {
   final FailedAuthenticationActionCancelPolicy? actionCancelPolicy;
   final int? actionDuration;
-  final String? actionDurationUnit;
+  final ExpiryUnit? actionDurationUnit;
   final bool emailUser;
   final int? resetCountInSeconds;
   final int? tooManyAttempts;
@@ -15831,7 +15778,9 @@ class FailedAuthenticationConfiguration {
               json[r'actionCancelPolicy']! as Map<String, Object?>)
           : null,
       actionDuration: (json[r'actionDuration'] as num?)?.toInt(),
-      actionDurationUnit: json[r'actionDurationUnit'] as String?,
+      actionDurationUnit: json[r'actionDurationUnit'] != null
+          ? ExpiryUnit.fromValue(json[r'actionDurationUnit']! as String)
+          : null,
       emailUser: json[r'emailUser'] as bool? ?? false,
       resetCountInSeconds: (json[r'resetCountInSeconds'] as num?)?.toInt(),
       tooManyAttempts: (json[r'tooManyAttempts'] as num?)?.toInt(),
@@ -15856,7 +15805,7 @@ class FailedAuthenticationConfiguration {
       json[r'actionDuration'] = actionDuration;
     }
     if (actionDurationUnit != null) {
-      json[r'actionDurationUnit'] = actionDurationUnit;
+      json[r'actionDurationUnit'] = actionDurationUnit.value;
     }
     json[r'emailUser'] = emailUser;
     if (resetCountInSeconds != null) {
@@ -15874,7 +15823,7 @@ class FailedAuthenticationConfiguration {
   FailedAuthenticationConfiguration copyWith(
       {FailedAuthenticationActionCancelPolicy? actionCancelPolicy,
       int? actionDuration,
-      String? actionDurationUnit,
+      ExpiryUnit? actionDurationUnit,
       bool? emailUser,
       int? resetCountInSeconds,
       int? tooManyAttempts,
@@ -15913,14 +15862,8 @@ class Family {
               .toList() ??
           [],
       id: json[r'id'] as String?,
-      insertInstant: json[r'insertInstant'] != null
-          ? ZonedDateTime.fromJson(
-              json[r'insertInstant']! as Map<String, Object?>)
-          : null,
-      lastUpdateInstant: json[r'lastUpdateInstant'] != null
-          ? ZonedDateTime.fromJson(
-              json[r'lastUpdateInstant']! as Map<String, Object?>)
-          : null,
+      insertInstant: (json[r'insertInstant'] as num?)?.toInt(),
+      lastUpdateInstant: (json[r'lastUpdateInstant'] as num?)?.toInt(),
     );
   }
 
@@ -16113,7 +16056,7 @@ class FamilyMember {
   final ZonedDateTime? insertInstant;
   final ZonedDateTime? lastUpdateInstant;
   final bool owner;
-  final String? role;
+  final FamilyRole? role;
   final String? userId;
 
   FamilyMember(
@@ -16128,16 +16071,12 @@ class FamilyMember {
   factory FamilyMember.fromJson(Map<String, Object?> json) {
     return FamilyMember(
       data: json[r'data'] as Map<String, Object?>?,
-      insertInstant: json[r'insertInstant'] != null
-          ? ZonedDateTime.fromJson(
-              json[r'insertInstant']! as Map<String, Object?>)
-          : null,
-      lastUpdateInstant: json[r'lastUpdateInstant'] != null
-          ? ZonedDateTime.fromJson(
-              json[r'lastUpdateInstant']! as Map<String, Object?>)
-          : null,
+      insertInstant: (json[r'insertInstant'] as num?)?.toInt(),
+      lastUpdateInstant: (json[r'lastUpdateInstant'] as num?)?.toInt(),
       owner: json[r'owner'] as bool? ?? false,
-      role: json[r'role'] as String?,
+      role: json[r'role'] != null
+          ? FamilyRole.fromValue(json[r'role']! as String)
+          : null,
       userId: json[r'userId'] as String?,
     );
   }
@@ -16162,7 +16101,7 @@ class FamilyMember {
     }
     json[r'owner'] = owner;
     if (role != null) {
-      json[r'role'] = role;
+      json[r'role'] = role.value;
     }
     if (userId != null) {
       json[r'userId'] = userId;
@@ -16175,7 +16114,7 @@ class FamilyMember {
       ZonedDateTime? insertInstant,
       ZonedDateTime? lastUpdateInstant,
       bool? owner,
-      String? role,
+      FamilyRole? role,
       String? userId}) {
     return FamilyMember(
       data: data ?? this.data,
@@ -16394,7 +16333,7 @@ class Form {
   final ZonedDateTime? lastUpdateInstant;
   final String? name;
   final List<FormStep> steps;
-  final String? type;
+  final FormType? type;
 
   Form(
       {this.data,
@@ -16410,21 +16349,17 @@ class Form {
     return Form(
       data: json[r'data'] as Map<String, Object?>?,
       id: json[r'id'] as String?,
-      insertInstant: json[r'insertInstant'] != null
-          ? ZonedDateTime.fromJson(
-              json[r'insertInstant']! as Map<String, Object?>)
-          : null,
-      lastUpdateInstant: json[r'lastUpdateInstant'] != null
-          ? ZonedDateTime.fromJson(
-              json[r'lastUpdateInstant']! as Map<String, Object?>)
-          : null,
+      insertInstant: (json[r'insertInstant'] as num?)?.toInt(),
+      lastUpdateInstant: (json[r'lastUpdateInstant'] as num?)?.toInt(),
       name: json[r'name'] as String?,
       steps: (json[r'steps'] as List<Object?>?)
               ?.map((i) =>
                   FormStep.fromJson(i as Map<String, Object?>? ?? const {}))
               .toList() ??
           [],
-      type: json[r'type'] as String?,
+      type: json[r'type'] != null
+          ? FormType.fromValue(json[r'type']! as String)
+          : null,
     );
   }
 
@@ -16455,7 +16390,7 @@ class Form {
     }
     json[r'steps'] = steps.map((i) => i.toJson()).toList();
     if (type != null) {
-      json[r'type'] = type;
+      json[r'type'] = type.value;
     }
     return json;
   }
@@ -16467,7 +16402,7 @@ class Form {
       ZonedDateTime? lastUpdateInstant,
       String? name,
       List<FormStep>? steps,
-      String? type}) {
+      FormType? type}) {
     return Form(
       data: data ?? this.data,
       id: id ?? this.id,
@@ -16483,7 +16418,7 @@ class Form {
 class FormField {
   final bool confirm;
   final String? consentId;
-  final String? control;
+  final FormControl? control;
   final Map<String, dynamic>? data;
   final String? description;
   final String? id;
@@ -16493,7 +16428,7 @@ class FormField {
   final String? name;
   final List<String> options;
   final bool required;
-  final String? type;
+  final FormDataType? type;
   final FormFieldValidator? validator;
 
   FormField(
@@ -16519,26 +16454,24 @@ class FormField {
     return FormField(
       confirm: json[r'confirm'] as bool? ?? false,
       consentId: json[r'consentId'] as String?,
-      control: json[r'control'] as String?,
+      control: json[r'control'] != null
+          ? FormControl.fromValue(json[r'control']! as String)
+          : null,
       data: json[r'data'] as Map<String, Object?>?,
       description: json[r'description'] as String?,
       id: json[r'id'] as String?,
-      insertInstant: json[r'insertInstant'] != null
-          ? ZonedDateTime.fromJson(
-              json[r'insertInstant']! as Map<String, Object?>)
-          : null,
+      insertInstant: (json[r'insertInstant'] as num?)?.toInt(),
       key: json[r'key'] as String?,
-      lastUpdateInstant: json[r'lastUpdateInstant'] != null
-          ? ZonedDateTime.fromJson(
-              json[r'lastUpdateInstant']! as Map<String, Object?>)
-          : null,
+      lastUpdateInstant: (json[r'lastUpdateInstant'] as num?)?.toInt(),
       name: json[r'name'] as String?,
       options: (json[r'options'] as List<Object?>?)
               ?.map((i) => i as String? ?? '')
               .toList() ??
           [],
       required: json[r'required'] as bool? ?? false,
-      type: json[r'type'] as String?,
+      type: json[r'type'] != null
+          ? FormDataType.fromValue(json[r'type']! as String)
+          : null,
       validator: json[r'validator'] != null
           ? FormFieldValidator.fromJson(
               json[r'validator']! as Map<String, Object?>)
@@ -16568,7 +16501,7 @@ class FormField {
       json[r'consentId'] = consentId;
     }
     if (control != null) {
-      json[r'control'] = control;
+      json[r'control'] = control.value;
     }
     if (data != null) {
       json[r'data'] = data;
@@ -16594,7 +16527,7 @@ class FormField {
     json[r'options'] = options;
     json[r'required'] = required;
     if (type != null) {
-      json[r'type'] = type;
+      json[r'type'] = type.value;
     }
     if (validator != null) {
       json[r'validator'] = validator.toJson();
@@ -16605,7 +16538,7 @@ class FormField {
   FormField copyWith(
       {bool? confirm,
       String? consentId,
-      String? control,
+      FormControl? control,
       Map<String, dynamic>? data,
       String? description,
       String? id,
@@ -16615,7 +16548,7 @@ class FormField {
       String? name,
       List<String>? options,
       bool? required,
-      String? type,
+      FormDataType? type,
       FormFieldValidator? validator}) {
     return FormField(
       confirm: confirm ?? this.confirm,
@@ -16860,7 +16793,7 @@ class FusionAuthConnectorConfiguration {
   final ZonedDateTime? insertInstant;
   final ZonedDateTime? lastUpdateInstant;
   final String? name;
-  final String? type;
+  final ConnectorType? type;
 
   FusionAuthConnectorConfiguration(
       {this.data,
@@ -16877,16 +16810,12 @@ class FusionAuthConnectorConfiguration {
       data: json[r'data'] as Map<String, Object?>?,
       debug: json[r'debug'] as bool? ?? false,
       id: json[r'id'] as String?,
-      insertInstant: json[r'insertInstant'] != null
-          ? ZonedDateTime.fromJson(
-              json[r'insertInstant']! as Map<String, Object?>)
-          : null,
-      lastUpdateInstant: json[r'lastUpdateInstant'] != null
-          ? ZonedDateTime.fromJson(
-              json[r'lastUpdateInstant']! as Map<String, Object?>)
-          : null,
+      insertInstant: (json[r'insertInstant'] as num?)?.toInt(),
+      lastUpdateInstant: (json[r'lastUpdateInstant'] as num?)?.toInt(),
       name: json[r'name'] as String?,
-      type: json[r'type'] as String?,
+      type: json[r'type'] != null
+          ? ConnectorType.fromValue(json[r'type']! as String)
+          : null,
     );
   }
 
@@ -16917,7 +16846,7 @@ class FusionAuthConnectorConfiguration {
       json[r'name'] = name;
     }
     if (type != null) {
-      json[r'type'] = type;
+      json[r'type'] = type.value;
     }
     return json;
   }
@@ -16929,7 +16858,7 @@ class FusionAuthConnectorConfiguration {
       ZonedDateTime? insertInstant,
       ZonedDateTime? lastUpdateInstant,
       String? name,
-      String? type}) {
+      ConnectorType? type}) {
     return FusionAuthConnectorConfiguration(
       data: data ?? this.data,
       debug: debug ?? this.debug,
@@ -16957,7 +16886,7 @@ class GenericConnectorConfiguration {
   final ZonedDateTime? insertInstant;
   final ZonedDateTime? lastUpdateInstant;
   final String? name;
-  final String? type;
+  final ConnectorType? type;
 
   GenericConnectorConfiguration(
       {this.authenticationUrl,
@@ -16992,16 +16921,12 @@ class GenericConnectorConfiguration {
       data: json[r'data'] as Map<String, Object?>?,
       debug: json[r'debug'] as bool? ?? false,
       id: json[r'id'] as String?,
-      insertInstant: json[r'insertInstant'] != null
-          ? ZonedDateTime.fromJson(
-              json[r'insertInstant']! as Map<String, Object?>)
-          : null,
-      lastUpdateInstant: json[r'lastUpdateInstant'] != null
-          ? ZonedDateTime.fromJson(
-              json[r'lastUpdateInstant']! as Map<String, Object?>)
-          : null,
+      insertInstant: (json[r'insertInstant'] as num?)?.toInt(),
+      lastUpdateInstant: (json[r'lastUpdateInstant'] as num?)?.toInt(),
       name: json[r'name'] as String?,
-      type: json[r'type'] as String?,
+      type: json[r'type'] != null
+          ? ConnectorType.fromValue(json[r'type']! as String)
+          : null,
     );
   }
 
@@ -17060,7 +16985,7 @@ class GenericConnectorConfiguration {
       json[r'name'] = name;
     }
     if (type != null) {
-      json[r'type'] = type;
+      json[r'type'] = type.value;
     }
     return json;
   }
@@ -17079,7 +17004,7 @@ class GenericConnectorConfiguration {
       ZonedDateTime? insertInstant,
       ZonedDateTime? lastUpdateInstant,
       String? name,
-      String? type}) {
+      ConnectorType? type}) {
     return GenericConnectorConfiguration(
       authenticationUrl: authenticationUrl ?? this.authenticationUrl,
       connectTimeout: connectTimeout ?? this.connectTimeout,
@@ -17116,7 +17041,7 @@ class GenericMessengerConfiguration {
   final ZonedDateTime? lastUpdateInstant;
   final String? name;
   final String? transport;
-  final String? type;
+  final MessengerType? type;
 
   GenericMessengerConfiguration(
       {this.connectTimeout,
@@ -17152,17 +17077,13 @@ class GenericMessengerConfiguration {
       data: json[r'data'] as Map<String, Object?>?,
       debug: json[r'debug'] as bool? ?? false,
       id: json[r'id'] as String?,
-      insertInstant: json[r'insertInstant'] != null
-          ? ZonedDateTime.fromJson(
-              json[r'insertInstant']! as Map<String, Object?>)
-          : null,
-      lastUpdateInstant: json[r'lastUpdateInstant'] != null
-          ? ZonedDateTime.fromJson(
-              json[r'lastUpdateInstant']! as Map<String, Object?>)
-          : null,
+      insertInstant: (json[r'insertInstant'] as num?)?.toInt(),
+      lastUpdateInstant: (json[r'lastUpdateInstant'] as num?)?.toInt(),
       name: json[r'name'] as String?,
       transport: json[r'transport'] as String?,
-      type: json[r'type'] as String?,
+      type: json[r'type'] != null
+          ? MessengerType.fromValue(json[r'type']! as String)
+          : null,
     );
   }
 
@@ -17225,7 +17146,7 @@ class GenericMessengerConfiguration {
       json[r'transport'] = transport;
     }
     if (type != null) {
-      json[r'type'] = type;
+      json[r'type'] = type.value;
     }
     return json;
   }
@@ -17245,7 +17166,7 @@ class GenericMessengerConfiguration {
       ZonedDateTime? lastUpdateInstant,
       String? name,
       String? transport,
-      String? type}) {
+      MessengerType? type}) {
     return GenericMessengerConfiguration(
       connectTimeout: connectTimeout ?? this.connectTimeout,
       headers: headers ?? this.headers,
@@ -17272,7 +17193,7 @@ class GoogleApplicationConfiguration {
   final String? buttonText;
   final String? clientId;
   final String? clientSecret;
-  final String? loginMethod;
+  final IdentityProviderLoginMethod? loginMethod;
   final GoogleIdentityProviderProperties? properties;
   final String? scope;
   final Map<String, dynamic>? data;
@@ -17294,7 +17215,10 @@ class GoogleApplicationConfiguration {
       buttonText: json[r'buttonText'] as String?,
       clientId: json[r'client_id'] as String?,
       clientSecret: json[r'client_secret'] as String?,
-      loginMethod: json[r'loginMethod'] as String?,
+      loginMethod: json[r'loginMethod'] != null
+          ? IdentityProviderLoginMethod.fromValue(
+              json[r'loginMethod']! as String)
+          : null,
       properties: json[r'properties'] != null
           ? GoogleIdentityProviderProperties.fromJson(
               json[r'properties']! as Map<String, Object?>)
@@ -17326,7 +17250,7 @@ class GoogleApplicationConfiguration {
       json[r'client_secret'] = clientSecret;
     }
     if (loginMethod != null) {
-      json[r'loginMethod'] = loginMethod;
+      json[r'loginMethod'] = loginMethod.value;
     }
     if (properties != null) {
       json[r'properties'] = properties.toJson();
@@ -17345,7 +17269,7 @@ class GoogleApplicationConfiguration {
       {String? buttonText,
       String? clientId,
       String? clientSecret,
-      String? loginMethod,
+      IdentityProviderLoginMethod? loginMethod,
       GoogleIdentityProviderProperties? properties,
       String? scope,
       Map<String, dynamic>? data,
@@ -17368,7 +17292,7 @@ class GoogleIdentityProvider {
   final String? buttonText;
   final String? clientId;
   final String? clientSecret;
-  final String? loginMethod;
+  final IdentityProviderLoginMethod? loginMethod;
   final GoogleIdentityProviderProperties? properties;
   final String? scope;
   final Map<String, dynamic>? data;
@@ -17378,10 +17302,10 @@ class GoogleIdentityProvider {
   final ZonedDateTime? insertInstant;
   final ProviderLambdaConfiguration? lambdaConfiguration;
   final ZonedDateTime? lastUpdateInstant;
-  final String? linkingStrategy;
+  final IdentityProviderLinkingStrategy? linkingStrategy;
   final String? name;
   final Map<String, dynamic>? tenantConfiguration;
-  final String? type;
+  final IdentityProviderType? type;
 
   GoogleIdentityProvider(
       {this.buttonText,
@@ -17408,7 +17332,10 @@ class GoogleIdentityProvider {
       buttonText: json[r'buttonText'] as String?,
       clientId: json[r'client_id'] as String?,
       clientSecret: json[r'client_secret'] as String?,
-      loginMethod: json[r'loginMethod'] as String?,
+      loginMethod: json[r'loginMethod'] != null
+          ? IdentityProviderLoginMethod.fromValue(
+              json[r'loginMethod']! as String)
+          : null,
       properties: json[r'properties'] != null
           ? GoogleIdentityProviderProperties.fromJson(
               json[r'properties']! as Map<String, Object?>)
@@ -17419,23 +17346,22 @@ class GoogleIdentityProvider {
           json[r'applicationConfiguration'] as Map<String, Object?>?,
       debug: json[r'debug'] as bool? ?? false,
       id: json[r'id'] as String?,
-      insertInstant: json[r'insertInstant'] != null
-          ? ZonedDateTime.fromJson(
-              json[r'insertInstant']! as Map<String, Object?>)
-          : null,
+      insertInstant: (json[r'insertInstant'] as num?)?.toInt(),
       lambdaConfiguration: json[r'lambdaConfiguration'] != null
           ? ProviderLambdaConfiguration.fromJson(
               json[r'lambdaConfiguration']! as Map<String, Object?>)
           : null,
-      lastUpdateInstant: json[r'lastUpdateInstant'] != null
-          ? ZonedDateTime.fromJson(
-              json[r'lastUpdateInstant']! as Map<String, Object?>)
+      lastUpdateInstant: (json[r'lastUpdateInstant'] as num?)?.toInt(),
+      linkingStrategy: json[r'linkingStrategy'] != null
+          ? IdentityProviderLinkingStrategy.fromValue(
+              json[r'linkingStrategy']! as String)
           : null,
-      linkingStrategy: json[r'linkingStrategy'] as String?,
       name: json[r'name'] as String?,
       tenantConfiguration:
           json[r'tenantConfiguration'] as Map<String, Object?>?,
-      type: json[r'type'] as String?,
+      type: json[r'type'] != null
+          ? IdentityProviderType.fromValue(json[r'type']! as String)
+          : null,
     );
   }
 
@@ -17469,7 +17395,7 @@ class GoogleIdentityProvider {
       json[r'client_secret'] = clientSecret;
     }
     if (loginMethod != null) {
-      json[r'loginMethod'] = loginMethod;
+      json[r'loginMethod'] = loginMethod.value;
     }
     if (properties != null) {
       json[r'properties'] = properties.toJson();
@@ -17497,7 +17423,7 @@ class GoogleIdentityProvider {
       json[r'lastUpdateInstant'] = lastUpdateInstant.toJson();
     }
     if (linkingStrategy != null) {
-      json[r'linkingStrategy'] = linkingStrategy;
+      json[r'linkingStrategy'] = linkingStrategy.value;
     }
     if (name != null) {
       json[r'name'] = name;
@@ -17506,7 +17432,7 @@ class GoogleIdentityProvider {
       json[r'tenantConfiguration'] = tenantConfiguration;
     }
     if (type != null) {
-      json[r'type'] = type;
+      json[r'type'] = type.value;
     }
     return json;
   }
@@ -17515,7 +17441,7 @@ class GoogleIdentityProvider {
       {String? buttonText,
       String? clientId,
       String? clientSecret,
-      String? loginMethod,
+      IdentityProviderLoginMethod? loginMethod,
       GoogleIdentityProviderProperties? properties,
       String? scope,
       Map<String, dynamic>? data,
@@ -17525,10 +17451,10 @@ class GoogleIdentityProvider {
       ZonedDateTime? insertInstant,
       ProviderLambdaConfiguration? lambdaConfiguration,
       ZonedDateTime? lastUpdateInstant,
-      String? linkingStrategy,
+      IdentityProviderLinkingStrategy? linkingStrategy,
       String? name,
       Map<String, dynamic>? tenantConfiguration,
-      String? type}) {
+      IdentityProviderType? type}) {
     return GoogleIdentityProvider(
       buttonText: buttonText ?? this.buttonText,
       clientId: clientId ?? this.clientId,
@@ -17611,14 +17537,8 @@ class Group {
     return Group(
       data: json[r'data'] as Map<String, Object?>?,
       id: json[r'id'] as String?,
-      insertInstant: json[r'insertInstant'] != null
-          ? ZonedDateTime.fromJson(
-              json[r'insertInstant']! as Map<String, Object?>)
-          : null,
-      lastUpdateInstant: json[r'lastUpdateInstant'] != null
-          ? ZonedDateTime.fromJson(
-              json[r'lastUpdateInstant']! as Map<String, Object?>)
-          : null,
+      insertInstant: (json[r'insertInstant'] as num?)?.toInt(),
+      lastUpdateInstant: (json[r'lastUpdateInstant'] as num?)?.toInt(),
       name: json[r'name'] as String?,
       roles: (json[r'roles'] as List<Object?>?)
               ?.map((i) => ApplicationRole.fromJson(
@@ -17827,10 +17747,7 @@ class GroupMember {
       data: json[r'data'] as Map<String, Object?>?,
       groupId: json[r'groupId'] as String?,
       id: json[r'id'] as String?,
-      insertInstant: json[r'insertInstant'] != null
-          ? ZonedDateTime.fromJson(
-              json[r'insertInstant']! as Map<String, Object?>)
-          : null,
+      insertInstant: (json[r'insertInstant'] as num?)?.toInt(),
       user: json[r'user'] != null
           ? User.fromJson(json[r'user']! as Map<String, Object?>)
           : null,
@@ -18660,10 +18577,10 @@ class HYPRIdentityProvider {
   final ZonedDateTime? insertInstant;
   final ProviderLambdaConfiguration? lambdaConfiguration;
   final ZonedDateTime? lastUpdateInstant;
-  final String? linkingStrategy;
+  final IdentityProviderLinkingStrategy? linkingStrategy;
   final String? name;
   final Map<String, dynamic>? tenantConfiguration;
-  final String? type;
+  final IdentityProviderType? type;
 
   HYPRIdentityProvider(
       {this.relyingPartyApplicationId,
@@ -18690,23 +18607,22 @@ class HYPRIdentityProvider {
           json[r'applicationConfiguration'] as Map<String, Object?>?,
       debug: json[r'debug'] as bool? ?? false,
       id: json[r'id'] as String?,
-      insertInstant: json[r'insertInstant'] != null
-          ? ZonedDateTime.fromJson(
-              json[r'insertInstant']! as Map<String, Object?>)
-          : null,
+      insertInstant: (json[r'insertInstant'] as num?)?.toInt(),
       lambdaConfiguration: json[r'lambdaConfiguration'] != null
           ? ProviderLambdaConfiguration.fromJson(
               json[r'lambdaConfiguration']! as Map<String, Object?>)
           : null,
-      lastUpdateInstant: json[r'lastUpdateInstant'] != null
-          ? ZonedDateTime.fromJson(
-              json[r'lastUpdateInstant']! as Map<String, Object?>)
+      lastUpdateInstant: (json[r'lastUpdateInstant'] as num?)?.toInt(),
+      linkingStrategy: json[r'linkingStrategy'] != null
+          ? IdentityProviderLinkingStrategy.fromValue(
+              json[r'linkingStrategy']! as String)
           : null,
-      linkingStrategy: json[r'linkingStrategy'] as String?,
       name: json[r'name'] as String?,
       tenantConfiguration:
           json[r'tenantConfiguration'] as Map<String, Object?>?,
-      type: json[r'type'] as String?,
+      type: json[r'type'] != null
+          ? IdentityProviderType.fromValue(json[r'type']! as String)
+          : null,
     );
   }
 
@@ -18752,7 +18668,7 @@ class HYPRIdentityProvider {
       json[r'lastUpdateInstant'] = lastUpdateInstant.toJson();
     }
     if (linkingStrategy != null) {
-      json[r'linkingStrategy'] = linkingStrategy;
+      json[r'linkingStrategy'] = linkingStrategy.value;
     }
     if (name != null) {
       json[r'name'] = name;
@@ -18761,7 +18677,7 @@ class HYPRIdentityProvider {
       json[r'tenantConfiguration'] = tenantConfiguration;
     }
     if (type != null) {
-      json[r'type'] = type;
+      json[r'type'] = type.value;
     }
     return json;
   }
@@ -18776,10 +18692,10 @@ class HYPRIdentityProvider {
       ZonedDateTime? insertInstant,
       ProviderLambdaConfiguration? lambdaConfiguration,
       ZonedDateTime? lastUpdateInstant,
-      String? linkingStrategy,
+      IdentityProviderLinkingStrategy? linkingStrategy,
       String? name,
       Map<String, dynamic>? tenantConfiguration,
-      String? type}) {
+      IdentityProviderType? type}) {
     return HYPRIdentityProvider(
       relyingPartyApplicationId:
           relyingPartyApplicationId ?? this.relyingPartyApplicationId,
@@ -18813,13 +18729,8 @@ class HistoryItem {
     return HistoryItem(
       actionerUserId: json[r'actionerUserId'] as String?,
       comment: json[r'comment'] as String?,
-      createInstant: json[r'createInstant'] != null
-          ? ZonedDateTime.fromJson(
-              json[r'createInstant']! as Map<String, Object?>)
-          : null,
-      expiry: json[r'expiry'] != null
-          ? ZonedDateTime.fromJson(json[r'expiry']! as Map<String, Object?>)
-          : null,
+      createInstant: (json[r'createInstant'] as num?)?.toInt(),
+      expiry: (json[r'expiry'] as num?)?.toInt(),
     );
   }
 
@@ -18860,7 +18771,7 @@ class HistoryItem {
 }
 
 class IPAccessControlEntry {
-  final String? action;
+  final IPAccessControlEntryAction? action;
   final String? endIpAddress;
   final String? startIpAddress;
 
@@ -18868,7 +18779,9 @@ class IPAccessControlEntry {
 
   factory IPAccessControlEntry.fromJson(Map<String, Object?> json) {
     return IPAccessControlEntry(
-      action: json[r'action'] as String?,
+      action: json[r'action'] != null
+          ? IPAccessControlEntryAction.fromValue(json[r'action']! as String)
+          : null,
       endIpAddress: json[r'endIPAddress'] as String?,
       startIpAddress: json[r'startIPAddress'] as String?,
     );
@@ -18881,7 +18794,7 @@ class IPAccessControlEntry {
 
     final json = <String, Object?>{};
     if (action != null) {
-      json[r'action'] = action;
+      json[r'action'] = action.value;
     }
     if (endIpAddress != null) {
       json[r'endIPAddress'] = endIpAddress;
@@ -18893,7 +18806,9 @@ class IPAccessControlEntry {
   }
 
   IPAccessControlEntry copyWith(
-      {String? action, String? endIpAddress, String? startIpAddress}) {
+      {IPAccessControlEntryAction? action,
+      String? endIpAddress,
+      String? startIpAddress}) {
     return IPAccessControlEntry(
       action: action ?? this.action,
       endIpAddress: endIpAddress ?? this.endIpAddress,
@@ -18928,14 +18843,8 @@ class IPAccessControlList {
               .toList() ??
           [],
       id: json[r'id'] as String?,
-      insertInstant: json[r'insertInstant'] != null
-          ? ZonedDateTime.fromJson(
-              json[r'insertInstant']! as Map<String, Object?>)
-          : null,
-      lastUpdateInstant: json[r'lastUpdateInstant'] != null
-          ? ZonedDateTime.fromJson(
-              json[r'lastUpdateInstant']! as Map<String, Object?>)
-          : null,
+      insertInstant: (json[r'insertInstant'] as num?)?.toInt(),
+      lastUpdateInstant: (json[r'lastUpdateInstant'] as num?)?.toInt(),
       name: json[r'name'] as String?,
     );
   }
@@ -19197,7 +19106,7 @@ class IdentityProviderDetails {
   final String? idpEndpoint;
   final String? name;
   final IdentityProviderOauth2Configuration? oauth2;
-  final String? type;
+  final IdentityProviderType? type;
 
   IdentityProviderDetails(
       {List<String>? applicationIds,
@@ -19221,7 +19130,9 @@ class IdentityProviderDetails {
           ? IdentityProviderOauth2Configuration.fromJson(
               json[r'oauth2']! as Map<String, Object?>)
           : null,
-      type: json[r'type'] as String?,
+      type: json[r'type'] != null
+          ? IdentityProviderType.fromValue(json[r'type']! as String)
+          : null,
     );
   }
 
@@ -19248,7 +19159,7 @@ class IdentityProviderDetails {
       json[r'oauth2'] = oauth2.toJson();
     }
     if (type != null) {
-      json[r'type'] = type;
+      json[r'type'] = type.value;
     }
     return json;
   }
@@ -19259,7 +19170,7 @@ class IdentityProviderDetails {
       String? idpEndpoint,
       String? name,
       IdentityProviderOauth2Configuration? oauth2,
-      String? type}) {
+      IdentityProviderType? type}) {
     return IdentityProviderDetails(
       applicationIds: applicationIds ?? this.applicationIds,
       id: id ?? this.id,
@@ -19325,7 +19236,7 @@ class IdentityProviderLink {
   final String? displayName;
   final String? identityProviderId;
   final String? identityProviderName;
-  final String? identityProviderType;
+  final IdentityProviderType? identityProviderType;
   final String? identityProviderUserId;
   final ZonedDateTime? insertInstant;
   final ZonedDateTime? lastLoginInstant;
@@ -19352,16 +19263,13 @@ class IdentityProviderLink {
       displayName: json[r'displayName'] as String?,
       identityProviderId: json[r'identityProviderId'] as String?,
       identityProviderName: json[r'identityProviderName'] as String?,
-      identityProviderType: json[r'identityProviderType'] as String?,
+      identityProviderType: json[r'identityProviderType'] != null
+          ? IdentityProviderType.fromValue(
+              json[r'identityProviderType']! as String)
+          : null,
       identityProviderUserId: json[r'identityProviderUserId'] as String?,
-      insertInstant: json[r'insertInstant'] != null
-          ? ZonedDateTime.fromJson(
-              json[r'insertInstant']! as Map<String, Object?>)
-          : null,
-      lastLoginInstant: json[r'lastLoginInstant'] != null
-          ? ZonedDateTime.fromJson(
-              json[r'lastLoginInstant']! as Map<String, Object?>)
-          : null,
+      insertInstant: (json[r'insertInstant'] as num?)?.toInt(),
+      lastLoginInstant: (json[r'lastLoginInstant'] as num?)?.toInt(),
       tenantId: json[r'tenantId'] as String?,
       token: json[r'token'] as String?,
       userId: json[r'userId'] as String?,
@@ -19395,7 +19303,7 @@ class IdentityProviderLink {
       json[r'identityProviderName'] = identityProviderName;
     }
     if (identityProviderType != null) {
-      json[r'identityProviderType'] = identityProviderType;
+      json[r'identityProviderType'] = identityProviderType.value;
     }
     if (identityProviderUserId != null) {
       json[r'identityProviderUserId'] = identityProviderUserId;
@@ -19423,7 +19331,7 @@ class IdentityProviderLink {
       String? displayName,
       String? identityProviderId,
       String? identityProviderName,
-      String? identityProviderType,
+      IdentityProviderType? identityProviderType,
       String? identityProviderUserId,
       ZonedDateTime? insertInstant,
       ZonedDateTime? lastLoginInstant,
@@ -19650,7 +19558,7 @@ class IdentityProviderLoginRequest {
 
 class IdentityProviderOauth2Configuration {
   final String? authorizationEndpoint;
-  final String? clientAuthenticationMethod;
+  final ClientAuthenticationMethod? clientAuthenticationMethod;
   final String? clientId;
   final String? clientSecret;
   final String? emailClaim;
@@ -19680,8 +19588,10 @@ class IdentityProviderOauth2Configuration {
       Map<String, Object?> json) {
     return IdentityProviderOauth2Configuration(
       authorizationEndpoint: json[r'authorization_endpoint'] as String?,
-      clientAuthenticationMethod:
-          json[r'clientAuthenticationMethod'] as String?,
+      clientAuthenticationMethod: json[r'clientAuthenticationMethod'] != null
+          ? ClientAuthenticationMethod.fromValue(
+              json[r'clientAuthenticationMethod']! as String)
+          : null,
       clientId: json[r'client_id'] as String?,
       clientSecret: json[r'client_secret'] as String?,
       emailClaim: json[r'emailClaim'] as String?,
@@ -19714,7 +19624,7 @@ class IdentityProviderOauth2Configuration {
       json[r'authorization_endpoint'] = authorizationEndpoint;
     }
     if (clientAuthenticationMethod != null) {
-      json[r'clientAuthenticationMethod'] = clientAuthenticationMethod;
+      json[r'clientAuthenticationMethod'] = clientAuthenticationMethod.value;
     }
     if (clientId != null) {
       json[r'client_id'] = clientId;
@@ -19751,7 +19661,7 @@ class IdentityProviderOauth2Configuration {
 
   IdentityProviderOauth2Configuration copyWith(
       {String? authorizationEndpoint,
-      String? clientAuthenticationMethod,
+      ClientAuthenticationMethod? clientAuthenticationMethod,
       String? clientId,
       String? clientSecret,
       String? emailClaim,
@@ -19923,7 +19833,7 @@ class IdentityProviderResponse {
 class IdentityProviderSearchCriteria {
   final String? applicationId;
   final String? name;
-  final String? type;
+  final IdentityProviderType? type;
   final int? numberOfResults;
   final String? orderBy;
   final int? startRow;
@@ -19940,7 +19850,9 @@ class IdentityProviderSearchCriteria {
     return IdentityProviderSearchCriteria(
       applicationId: json[r'applicationId'] as String?,
       name: json[r'name'] as String?,
-      type: json[r'type'] as String?,
+      type: json[r'type'] != null
+          ? IdentityProviderType.fromValue(json[r'type']! as String)
+          : null,
       numberOfResults: (json[r'numberOfResults'] as num?)?.toInt(),
       orderBy: json[r'orderBy'] as String?,
       startRow: (json[r'startRow'] as num?)?.toInt(),
@@ -19963,7 +19875,7 @@ class IdentityProviderSearchCriteria {
       json[r'name'] = name;
     }
     if (type != null) {
-      json[r'type'] = type;
+      json[r'type'] = type.value;
     }
     if (numberOfResults != null) {
       json[r'numberOfResults'] = numberOfResults;
@@ -19980,7 +19892,7 @@ class IdentityProviderSearchCriteria {
   IdentityProviderSearchCriteria copyWith(
       {String? applicationId,
       String? name,
-      String? type,
+      IdentityProviderType? type,
       int? numberOfResults,
       String? orderBy,
       int? startRow}) {
@@ -20489,14 +20401,14 @@ class IssueResponse {
 ///  Section 4<a> and <a href="https:tools.ietf.orghtmlrfc7518">RFC 7518 JSON
 /// Web Algorithms (JWA)<a>.
 class JSONWebKey {
-  final String? alg;
+  final Algorithm? alg;
   final String? crv;
   final String? d;
   final String? dp;
   final String? dq;
   final String? e;
   final String? kid;
-  final String? kty;
+  final KeyType? kty;
   final String? n;
   final Map<String, dynamic>? other;
   final String? p;
@@ -20533,14 +20445,18 @@ class JSONWebKey {
 
   factory JSONWebKey.fromJson(Map<String, Object?> json) {
     return JSONWebKey(
-      alg: json[r'alg'] as String?,
+      alg: json[r'alg'] != null
+          ? Algorithm.fromValue(json[r'alg']! as String)
+          : null,
       crv: json[r'crv'] as String?,
       d: json[r'd'] as String?,
       dp: json[r'dp'] as String?,
       dq: json[r'dq'] as String?,
       e: json[r'e'] as String?,
       kid: json[r'kid'] as String?,
-      kty: json[r'kty'] as String?,
+      kty: json[r'kty'] != null
+          ? KeyType.fromValue(json[r'kty']! as String)
+          : null,
       n: json[r'n'] as String?,
       other: json[r'other'] as Map<String, Object?>?,
       p: json[r'p'] as String?,
@@ -20581,7 +20497,7 @@ class JSONWebKey {
 
     final json = <String, Object?>{};
     if (alg != null) {
-      json[r'alg'] = alg;
+      json[r'alg'] = alg.value;
     }
     if (crv != null) {
       json[r'crv'] = crv;
@@ -20602,7 +20518,7 @@ class JSONWebKey {
       json[r'kid'] = kid;
     }
     if (kty != null) {
-      json[r'kty'] = kty;
+      json[r'kty'] = kty.value;
     }
     if (n != null) {
       json[r'n'] = n;
@@ -20639,14 +20555,14 @@ class JSONWebKey {
   }
 
   JSONWebKey copyWith(
-      {String? alg,
+      {Algorithm? alg,
       String? crv,
       String? d,
       String? dp,
       String? dq,
       String? e,
       String? kid,
-      String? kty,
+      KeyType? kty,
       String? n,
       Map<String, dynamic>? other,
       String? p,
@@ -20753,16 +20669,10 @@ class JWT {
   factory JWT.fromJson(Map<String, Object?> json) {
     return JWT(
       aud: json[r'aud'] as Map<String, Object?>?,
-      exp: json[r'exp'] != null
-          ? ZonedDateTime.fromJson(json[r'exp']! as Map<String, Object?>)
-          : null,
-      iat: json[r'iat'] != null
-          ? ZonedDateTime.fromJson(json[r'iat']! as Map<String, Object?>)
-          : null,
+      exp: (json[r'exp'] as num?)?.toInt(),
+      iat: (json[r'iat'] as num?)?.toInt(),
       iss: json[r'iss'] as String?,
-      nbf: json[r'nbf'] != null
-          ? ZonedDateTime.fromJson(json[r'nbf']! as Map<String, Object?>)
-          : null,
+      nbf: (json[r'nbf'] as num?)?.toInt(),
       otherClaims: json[r'otherClaims'] as Map<String, Object?>?,
       sub: json[r'sub'] as String?,
       jti: json[r'jti'] as String?,
@@ -20835,12 +20745,12 @@ class JWT {
 class JWTConfiguration {
   final String? accessTokenKeyId;
   final String? idTokenKeyId;
-  final String? refreshTokenExpirationPolicy;
+  final RefreshTokenExpirationPolicy? refreshTokenExpirationPolicy;
   final RefreshTokenRevocationPolicy? refreshTokenRevocationPolicy;
   final RefreshTokenSlidingWindowConfiguration?
       refreshTokenSlidingWindowConfiguration;
   final int? refreshTokenTimeToLiveInMinutes;
-  final String? refreshTokenUsagePolicy;
+  final RefreshTokenUsagePolicy? refreshTokenUsagePolicy;
   final int? timeToLiveInSeconds;
   final bool enabled;
 
@@ -20861,7 +20771,10 @@ class JWTConfiguration {
       accessTokenKeyId: json[r'accessTokenKeyId'] as String?,
       idTokenKeyId: json[r'idTokenKeyId'] as String?,
       refreshTokenExpirationPolicy:
-          json[r'refreshTokenExpirationPolicy'] as String?,
+          json[r'refreshTokenExpirationPolicy'] != null
+              ? RefreshTokenExpirationPolicy.fromValue(
+                  json[r'refreshTokenExpirationPolicy']! as String)
+              : null,
       refreshTokenRevocationPolicy: json[r'refreshTokenRevocationPolicy'] !=
               null
           ? RefreshTokenRevocationPolicy.fromJson(
@@ -20875,7 +20788,10 @@ class JWTConfiguration {
               : null,
       refreshTokenTimeToLiveInMinutes:
           (json[r'refreshTokenTimeToLiveInMinutes'] as num?)?.toInt(),
-      refreshTokenUsagePolicy: json[r'refreshTokenUsagePolicy'] as String?,
+      refreshTokenUsagePolicy: json[r'refreshTokenUsagePolicy'] != null
+          ? RefreshTokenUsagePolicy.fromValue(
+              json[r'refreshTokenUsagePolicy']! as String)
+          : null,
       timeToLiveInSeconds: (json[r'timeToLiveInSeconds'] as num?)?.toInt(),
       enabled: json[r'enabled'] as bool? ?? false,
     );
@@ -20901,7 +20817,8 @@ class JWTConfiguration {
       json[r'idTokenKeyId'] = idTokenKeyId;
     }
     if (refreshTokenExpirationPolicy != null) {
-      json[r'refreshTokenExpirationPolicy'] = refreshTokenExpirationPolicy;
+      json[r'refreshTokenExpirationPolicy'] =
+          refreshTokenExpirationPolicy.value;
     }
     if (refreshTokenRevocationPolicy != null) {
       json[r'refreshTokenRevocationPolicy'] =
@@ -20916,7 +20833,7 @@ class JWTConfiguration {
           refreshTokenTimeToLiveInMinutes;
     }
     if (refreshTokenUsagePolicy != null) {
-      json[r'refreshTokenUsagePolicy'] = refreshTokenUsagePolicy;
+      json[r'refreshTokenUsagePolicy'] = refreshTokenUsagePolicy.value;
     }
     if (timeToLiveInSeconds != null) {
       json[r'timeToLiveInSeconds'] = timeToLiveInSeconds;
@@ -20928,12 +20845,12 @@ class JWTConfiguration {
   JWTConfiguration copyWith(
       {String? accessTokenKeyId,
       String? idTokenKeyId,
-      String? refreshTokenExpirationPolicy,
+      RefreshTokenExpirationPolicy? refreshTokenExpirationPolicy,
       RefreshTokenRevocationPolicy? refreshTokenRevocationPolicy,
       RefreshTokenSlidingWindowConfiguration?
           refreshTokenSlidingWindowConfiguration,
       int? refreshTokenTimeToLiveInMinutes,
-      String? refreshTokenUsagePolicy,
+      RefreshTokenUsagePolicy? refreshTokenUsagePolicy,
       int? timeToLiveInSeconds,
       bool? enabled}) {
     return JWTConfiguration(
@@ -20964,7 +20881,7 @@ class JWTPublicKeyUpdateEvent {
   final String? id;
   final EventInfo? info;
   final String? tenantId;
-  final String? type;
+  final EventType? type;
 
   JWTPublicKeyUpdateEvent(
       {List<dynamic>? applicationIds,
@@ -20980,16 +20897,15 @@ class JWTPublicKeyUpdateEvent {
       applicationIds:
           (json[r'applicationIds'] as List<Object?>?)?.map((i) => i).toList() ??
               [],
-      createInstant: json[r'createInstant'] != null
-          ? ZonedDateTime.fromJson(
-              json[r'createInstant']! as Map<String, Object?>)
-          : null,
+      createInstant: (json[r'createInstant'] as num?)?.toInt(),
       id: json[r'id'] as String?,
       info: json[r'info'] != null
           ? EventInfo.fromJson(json[r'info']! as Map<String, Object?>)
           : null,
       tenantId: json[r'tenantId'] as String?,
-      type: json[r'type'] as String?,
+      type: json[r'type'] != null
+          ? EventType.fromValue(json[r'type']! as String)
+          : null,
     );
   }
 
@@ -21016,7 +20932,7 @@ class JWTPublicKeyUpdateEvent {
       json[r'tenantId'] = tenantId;
     }
     if (type != null) {
-      json[r'type'] = type;
+      json[r'type'] = type.value;
     }
     return json;
   }
@@ -21027,7 +20943,7 @@ class JWTPublicKeyUpdateEvent {
       String? id,
       EventInfo? info,
       String? tenantId,
-      String? type}) {
+      EventType? type}) {
     return JWTPublicKeyUpdateEvent(
       applicationIds: applicationIds ?? this.applicationIds,
       createInstant: createInstant ?? this.createInstant,
@@ -21051,7 +20967,7 @@ class JWTRefreshEvent {
   final String? id;
   final EventInfo? info;
   final String? tenantId;
-  final String? type;
+  final EventType? type;
 
   JWTRefreshEvent(
       {this.applicationId,
@@ -21072,16 +20988,15 @@ class JWTRefreshEvent {
       refreshToken: json[r'refreshToken'] as String?,
       token: json[r'token'] as String?,
       userId: json[r'userId'] as String?,
-      createInstant: json[r'createInstant'] != null
-          ? ZonedDateTime.fromJson(
-              json[r'createInstant']! as Map<String, Object?>)
-          : null,
+      createInstant: (json[r'createInstant'] as num?)?.toInt(),
       id: json[r'id'] as String?,
       info: json[r'info'] != null
           ? EventInfo.fromJson(json[r'info']! as Map<String, Object?>)
           : null,
       tenantId: json[r'tenantId'] as String?,
-      type: json[r'type'] as String?,
+      type: json[r'type'] != null
+          ? EventType.fromValue(json[r'type']! as String)
+          : null,
     );
   }
 
@@ -21126,7 +21041,7 @@ class JWTRefreshEvent {
       json[r'tenantId'] = tenantId;
     }
     if (type != null) {
-      json[r'type'] = type;
+      json[r'type'] = type.value;
     }
     return json;
   }
@@ -21141,7 +21056,7 @@ class JWTRefreshEvent {
       String? id,
       EventInfo? info,
       String? tenantId,
-      String? type}) {
+      EventType? type}) {
     return JWTRefreshEvent(
       applicationId: applicationId ?? this.applicationId,
       original: original ?? this.original,
@@ -21215,7 +21130,7 @@ class JWTRefreshTokenRevokeEvent {
   final String? id;
   final EventInfo? info;
   final String? tenantId;
-  final String? type;
+  final EventType? type;
 
   JWTRefreshTokenRevokeEvent(
       {this.applicationId,
@@ -21242,16 +21157,15 @@ class JWTRefreshTokenRevokeEvent {
           ? User.fromJson(json[r'user']! as Map<String, Object?>)
           : null,
       userId: json[r'userId'] as String?,
-      createInstant: json[r'createInstant'] != null
-          ? ZonedDateTime.fromJson(
-              json[r'createInstant']! as Map<String, Object?>)
-          : null,
+      createInstant: (json[r'createInstant'] as num?)?.toInt(),
       id: json[r'id'] as String?,
       info: json[r'info'] != null
           ? EventInfo.fromJson(json[r'info']! as Map<String, Object?>)
           : null,
       tenantId: json[r'tenantId'] as String?,
-      type: json[r'type'] as String?,
+      type: json[r'type'] != null
+          ? EventType.fromValue(json[r'type']! as String)
+          : null,
     );
   }
 
@@ -21296,7 +21210,7 @@ class JWTRefreshTokenRevokeEvent {
       json[r'tenantId'] = tenantId;
     }
     if (type != null) {
-      json[r'type'] = type;
+      json[r'type'] = type.value;
     }
     return json;
   }
@@ -21311,7 +21225,7 @@ class JWTRefreshTokenRevokeEvent {
       String? id,
       EventInfo? info,
       String? tenantId,
-      String? type}) {
+      EventType? type}) {
     return JWTRefreshTokenRevokeEvent(
       applicationId: applicationId ?? this.applicationId,
       applicationTimeToLiveInSeconds:
@@ -21451,7 +21365,7 @@ class KafkaMessengerConfiguration {
   final ZonedDateTime? lastUpdateInstant;
   final String? name;
   final String? transport;
-  final String? type;
+  final MessengerType? type;
 
   KafkaMessengerConfiguration(
       {this.defaultTopic,
@@ -21473,17 +21387,13 @@ class KafkaMessengerConfiguration {
       data: json[r'data'] as Map<String, Object?>?,
       debug: json[r'debug'] as bool? ?? false,
       id: json[r'id'] as String?,
-      insertInstant: json[r'insertInstant'] != null
-          ? ZonedDateTime.fromJson(
-              json[r'insertInstant']! as Map<String, Object?>)
-          : null,
-      lastUpdateInstant: json[r'lastUpdateInstant'] != null
-          ? ZonedDateTime.fromJson(
-              json[r'lastUpdateInstant']! as Map<String, Object?>)
-          : null,
+      insertInstant: (json[r'insertInstant'] as num?)?.toInt(),
+      lastUpdateInstant: (json[r'lastUpdateInstant'] as num?)?.toInt(),
       name: json[r'name'] as String?,
       transport: json[r'transport'] as String?,
-      type: json[r'type'] as String?,
+      type: json[r'type'] != null
+          ? MessengerType.fromValue(json[r'type']! as String)
+          : null,
     );
   }
 
@@ -21526,7 +21436,7 @@ class KafkaMessengerConfiguration {
       json[r'transport'] = transport;
     }
     if (type != null) {
-      json[r'type'] = type;
+      json[r'type'] = type.value;
     }
     return json;
   }
@@ -21541,7 +21451,7 @@ class KafkaMessengerConfiguration {
       ZonedDateTime? lastUpdateInstant,
       String? name,
       String? transport,
-      String? type}) {
+      MessengerType? type}) {
     return KafkaMessengerConfiguration(
       defaultTopic: defaultTopic ?? this.defaultTopic,
       producer: producer ?? this.producer,
@@ -21560,7 +21470,7 @@ class KafkaMessengerConfiguration {
 /// Domain for a public key, key pair or an HMAC secret. This is used by
 /// KeyMaster to manage keys for JWTs, SAML, etc.
 class Key {
-  final String? algorithm;
+  final KeyAlgorithm? algorithm;
   final String? certificate;
   final CertificateInformation? certificateInformation;
   final ZonedDateTime? expirationInstant;
@@ -21575,7 +21485,7 @@ class Key {
   final String? privateKey;
   final String? publicKey;
   final String? secret;
-  final String? type;
+  final KeyType? type;
 
   Key(
       {this.algorithm,
@@ -21598,34 +21508,29 @@ class Key {
 
   factory Key.fromJson(Map<String, Object?> json) {
     return Key(
-      algorithm: json[r'algorithm'] as String?,
+      algorithm: json[r'algorithm'] != null
+          ? KeyAlgorithm.fromValue(json[r'algorithm']! as String)
+          : null,
       certificate: json[r'certificate'] as String?,
       certificateInformation: json[r'certificateInformation'] != null
           ? CertificateInformation.fromJson(
               json[r'certificateInformation']! as Map<String, Object?>)
           : null,
-      expirationInstant: json[r'expirationInstant'] != null
-          ? ZonedDateTime.fromJson(
-              json[r'expirationInstant']! as Map<String, Object?>)
-          : null,
+      expirationInstant: (json[r'expirationInstant'] as num?)?.toInt(),
       hasPrivateKey: json[r'hasPrivateKey'] as bool? ?? false,
       id: json[r'id'] as String?,
-      insertInstant: json[r'insertInstant'] != null
-          ? ZonedDateTime.fromJson(
-              json[r'insertInstant']! as Map<String, Object?>)
-          : null,
+      insertInstant: (json[r'insertInstant'] as num?)?.toInt(),
       issuer: json[r'issuer'] as String?,
       kid: json[r'kid'] as String?,
-      lastUpdateInstant: json[r'lastUpdateInstant'] != null
-          ? ZonedDateTime.fromJson(
-              json[r'lastUpdateInstant']! as Map<String, Object?>)
-          : null,
+      lastUpdateInstant: (json[r'lastUpdateInstant'] as num?)?.toInt(),
       length: (json[r'length'] as num?)?.toInt(),
       name: json[r'name'] as String?,
       privateKey: json[r'privateKey'] as String?,
       publicKey: json[r'publicKey'] as String?,
       secret: json[r'secret'] as String?,
-      type: json[r'type'] as String?,
+      type: json[r'type'] != null
+          ? KeyType.fromValue(json[r'type']! as String)
+          : null,
     );
   }
 
@@ -21649,7 +21554,7 @@ class Key {
 
     final json = <String, Object?>{};
     if (algorithm != null) {
-      json[r'algorithm'] = algorithm;
+      json[r'algorithm'] = algorithm.value;
     }
     if (certificate != null) {
       json[r'certificate'] = certificate;
@@ -21692,13 +21597,13 @@ class Key {
       json[r'secret'] = secret;
     }
     if (type != null) {
-      json[r'type'] = type;
+      json[r'type'] = type.value;
     }
     return json;
   }
 
   Key copyWith(
-      {String? algorithm,
+      {KeyAlgorithm? algorithm,
       String? certificate,
       CertificateInformation? certificateInformation,
       ZonedDateTime? expirationInstant,
@@ -21713,7 +21618,7 @@ class Key {
       String? privateKey,
       String? publicKey,
       String? secret,
-      String? type}) {
+      KeyType? type}) {
     return Key(
       algorithm: algorithm ?? this.algorithm,
       certificate: certificate ?? this.certificate,
@@ -21808,9 +21713,9 @@ class KeyResponse {
 
 /// Search criteria for Keys
 class KeySearchCriteria {
-  final String? algorithm;
+  final KeyAlgorithm? algorithm;
   final String? name;
-  final String? type;
+  final KeyType? type;
   final int? numberOfResults;
   final String? orderBy;
   final int? startRow;
@@ -21825,9 +21730,13 @@ class KeySearchCriteria {
 
   factory KeySearchCriteria.fromJson(Map<String, Object?> json) {
     return KeySearchCriteria(
-      algorithm: json[r'algorithm'] as String?,
+      algorithm: json[r'algorithm'] != null
+          ? KeyAlgorithm.fromValue(json[r'algorithm']! as String)
+          : null,
       name: json[r'name'] as String?,
-      type: json[r'type'] as String?,
+      type: json[r'type'] != null
+          ? KeyType.fromValue(json[r'type']! as String)
+          : null,
       numberOfResults: (json[r'numberOfResults'] as num?)?.toInt(),
       orderBy: json[r'orderBy'] as String?,
       startRow: (json[r'startRow'] as num?)?.toInt(),
@@ -21844,13 +21753,13 @@ class KeySearchCriteria {
 
     final json = <String, Object?>{};
     if (algorithm != null) {
-      json[r'algorithm'] = algorithm;
+      json[r'algorithm'] = algorithm.value;
     }
     if (name != null) {
       json[r'name'] = name;
     }
     if (type != null) {
-      json[r'type'] = type;
+      json[r'type'] = type.value;
     }
     if (numberOfResults != null) {
       json[r'numberOfResults'] = numberOfResults;
@@ -21865,9 +21774,9 @@ class KeySearchCriteria {
   }
 
   KeySearchCriteria copyWith(
-      {String? algorithm,
+      {KeyAlgorithm? algorithm,
       String? name,
-      String? type,
+      KeyType? type,
       int? numberOfResults,
       String? orderBy,
       int? startRow}) {
@@ -21957,7 +21866,7 @@ class KickstartSuccessEvent {
   final String? id;
   final EventInfo? info;
   final String? tenantId;
-  final String? type;
+  final EventType? type;
 
   KickstartSuccessEvent(
       {this.instanceId,
@@ -21970,16 +21879,15 @@ class KickstartSuccessEvent {
   factory KickstartSuccessEvent.fromJson(Map<String, Object?> json) {
     return KickstartSuccessEvent(
       instanceId: json[r'instanceId'] as String?,
-      createInstant: json[r'createInstant'] != null
-          ? ZonedDateTime.fromJson(
-              json[r'createInstant']! as Map<String, Object?>)
-          : null,
+      createInstant: (json[r'createInstant'] as num?)?.toInt(),
       id: json[r'id'] as String?,
       info: json[r'info'] != null
           ? EventInfo.fromJson(json[r'info']! as Map<String, Object?>)
           : null,
       tenantId: json[r'tenantId'] as String?,
-      type: json[r'type'] as String?,
+      type: json[r'type'] != null
+          ? EventType.fromValue(json[r'type']! as String)
+          : null,
     );
   }
 
@@ -22008,7 +21916,7 @@ class KickstartSuccessEvent {
       json[r'tenantId'] = tenantId;
     }
     if (type != null) {
-      json[r'type'] = type;
+      json[r'type'] = type.value;
     }
     return json;
   }
@@ -22019,7 +21927,7 @@ class KickstartSuccessEvent {
       String? id,
       EventInfo? info,
       String? tenantId,
-      String? type}) {
+      EventType? type}) {
     return KickstartSuccessEvent(
       instanceId: instanceId ?? this.instanceId,
       createInstant: createInstant ?? this.createInstant,
@@ -22041,7 +21949,7 @@ class LDAPConnectorConfiguration {
   final String? loginIdAttribute;
   final int? readTimeout;
   final List<String> requestedAttributes;
-  final String? securityMethod;
+  final LDAPSecurityMethod? securityMethod;
   final String? systemAccountDn;
   final String? systemAccountPassword;
   final Map<String, dynamic>? data;
@@ -22050,7 +21958,7 @@ class LDAPConnectorConfiguration {
   final ZonedDateTime? insertInstant;
   final ZonedDateTime? lastUpdateInstant;
   final String? name;
-  final String? type;
+  final ConnectorType? type;
 
   LDAPConnectorConfiguration(
       {this.authenticationUrl,
@@ -22090,22 +21998,20 @@ class LDAPConnectorConfiguration {
               ?.map((i) => i as String? ?? '')
               .toList() ??
           [],
-      securityMethod: json[r'securityMethod'] as String?,
+      securityMethod: json[r'securityMethod'] != null
+          ? LDAPSecurityMethod.fromValue(json[r'securityMethod']! as String)
+          : null,
       systemAccountDn: json[r'systemAccountDN'] as String?,
       systemAccountPassword: json[r'systemAccountPassword'] as String?,
       data: json[r'data'] as Map<String, Object?>?,
       debug: json[r'debug'] as bool? ?? false,
       id: json[r'id'] as String?,
-      insertInstant: json[r'insertInstant'] != null
-          ? ZonedDateTime.fromJson(
-              json[r'insertInstant']! as Map<String, Object?>)
-          : null,
-      lastUpdateInstant: json[r'lastUpdateInstant'] != null
-          ? ZonedDateTime.fromJson(
-              json[r'lastUpdateInstant']! as Map<String, Object?>)
-          : null,
+      insertInstant: (json[r'insertInstant'] as num?)?.toInt(),
+      lastUpdateInstant: (json[r'lastUpdateInstant'] as num?)?.toInt(),
       name: json[r'name'] as String?,
-      type: json[r'type'] as String?,
+      type: json[r'type'] != null
+          ? ConnectorType.fromValue(json[r'type']! as String)
+          : null,
     );
   }
 
@@ -22153,7 +22059,7 @@ class LDAPConnectorConfiguration {
     }
     json[r'requestedAttributes'] = requestedAttributes;
     if (securityMethod != null) {
-      json[r'securityMethod'] = securityMethod;
+      json[r'securityMethod'] = securityMethod.value;
     }
     if (systemAccountDn != null) {
       json[r'systemAccountDN'] = systemAccountDn;
@@ -22178,7 +22084,7 @@ class LDAPConnectorConfiguration {
       json[r'name'] = name;
     }
     if (type != null) {
-      json[r'type'] = type;
+      json[r'type'] = type.value;
     }
     return json;
   }
@@ -22192,7 +22098,7 @@ class LDAPConnectorConfiguration {
       String? loginIdAttribute,
       int? readTimeout,
       List<String>? requestedAttributes,
-      String? securityMethod,
+      LDAPSecurityMethod? securityMethod,
       String? systemAccountDn,
       String? systemAccountPassword,
       Map<String, dynamic>? data,
@@ -22201,7 +22107,7 @@ class LDAPConnectorConfiguration {
       ZonedDateTime? insertInstant,
       ZonedDateTime? lastUpdateInstant,
       String? name,
-      String? type}) {
+      ConnectorType? type}) {
     return LDAPConnectorConfiguration(
       authenticationUrl: authenticationUrl ?? this.authenticationUrl,
       baseStructure: baseStructure ?? this.baseStructure,
@@ -22231,12 +22137,12 @@ class LDAPConnectorConfiguration {
 class Lambda {
   final String? body;
   final bool debug;
-  final String? engineType;
+  final LambdaEngineType? engineType;
   final String? id;
   final ZonedDateTime? insertInstant;
   final ZonedDateTime? lastUpdateInstant;
   final String? name;
-  final String? type;
+  final LambdaType? type;
 
   Lambda(
       {this.body,
@@ -22253,18 +22159,16 @@ class Lambda {
     return Lambda(
       body: json[r'body'] as String?,
       debug: json[r'debug'] as bool? ?? false,
-      engineType: json[r'engineType'] as String?,
+      engineType: json[r'engineType'] != null
+          ? LambdaEngineType.fromValue(json[r'engineType']! as String)
+          : null,
       id: json[r'id'] as String?,
-      insertInstant: json[r'insertInstant'] != null
-          ? ZonedDateTime.fromJson(
-              json[r'insertInstant']! as Map<String, Object?>)
-          : null,
-      lastUpdateInstant: json[r'lastUpdateInstant'] != null
-          ? ZonedDateTime.fromJson(
-              json[r'lastUpdateInstant']! as Map<String, Object?>)
-          : null,
+      insertInstant: (json[r'insertInstant'] as num?)?.toInt(),
+      lastUpdateInstant: (json[r'lastUpdateInstant'] as num?)?.toInt(),
       name: json[r'name'] as String?,
-      type: json[r'type'] as String?,
+      type: json[r'type'] != null
+          ? LambdaType.fromValue(json[r'type']! as String)
+          : null,
     );
   }
 
@@ -22284,7 +22188,7 @@ class Lambda {
     }
     json[r'debug'] = debug;
     if (engineType != null) {
-      json[r'engineType'] = engineType;
+      json[r'engineType'] = engineType.value;
     }
     if (id != null) {
       json[r'id'] = id;
@@ -22299,7 +22203,7 @@ class Lambda {
       json[r'name'] = name;
     }
     if (type != null) {
-      json[r'type'] = type;
+      json[r'type'] = type.value;
     }
     return json;
   }
@@ -22307,12 +22211,12 @@ class Lambda {
   Lambda copyWith(
       {String? body,
       bool? debug,
-      String? engineType,
+      LambdaEngineType? engineType,
       String? id,
       ZonedDateTime? insertInstant,
       ZonedDateTime? lastUpdateInstant,
       String? name,
-      String? type}) {
+      LambdaType? type}) {
     return Lambda(
       body: body ?? this.body,
       debug: debug ?? this.debug,
@@ -22474,7 +22378,7 @@ class LambdaResponse {
 class LambdaSearchCriteria {
   final String? body;
   final String? name;
-  final String? type;
+  final LambdaType? type;
   final int? numberOfResults;
   final String? orderBy;
   final int? startRow;
@@ -22491,7 +22395,9 @@ class LambdaSearchCriteria {
     return LambdaSearchCriteria(
       body: json[r'body'] as String?,
       name: json[r'name'] as String?,
-      type: json[r'type'] as String?,
+      type: json[r'type'] != null
+          ? LambdaType.fromValue(json[r'type']! as String)
+          : null,
       numberOfResults: (json[r'numberOfResults'] as num?)?.toInt(),
       orderBy: json[r'orderBy'] as String?,
       startRow: (json[r'startRow'] as num?)?.toInt(),
@@ -22514,7 +22420,7 @@ class LambdaSearchCriteria {
       json[r'name'] = name;
     }
     if (type != null) {
-      json[r'type'] = type;
+      json[r'type'] = type.value;
     }
     if (numberOfResults != null) {
       json[r'numberOfResults'] = numberOfResults;
@@ -22531,7 +22437,7 @@ class LambdaSearchCriteria {
   LambdaSearchCriteria copyWith(
       {String? body,
       String? name,
-      String? type,
+      LambdaType? type,
       int? numberOfResults,
       String? orderBy,
       int? startRow}) {
@@ -22703,10 +22609,10 @@ class LinkedInIdentityProvider {
   final ZonedDateTime? insertInstant;
   final ProviderLambdaConfiguration? lambdaConfiguration;
   final ZonedDateTime? lastUpdateInstant;
-  final String? linkingStrategy;
+  final IdentityProviderLinkingStrategy? linkingStrategy;
   final String? name;
   final Map<String, dynamic>? tenantConfiguration;
-  final String? type;
+  final IdentityProviderType? type;
 
   LinkedInIdentityProvider(
       {this.buttonText,
@@ -22737,23 +22643,22 @@ class LinkedInIdentityProvider {
           json[r'applicationConfiguration'] as Map<String, Object?>?,
       debug: json[r'debug'] as bool? ?? false,
       id: json[r'id'] as String?,
-      insertInstant: json[r'insertInstant'] != null
-          ? ZonedDateTime.fromJson(
-              json[r'insertInstant']! as Map<String, Object?>)
-          : null,
+      insertInstant: (json[r'insertInstant'] as num?)?.toInt(),
       lambdaConfiguration: json[r'lambdaConfiguration'] != null
           ? ProviderLambdaConfiguration.fromJson(
               json[r'lambdaConfiguration']! as Map<String, Object?>)
           : null,
-      lastUpdateInstant: json[r'lastUpdateInstant'] != null
-          ? ZonedDateTime.fromJson(
-              json[r'lastUpdateInstant']! as Map<String, Object?>)
+      lastUpdateInstant: (json[r'lastUpdateInstant'] as num?)?.toInt(),
+      linkingStrategy: json[r'linkingStrategy'] != null
+          ? IdentityProviderLinkingStrategy.fromValue(
+              json[r'linkingStrategy']! as String)
           : null,
-      linkingStrategy: json[r'linkingStrategy'] as String?,
       name: json[r'name'] as String?,
       tenantConfiguration:
           json[r'tenantConfiguration'] as Map<String, Object?>?,
-      type: json[r'type'] as String?,
+      type: json[r'type'] != null
+          ? IdentityProviderType.fromValue(json[r'type']! as String)
+          : null,
     );
   }
 
@@ -22807,7 +22712,7 @@ class LinkedInIdentityProvider {
       json[r'lastUpdateInstant'] = lastUpdateInstant.toJson();
     }
     if (linkingStrategy != null) {
-      json[r'linkingStrategy'] = linkingStrategy;
+      json[r'linkingStrategy'] = linkingStrategy.value;
     }
     if (name != null) {
       json[r'name'] = name;
@@ -22816,7 +22721,7 @@ class LinkedInIdentityProvider {
       json[r'tenantConfiguration'] = tenantConfiguration;
     }
     if (type != null) {
-      json[r'type'] = type;
+      json[r'type'] = type.value;
     }
     return json;
   }
@@ -22833,10 +22738,10 @@ class LinkedInIdentityProvider {
       ZonedDateTime? insertInstant,
       ProviderLambdaConfiguration? lambdaConfiguration,
       ZonedDateTime? lastUpdateInstant,
-      String? linkingStrategy,
+      IdentityProviderLinkingStrategy? linkingStrategy,
       String? name,
       Map<String, dynamic>? tenantConfiguration,
-      String? type}) {
+      IdentityProviderType? type}) {
     return LinkedInIdentityProvider(
       buttonText: buttonText ?? this.buttonText,
       clientId: clientId ?? this.clientId,
@@ -23192,9 +23097,7 @@ class LoginPreventedResponse {
     return LoginPreventedResponse(
       actionId: json[r'actionId'] as String?,
       actionerUserId: json[r'actionerUserId'] as String?,
-      expiry: json[r'expiry'] != null
-          ? ZonedDateTime.fromJson(json[r'expiry']! as Map<String, Object?>)
-          : null,
+      expiry: (json[r'expiry'] as num?)?.toInt(),
       localizedName: json[r'localizedName'] as String?,
       localizedOption: json[r'localizedOption'] as String?,
       localizedReason: json[r'localizedReason'] as String?,
@@ -23311,7 +23214,7 @@ class LoginRecordConfiguration {
 class LoginRecordExportRequest {
   final LoginRecordSearchCriteria? criteria;
   final String? dateTimeSecondsFormat;
-  final String? zoneId;
+  final ZoneId? zoneId;
 
   LoginRecordExportRequest(
       {this.criteria, this.dateTimeSecondsFormat, this.zoneId});
@@ -23340,7 +23243,7 @@ class LoginRecordExportRequest {
       json[r'dateTimeSecondsFormat'] = dateTimeSecondsFormat;
     }
     if (zoneId != null) {
-      json[r'zoneId'] = zoneId;
+      json[r'zoneId'] = zoneId.toJson();
     }
     return json;
   }
@@ -23348,7 +23251,7 @@ class LoginRecordExportRequest {
   LoginRecordExportRequest copyWith(
       {LoginRecordSearchCriteria? criteria,
       String? dateTimeSecondsFormat,
-      String? zoneId}) {
+      ZoneId? zoneId}) {
     return LoginRecordExportRequest(
       criteria: criteria ?? this.criteria,
       dateTimeSecondsFormat:
@@ -23379,12 +23282,8 @@ class LoginRecordSearchCriteria {
   factory LoginRecordSearchCriteria.fromJson(Map<String, Object?> json) {
     return LoginRecordSearchCriteria(
       applicationId: json[r'applicationId'] as String?,
-      end: json[r'end'] != null
-          ? ZonedDateTime.fromJson(json[r'end']! as Map<String, Object?>)
-          : null,
-      start: json[r'start'] != null
-          ? ZonedDateTime.fromJson(json[r'start']! as Map<String, Object?>)
-          : null,
+      end: (json[r'end'] as num?)?.toInt(),
+      start: (json[r'start'] as num?)?.toInt(),
       userId: json[r'userId'] as String?,
       numberOfResults: (json[r'numberOfResults'] as num?)?.toInt(),
       orderBy: json[r'orderBy'] as String?,
@@ -23669,7 +23568,7 @@ class LoginRequest {
 class LoginResponse {
   final List<LoginPreventedResponse> actions;
   final String? changePasswordId;
-  final String? changePasswordReason;
+  final ChangePasswordReason? changePasswordReason;
   final List<String> configurableMethods;
   final String? emailVerificationId;
   final List<TwoFactorMethod> methods;
@@ -23718,7 +23617,10 @@ class LoginResponse {
               .toList() ??
           [],
       changePasswordId: json[r'changePasswordId'] as String?,
-      changePasswordReason: json[r'changePasswordReason'] as String?,
+      changePasswordReason: json[r'changePasswordReason'] != null
+          ? ChangePasswordReason.fromValue(
+              json[r'changePasswordReason']! as String)
+          : null,
       configurableMethods: (json[r'configurableMethods'] as List<Object?>?)
               ?.map((i) => i as String? ?? '')
               .toList() ??
@@ -23740,10 +23642,8 @@ class LoginResponse {
               .toList() ??
           [],
       token: json[r'token'] as String?,
-      tokenExpirationInstant: json[r'tokenExpirationInstant'] != null
-          ? ZonedDateTime.fromJson(
-              json[r'tokenExpirationInstant']! as Map<String, Object?>)
-          : null,
+      tokenExpirationInstant:
+          (json[r'tokenExpirationInstant'] as num?)?.toInt(),
       trustToken: json[r'trustToken'] as String?,
       twoFactorId: json[r'twoFactorId'] as String?,
       twoFactorTrustId: json[r'twoFactorTrustId'] as String?,
@@ -23779,7 +23679,7 @@ class LoginResponse {
       json[r'changePasswordId'] = changePasswordId;
     }
     if (changePasswordReason != null) {
-      json[r'changePasswordReason'] = changePasswordReason;
+      json[r'changePasswordReason'] = changePasswordReason.value;
     }
     json[r'configurableMethods'] = configurableMethods;
     if (emailVerificationId != null) {
@@ -23826,7 +23726,7 @@ class LoginResponse {
   LoginResponse copyWith(
       {List<LoginPreventedResponse>? actions,
       String? changePasswordId,
-      String? changePasswordReason,
+      ChangePasswordReason? changePasswordReason,
       List<String>? configurableMethods,
       String? emailVerificationId,
       List<TwoFactorMethod>? methods,
@@ -24118,7 +24018,7 @@ class MessageTemplate {
   final ZonedDateTime? insertInstant;
   final ZonedDateTime? lastUpdateInstant;
   final String? name;
-  final String? type;
+  final MessageType? type;
 
   MessageTemplate(
       {this.data,
@@ -24132,16 +24032,12 @@ class MessageTemplate {
     return MessageTemplate(
       data: json[r'data'] as Map<String, Object?>?,
       id: json[r'id'] as String?,
-      insertInstant: json[r'insertInstant'] != null
-          ? ZonedDateTime.fromJson(
-              json[r'insertInstant']! as Map<String, Object?>)
-          : null,
-      lastUpdateInstant: json[r'lastUpdateInstant'] != null
-          ? ZonedDateTime.fromJson(
-              json[r'lastUpdateInstant']! as Map<String, Object?>)
-          : null,
+      insertInstant: (json[r'insertInstant'] as num?)?.toInt(),
+      lastUpdateInstant: (json[r'lastUpdateInstant'] as num?)?.toInt(),
       name: json[r'name'] as String?,
-      type: json[r'type'] as String?,
+      type: json[r'type'] != null
+          ? MessageType.fromValue(json[r'type']! as String)
+          : null,
     );
   }
 
@@ -24170,7 +24066,7 @@ class MessageTemplate {
       json[r'name'] = name;
     }
     if (type != null) {
-      json[r'type'] = type;
+      json[r'type'] = type.value;
     }
     return json;
   }
@@ -24181,7 +24077,7 @@ class MessageTemplate {
       ZonedDateTime? insertInstant,
       ZonedDateTime? lastUpdateInstant,
       String? name,
-      String? type}) {
+      MessageType? type}) {
     return MessageTemplate(
       data: data ?? this.data,
       id: id ?? this.id,
@@ -24478,7 +24374,7 @@ class MonthlyActiveUserReportResponse {
 }
 
 class MultiFactorAuthenticatorMethod {
-  final String? algorithm;
+  final TOTPAlgorithm? algorithm;
   final int? codeLength;
   final int? timeStep;
   final bool enabled;
@@ -24489,7 +24385,9 @@ class MultiFactorAuthenticatorMethod {
 
   factory MultiFactorAuthenticatorMethod.fromJson(Map<String, Object?> json) {
     return MultiFactorAuthenticatorMethod(
-      algorithm: json[r'algorithm'] as String?,
+      algorithm: json[r'algorithm'] != null
+          ? TOTPAlgorithm.fromValue(json[r'algorithm']! as String)
+          : null,
       codeLength: (json[r'codeLength'] as num?)?.toInt(),
       timeStep: (json[r'timeStep'] as num?)?.toInt(),
       enabled: json[r'enabled'] as bool? ?? false,
@@ -24504,7 +24402,7 @@ class MultiFactorAuthenticatorMethod {
 
     final json = <String, Object?>{};
     if (algorithm != null) {
-      json[r'algorithm'] = algorithm;
+      json[r'algorithm'] = algorithm.value;
     }
     if (codeLength != null) {
       json[r'codeLength'] = codeLength;
@@ -24517,7 +24415,10 @@ class MultiFactorAuthenticatorMethod {
   }
 
   MultiFactorAuthenticatorMethod copyWith(
-      {String? algorithm, int? codeLength, int? timeStep, bool? enabled}) {
+      {TOTPAlgorithm? algorithm,
+      int? codeLength,
+      int? timeStep,
+      bool? enabled}) {
     return MultiFactorAuthenticatorMethod(
       algorithm: algorithm ?? this.algorithm,
       codeLength: codeLength ?? this.codeLength,
@@ -24776,10 +24677,10 @@ class NintendoIdentityProvider {
   final ZonedDateTime? insertInstant;
   final ProviderLambdaConfiguration? lambdaConfiguration;
   final ZonedDateTime? lastUpdateInstant;
-  final String? linkingStrategy;
+  final IdentityProviderLinkingStrategy? linkingStrategy;
   final String? name;
   final Map<String, dynamic>? tenantConfiguration;
-  final String? type;
+  final IdentityProviderType? type;
 
   NintendoIdentityProvider(
       {this.buttonText,
@@ -24816,23 +24717,22 @@ class NintendoIdentityProvider {
           json[r'applicationConfiguration'] as Map<String, Object?>?,
       debug: json[r'debug'] as bool? ?? false,
       id: json[r'id'] as String?,
-      insertInstant: json[r'insertInstant'] != null
-          ? ZonedDateTime.fromJson(
-              json[r'insertInstant']! as Map<String, Object?>)
-          : null,
+      insertInstant: (json[r'insertInstant'] as num?)?.toInt(),
       lambdaConfiguration: json[r'lambdaConfiguration'] != null
           ? ProviderLambdaConfiguration.fromJson(
               json[r'lambdaConfiguration']! as Map<String, Object?>)
           : null,
-      lastUpdateInstant: json[r'lastUpdateInstant'] != null
-          ? ZonedDateTime.fromJson(
-              json[r'lastUpdateInstant']! as Map<String, Object?>)
+      lastUpdateInstant: (json[r'lastUpdateInstant'] as num?)?.toInt(),
+      linkingStrategy: json[r'linkingStrategy'] != null
+          ? IdentityProviderLinkingStrategy.fromValue(
+              json[r'linkingStrategy']! as String)
           : null,
-      linkingStrategy: json[r'linkingStrategy'] as String?,
       name: json[r'name'] as String?,
       tenantConfiguration:
           json[r'tenantConfiguration'] as Map<String, Object?>?,
-      type: json[r'type'] as String?,
+      type: json[r'type'] != null
+          ? IdentityProviderType.fromValue(json[r'type']! as String)
+          : null,
     );
   }
 
@@ -24898,7 +24798,7 @@ class NintendoIdentityProvider {
       json[r'lastUpdateInstant'] = lastUpdateInstant.toJson();
     }
     if (linkingStrategy != null) {
-      json[r'linkingStrategy'] = linkingStrategy;
+      json[r'linkingStrategy'] = linkingStrategy.value;
     }
     if (name != null) {
       json[r'name'] = name;
@@ -24907,7 +24807,7 @@ class NintendoIdentityProvider {
       json[r'tenantConfiguration'] = tenantConfiguration;
     }
     if (type != null) {
-      json[r'type'] = type;
+      json[r'type'] = type.value;
     }
     return json;
   }
@@ -24927,10 +24827,10 @@ class NintendoIdentityProvider {
       ZonedDateTime? insertInstant,
       ProviderLambdaConfiguration? lambdaConfiguration,
       ZonedDateTime? lastUpdateInstant,
-      String? linkingStrategy,
+      IdentityProviderLinkingStrategy? linkingStrategy,
       String? name,
       Map<String, dynamic>? tenantConfiguration,
-      String? type}) {
+      IdentityProviderType? type}) {
     return NintendoIdentityProvider(
       buttonText: buttonText ?? this.buttonText,
       clientId: clientId ?? this.clientId,
@@ -24972,24 +24872,24 @@ class NonTransactionalEvent {
 class OAuth2Configuration {
   final List<String> authorizedOriginUrLs;
   final List<String> authorizedRedirectUrLs;
-  final String? authorizedUrlValidationPolicy;
-  final String? clientAuthenticationPolicy;
+  final Oauth2AuthorizedURLValidationPolicy? authorizedUrlValidationPolicy;
+  final ClientAuthenticationPolicy? clientAuthenticationPolicy;
   final String? clientId;
   final String? clientSecret;
-  final String? consentMode;
+  final OAuthScopeConsentMode? consentMode;
   final bool debug;
   final String? deviceVerificationUrl;
   final List<dynamic> enabledGrants;
   final bool generateRefreshTokens;
-  final String? logoutBehavior;
+  final LogoutBehavior? logoutBehavior;
   final String? logoutUrl;
-  final String? proofKeyForCodeExchangePolicy;
+  final ProofKeyForCodeExchangePolicy? proofKeyForCodeExchangePolicy;
   final ProvidedScopePolicy? providedScopePolicy;
-  final String? relationship;
+  final OAuthApplicationRelationship? relationship;
   final bool requireClientAuthentication;
   final bool requireRegistration;
-  final String? scopeHandlingPolicy;
-  final String? unknownScopePolicy;
+  final OAuthScopeHandlingPolicy? scopeHandlingPolicy;
+  final UnknownScopePolicy? unknownScopePolicy;
 
   OAuth2Configuration(
       {List<String>? authorizedOriginUrLs,
@@ -25032,32 +24932,52 @@ class OAuth2Configuration {
                   .toList() ??
               [],
       authorizedUrlValidationPolicy:
-          json[r'authorizedURLValidationPolicy'] as String?,
-      clientAuthenticationPolicy:
-          json[r'clientAuthenticationPolicy'] as String?,
+          json[r'authorizedURLValidationPolicy'] != null
+              ? Oauth2AuthorizedURLValidationPolicy.fromValue(
+                  json[r'authorizedURLValidationPolicy']! as String)
+              : null,
+      clientAuthenticationPolicy: json[r'clientAuthenticationPolicy'] != null
+          ? ClientAuthenticationPolicy.fromValue(
+              json[r'clientAuthenticationPolicy']! as String)
+          : null,
       clientId: json[r'clientId'] as String?,
       clientSecret: json[r'clientSecret'] as String?,
-      consentMode: json[r'consentMode'] as String?,
+      consentMode: json[r'consentMode'] != null
+          ? OAuthScopeConsentMode.fromValue(json[r'consentMode']! as String)
+          : null,
       debug: json[r'debug'] as bool? ?? false,
       deviceVerificationUrl: json[r'deviceVerificationURL'] as String?,
       enabledGrants:
           (json[r'enabledGrants'] as List<Object?>?)?.map((i) => i).toList() ??
               [],
       generateRefreshTokens: json[r'generateRefreshTokens'] as bool? ?? false,
-      logoutBehavior: json[r'logoutBehavior'] as String?,
+      logoutBehavior: json[r'logoutBehavior'] != null
+          ? LogoutBehavior.fromValue(json[r'logoutBehavior']! as String)
+          : null,
       logoutUrl: json[r'logoutURL'] as String?,
       proofKeyForCodeExchangePolicy:
-          json[r'proofKeyForCodeExchangePolicy'] as String?,
+          json[r'proofKeyForCodeExchangePolicy'] != null
+              ? ProofKeyForCodeExchangePolicy.fromValue(
+                  json[r'proofKeyForCodeExchangePolicy']! as String)
+              : null,
       providedScopePolicy: json[r'providedScopePolicy'] != null
           ? ProvidedScopePolicy.fromJson(
               json[r'providedScopePolicy']! as Map<String, Object?>)
           : null,
-      relationship: json[r'relationship'] as String?,
+      relationship: json[r'relationship'] != null
+          ? OAuthApplicationRelationship.fromValue(
+              json[r'relationship']! as String)
+          : null,
       requireClientAuthentication:
           json[r'requireClientAuthentication'] as bool? ?? false,
       requireRegistration: json[r'requireRegistration'] as bool? ?? false,
-      scopeHandlingPolicy: json[r'scopeHandlingPolicy'] as String?,
-      unknownScopePolicy: json[r'unknownScopePolicy'] as String?,
+      scopeHandlingPolicy: json[r'scopeHandlingPolicy'] != null
+          ? OAuthScopeHandlingPolicy.fromValue(
+              json[r'scopeHandlingPolicy']! as String)
+          : null,
+      unknownScopePolicy: json[r'unknownScopePolicy'] != null
+          ? UnknownScopePolicy.fromValue(json[r'unknownScopePolicy']! as String)
+          : null,
     );
   }
 
@@ -25087,10 +25007,11 @@ class OAuth2Configuration {
     json[r'authorizedOriginURLs'] = authorizedOriginUrLs;
     json[r'authorizedRedirectURLs'] = authorizedRedirectUrLs;
     if (authorizedUrlValidationPolicy != null) {
-      json[r'authorizedURLValidationPolicy'] = authorizedUrlValidationPolicy;
+      json[r'authorizedURLValidationPolicy'] =
+          authorizedUrlValidationPolicy.value;
     }
     if (clientAuthenticationPolicy != null) {
-      json[r'clientAuthenticationPolicy'] = clientAuthenticationPolicy;
+      json[r'clientAuthenticationPolicy'] = clientAuthenticationPolicy.value;
     }
     if (clientId != null) {
       json[r'clientId'] = clientId;
@@ -25099,7 +25020,7 @@ class OAuth2Configuration {
       json[r'clientSecret'] = clientSecret;
     }
     if (consentMode != null) {
-      json[r'consentMode'] = consentMode;
+      json[r'consentMode'] = consentMode.value;
     }
     json[r'debug'] = debug;
     if (deviceVerificationUrl != null) {
@@ -25108,27 +25029,28 @@ class OAuth2Configuration {
     json[r'enabledGrants'] = enabledGrants;
     json[r'generateRefreshTokens'] = generateRefreshTokens;
     if (logoutBehavior != null) {
-      json[r'logoutBehavior'] = logoutBehavior;
+      json[r'logoutBehavior'] = logoutBehavior.value;
     }
     if (logoutUrl != null) {
       json[r'logoutURL'] = logoutUrl;
     }
     if (proofKeyForCodeExchangePolicy != null) {
-      json[r'proofKeyForCodeExchangePolicy'] = proofKeyForCodeExchangePolicy;
+      json[r'proofKeyForCodeExchangePolicy'] =
+          proofKeyForCodeExchangePolicy.value;
     }
     if (providedScopePolicy != null) {
       json[r'providedScopePolicy'] = providedScopePolicy.toJson();
     }
     if (relationship != null) {
-      json[r'relationship'] = relationship;
+      json[r'relationship'] = relationship.value;
     }
     json[r'requireClientAuthentication'] = requireClientAuthentication;
     json[r'requireRegistration'] = requireRegistration;
     if (scopeHandlingPolicy != null) {
-      json[r'scopeHandlingPolicy'] = scopeHandlingPolicy;
+      json[r'scopeHandlingPolicy'] = scopeHandlingPolicy.value;
     }
     if (unknownScopePolicy != null) {
-      json[r'unknownScopePolicy'] = unknownScopePolicy;
+      json[r'unknownScopePolicy'] = unknownScopePolicy.value;
     }
     return json;
   }
@@ -25136,24 +25058,24 @@ class OAuth2Configuration {
   OAuth2Configuration copyWith(
       {List<String>? authorizedOriginUrLs,
       List<String>? authorizedRedirectUrLs,
-      String? authorizedUrlValidationPolicy,
-      String? clientAuthenticationPolicy,
+      Oauth2AuthorizedURLValidationPolicy? authorizedUrlValidationPolicy,
+      ClientAuthenticationPolicy? clientAuthenticationPolicy,
       String? clientId,
       String? clientSecret,
-      String? consentMode,
+      OAuthScopeConsentMode? consentMode,
       bool? debug,
       String? deviceVerificationUrl,
       List<dynamic>? enabledGrants,
       bool? generateRefreshTokens,
-      String? logoutBehavior,
+      LogoutBehavior? logoutBehavior,
       String? logoutUrl,
-      String? proofKeyForCodeExchangePolicy,
+      ProofKeyForCodeExchangePolicy? proofKeyForCodeExchangePolicy,
       ProvidedScopePolicy? providedScopePolicy,
-      String? relationship,
+      OAuthApplicationRelationship? relationship,
       bool? requireClientAuthentication,
       bool? requireRegistration,
-      String? scopeHandlingPolicy,
-      String? unknownScopePolicy}) {
+      OAuthScopeHandlingPolicy? scopeHandlingPolicy,
+      UnknownScopePolicy? unknownScopePolicy}) {
     return OAuth2Configuration(
       authorizedOriginUrLs: authorizedOriginUrLs ?? this.authorizedOriginUrLs,
       authorizedRedirectUrLs:
@@ -25242,10 +25164,10 @@ class OAuthConfigurationResponse {
 class OAuthError {
   final String? changePasswordId;
   final String? errorDescription;
-  final String? error;
+  final OAuthErrorType? error;
   final String? errorUri;
   final List<TwoFactorMethod> twoFactorMethods;
-  final String? errorReason;
+  final OAuthErrorReason? errorReason;
   final String? twoFactorId;
 
   OAuthError(
@@ -25262,14 +25184,18 @@ class OAuthError {
     return OAuthError(
       changePasswordId: json[r'change_password_id'] as String?,
       errorDescription: json[r'error_description'] as String?,
-      error: json[r'error'] as String?,
+      error: json[r'error'] != null
+          ? OAuthErrorType.fromValue(json[r'error']! as String)
+          : null,
       errorUri: json[r'error_uri'] as String?,
       twoFactorMethods: (json[r'two_factor_methods'] as List<Object?>?)
               ?.map((i) => TwoFactorMethod.fromJson(
                   i as Map<String, Object?>? ?? const {}))
               .toList() ??
           [],
-      errorReason: json[r'error_reason'] as String?,
+      errorReason: json[r'error_reason'] != null
+          ? OAuthErrorReason.fromValue(json[r'error_reason']! as String)
+          : null,
       twoFactorId: json[r'two_factor_id'] as String?,
     );
   }
@@ -25291,7 +25217,7 @@ class OAuthError {
       json[r'error_description'] = errorDescription;
     }
     if (error != null) {
-      json[r'error'] = error;
+      json[r'error'] = error.value;
     }
     if (errorUri != null) {
       json[r'error_uri'] = errorUri;
@@ -25299,7 +25225,7 @@ class OAuthError {
     json[r'two_factor_methods'] =
         twoFactorMethods.map((i) => i.toJson()).toList();
     if (errorReason != null) {
-      json[r'error_reason'] = errorReason;
+      json[r'error_reason'] = errorReason.value;
     }
     if (twoFactorId != null) {
       json[r'two_factor_id'] = twoFactorId;
@@ -25310,10 +25236,10 @@ class OAuthError {
   OAuthError copyWith(
       {String? changePasswordId,
       String? errorDescription,
-      String? error,
+      OAuthErrorType? error,
       String? errorUri,
       List<TwoFactorMethod>? twoFactorMethods,
-      String? errorReason,
+      OAuthErrorReason? errorReason,
       String? twoFactorId}) {
     return OAuthError(
       changePasswordId: changePasswordId ?? this.changePasswordId,
@@ -25667,10 +25593,10 @@ class OpenIdConnectIdentityProvider {
   final ZonedDateTime? insertInstant;
   final ProviderLambdaConfiguration? lambdaConfiguration;
   final ZonedDateTime? lastUpdateInstant;
-  final String? linkingStrategy;
+  final IdentityProviderLinkingStrategy? linkingStrategy;
   final String? name;
   final Map<String, dynamic>? tenantConfiguration;
-  final String? type;
+  final IdentityProviderType? type;
 
   OpenIdConnectIdentityProvider(
       {List<dynamic>? domains,
@@ -25709,23 +25635,22 @@ class OpenIdConnectIdentityProvider {
           json[r'applicationConfiguration'] as Map<String, Object?>?,
       debug: json[r'debug'] as bool? ?? false,
       id: json[r'id'] as String?,
-      insertInstant: json[r'insertInstant'] != null
-          ? ZonedDateTime.fromJson(
-              json[r'insertInstant']! as Map<String, Object?>)
-          : null,
+      insertInstant: (json[r'insertInstant'] as num?)?.toInt(),
       lambdaConfiguration: json[r'lambdaConfiguration'] != null
           ? ProviderLambdaConfiguration.fromJson(
               json[r'lambdaConfiguration']! as Map<String, Object?>)
           : null,
-      lastUpdateInstant: json[r'lastUpdateInstant'] != null
-          ? ZonedDateTime.fromJson(
-              json[r'lastUpdateInstant']! as Map<String, Object?>)
+      lastUpdateInstant: (json[r'lastUpdateInstant'] as num?)?.toInt(),
+      linkingStrategy: json[r'linkingStrategy'] != null
+          ? IdentityProviderLinkingStrategy.fromValue(
+              json[r'linkingStrategy']! as String)
           : null,
-      linkingStrategy: json[r'linkingStrategy'] as String?,
       name: json[r'name'] as String?,
       tenantConfiguration:
           json[r'tenantConfiguration'] as Map<String, Object?>?,
-      type: json[r'type'] as String?,
+      type: json[r'type'] != null
+          ? IdentityProviderType.fromValue(json[r'type']! as String)
+          : null,
     );
   }
 
@@ -25779,7 +25704,7 @@ class OpenIdConnectIdentityProvider {
       json[r'lastUpdateInstant'] = lastUpdateInstant.toJson();
     }
     if (linkingStrategy != null) {
-      json[r'linkingStrategy'] = linkingStrategy;
+      json[r'linkingStrategy'] = linkingStrategy.value;
     }
     if (name != null) {
       json[r'name'] = name;
@@ -25788,7 +25713,7 @@ class OpenIdConnectIdentityProvider {
       json[r'tenantConfiguration'] = tenantConfiguration;
     }
     if (type != null) {
-      json[r'type'] = type;
+      json[r'type'] = type.value;
     }
     return json;
   }
@@ -25806,10 +25731,10 @@ class OpenIdConnectIdentityProvider {
       ZonedDateTime? insertInstant,
       ProviderLambdaConfiguration? lambdaConfiguration,
       ZonedDateTime? lastUpdateInstant,
-      String? linkingStrategy,
+      IdentityProviderLinkingStrategy? linkingStrategy,
       String? name,
       Map<String, dynamic>? tenantConfiguration,
-      String? type}) {
+      IdentityProviderType? type}) {
     return OpenIdConnectIdentityProvider(
       domains: domains ?? this.domains,
       buttonImageUrl: buttonImageUrl ?? this.buttonImageUrl,
@@ -25833,9 +25758,9 @@ class OpenIdConnectIdentityProvider {
 }
 
 class PasswordBreachDetection {
-  final String? matchMode;
+  final BreachMatchMode? matchMode;
   final String? notifyUserEmailTemplateId;
-  final String? onLogin;
+  final BreachAction? onLogin;
   final bool enabled;
 
   PasswordBreachDetection(
@@ -25847,9 +25772,13 @@ class PasswordBreachDetection {
 
   factory PasswordBreachDetection.fromJson(Map<String, Object?> json) {
     return PasswordBreachDetection(
-      matchMode: json[r'matchMode'] as String?,
+      matchMode: json[r'matchMode'] != null
+          ? BreachMatchMode.fromValue(json[r'matchMode']! as String)
+          : null,
       notifyUserEmailTemplateId: json[r'notifyUserEmailTemplateId'] as String?,
-      onLogin: json[r'onLogin'] as String?,
+      onLogin: json[r'onLogin'] != null
+          ? BreachAction.fromValue(json[r'onLogin']! as String)
+          : null,
       enabled: json[r'enabled'] as bool? ?? false,
     );
   }
@@ -25862,22 +25791,22 @@ class PasswordBreachDetection {
 
     final json = <String, Object?>{};
     if (matchMode != null) {
-      json[r'matchMode'] = matchMode;
+      json[r'matchMode'] = matchMode.value;
     }
     if (notifyUserEmailTemplateId != null) {
       json[r'notifyUserEmailTemplateId'] = notifyUserEmailTemplateId;
     }
     if (onLogin != null) {
-      json[r'onLogin'] = onLogin;
+      json[r'onLogin'] = onLogin.value;
     }
     json[r'enabled'] = enabled;
     return json;
   }
 
   PasswordBreachDetection copyWith(
-      {String? matchMode,
+      {BreachMatchMode? matchMode,
       String? notifyUserEmailTemplateId,
-      String? onLogin,
+      BreachAction? onLogin,
       bool? enabled}) {
     return PasswordBreachDetection(
       matchMode: matchMode ?? this.matchMode,
@@ -26328,7 +26257,7 @@ class PendingIdPLink {
   final String? identityProviderName;
   final IdentityProviderTenantConfiguration?
       identityProviderTenantConfiguration;
-  final String? identityProviderType;
+  final IdentityProviderType? identityProviderType;
   final String? identityProviderUserId;
   final User? user;
   final String? username;
@@ -26363,7 +26292,10 @@ class PendingIdPLink {
                   json[r'identityProviderTenantConfiguration']!
                       as Map<String, Object?>)
               : null,
-      identityProviderType: json[r'identityProviderType'] as String?,
+      identityProviderType: json[r'identityProviderType'] != null
+          ? IdentityProviderType.fromValue(
+              json[r'identityProviderType']! as String)
+          : null,
       identityProviderUserId: json[r'identityProviderUserId'] as String?,
       user: json[r'user'] != null
           ? User.fromJson(json[r'user']! as Map<String, Object?>)
@@ -26405,7 +26337,7 @@ class PendingIdPLink {
           identityProviderTenantConfiguration.toJson();
     }
     if (identityProviderType != null) {
-      json[r'identityProviderType'] = identityProviderType;
+      json[r'identityProviderType'] = identityProviderType.value;
     }
     if (identityProviderUserId != null) {
       json[r'identityProviderUserId'] = identityProviderUserId;
@@ -26426,7 +26358,7 @@ class PendingIdPLink {
       List<IdentityProviderLink>? identityProviderLinks,
       String? identityProviderName,
       IdentityProviderTenantConfiguration? identityProviderTenantConfiguration,
-      String? identityProviderType,
+      IdentityProviderType? identityProviderType,
       String? identityProviderUserId,
       User? user,
       String? username}) {
@@ -26480,7 +26412,7 @@ class PendingResponse {
 }
 
 class PreviewMessageTemplateRequest {
-  final String? locale;
+  final Locale? locale;
   final MessageTemplate? messageTemplate;
 
   PreviewMessageTemplateRequest({this.locale, this.messageTemplate});
@@ -26501,7 +26433,7 @@ class PreviewMessageTemplateRequest {
 
     final json = <String, Object?>{};
     if (locale != null) {
-      json[r'locale'] = locale;
+      json[r'locale'] = locale.toJson();
     }
     if (messageTemplate != null) {
       json[r'messageTemplate'] = messageTemplate.toJson();
@@ -26510,7 +26442,7 @@ class PreviewMessageTemplateRequest {
   }
 
   PreviewMessageTemplateRequest copyWith(
-      {String? locale, MessageTemplate? messageTemplate}) {
+      {Locale? locale, MessageTemplate? messageTemplate}) {
     return PreviewMessageTemplateRequest(
       locale: locale ?? this.locale,
       messageTemplate: messageTemplate ?? this.messageTemplate,
@@ -26560,7 +26492,7 @@ class PreviewMessageTemplateResponse {
 
 class PreviewRequest {
   final EmailTemplate? emailTemplate;
-  final String? locale;
+  final Locale? locale;
 
   PreviewRequest({this.emailTemplate, this.locale});
 
@@ -26583,12 +26515,12 @@ class PreviewRequest {
       json[r'emailTemplate'] = emailTemplate.toJson();
     }
     if (locale != null) {
-      json[r'locale'] = locale;
+      json[r'locale'] = locale.toJson();
     }
     return json;
   }
 
-  PreviewRequest copyWith({EmailTemplate? emailTemplate, String? locale}) {
+  PreviewRequest copyWith({EmailTemplate? emailTemplate, Locale? locale}) {
     return PreviewRequest(
       emailTemplate: emailTemplate ?? this.emailTemplate,
       locale: locale ?? this.locale,
@@ -26727,7 +26659,7 @@ class ProviderLambdaConfiguration {
 
 /// Allows the Relying Party to specify desired attributes of a new credential.
 class PublicKeyCredentialCreationOptions {
-  final String? attestation;
+  final AttestationConveyancePreference? attestation;
   final AuthenticatorSelectionCriteria? authenticatorSelection;
   final String? challenge;
   final List<PublicKeyCredentialDescriptor> excludeCredentials;
@@ -26753,7 +26685,10 @@ class PublicKeyCredentialCreationOptions {
   factory PublicKeyCredentialCreationOptions.fromJson(
       Map<String, Object?> json) {
     return PublicKeyCredentialCreationOptions(
-      attestation: json[r'attestation'] as String?,
+      attestation: json[r'attestation'] != null
+          ? AttestationConveyancePreference.fromValue(
+              json[r'attestation']! as String)
+          : null,
       authenticatorSelection: json[r'authenticatorSelection'] != null
           ? AuthenticatorSelectionCriteria.fromJson(
               json[r'authenticatorSelection']! as Map<String, Object?>)
@@ -26798,7 +26733,7 @@ class PublicKeyCredentialCreationOptions {
 
     final json = <String, Object?>{};
     if (attestation != null) {
-      json[r'attestation'] = attestation;
+      json[r'attestation'] = attestation.value;
     }
     if (authenticatorSelection != null) {
       json[r'authenticatorSelection'] = authenticatorSelection.toJson();
@@ -26826,7 +26761,7 @@ class PublicKeyCredentialCreationOptions {
   }
 
   PublicKeyCredentialCreationOptions copyWith(
-      {String? attestation,
+      {AttestationConveyancePreference? attestation,
       AuthenticatorSelectionCriteria? authenticatorSelection,
       String? challenge,
       List<PublicKeyCredentialDescriptor>? excludeCredentials,
@@ -26855,7 +26790,7 @@ class PublicKeyCredentialCreationOptions {
 class PublicKeyCredentialDescriptor {
   final String? id;
   final List<String> transports;
-  final String? type;
+  final PublicKeyCredentialType? type;
 
   PublicKeyCredentialDescriptor({this.id, List<String>? transports, this.type})
       : transports = transports ?? [];
@@ -26867,7 +26802,9 @@ class PublicKeyCredentialDescriptor {
               ?.map((i) => i as String? ?? '')
               .toList() ??
           [],
-      type: json[r'type'] as String?,
+      type: json[r'type'] != null
+          ? PublicKeyCredentialType.fromValue(json[r'type']! as String)
+          : null,
     );
   }
 
@@ -26882,13 +26819,13 @@ class PublicKeyCredentialDescriptor {
     }
     json[r'transports'] = transports;
     if (type != null) {
-      json[r'type'] = type;
+      json[r'type'] = type.value;
     }
     return json;
   }
 
   PublicKeyCredentialDescriptor copyWith(
-      {String? id, List<String>? transports, String? type}) {
+      {String? id, List<String>? transports, PublicKeyCredentialType? type}) {
     return PublicKeyCredentialDescriptor(
       id: id ?? this.id,
       transports: transports ?? this.transports,
@@ -26930,15 +26867,19 @@ class PublicKeyCredentialEntity {
 /// Supply information on credential type and algorithm to the
 /// <i>authenticator<i>.
 class PublicKeyCredentialParameters {
-  final String? alg;
-  final String? type;
+  final CoseAlgorithmIdentifier? alg;
+  final PublicKeyCredentialType? type;
 
   PublicKeyCredentialParameters({this.alg, this.type});
 
   factory PublicKeyCredentialParameters.fromJson(Map<String, Object?> json) {
     return PublicKeyCredentialParameters(
-      alg: json[r'alg'] as String?,
-      type: json[r'type'] as String?,
+      alg: json[r'alg'] != null
+          ? CoseAlgorithmIdentifier.fromValue(json[r'alg']! as String)
+          : null,
+      type: json[r'type'] != null
+          ? PublicKeyCredentialType.fromValue(json[r'type']! as String)
+          : null,
     );
   }
 
@@ -26948,15 +26889,16 @@ class PublicKeyCredentialParameters {
 
     final json = <String, Object?>{};
     if (alg != null) {
-      json[r'alg'] = alg;
+      json[r'alg'] = alg.value;
     }
     if (type != null) {
-      json[r'type'] = type;
+      json[r'type'] = type.value;
     }
     return json;
   }
 
-  PublicKeyCredentialParameters copyWith({String? alg, String? type}) {
+  PublicKeyCredentialParameters copyWith(
+      {CoseAlgorithmIdentifier? alg, PublicKeyCredentialType? type}) {
     return PublicKeyCredentialParameters(
       alg: alg ?? this.alg,
       type: type ?? this.type,
@@ -27009,7 +26951,7 @@ class PublicKeyCredentialRequestOptions {
   final String? challenge;
   final String? rpId;
   final int? timeout;
-  final String? userVerification;
+  final UserVerificationRequirement? userVerification;
 
   PublicKeyCredentialRequestOptions(
       {List<PublicKeyCredentialDescriptor>? allowCredentials,
@@ -27030,7 +26972,10 @@ class PublicKeyCredentialRequestOptions {
       challenge: json[r'challenge'] as String?,
       rpId: json[r'rpId'] as String?,
       timeout: (json[r'timeout'] as num?)?.toInt(),
-      userVerification: json[r'userVerification'] as String?,
+      userVerification: json[r'userVerification'] != null
+          ? UserVerificationRequirement.fromValue(
+              json[r'userVerification']! as String)
+          : null,
     );
   }
 
@@ -27054,7 +26999,7 @@ class PublicKeyCredentialRequestOptions {
       json[r'timeout'] = timeout;
     }
     if (userVerification != null) {
-      json[r'userVerification'] = userVerification;
+      json[r'userVerification'] = userVerification.value;
     }
     return json;
   }
@@ -27064,7 +27009,7 @@ class PublicKeyCredentialRequestOptions {
       String? challenge,
       String? rpId,
       int? timeout,
-      String? userVerification}) {
+      UserVerificationRequirement? userVerification}) {
     return PublicKeyCredentialRequestOptions(
       allowCredentials: allowCredentials ?? this.allowCredentials,
       challenge: challenge ?? this.challenge,
@@ -27212,9 +27157,7 @@ class RawLogin {
   factory RawLogin.fromJson(Map<String, Object?> json) {
     return RawLogin(
       applicationId: json[r'applicationId'] as String?,
-      instant: json[r'instant'] != null
-          ? ZonedDateTime.fromJson(json[r'instant']! as Map<String, Object?>)
-          : null,
+      instant: (json[r'instant'] as num?)?.toInt(),
       ipAddress: json[r'ipAddress'] as String?,
       userId: json[r'userId'] as String?,
     );
@@ -27383,26 +27326,26 @@ class ReactorResponse {
 }
 
 class ReactorStatus {
-  final String? advancedIdentityProviders;
-  final String? advancedLambdas;
-  final String? advancedMultiFactorAuthentication;
-  final String? advancedoAuthScopes;
-  final String? advancedoAuthScopesCustomScopes;
-  final String? advancedoAuthScopesThirdPartyApplications;
-  final String? advancedRegistration;
-  final String? applicationMultiFactorAuthentication;
-  final String? applicationThemes;
-  final String? breachedPasswordDetection;
-  final String? connectors;
-  final String? entityManagement;
-  final String? expiration;
+  final ReactorFeatureStatus? advancedIdentityProviders;
+  final ReactorFeatureStatus? advancedLambdas;
+  final ReactorFeatureStatus? advancedMultiFactorAuthentication;
+  final ReactorFeatureStatus? advancedoAuthScopes;
+  final ReactorFeatureStatus? advancedoAuthScopesCustomScopes;
+  final ReactorFeatureStatus? advancedoAuthScopesThirdPartyApplications;
+  final ReactorFeatureStatus? advancedRegistration;
+  final ReactorFeatureStatus? applicationMultiFactorAuthentication;
+  final ReactorFeatureStatus? applicationThemes;
+  final ReactorFeatureStatus? breachedPasswordDetection;
+  final ReactorFeatureStatus? connectors;
+  final ReactorFeatureStatus? entityManagement;
+  final LocalDate? expiration;
   final Map<String, dynamic>? licenseAttributes;
   final bool licensed;
-  final String? scimServer;
-  final String? threatDetection;
-  final String? webAuthn;
-  final String? webAuthnPlatformAuthenticators;
-  final String? webAuthnRoamingAuthenticators;
+  final ReactorFeatureStatus? scimServer;
+  final ReactorFeatureStatus? threatDetection;
+  final ReactorFeatureStatus? webAuthn;
+  final ReactorFeatureStatus? webAuthnPlatformAuthenticators;
+  final ReactorFeatureStatus? webAuthnRoamingAuthenticators;
 
   ReactorStatus(
       {this.advancedIdentityProviders,
@@ -27429,32 +27372,77 @@ class ReactorStatus {
 
   factory ReactorStatus.fromJson(Map<String, Object?> json) {
     return ReactorStatus(
-      advancedIdentityProviders: json[r'advancedIdentityProviders'] as String?,
-      advancedLambdas: json[r'advancedLambdas'] as String?,
+      advancedIdentityProviders: json[r'advancedIdentityProviders'] != null
+          ? ReactorFeatureStatus.fromValue(
+              json[r'advancedIdentityProviders']! as String)
+          : null,
+      advancedLambdas: json[r'advancedLambdas'] != null
+          ? ReactorFeatureStatus.fromValue(json[r'advancedLambdas']! as String)
+          : null,
       advancedMultiFactorAuthentication:
-          json[r'advancedMultiFactorAuthentication'] as String?,
-      advancedoAuthScopes: json[r'advancedOAuthScopes'] as String?,
+          json[r'advancedMultiFactorAuthentication'] != null
+              ? ReactorFeatureStatus.fromValue(
+                  json[r'advancedMultiFactorAuthentication']! as String)
+              : null,
+      advancedoAuthScopes: json[r'advancedOAuthScopes'] != null
+          ? ReactorFeatureStatus.fromValue(
+              json[r'advancedOAuthScopes']! as String)
+          : null,
       advancedoAuthScopesCustomScopes:
-          json[r'advancedOAuthScopesCustomScopes'] as String?,
+          json[r'advancedOAuthScopesCustomScopes'] != null
+              ? ReactorFeatureStatus.fromValue(
+                  json[r'advancedOAuthScopesCustomScopes']! as String)
+              : null,
       advancedoAuthScopesThirdPartyApplications:
-          json[r'advancedOAuthScopesThirdPartyApplications'] as String?,
-      advancedRegistration: json[r'advancedRegistration'] as String?,
+          json[r'advancedOAuthScopesThirdPartyApplications'] != null
+              ? ReactorFeatureStatus.fromValue(
+                  json[r'advancedOAuthScopesThirdPartyApplications']! as String)
+              : null,
+      advancedRegistration: json[r'advancedRegistration'] != null
+          ? ReactorFeatureStatus.fromValue(
+              json[r'advancedRegistration']! as String)
+          : null,
       applicationMultiFactorAuthentication:
-          json[r'applicationMultiFactorAuthentication'] as String?,
-      applicationThemes: json[r'applicationThemes'] as String?,
-      breachedPasswordDetection: json[r'breachedPasswordDetection'] as String?,
-      connectors: json[r'connectors'] as String?,
-      entityManagement: json[r'entityManagement'] as String?,
+          json[r'applicationMultiFactorAuthentication'] != null
+              ? ReactorFeatureStatus.fromValue(
+                  json[r'applicationMultiFactorAuthentication']! as String)
+              : null,
+      applicationThemes: json[r'applicationThemes'] != null
+          ? ReactorFeatureStatus.fromValue(
+              json[r'applicationThemes']! as String)
+          : null,
+      breachedPasswordDetection: json[r'breachedPasswordDetection'] != null
+          ? ReactorFeatureStatus.fromValue(
+              json[r'breachedPasswordDetection']! as String)
+          : null,
+      connectors: json[r'connectors'] != null
+          ? ReactorFeatureStatus.fromValue(json[r'connectors']! as String)
+          : null,
+      entityManagement: json[r'entityManagement'] != null
+          ? ReactorFeatureStatus.fromValue(json[r'entityManagement']! as String)
+          : null,
       expiration: json[r'expiration'] as String?,
       licenseAttributes: json[r'licenseAttributes'] as Map<String, Object?>?,
       licensed: json[r'licensed'] as bool? ?? false,
-      scimServer: json[r'scimServer'] as String?,
-      threatDetection: json[r'threatDetection'] as String?,
-      webAuthn: json[r'webAuthn'] as String?,
+      scimServer: json[r'scimServer'] != null
+          ? ReactorFeatureStatus.fromValue(json[r'scimServer']! as String)
+          : null,
+      threatDetection: json[r'threatDetection'] != null
+          ? ReactorFeatureStatus.fromValue(json[r'threatDetection']! as String)
+          : null,
+      webAuthn: json[r'webAuthn'] != null
+          ? ReactorFeatureStatus.fromValue(json[r'webAuthn']! as String)
+          : null,
       webAuthnPlatformAuthenticators:
-          json[r'webAuthnPlatformAuthenticators'] as String?,
+          json[r'webAuthnPlatformAuthenticators'] != null
+              ? ReactorFeatureStatus.fromValue(
+                  json[r'webAuthnPlatformAuthenticators']! as String)
+              : null,
       webAuthnRoamingAuthenticators:
-          json[r'webAuthnRoamingAuthenticators'] as String?,
+          json[r'webAuthnRoamingAuthenticators'] != null
+              ? ReactorFeatureStatus.fromValue(
+                  json[r'webAuthnRoamingAuthenticators']! as String)
+              : null,
     );
   }
 
@@ -27485,91 +27473,93 @@ class ReactorStatus {
 
     final json = <String, Object?>{};
     if (advancedIdentityProviders != null) {
-      json[r'advancedIdentityProviders'] = advancedIdentityProviders;
+      json[r'advancedIdentityProviders'] = advancedIdentityProviders.value;
     }
     if (advancedLambdas != null) {
-      json[r'advancedLambdas'] = advancedLambdas;
+      json[r'advancedLambdas'] = advancedLambdas.value;
     }
     if (advancedMultiFactorAuthentication != null) {
       json[r'advancedMultiFactorAuthentication'] =
-          advancedMultiFactorAuthentication;
+          advancedMultiFactorAuthentication.value;
     }
     if (advancedoAuthScopes != null) {
-      json[r'advancedOAuthScopes'] = advancedoAuthScopes;
+      json[r'advancedOAuthScopes'] = advancedoAuthScopes.value;
     }
     if (advancedoAuthScopesCustomScopes != null) {
       json[r'advancedOAuthScopesCustomScopes'] =
-          advancedoAuthScopesCustomScopes;
+          advancedoAuthScopesCustomScopes.value;
     }
     if (advancedoAuthScopesThirdPartyApplications != null) {
       json[r'advancedOAuthScopesThirdPartyApplications'] =
-          advancedoAuthScopesThirdPartyApplications;
+          advancedoAuthScopesThirdPartyApplications.value;
     }
     if (advancedRegistration != null) {
-      json[r'advancedRegistration'] = advancedRegistration;
+      json[r'advancedRegistration'] = advancedRegistration.value;
     }
     if (applicationMultiFactorAuthentication != null) {
       json[r'applicationMultiFactorAuthentication'] =
-          applicationMultiFactorAuthentication;
+          applicationMultiFactorAuthentication.value;
     }
     if (applicationThemes != null) {
-      json[r'applicationThemes'] = applicationThemes;
+      json[r'applicationThemes'] = applicationThemes.value;
     }
     if (breachedPasswordDetection != null) {
-      json[r'breachedPasswordDetection'] = breachedPasswordDetection;
+      json[r'breachedPasswordDetection'] = breachedPasswordDetection.value;
     }
     if (connectors != null) {
-      json[r'connectors'] = connectors;
+      json[r'connectors'] = connectors.value;
     }
     if (entityManagement != null) {
-      json[r'entityManagement'] = entityManagement;
+      json[r'entityManagement'] = entityManagement.value;
     }
     if (expiration != null) {
-      json[r'expiration'] = expiration;
+      json[r'expiration'] = expiration.toJson();
     }
     if (licenseAttributes != null) {
       json[r'licenseAttributes'] = licenseAttributes;
     }
     json[r'licensed'] = licensed;
     if (scimServer != null) {
-      json[r'scimServer'] = scimServer;
+      json[r'scimServer'] = scimServer.value;
     }
     if (threatDetection != null) {
-      json[r'threatDetection'] = threatDetection;
+      json[r'threatDetection'] = threatDetection.value;
     }
     if (webAuthn != null) {
-      json[r'webAuthn'] = webAuthn;
+      json[r'webAuthn'] = webAuthn.value;
     }
     if (webAuthnPlatformAuthenticators != null) {
-      json[r'webAuthnPlatformAuthenticators'] = webAuthnPlatformAuthenticators;
+      json[r'webAuthnPlatformAuthenticators'] =
+          webAuthnPlatformAuthenticators.value;
     }
     if (webAuthnRoamingAuthenticators != null) {
-      json[r'webAuthnRoamingAuthenticators'] = webAuthnRoamingAuthenticators;
+      json[r'webAuthnRoamingAuthenticators'] =
+          webAuthnRoamingAuthenticators.value;
     }
     return json;
   }
 
   ReactorStatus copyWith(
-      {String? advancedIdentityProviders,
-      String? advancedLambdas,
-      String? advancedMultiFactorAuthentication,
-      String? advancedoAuthScopes,
-      String? advancedoAuthScopesCustomScopes,
-      String? advancedoAuthScopesThirdPartyApplications,
-      String? advancedRegistration,
-      String? applicationMultiFactorAuthentication,
-      String? applicationThemes,
-      String? breachedPasswordDetection,
-      String? connectors,
-      String? entityManagement,
-      String? expiration,
+      {ReactorFeatureStatus? advancedIdentityProviders,
+      ReactorFeatureStatus? advancedLambdas,
+      ReactorFeatureStatus? advancedMultiFactorAuthentication,
+      ReactorFeatureStatus? advancedoAuthScopes,
+      ReactorFeatureStatus? advancedoAuthScopesCustomScopes,
+      ReactorFeatureStatus? advancedoAuthScopesThirdPartyApplications,
+      ReactorFeatureStatus? advancedRegistration,
+      ReactorFeatureStatus? applicationMultiFactorAuthentication,
+      ReactorFeatureStatus? applicationThemes,
+      ReactorFeatureStatus? breachedPasswordDetection,
+      ReactorFeatureStatus? connectors,
+      ReactorFeatureStatus? entityManagement,
+      LocalDate? expiration,
       Map<String, dynamic>? licenseAttributes,
       bool? licensed,
-      String? scimServer,
-      String? threatDetection,
-      String? webAuthn,
-      String? webAuthnPlatformAuthenticators,
-      String? webAuthnRoamingAuthenticators}) {
+      ReactorFeatureStatus? scimServer,
+      ReactorFeatureStatus? threatDetection,
+      ReactorFeatureStatus? webAuthn,
+      ReactorFeatureStatus? webAuthnPlatformAuthenticators,
+      ReactorFeatureStatus? webAuthnRoamingAuthenticators}) {
     return ReactorStatus(
       advancedIdentityProviders:
           advancedIdentityProviders ?? this.advancedIdentityProviders,
@@ -27723,17 +27713,11 @@ class RefreshToken {
       applicationId: json[r'applicationId'] as String?,
       data: json[r'data'] as Map<String, Object?>?,
       id: json[r'id'] as String?,
-      insertInstant: json[r'insertInstant'] != null
-          ? ZonedDateTime.fromJson(
-              json[r'insertInstant']! as Map<String, Object?>)
-          : null,
+      insertInstant: (json[r'insertInstant'] as num?)?.toInt(),
       metaData: json[r'metaData'] != null
           ? MetaData.fromJson(json[r'metaData']! as Map<String, Object?>)
           : null,
-      startInstant: json[r'startInstant'] != null
-          ? ZonedDateTime.fromJson(
-              json[r'startInstant']! as Map<String, Object?>)
-          : null,
+      startInstant: (json[r'startInstant'] as num?)?.toInt(),
       tenantId: json[r'tenantId'] as String?,
       token: json[r'token'] as String?,
       userId: json[r'userId'] as String?,
@@ -28032,11 +28016,11 @@ class RegistrationConfiguration {
   final String? formId;
   final Requirable? fullName;
   final Requirable? lastName;
-  final String? loginIdType;
+  final LoginIdType? loginIdType;
   final Requirable? middleName;
   final Requirable? mobilePhone;
   final Requirable? preferredLanguages;
-  final String? type;
+  final RegistrationType? type;
   final bool enabled;
 
   RegistrationConfiguration(
@@ -28071,7 +28055,9 @@ class RegistrationConfiguration {
       lastName: json[r'lastName'] != null
           ? Requirable.fromJson(json[r'lastName']! as Map<String, Object?>)
           : null,
-      loginIdType: json[r'loginIdType'] as String?,
+      loginIdType: json[r'loginIdType'] != null
+          ? LoginIdType.fromValue(json[r'loginIdType']! as String)
+          : null,
       middleName: json[r'middleName'] != null
           ? Requirable.fromJson(json[r'middleName']! as Map<String, Object?>)
           : null,
@@ -28082,7 +28068,9 @@ class RegistrationConfiguration {
           ? Requirable.fromJson(
               json[r'preferredLanguages']! as Map<String, Object?>)
           : null,
-      type: json[r'type'] as String?,
+      type: json[r'type'] != null
+          ? RegistrationType.fromValue(json[r'type']! as String)
+          : null,
       enabled: json[r'enabled'] as bool? ?? false,
     );
   }
@@ -28119,7 +28107,7 @@ class RegistrationConfiguration {
       json[r'lastName'] = lastName.toJson();
     }
     if (loginIdType != null) {
-      json[r'loginIdType'] = loginIdType;
+      json[r'loginIdType'] = loginIdType.value;
     }
     if (middleName != null) {
       json[r'middleName'] = middleName.toJson();
@@ -28131,7 +28119,7 @@ class RegistrationConfiguration {
       json[r'preferredLanguages'] = preferredLanguages.toJson();
     }
     if (type != null) {
-      json[r'type'] = type;
+      json[r'type'] = type.value;
     }
     json[r'enabled'] = enabled;
     return json;
@@ -28144,11 +28132,11 @@ class RegistrationConfiguration {
       String? formId,
       Requirable? fullName,
       Requirable? lastName,
-      String? loginIdType,
+      LoginIdType? loginIdType,
       Requirable? middleName,
       Requirable? mobilePhone,
       Requirable? preferredLanguages,
-      String? type,
+      RegistrationType? type,
       bool? enabled}) {
     return RegistrationConfiguration(
       birthDate: birthDate ?? this.birthDate,
@@ -28368,10 +28356,8 @@ class RegistrationResponse {
       registrationVerificationOneTimeCode:
           json[r'registrationVerificationOneTimeCode'] as String?,
       token: json[r'token'] as String?,
-      tokenExpirationInstant: json[r'tokenExpirationInstant'] != null
-          ? ZonedDateTime.fromJson(
-              json[r'tokenExpirationInstant']! as Map<String, Object?>)
-          : null,
+      tokenExpirationInstant:
+          (json[r'tokenExpirationInstant'] as num?)?.toInt(),
       user: json[r'user'] != null
           ? User.fromJson(json[r'user']! as Map<String, Object?>)
           : null,
@@ -28439,13 +28425,15 @@ class RegistrationResponse {
 }
 
 class RegistrationUnverifiedOptions {
-  final String? behavior;
+  final UnverifiedBehavior? behavior;
 
   RegistrationUnverifiedOptions({this.behavior});
 
   factory RegistrationUnverifiedOptions.fromJson(Map<String, Object?> json) {
     return RegistrationUnverifiedOptions(
-      behavior: json[r'behavior'] as String?,
+      behavior: json[r'behavior'] != null
+          ? UnverifiedBehavior.fromValue(json[r'behavior']! as String)
+          : null,
     );
   }
 
@@ -28454,12 +28442,12 @@ class RegistrationUnverifiedOptions {
 
     final json = <String, Object?>{};
     if (behavior != null) {
-      json[r'behavior'] = behavior;
+      json[r'behavior'] = behavior.value;
     }
     return json;
   }
 
-  RegistrationUnverifiedOptions copyWith({String? behavior}) {
+  RegistrationUnverifiedOptions copyWith({UnverifiedBehavior? behavior}) {
     return RegistrationUnverifiedOptions(
       behavior: behavior ?? this.behavior,
     );
@@ -28798,8 +28786,8 @@ class SAMLv2Configuration {
   final SAMLv2Logout? logout;
   final String? logoutUrl;
   final bool requireSignedRequests;
-  final String? xmlSignatureC14nMethod;
-  final String? xmlSignatureLocation;
+  final CanonicalizationMethod? xmlSignatureC14nMethod;
+  final XMLSignatureLocation? xmlSignatureLocation;
   final String? callbackUrl;
   final bool enabled;
 
@@ -28856,8 +28844,14 @@ class SAMLv2Configuration {
           : null,
       logoutUrl: json[r'logoutURL'] as String?,
       requireSignedRequests: json[r'requireSignedRequests'] as bool? ?? false,
-      xmlSignatureC14nMethod: json[r'xmlSignatureC14nMethod'] as String?,
-      xmlSignatureLocation: json[r'xmlSignatureLocation'] as String?,
+      xmlSignatureC14nMethod: json[r'xmlSignatureC14nMethod'] != null
+          ? CanonicalizationMethod.fromValue(
+              json[r'xmlSignatureC14nMethod']! as String)
+          : null,
+      xmlSignatureLocation: json[r'xmlSignatureLocation'] != null
+          ? XMLSignatureLocation.fromValue(
+              json[r'xmlSignatureLocation']! as String)
+          : null,
       callbackUrl: json[r'callbackURL'] as String?,
       enabled: json[r'enabled'] as bool? ?? false,
     );
@@ -28915,10 +28909,10 @@ class SAMLv2Configuration {
     }
     json[r'requireSignedRequests'] = requireSignedRequests;
     if (xmlSignatureC14nMethod != null) {
-      json[r'xmlSignatureC14nMethod'] = xmlSignatureC14nMethod;
+      json[r'xmlSignatureC14nMethod'] = xmlSignatureC14nMethod.value;
     }
     if (xmlSignatureLocation != null) {
-      json[r'xmlSignatureLocation'] = xmlSignatureLocation;
+      json[r'xmlSignatureLocation'] = xmlSignatureLocation.value;
     }
     if (callbackUrl != null) {
       json[r'callbackURL'] = callbackUrl;
@@ -28940,8 +28934,8 @@ class SAMLv2Configuration {
       SAMLv2Logout? logout,
       String? logoutUrl,
       bool? requireSignedRequests,
-      String? xmlSignatureC14nMethod,
-      String? xmlSignatureLocation,
+      CanonicalizationMethod? xmlSignatureC14nMethod,
+      XMLSignatureLocation? xmlSignatureLocation,
       String? callbackUrl,
       bool? enabled}) {
     return SAMLv2Configuration(
@@ -28973,7 +28967,7 @@ class SAMLv2Configuration {
 
 class SAMLv2DestinationAssertionConfiguration {
   final List<String> alternates;
-  final String? policy;
+  final SAMLv2DestinationAssertionPolicy? policy;
 
   SAMLv2DestinationAssertionConfiguration(
       {List<String>? alternates, this.policy})
@@ -28986,7 +28980,10 @@ class SAMLv2DestinationAssertionConfiguration {
               ?.map((i) => i as String? ?? '')
               .toList() ??
           [],
-      policy: json[r'policy'] as String?,
+      policy: json[r'policy'] != null
+          ? SAMLv2DestinationAssertionPolicy.fromValue(
+              json[r'policy']! as String)
+          : null,
     );
   }
 
@@ -28997,13 +28994,13 @@ class SAMLv2DestinationAssertionConfiguration {
     final json = <String, Object?>{};
     json[r'alternates'] = alternates;
     if (policy != null) {
-      json[r'policy'] = policy;
+      json[r'policy'] = policy.value;
     }
     return json;
   }
 
   SAMLv2DestinationAssertionConfiguration copyWith(
-      {List<String>? alternates, String? policy}) {
+      {List<String>? alternates, SAMLv2DestinationAssertionPolicy? policy}) {
     return SAMLv2DestinationAssertionConfiguration(
       alternates: alternates ?? this.alternates,
       policy: policy ?? this.policy,
@@ -29175,7 +29172,7 @@ class SAMLv2IdentityProvider {
   final bool postRequest;
   final String? requestSigningKeyId;
   final bool signRequest;
-  final String? xmlSignatureC14nMethod;
+  final CanonicalizationMethod? xmlSignatureC14nMethod;
   final String? emailClaim;
   final String? keyId;
   final String? uniqueIdClaim;
@@ -29230,7 +29227,10 @@ class SAMLv2IdentityProvider {
       postRequest: json[r'postRequest'] as bool? ?? false,
       requestSigningKeyId: json[r'requestSigningKeyId'] as String?,
       signRequest: json[r'signRequest'] as bool? ?? false,
-      xmlSignatureC14nMethod: json[r'xmlSignatureC14nMethod'] as String?,
+      xmlSignatureC14nMethod: json[r'xmlSignatureC14nMethod'] != null
+          ? CanonicalizationMethod.fromValue(
+              json[r'xmlSignatureC14nMethod']! as String)
+          : null,
       emailClaim: json[r'emailClaim'] as String?,
       keyId: json[r'keyId'] as String?,
       uniqueIdClaim: json[r'uniqueIdClaim'] as String?,
@@ -29291,7 +29291,7 @@ class SAMLv2IdentityProvider {
     }
     json[r'signRequest'] = signRequest;
     if (xmlSignatureC14nMethod != null) {
-      json[r'xmlSignatureC14nMethod'] = xmlSignatureC14nMethod;
+      json[r'xmlSignatureC14nMethod'] = xmlSignatureC14nMethod.value;
     }
     if (emailClaim != null) {
       json[r'emailClaim'] = emailClaim;
@@ -29322,7 +29322,7 @@ class SAMLv2IdentityProvider {
       bool? postRequest,
       String? requestSigningKeyId,
       bool? signRequest,
-      String? xmlSignatureC14nMethod,
+      CanonicalizationMethod? xmlSignatureC14nMethod,
       String? emailClaim,
       String? keyId,
       String? uniqueIdClaim,
@@ -29392,12 +29392,12 @@ class SAMLv2IdpInitiatedConfiguration {
 }
 
 class SAMLv2Logout {
-  final String? behavior;
+  final SAMLLogoutBehavior? behavior;
   final String? defaultVerificationKeyId;
   final String? keyId;
   final bool requireSignedRequests;
   final SAMLv2SingleLogout? singleLogout;
-  final String? xmlSignatureC14nMethod;
+  final CanonicalizationMethod? xmlSignatureC14nMethod;
 
   SAMLv2Logout(
       {this.behavior,
@@ -29410,7 +29410,9 @@ class SAMLv2Logout {
 
   factory SAMLv2Logout.fromJson(Map<String, Object?> json) {
     return SAMLv2Logout(
-      behavior: json[r'behavior'] as String?,
+      behavior: json[r'behavior'] != null
+          ? SAMLLogoutBehavior.fromValue(json[r'behavior']! as String)
+          : null,
       defaultVerificationKeyId: json[r'defaultVerificationKeyId'] as String?,
       keyId: json[r'keyId'] as String?,
       requireSignedRequests: json[r'requireSignedRequests'] as bool? ?? false,
@@ -29418,7 +29420,10 @@ class SAMLv2Logout {
           ? SAMLv2SingleLogout.fromJson(
               json[r'singleLogout']! as Map<String, Object?>)
           : null,
-      xmlSignatureC14nMethod: json[r'xmlSignatureC14nMethod'] as String?,
+      xmlSignatureC14nMethod: json[r'xmlSignatureC14nMethod'] != null
+          ? CanonicalizationMethod.fromValue(
+              json[r'xmlSignatureC14nMethod']! as String)
+          : null,
     );
   }
 
@@ -29432,7 +29437,7 @@ class SAMLv2Logout {
 
     final json = <String, Object?>{};
     if (behavior != null) {
-      json[r'behavior'] = behavior;
+      json[r'behavior'] = behavior.value;
     }
     if (defaultVerificationKeyId != null) {
       json[r'defaultVerificationKeyId'] = defaultVerificationKeyId;
@@ -29445,18 +29450,18 @@ class SAMLv2Logout {
       json[r'singleLogout'] = singleLogout.toJson();
     }
     if (xmlSignatureC14nMethod != null) {
-      json[r'xmlSignatureC14nMethod'] = xmlSignatureC14nMethod;
+      json[r'xmlSignatureC14nMethod'] = xmlSignatureC14nMethod.value;
     }
     return json;
   }
 
   SAMLv2Logout copyWith(
-      {String? behavior,
+      {SAMLLogoutBehavior? behavior,
       String? defaultVerificationKeyId,
       String? keyId,
       bool? requireSignedRequests,
       SAMLv2SingleLogout? singleLogout,
-      String? xmlSignatureC14nMethod}) {
+      CanonicalizationMethod? xmlSignatureC14nMethod}) {
     return SAMLv2Logout(
       behavior: behavior ?? this.behavior,
       defaultVerificationKeyId:
@@ -29474,7 +29479,7 @@ class SAMLv2Logout {
 class SAMLv2SingleLogout {
   final String? keyId;
   final String? url;
-  final String? xmlSignatureC14nMethod;
+  final CanonicalizationMethod? xmlSignatureC14nMethod;
   final bool enabled;
 
   SAMLv2SingleLogout(
@@ -29485,7 +29490,10 @@ class SAMLv2SingleLogout {
     return SAMLv2SingleLogout(
       keyId: json[r'keyId'] as String?,
       url: json[r'url'] as String?,
-      xmlSignatureC14nMethod: json[r'xmlSignatureC14nMethod'] as String?,
+      xmlSignatureC14nMethod: json[r'xmlSignatureC14nMethod'] != null
+          ? CanonicalizationMethod.fromValue(
+              json[r'xmlSignatureC14nMethod']! as String)
+          : null,
       enabled: json[r'enabled'] as bool? ?? false,
     );
   }
@@ -29504,7 +29512,7 @@ class SAMLv2SingleLogout {
       json[r'url'] = url;
     }
     if (xmlSignatureC14nMethod != null) {
-      json[r'xmlSignatureC14nMethod'] = xmlSignatureC14nMethod;
+      json[r'xmlSignatureC14nMethod'] = xmlSignatureC14nMethod.value;
     }
     json[r'enabled'] = enabled;
     return json;
@@ -29513,7 +29521,7 @@ class SAMLv2SingleLogout {
   SAMLv2SingleLogout copyWith(
       {String? keyId,
       String? url,
-      String? xmlSignatureC14nMethod,
+      CanonicalizationMethod? xmlSignatureC14nMethod,
       bool? enabled}) {
     return SAMLv2SingleLogout(
       keyId: keyId ?? this.keyId,
@@ -29798,14 +29806,16 @@ class SecretResponse {
 
 class SecureGeneratorConfiguration {
   final int? length;
-  final String? type;
+  final SecureGeneratorType? type;
 
   SecureGeneratorConfiguration({this.length, this.type});
 
   factory SecureGeneratorConfiguration.fromJson(Map<String, Object?> json) {
     return SecureGeneratorConfiguration(
       length: (json[r'length'] as num?)?.toInt(),
-      type: json[r'type'] as String?,
+      type: json[r'type'] != null
+          ? SecureGeneratorType.fromValue(json[r'type']! as String)
+          : null,
     );
   }
 
@@ -29818,12 +29828,13 @@ class SecureGeneratorConfiguration {
       json[r'length'] = length;
     }
     if (type != null) {
-      json[r'type'] = type;
+      json[r'type'] = type.value;
     }
     return json;
   }
 
-  SecureGeneratorConfiguration copyWith({int? length, String? type}) {
+  SecureGeneratorConfiguration copyWith(
+      {int? length, SecureGeneratorType? type}) {
     return SecureGeneratorConfiguration(
       length: length ?? this.length,
       type: type ?? this.type,
@@ -29833,20 +29844,20 @@ class SecureGeneratorConfiguration {
 
 class SecureIdentity {
   final ZonedDateTime? breachedPasswordLastCheckedInstant;
-  final String? breachedPasswordStatus;
+  final BreachedPasswordStatus? breachedPasswordStatus;
   final String? connectorId;
   final String? encryptionScheme;
   final int? factor;
   final String? id;
   final ZonedDateTime? lastLoginInstant;
   final String? password;
-  final String? passwordChangeReason;
+  final ChangePasswordReason? passwordChangeReason;
   final bool passwordChangeRequired;
   final ZonedDateTime? passwordLastUpdateInstant;
   final String? salt;
   final String? uniqueUsername;
   final String? username;
-  final String? usernameStatus;
+  final ContentStatus? usernameStatus;
   final bool verified;
   final ZonedDateTime? verifiedInstant;
 
@@ -29874,36 +29885,32 @@ class SecureIdentity {
   factory SecureIdentity.fromJson(Map<String, Object?> json) {
     return SecureIdentity(
       breachedPasswordLastCheckedInstant:
-          json[r'breachedPasswordLastCheckedInstant'] != null
-              ? ZonedDateTime.fromJson(
-                  json[r'breachedPasswordLastCheckedInstant']!
-                      as Map<String, Object?>)
-              : null,
-      breachedPasswordStatus: json[r'breachedPasswordStatus'] as String?,
+          (json[r'breachedPasswordLastCheckedInstant'] as num?)?.toInt(),
+      breachedPasswordStatus: json[r'breachedPasswordStatus'] != null
+          ? BreachedPasswordStatus.fromValue(
+              json[r'breachedPasswordStatus']! as String)
+          : null,
       connectorId: json[r'connectorId'] as String?,
       encryptionScheme: json[r'encryptionScheme'] as String?,
       factor: (json[r'factor'] as num?)?.toInt(),
       id: json[r'id'] as String?,
-      lastLoginInstant: json[r'lastLoginInstant'] != null
-          ? ZonedDateTime.fromJson(
-              json[r'lastLoginInstant']! as Map<String, Object?>)
-          : null,
+      lastLoginInstant: (json[r'lastLoginInstant'] as num?)?.toInt(),
       password: json[r'password'] as String?,
-      passwordChangeReason: json[r'passwordChangeReason'] as String?,
-      passwordChangeRequired: json[r'passwordChangeRequired'] as bool? ?? false,
-      passwordLastUpdateInstant: json[r'passwordLastUpdateInstant'] != null
-          ? ZonedDateTime.fromJson(
-              json[r'passwordLastUpdateInstant']! as Map<String, Object?>)
+      passwordChangeReason: json[r'passwordChangeReason'] != null
+          ? ChangePasswordReason.fromValue(
+              json[r'passwordChangeReason']! as String)
           : null,
+      passwordChangeRequired: json[r'passwordChangeRequired'] as bool? ?? false,
+      passwordLastUpdateInstant:
+          (json[r'passwordLastUpdateInstant'] as num?)?.toInt(),
       salt: json[r'salt'] as String?,
       uniqueUsername: json[r'uniqueUsername'] as String?,
       username: json[r'username'] as String?,
-      usernameStatus: json[r'usernameStatus'] as String?,
-      verified: json[r'verified'] as bool? ?? false,
-      verifiedInstant: json[r'verifiedInstant'] != null
-          ? ZonedDateTime.fromJson(
-              json[r'verifiedInstant']! as Map<String, Object?>)
+      usernameStatus: json[r'usernameStatus'] != null
+          ? ContentStatus.fromValue(json[r'usernameStatus']! as String)
           : null,
+      verified: json[r'verified'] as bool? ?? false,
+      verifiedInstant: (json[r'verifiedInstant'] as num?)?.toInt(),
     );
   }
 
@@ -29933,7 +29940,7 @@ class SecureIdentity {
           breachedPasswordLastCheckedInstant.toJson();
     }
     if (breachedPasswordStatus != null) {
-      json[r'breachedPasswordStatus'] = breachedPasswordStatus;
+      json[r'breachedPasswordStatus'] = breachedPasswordStatus.value;
     }
     if (connectorId != null) {
       json[r'connectorId'] = connectorId;
@@ -29954,7 +29961,7 @@ class SecureIdentity {
       json[r'password'] = password;
     }
     if (passwordChangeReason != null) {
-      json[r'passwordChangeReason'] = passwordChangeReason;
+      json[r'passwordChangeReason'] = passwordChangeReason.value;
     }
     json[r'passwordChangeRequired'] = passwordChangeRequired;
     if (passwordLastUpdateInstant != null) {
@@ -29970,7 +29977,7 @@ class SecureIdentity {
       json[r'username'] = username;
     }
     if (usernameStatus != null) {
-      json[r'usernameStatus'] = usernameStatus;
+      json[r'usernameStatus'] = usernameStatus.value;
     }
     json[r'verified'] = verified;
     if (verifiedInstant != null) {
@@ -29981,20 +29988,20 @@ class SecureIdentity {
 
   SecureIdentity copyWith(
       {ZonedDateTime? breachedPasswordLastCheckedInstant,
-      String? breachedPasswordStatus,
+      BreachedPasswordStatus? breachedPasswordStatus,
       String? connectorId,
       String? encryptionScheme,
       int? factor,
       String? id,
       ZonedDateTime? lastLoginInstant,
       String? password,
-      String? passwordChangeReason,
+      ChangePasswordReason? passwordChangeReason,
       bool? passwordChangeRequired,
       ZonedDateTime? passwordLastUpdateInstant,
       String? salt,
       String? uniqueUsername,
       String? username,
-      String? usernameStatus,
+      ContentStatus? usernameStatus,
       bool? verified,
       ZonedDateTime? verifiedInstant}) {
     return SecureIdentity(
@@ -30061,7 +30068,7 @@ class SendRequest {
   final String? applicationId;
   final List<String> bccAddresses;
   final List<String> ccAddresses;
-  final List<String> preferredLanguages;
+  final List<Locale> preferredLanguages;
   final Map<String, dynamic>? requestData;
   final List<EmailAddress> toAddresses;
   final List<String> userIds;
@@ -30070,7 +30077,7 @@ class SendRequest {
       {this.applicationId,
       List<String>? bccAddresses,
       List<String>? ccAddresses,
-      List<String>? preferredLanguages,
+      List<Locale>? preferredLanguages,
       this.requestData,
       List<EmailAddress>? toAddresses,
       List<String>? userIds})
@@ -30092,7 +30099,7 @@ class SendRequest {
               .toList() ??
           [],
       preferredLanguages: (json[r'preferredLanguages'] as List<Object?>?)
-              ?.map((i) => i as String? ?? '')
+              ?.map((i) => (i as String? ?? '') as Locale)
               .toList() ??
           [],
       requestData: json[r'requestData'] as Map<String, Object?>?,
@@ -30123,7 +30130,8 @@ class SendRequest {
     }
     json[r'bccAddresses'] = bccAddresses;
     json[r'ccAddresses'] = ccAddresses;
-    json[r'preferredLanguages'] = preferredLanguages;
+    json[r'preferredLanguages'] =
+        preferredLanguages.map((i) => i.toJson()).toList();
     if (requestData != null) {
       json[r'requestData'] = requestData;
     }
@@ -30136,7 +30144,7 @@ class SendRequest {
       {String? applicationId,
       List<String>? bccAddresses,
       List<String>? ccAddresses,
-      List<String>? preferredLanguages,
+      List<Locale>? preferredLanguages,
       Map<String, dynamic>? requestData,
       List<EmailAddress>? toAddresses,
       List<String>? userIds}) {
@@ -30592,10 +30600,10 @@ class SonyPSNIdentityProvider {
   final ZonedDateTime? insertInstant;
   final ProviderLambdaConfiguration? lambdaConfiguration;
   final ZonedDateTime? lastUpdateInstant;
-  final String? linkingStrategy;
+  final IdentityProviderLinkingStrategy? linkingStrategy;
   final String? name;
   final Map<String, dynamic>? tenantConfiguration;
-  final String? type;
+  final IdentityProviderType? type;
 
   SonyPSNIdentityProvider(
       {this.buttonText,
@@ -30626,23 +30634,22 @@ class SonyPSNIdentityProvider {
           json[r'applicationConfiguration'] as Map<String, Object?>?,
       debug: json[r'debug'] as bool? ?? false,
       id: json[r'id'] as String?,
-      insertInstant: json[r'insertInstant'] != null
-          ? ZonedDateTime.fromJson(
-              json[r'insertInstant']! as Map<String, Object?>)
-          : null,
+      insertInstant: (json[r'insertInstant'] as num?)?.toInt(),
       lambdaConfiguration: json[r'lambdaConfiguration'] != null
           ? ProviderLambdaConfiguration.fromJson(
               json[r'lambdaConfiguration']! as Map<String, Object?>)
           : null,
-      lastUpdateInstant: json[r'lastUpdateInstant'] != null
-          ? ZonedDateTime.fromJson(
-              json[r'lastUpdateInstant']! as Map<String, Object?>)
+      lastUpdateInstant: (json[r'lastUpdateInstant'] as num?)?.toInt(),
+      linkingStrategy: json[r'linkingStrategy'] != null
+          ? IdentityProviderLinkingStrategy.fromValue(
+              json[r'linkingStrategy']! as String)
           : null,
-      linkingStrategy: json[r'linkingStrategy'] as String?,
       name: json[r'name'] as String?,
       tenantConfiguration:
           json[r'tenantConfiguration'] as Map<String, Object?>?,
-      type: json[r'type'] as String?,
+      type: json[r'type'] != null
+          ? IdentityProviderType.fromValue(json[r'type']! as String)
+          : null,
     );
   }
 
@@ -30696,7 +30703,7 @@ class SonyPSNIdentityProvider {
       json[r'lastUpdateInstant'] = lastUpdateInstant.toJson();
     }
     if (linkingStrategy != null) {
-      json[r'linkingStrategy'] = linkingStrategy;
+      json[r'linkingStrategy'] = linkingStrategy.value;
     }
     if (name != null) {
       json[r'name'] = name;
@@ -30705,7 +30712,7 @@ class SonyPSNIdentityProvider {
       json[r'tenantConfiguration'] = tenantConfiguration;
     }
     if (type != null) {
-      json[r'type'] = type;
+      json[r'type'] = type.value;
     }
     return json;
   }
@@ -30722,10 +30729,10 @@ class SonyPSNIdentityProvider {
       ZonedDateTime? insertInstant,
       ProviderLambdaConfiguration? lambdaConfiguration,
       ZonedDateTime? lastUpdateInstant,
-      String? linkingStrategy,
+      IdentityProviderLinkingStrategy? linkingStrategy,
       String? name,
       Map<String, dynamic>? tenantConfiguration,
-      String? type}) {
+      IdentityProviderType? type}) {
     return SonyPSNIdentityProvider(
       buttonText: buttonText ?? this.buttonText,
       clientId: clientId ?? this.clientId,
@@ -30750,7 +30757,7 @@ class SonyPSNIdentityProvider {
 class SortField {
   final String? missing;
   final String? name;
-  final String? order;
+  final Sort? order;
 
   SortField({this.missing, this.name, this.order});
 
@@ -30758,7 +30765,9 @@ class SortField {
     return SortField(
       missing: json[r'missing'] as String?,
       name: json[r'name'] as String?,
-      order: json[r'order'] as String?,
+      order: json[r'order'] != null
+          ? Sort.fromValue(json[r'order']! as String)
+          : null,
     );
   }
 
@@ -30775,12 +30784,12 @@ class SortField {
       json[r'name'] = name;
     }
     if (order != null) {
-      json[r'order'] = order;
+      json[r'order'] = order.value;
     }
     return json;
   }
 
-  SortField copyWith({String? missing, String? name, String? order}) {
+  SortField copyWith({String? missing, String? name, Sort? order}) {
     return SortField(
       missing: missing ?? this.missing,
       name: name ?? this.name,
@@ -30804,7 +30813,7 @@ class StatusResponse {
 }
 
 class SteamApplicationConfiguration {
-  final String? apiMode;
+  final SteamAPIMode? apiMode;
   final String? buttonText;
   final String? clientId;
   final String? scope;
@@ -30824,7 +30833,9 @@ class SteamApplicationConfiguration {
 
   factory SteamApplicationConfiguration.fromJson(Map<String, Object?> json) {
     return SteamApplicationConfiguration(
-      apiMode: json[r'apiMode'] as String?,
+      apiMode: json[r'apiMode'] != null
+          ? SteamAPIMode.fromValue(json[r'apiMode']! as String)
+          : null,
       buttonText: json[r'buttonText'] as String?,
       clientId: json[r'client_id'] as String?,
       scope: json[r'scope'] as String?,
@@ -30845,7 +30856,7 @@ class SteamApplicationConfiguration {
 
     final json = <String, Object?>{};
     if (apiMode != null) {
-      json[r'apiMode'] = apiMode;
+      json[r'apiMode'] = apiMode.value;
     }
     if (buttonText != null) {
       json[r'buttonText'] = buttonText;
@@ -30867,7 +30878,7 @@ class SteamApplicationConfiguration {
   }
 
   SteamApplicationConfiguration copyWith(
-      {String? apiMode,
+      {SteamAPIMode? apiMode,
       String? buttonText,
       String? clientId,
       String? scope,
@@ -30888,7 +30899,7 @@ class SteamApplicationConfiguration {
 
 /// Steam gaming login provider.
 class SteamIdentityProvider {
-  final String? apiMode;
+  final SteamAPIMode? apiMode;
   final String? buttonText;
   final String? clientId;
   final String? scope;
@@ -30900,10 +30911,10 @@ class SteamIdentityProvider {
   final ZonedDateTime? insertInstant;
   final ProviderLambdaConfiguration? lambdaConfiguration;
   final ZonedDateTime? lastUpdateInstant;
-  final String? linkingStrategy;
+  final IdentityProviderLinkingStrategy? linkingStrategy;
   final String? name;
   final Map<String, dynamic>? tenantConfiguration;
-  final String? type;
+  final IdentityProviderType? type;
 
   SteamIdentityProvider(
       {this.apiMode,
@@ -30926,7 +30937,9 @@ class SteamIdentityProvider {
 
   factory SteamIdentityProvider.fromJson(Map<String, Object?> json) {
     return SteamIdentityProvider(
-      apiMode: json[r'apiMode'] as String?,
+      apiMode: json[r'apiMode'] != null
+          ? SteamAPIMode.fromValue(json[r'apiMode']! as String)
+          : null,
       buttonText: json[r'buttonText'] as String?,
       clientId: json[r'client_id'] as String?,
       scope: json[r'scope'] as String?,
@@ -30936,23 +30949,22 @@ class SteamIdentityProvider {
           json[r'applicationConfiguration'] as Map<String, Object?>?,
       debug: json[r'debug'] as bool? ?? false,
       id: json[r'id'] as String?,
-      insertInstant: json[r'insertInstant'] != null
-          ? ZonedDateTime.fromJson(
-              json[r'insertInstant']! as Map<String, Object?>)
-          : null,
+      insertInstant: (json[r'insertInstant'] as num?)?.toInt(),
       lambdaConfiguration: json[r'lambdaConfiguration'] != null
           ? ProviderLambdaConfiguration.fromJson(
               json[r'lambdaConfiguration']! as Map<String, Object?>)
           : null,
-      lastUpdateInstant: json[r'lastUpdateInstant'] != null
-          ? ZonedDateTime.fromJson(
-              json[r'lastUpdateInstant']! as Map<String, Object?>)
+      lastUpdateInstant: (json[r'lastUpdateInstant'] as num?)?.toInt(),
+      linkingStrategy: json[r'linkingStrategy'] != null
+          ? IdentityProviderLinkingStrategy.fromValue(
+              json[r'linkingStrategy']! as String)
           : null,
-      linkingStrategy: json[r'linkingStrategy'] as String?,
       name: json[r'name'] as String?,
       tenantConfiguration:
           json[r'tenantConfiguration'] as Map<String, Object?>?,
-      type: json[r'type'] as String?,
+      type: json[r'type'] != null
+          ? IdentityProviderType.fromValue(json[r'type']! as String)
+          : null,
     );
   }
 
@@ -30976,7 +30988,7 @@ class SteamIdentityProvider {
 
     final json = <String, Object?>{};
     if (apiMode != null) {
-      json[r'apiMode'] = apiMode;
+      json[r'apiMode'] = apiMode.value;
     }
     if (buttonText != null) {
       json[r'buttonText'] = buttonText;
@@ -31010,7 +31022,7 @@ class SteamIdentityProvider {
       json[r'lastUpdateInstant'] = lastUpdateInstant.toJson();
     }
     if (linkingStrategy != null) {
-      json[r'linkingStrategy'] = linkingStrategy;
+      json[r'linkingStrategy'] = linkingStrategy.value;
     }
     if (name != null) {
       json[r'name'] = name;
@@ -31019,13 +31031,13 @@ class SteamIdentityProvider {
       json[r'tenantConfiguration'] = tenantConfiguration;
     }
     if (type != null) {
-      json[r'type'] = type;
+      json[r'type'] = type.value;
     }
     return json;
   }
 
   SteamIdentityProvider copyWith(
-      {String? apiMode,
+      {SteamAPIMode? apiMode,
       String? buttonText,
       String? clientId,
       String? scope,
@@ -31037,10 +31049,10 @@ class SteamIdentityProvider {
       ZonedDateTime? insertInstant,
       ProviderLambdaConfiguration? lambdaConfiguration,
       ZonedDateTime? lastUpdateInstant,
-      String? linkingStrategy,
+      IdentityProviderLinkingStrategy? linkingStrategy,
       String? name,
       Map<String, dynamic>? tenantConfiguration,
-      String? type}) {
+      IdentityProviderType? type}) {
     return SteamIdentityProvider(
       apiMode: apiMode ?? this.apiMode,
       buttonText: buttonText ?? this.buttonText,
@@ -31086,7 +31098,7 @@ class SystemConfiguration {
   final ZonedDateTime? insertInstant;
   final ZonedDateTime? lastUpdateInstant;
   final LoginRecordConfiguration? loginRecordConfiguration;
-  final String? reportTimezone;
+  final ZoneId? reportTimezone;
   final SystemTrustedProxyConfiguration? trustedProxyConfiguration;
   final UIConfiguration? uiConfiguration;
   final WebhookEventLogConfiguration? webhookEventLogConfiguration;
@@ -31119,14 +31131,8 @@ class SystemConfiguration {
           ? EventLogConfiguration.fromJson(
               json[r'eventLogConfiguration']! as Map<String, Object?>)
           : null,
-      insertInstant: json[r'insertInstant'] != null
-          ? ZonedDateTime.fromJson(
-              json[r'insertInstant']! as Map<String, Object?>)
-          : null,
-      lastUpdateInstant: json[r'lastUpdateInstant'] != null
-          ? ZonedDateTime.fromJson(
-              json[r'lastUpdateInstant']! as Map<String, Object?>)
-          : null,
+      insertInstant: (json[r'insertInstant'] as num?)?.toInt(),
+      lastUpdateInstant: (json[r'lastUpdateInstant'] as num?)?.toInt(),
       loginRecordConfiguration: json[r'loginRecordConfiguration'] != null
           ? LoginRecordConfiguration.fromJson(
               json[r'loginRecordConfiguration']! as Map<String, Object?>)
@@ -31184,7 +31190,7 @@ class SystemConfiguration {
       json[r'loginRecordConfiguration'] = loginRecordConfiguration.toJson();
     }
     if (reportTimezone != null) {
-      json[r'reportTimezone'] = reportTimezone;
+      json[r'reportTimezone'] = reportTimezone.toJson();
     }
     if (trustedProxyConfiguration != null) {
       json[r'trustedProxyConfiguration'] = trustedProxyConfiguration.toJson();
@@ -31207,7 +31213,7 @@ class SystemConfiguration {
       ZonedDateTime? insertInstant,
       ZonedDateTime? lastUpdateInstant,
       LoginRecordConfiguration? loginRecordConfiguration,
-      String? reportTimezone,
+      ZoneId? reportTimezone,
       SystemTrustedProxyConfiguration? trustedProxyConfiguration,
       UIConfiguration? uiConfiguration,
       WebhookEventLogConfiguration? webhookEventLogConfiguration}) {
@@ -31302,7 +31308,7 @@ class SystemLogsExportRequest {
   final bool includeArchived;
   final int? lastnBytes;
   final String? dateTimeSecondsFormat;
-  final String? zoneId;
+  final ZoneId? zoneId;
 
   SystemLogsExportRequest(
       {bool? includeArchived,
@@ -31335,7 +31341,7 @@ class SystemLogsExportRequest {
       json[r'dateTimeSecondsFormat'] = dateTimeSecondsFormat;
     }
     if (zoneId != null) {
-      json[r'zoneId'] = zoneId;
+      json[r'zoneId'] = zoneId.toJson();
     }
     return json;
   }
@@ -31344,7 +31350,7 @@ class SystemLogsExportRequest {
       {bool? includeArchived,
       int? lastnBytes,
       String? dateTimeSecondsFormat,
-      String? zoneId}) {
+      ZoneId? zoneId}) {
     return SystemLogsExportRequest(
       includeArchived: includeArchived ?? this.includeArchived,
       lastnBytes: lastnBytes ?? this.lastnBytes,
@@ -31356,7 +31362,7 @@ class SystemLogsExportRequest {
 }
 
 class SystemTrustedProxyConfiguration {
-  final String? trustPolicy;
+  final SystemTrustedProxyConfigurationPolicy? trustPolicy;
   final List<String> trusted;
 
   SystemTrustedProxyConfiguration({this.trustPolicy, List<String>? trusted})
@@ -31364,7 +31370,10 @@ class SystemTrustedProxyConfiguration {
 
   factory SystemTrustedProxyConfiguration.fromJson(Map<String, Object?> json) {
     return SystemTrustedProxyConfiguration(
-      trustPolicy: json[r'trustPolicy'] as String?,
+      trustPolicy: json[r'trustPolicy'] != null
+          ? SystemTrustedProxyConfigurationPolicy.fromValue(
+              json[r'trustPolicy']! as String)
+          : null,
       trusted: (json[r'trusted'] as List<Object?>?)
               ?.map((i) => i as String? ?? '')
               .toList() ??
@@ -31378,14 +31387,15 @@ class SystemTrustedProxyConfiguration {
 
     final json = <String, Object?>{};
     if (trustPolicy != null) {
-      json[r'trustPolicy'] = trustPolicy;
+      json[r'trustPolicy'] = trustPolicy.value;
     }
     json[r'trusted'] = trusted;
     return json;
   }
 
   SystemTrustedProxyConfiguration copyWith(
-      {String? trustPolicy, List<String>? trusted}) {
+      {SystemTrustedProxyConfigurationPolicy? trustPolicy,
+      List<String>? trusted}) {
     return SystemTrustedProxyConfiguration(
       trustPolicy: trustPolicy ?? this.trustPolicy,
       trusted: trusted ?? this.trusted,
@@ -31906,7 +31916,7 @@ class Tenant {
   final TenantRegistrationConfiguration? registrationConfiguration;
   final TenantSCIMServerConfiguration? scimServerConfiguration;
   final TenantSSOConfiguration? ssoConfiguration;
-  final String? state;
+  final ObjectState? state;
   final String? themeId;
   final TenantUserDeletePolicy? userDeletePolicy;
   final TenantUsernameConfiguration? usernameConfiguration;
@@ -32000,10 +32010,7 @@ class Tenant {
       httpSessionMaxInactiveInterval:
           (json[r'httpSessionMaxInactiveInterval'] as num?)?.toInt(),
       id: json[r'id'] as String?,
-      insertInstant: json[r'insertInstant'] != null
-          ? ZonedDateTime.fromJson(
-              json[r'insertInstant']! as Map<String, Object?>)
-          : null,
+      insertInstant: (json[r'insertInstant'] as num?)?.toInt(),
       issuer: json[r'issuer'] as String?,
       jwtConfiguration: json[r'jwtConfiguration'] != null
           ? JWTConfiguration.fromJson(
@@ -32013,10 +32020,7 @@ class Tenant {
           ? TenantLambdaConfiguration.fromJson(
               json[r'lambdaConfiguration']! as Map<String, Object?>)
           : null,
-      lastUpdateInstant: json[r'lastUpdateInstant'] != null
-          ? ZonedDateTime.fromJson(
-              json[r'lastUpdateInstant']! as Map<String, Object?>)
-          : null,
+      lastUpdateInstant: (json[r'lastUpdateInstant'] as num?)?.toInt(),
       loginConfiguration: json[r'loginConfiguration'] != null
           ? TenantLoginConfiguration.fromJson(
               json[r'loginConfiguration']! as Map<String, Object?>)
@@ -32065,7 +32069,9 @@ class Tenant {
           ? TenantSSOConfiguration.fromJson(
               json[r'ssoConfiguration']! as Map<String, Object?>)
           : null,
-      state: json[r'state'] as String?,
+      state: json[r'state'] != null
+          ? ObjectState.fromValue(json[r'state']! as String)
+          : null,
       themeId: json[r'themeId'] as String?,
       userDeletePolicy: json[r'userDeletePolicy'] != null
           ? TenantUserDeletePolicy.fromJson(
@@ -32216,7 +32222,7 @@ class Tenant {
       json[r'ssoConfiguration'] = ssoConfiguration.toJson();
     }
     if (state != null) {
-      json[r'state'] = state;
+      json[r'state'] = state.value;
     }
     if (themeId != null) {
       json[r'themeId'] = themeId;
@@ -32265,7 +32271,7 @@ class Tenant {
       TenantRegistrationConfiguration? registrationConfiguration,
       TenantSCIMServerConfiguration? scimServerConfiguration,
       TenantSSOConfiguration? ssoConfiguration,
-      String? state,
+      ObjectState? state,
       String? themeId,
       TenantUserDeletePolicy? userDeletePolicy,
       TenantUsernameConfiguration? usernameConfiguration,
@@ -32353,7 +32359,7 @@ class TenantAccessControlConfiguration {
 }
 
 class TenantCaptchaConfiguration {
-  final String? captchaMethod;
+  final CaptchaMethod? captchaMethod;
   final String? secretKey;
   final String? siteKey;
   final num? threshold;
@@ -32369,7 +32375,9 @@ class TenantCaptchaConfiguration {
 
   factory TenantCaptchaConfiguration.fromJson(Map<String, Object?> json) {
     return TenantCaptchaConfiguration(
-      captchaMethod: json[r'captchaMethod'] as String?,
+      captchaMethod: json[r'captchaMethod'] != null
+          ? CaptchaMethod.fromValue(json[r'captchaMethod']! as String)
+          : null,
       secretKey: json[r'secretKey'] as String?,
       siteKey: json[r'siteKey'] as String?,
       threshold: json[r'threshold'] as num?,
@@ -32386,7 +32394,7 @@ class TenantCaptchaConfiguration {
 
     final json = <String, Object?>{};
     if (captchaMethod != null) {
-      json[r'captchaMethod'] = captchaMethod;
+      json[r'captchaMethod'] = captchaMethod.value;
     }
     if (secretKey != null) {
       json[r'secretKey'] = secretKey;
@@ -32402,7 +32410,7 @@ class TenantCaptchaConfiguration {
   }
 
   TenantCaptchaConfiguration copyWith(
-      {String? captchaMethod,
+      {CaptchaMethod? captchaMethod,
       String? secretKey,
       String? siteKey,
       num? threshold,
@@ -32616,7 +32624,7 @@ class TenantLoginConfiguration {
 class TenantMultiFactorConfiguration {
   final MultiFactorAuthenticatorMethod? authenticator;
   final MultiFactorEmailMethod? email;
-  final String? loginPolicy;
+  final MultiFactorLoginPolicy? loginPolicy;
   final MultiFactorSMSMethod? sms;
 
   TenantMultiFactorConfiguration(
@@ -32632,7 +32640,9 @@ class TenantMultiFactorConfiguration {
           ? MultiFactorEmailMethod.fromJson(
               json[r'email']! as Map<String, Object?>)
           : null,
-      loginPolicy: json[r'loginPolicy'] as String?,
+      loginPolicy: json[r'loginPolicy'] != null
+          ? MultiFactorLoginPolicy.fromValue(json[r'loginPolicy']! as String)
+          : null,
       sms: json[r'sms'] != null
           ? MultiFactorSMSMethod.fromJson(json[r'sms']! as Map<String, Object?>)
           : null,
@@ -32653,7 +32663,7 @@ class TenantMultiFactorConfiguration {
       json[r'email'] = email.toJson();
     }
     if (loginPolicy != null) {
-      json[r'loginPolicy'] = loginPolicy;
+      json[r'loginPolicy'] = loginPolicy.value;
     }
     if (sms != null) {
       json[r'sms'] = sms.toJson();
@@ -32664,7 +32674,7 @@ class TenantMultiFactorConfiguration {
   TenantMultiFactorConfiguration copyWith(
       {MultiFactorAuthenticatorMethod? authenticator,
       MultiFactorEmailMethod? email,
-      String? loginPolicy,
+      MultiFactorLoginPolicy? loginPolicy,
       MultiFactorSMSMethod? sms}) {
     return TenantMultiFactorConfiguration(
       authenticator: authenticator ?? this.authenticator,
@@ -33149,14 +33159,16 @@ class TenantSearchResponse {
 }
 
 class TenantUnverifiedConfiguration {
-  final String? email;
+  final UnverifiedBehavior? email;
   final RegistrationUnverifiedOptions? whenGated;
 
   TenantUnverifiedConfiguration({this.email, this.whenGated});
 
   factory TenantUnverifiedConfiguration.fromJson(Map<String, Object?> json) {
     return TenantUnverifiedConfiguration(
-      email: json[r'email'] as String?,
+      email: json[r'email'] != null
+          ? UnverifiedBehavior.fromValue(json[r'email']! as String)
+          : null,
       whenGated: json[r'whenGated'] != null
           ? RegistrationUnverifiedOptions.fromJson(
               json[r'whenGated']! as Map<String, Object?>)
@@ -33170,7 +33182,7 @@ class TenantUnverifiedConfiguration {
 
     final json = <String, Object?>{};
     if (email != null) {
-      json[r'email'] = email;
+      json[r'email'] = email.value;
     }
     if (whenGated != null) {
       json[r'whenGated'] = whenGated.toJson();
@@ -33179,7 +33191,7 @@ class TenantUnverifiedConfiguration {
   }
 
   TenantUnverifiedConfiguration copyWith(
-      {String? email, RegistrationUnverifiedOptions? whenGated}) {
+      {UnverifiedBehavior? email, RegistrationUnverifiedOptions? whenGated}) {
     return TenantUnverifiedConfiguration(
       email: email ?? this.email,
       whenGated: whenGated ?? this.whenGated,
@@ -33332,8 +33344,8 @@ class TenantWebAuthnConfiguration {
 }
 
 class TenantWebAuthnWorkflowConfiguration {
-  final String? authenticatorAttachmentPreference;
-  final String? userVerificationRequirement;
+  final AuthenticatorAttachmentPreference? authenticatorAttachmentPreference;
+  final UserVerificationRequirement? userVerificationRequirement;
   final bool enabled;
 
   TenantWebAuthnWorkflowConfiguration(
@@ -33346,9 +33358,14 @@ class TenantWebAuthnWorkflowConfiguration {
       Map<String, Object?> json) {
     return TenantWebAuthnWorkflowConfiguration(
       authenticatorAttachmentPreference:
-          json[r'authenticatorAttachmentPreference'] as String?,
-      userVerificationRequirement:
-          json[r'userVerificationRequirement'] as String?,
+          json[r'authenticatorAttachmentPreference'] != null
+              ? AuthenticatorAttachmentPreference.fromValue(
+                  json[r'authenticatorAttachmentPreference']! as String)
+              : null,
+      userVerificationRequirement: json[r'userVerificationRequirement'] != null
+          ? UserVerificationRequirement.fromValue(
+              json[r'userVerificationRequirement']! as String)
+          : null,
       enabled: json[r'enabled'] as bool? ?? false,
     );
   }
@@ -33362,18 +33379,18 @@ class TenantWebAuthnWorkflowConfiguration {
     final json = <String, Object?>{};
     if (authenticatorAttachmentPreference != null) {
       json[r'authenticatorAttachmentPreference'] =
-          authenticatorAttachmentPreference;
+          authenticatorAttachmentPreference.value;
     }
     if (userVerificationRequirement != null) {
-      json[r'userVerificationRequirement'] = userVerificationRequirement;
+      json[r'userVerificationRequirement'] = userVerificationRequirement.value;
     }
     json[r'enabled'] = enabled;
     return json;
   }
 
   TenantWebAuthnWorkflowConfiguration copyWith(
-      {String? authenticatorAttachmentPreference,
-      String? userVerificationRequirement,
+      {AuthenticatorAttachmentPreference? authenticatorAttachmentPreference,
+      UserVerificationRequirement? userVerificationRequirement,
       bool? enabled}) {
     return TenantWebAuthnWorkflowConfiguration(
       authenticatorAttachmentPreference: authenticatorAttachmentPreference ??
@@ -33404,7 +33421,7 @@ class TestEvent {
   final String? id;
   final EventInfo? info;
   final String? tenantId;
-  final String? type;
+  final EventType? type;
 
   TestEvent(
       {this.message,
@@ -33417,16 +33434,15 @@ class TestEvent {
   factory TestEvent.fromJson(Map<String, Object?> json) {
     return TestEvent(
       message: json[r'message'] as String?,
-      createInstant: json[r'createInstant'] != null
-          ? ZonedDateTime.fromJson(
-              json[r'createInstant']! as Map<String, Object?>)
-          : null,
+      createInstant: (json[r'createInstant'] as num?)?.toInt(),
       id: json[r'id'] as String?,
       info: json[r'info'] != null
           ? EventInfo.fromJson(json[r'info']! as Map<String, Object?>)
           : null,
       tenantId: json[r'tenantId'] as String?,
-      type: json[r'type'] as String?,
+      type: json[r'type'] != null
+          ? EventType.fromValue(json[r'type']! as String)
+          : null,
     );
   }
 
@@ -33455,7 +33471,7 @@ class TestEvent {
       json[r'tenantId'] = tenantId;
     }
     if (type != null) {
-      json[r'type'] = type;
+      json[r'type'] = type.value;
     }
     return json;
   }
@@ -33466,7 +33482,7 @@ class TestEvent {
       String? id,
       EventInfo? info,
       String? tenantId,
-      String? type}) {
+      EventType? type}) {
     return TestEvent(
       message: message ?? this.message,
       createInstant: createInstant ?? this.createInstant,
@@ -33488,7 +33504,7 @@ class Theme {
   final String? name;
   final String? stylesheet;
   final Templates? templates;
-  final String? type;
+  final ThemeType? type;
   final SimpleThemeVariables? variables;
 
   Theme(
@@ -33509,14 +33525,8 @@ class Theme {
       data: json[r'data'] as Map<String, Object?>?,
       defaultMessages: json[r'defaultMessages'] as String?,
       id: json[r'id'] as String?,
-      insertInstant: json[r'insertInstant'] != null
-          ? ZonedDateTime.fromJson(
-              json[r'insertInstant']! as Map<String, Object?>)
-          : null,
-      lastUpdateInstant: json[r'lastUpdateInstant'] != null
-          ? ZonedDateTime.fromJson(
-              json[r'lastUpdateInstant']! as Map<String, Object?>)
-          : null,
+      insertInstant: (json[r'insertInstant'] as num?)?.toInt(),
+      lastUpdateInstant: (json[r'lastUpdateInstant'] as num?)?.toInt(),
       localizedMessages: json[r'localizedMessages'] != null
           ? LocalizedStrings.fromJson(
               json[r'localizedMessages']! as Map<String, Object?>)
@@ -33526,7 +33536,9 @@ class Theme {
       templates: json[r'templates'] != null
           ? Templates.fromJson(json[r'templates']! as Map<String, Object?>)
           : null,
-      type: json[r'type'] as String?,
+      type: json[r'type'] != null
+          ? ThemeType.fromValue(json[r'type']! as String)
+          : null,
       variables: json[r'variables'] != null
           ? SimpleThemeVariables.fromJson(
               json[r'variables']! as Map<String, Object?>)
@@ -33576,7 +33588,7 @@ class Theme {
       json[r'templates'] = templates.toJson();
     }
     if (type != null) {
-      json[r'type'] = type;
+      json[r'type'] = type.value;
     }
     if (variables != null) {
       json[r'variables'] = variables.toJson();
@@ -33594,7 +33606,7 @@ class Theme {
       String? name,
       String? stylesheet,
       Templates? templates,
-      String? type,
+      ThemeType? type,
       SimpleThemeVariables? variables}) {
     return Theme(
       data: data ?? this.data,
@@ -33693,7 +33705,7 @@ class ThemeResponse {
 /// Search criteria for themes
 class ThemeSearchCriteria {
   final String? name;
-  final String? type;
+  final ThemeType? type;
   final int? numberOfResults;
   final String? orderBy;
   final int? startRow;
@@ -33708,7 +33720,9 @@ class ThemeSearchCriteria {
   factory ThemeSearchCriteria.fromJson(Map<String, Object?> json) {
     return ThemeSearchCriteria(
       name: json[r'name'] as String?,
-      type: json[r'type'] as String?,
+      type: json[r'type'] != null
+          ? ThemeType.fromValue(json[r'type']! as String)
+          : null,
       numberOfResults: (json[r'numberOfResults'] as num?)?.toInt(),
       orderBy: json[r'orderBy'] as String?,
       startRow: (json[r'startRow'] as num?)?.toInt(),
@@ -33727,7 +33741,7 @@ class ThemeSearchCriteria {
       json[r'name'] = name;
     }
     if (type != null) {
-      json[r'type'] = type;
+      json[r'type'] = type.value;
     }
     if (numberOfResults != null) {
       json[r'numberOfResults'] = numberOfResults;
@@ -33743,7 +33757,7 @@ class ThemeSearchCriteria {
 
   ThemeSearchCriteria copyWith(
       {String? name,
-      String? type,
+      ThemeType? type,
       int? numberOfResults,
       String? orderBy,
       int? startRow}) {
@@ -33840,10 +33854,7 @@ class TimeBasedDeletePolicy {
 
   factory TimeBasedDeletePolicy.fromJson(Map<String, Object?> json) {
     return TimeBasedDeletePolicy(
-      enabledInstant: json[r'enabledInstant'] != null
-          ? ZonedDateTime.fromJson(
-              json[r'enabledInstant']! as Map<String, Object?>)
-          : null,
+      enabledInstant: (json[r'enabledInstant'] as num?)?.toInt(),
       numberOfDaysToRetain: (json[r'numberOfDaysToRetain'] as num?)?.toInt(),
       enabled: json[r'enabled'] as bool? ?? false,
     );
@@ -33984,7 +33995,7 @@ class TwilioMessengerConfiguration {
   final ZonedDateTime? lastUpdateInstant;
   final String? name;
   final String? transport;
-  final String? type;
+  final MessengerType? type;
 
   TwilioMessengerConfiguration(
       {this.accountSid,
@@ -34012,17 +34023,13 @@ class TwilioMessengerConfiguration {
       data: json[r'data'] as Map<String, Object?>?,
       debug: json[r'debug'] as bool? ?? false,
       id: json[r'id'] as String?,
-      insertInstant: json[r'insertInstant'] != null
-          ? ZonedDateTime.fromJson(
-              json[r'insertInstant']! as Map<String, Object?>)
-          : null,
-      lastUpdateInstant: json[r'lastUpdateInstant'] != null
-          ? ZonedDateTime.fromJson(
-              json[r'lastUpdateInstant']! as Map<String, Object?>)
-          : null,
+      insertInstant: (json[r'insertInstant'] as num?)?.toInt(),
+      lastUpdateInstant: (json[r'lastUpdateInstant'] as num?)?.toInt(),
       name: json[r'name'] as String?,
       transport: json[r'transport'] as String?,
-      type: json[r'type'] as String?,
+      type: json[r'type'] != null
+          ? MessengerType.fromValue(json[r'type']! as String)
+          : null,
     );
   }
 
@@ -34077,7 +34084,7 @@ class TwilioMessengerConfiguration {
       json[r'transport'] = transport;
     }
     if (type != null) {
-      json[r'type'] = type;
+      json[r'type'] = type.value;
     }
     return json;
   }
@@ -34095,7 +34102,7 @@ class TwilioMessengerConfiguration {
       ZonedDateTime? lastUpdateInstant,
       String? name,
       String? transport,
-      String? type}) {
+      MessengerType? type}) {
     return TwilioMessengerConfiguration(
       accountSid: accountSid ?? this.accountSid,
       authToken: authToken ?? this.authToken,
@@ -34201,10 +34208,10 @@ class TwitchIdentityProvider {
   final ZonedDateTime? insertInstant;
   final ProviderLambdaConfiguration? lambdaConfiguration;
   final ZonedDateTime? lastUpdateInstant;
-  final String? linkingStrategy;
+  final IdentityProviderLinkingStrategy? linkingStrategy;
   final String? name;
   final Map<String, dynamic>? tenantConfiguration;
-  final String? type;
+  final IdentityProviderType? type;
 
   TwitchIdentityProvider(
       {this.buttonText,
@@ -34235,23 +34242,22 @@ class TwitchIdentityProvider {
           json[r'applicationConfiguration'] as Map<String, Object?>?,
       debug: json[r'debug'] as bool? ?? false,
       id: json[r'id'] as String?,
-      insertInstant: json[r'insertInstant'] != null
-          ? ZonedDateTime.fromJson(
-              json[r'insertInstant']! as Map<String, Object?>)
-          : null,
+      insertInstant: (json[r'insertInstant'] as num?)?.toInt(),
       lambdaConfiguration: json[r'lambdaConfiguration'] != null
           ? ProviderLambdaConfiguration.fromJson(
               json[r'lambdaConfiguration']! as Map<String, Object?>)
           : null,
-      lastUpdateInstant: json[r'lastUpdateInstant'] != null
-          ? ZonedDateTime.fromJson(
-              json[r'lastUpdateInstant']! as Map<String, Object?>)
+      lastUpdateInstant: (json[r'lastUpdateInstant'] as num?)?.toInt(),
+      linkingStrategy: json[r'linkingStrategy'] != null
+          ? IdentityProviderLinkingStrategy.fromValue(
+              json[r'linkingStrategy']! as String)
           : null,
-      linkingStrategy: json[r'linkingStrategy'] as String?,
       name: json[r'name'] as String?,
       tenantConfiguration:
           json[r'tenantConfiguration'] as Map<String, Object?>?,
-      type: json[r'type'] as String?,
+      type: json[r'type'] != null
+          ? IdentityProviderType.fromValue(json[r'type']! as String)
+          : null,
     );
   }
 
@@ -34305,7 +34311,7 @@ class TwitchIdentityProvider {
       json[r'lastUpdateInstant'] = lastUpdateInstant.toJson();
     }
     if (linkingStrategy != null) {
-      json[r'linkingStrategy'] = linkingStrategy;
+      json[r'linkingStrategy'] = linkingStrategy.value;
     }
     if (name != null) {
       json[r'name'] = name;
@@ -34314,7 +34320,7 @@ class TwitchIdentityProvider {
       json[r'tenantConfiguration'] = tenantConfiguration;
     }
     if (type != null) {
-      json[r'type'] = type;
+      json[r'type'] = type.value;
     }
     return json;
   }
@@ -34331,10 +34337,10 @@ class TwitchIdentityProvider {
       ZonedDateTime? insertInstant,
       ProviderLambdaConfiguration? lambdaConfiguration,
       ZonedDateTime? lastUpdateInstant,
-      String? linkingStrategy,
+      IdentityProviderLinkingStrategy? linkingStrategy,
       String? name,
       Map<String, dynamic>? tenantConfiguration,
-      String? type}) {
+      IdentityProviderType? type}) {
     return TwitchIdentityProvider(
       buttonText: buttonText ?? this.buttonText,
       clientId: clientId ?? this.clientId,
@@ -34433,10 +34439,10 @@ class TwitterIdentityProvider {
   final ZonedDateTime? insertInstant;
   final ProviderLambdaConfiguration? lambdaConfiguration;
   final ZonedDateTime? lastUpdateInstant;
-  final String? linkingStrategy;
+  final IdentityProviderLinkingStrategy? linkingStrategy;
   final String? name;
   final Map<String, dynamic>? tenantConfiguration;
-  final String? type;
+  final IdentityProviderType? type;
 
   TwitterIdentityProvider(
       {this.buttonText,
@@ -34465,23 +34471,22 @@ class TwitterIdentityProvider {
           json[r'applicationConfiguration'] as Map<String, Object?>?,
       debug: json[r'debug'] as bool? ?? false,
       id: json[r'id'] as String?,
-      insertInstant: json[r'insertInstant'] != null
-          ? ZonedDateTime.fromJson(
-              json[r'insertInstant']! as Map<String, Object?>)
-          : null,
+      insertInstant: (json[r'insertInstant'] as num?)?.toInt(),
       lambdaConfiguration: json[r'lambdaConfiguration'] != null
           ? ProviderLambdaConfiguration.fromJson(
               json[r'lambdaConfiguration']! as Map<String, Object?>)
           : null,
-      lastUpdateInstant: json[r'lastUpdateInstant'] != null
-          ? ZonedDateTime.fromJson(
-              json[r'lastUpdateInstant']! as Map<String, Object?>)
+      lastUpdateInstant: (json[r'lastUpdateInstant'] as num?)?.toInt(),
+      linkingStrategy: json[r'linkingStrategy'] != null
+          ? IdentityProviderLinkingStrategy.fromValue(
+              json[r'linkingStrategy']! as String)
           : null,
-      linkingStrategy: json[r'linkingStrategy'] as String?,
       name: json[r'name'] as String?,
       tenantConfiguration:
           json[r'tenantConfiguration'] as Map<String, Object?>?,
-      type: json[r'type'] as String?,
+      type: json[r'type'] != null
+          ? IdentityProviderType.fromValue(json[r'type']! as String)
+          : null,
     );
   }
 
@@ -34531,7 +34536,7 @@ class TwitterIdentityProvider {
       json[r'lastUpdateInstant'] = lastUpdateInstant.toJson();
     }
     if (linkingStrategy != null) {
-      json[r'linkingStrategy'] = linkingStrategy;
+      json[r'linkingStrategy'] = linkingStrategy.value;
     }
     if (name != null) {
       json[r'name'] = name;
@@ -34540,7 +34545,7 @@ class TwitterIdentityProvider {
       json[r'tenantConfiguration'] = tenantConfiguration;
     }
     if (type != null) {
-      json[r'type'] = type;
+      json[r'type'] = type.value;
     }
     return json;
   }
@@ -34556,10 +34561,10 @@ class TwitterIdentityProvider {
       ZonedDateTime? insertInstant,
       ProviderLambdaConfiguration? lambdaConfiguration,
       ZonedDateTime? lastUpdateInstant,
-      String? linkingStrategy,
+      IdentityProviderLinkingStrategy? linkingStrategy,
       String? name,
       Map<String, dynamic>? tenantConfiguration,
-      String? type}) {
+      IdentityProviderType? type}) {
     return TwitterIdentityProvider(
       buttonText: buttonText ?? this.buttonText,
       consumerKey: consumerKey ?? this.consumerKey,
@@ -35301,13 +35306,8 @@ class TwoFactorTrust {
   factory TwoFactorTrust.fromJson(Map<String, Object?> json) {
     return TwoFactorTrust(
       applicationId: json[r'applicationId'] as String?,
-      expiration: json[r'expiration'] != null
-          ? ZonedDateTime.fromJson(json[r'expiration']! as Map<String, Object?>)
-          : null,
-      startInstant: json[r'startInstant'] != null
-          ? ZonedDateTime.fromJson(
-              json[r'startInstant']! as Map<String, Object?>)
-          : null,
+      expiration: (json[r'expiration'] as num?)?.toInt(),
+      startInstant: (json[r'startInstant'] as num?)?.toInt(),
     );
   }
 
@@ -35387,7 +35387,7 @@ class UIConfiguration {
 class UniqueUsernameConfiguration {
   final int? numberOfDigits;
   final String? separator;
-  final String? strategy;
+  final UniqueUsernameStrategy? strategy;
   final bool enabled;
 
   UniqueUsernameConfiguration(
@@ -35398,7 +35398,9 @@ class UniqueUsernameConfiguration {
     return UniqueUsernameConfiguration(
       numberOfDigits: (json[r'numberOfDigits'] as num?)?.toInt(),
       separator: json[r'separator'] as String?,
-      strategy: json[r'strategy'] as String?,
+      strategy: json[r'strategy'] != null
+          ? UniqueUsernameStrategy.fromValue(json[r'strategy']! as String)
+          : null,
       enabled: json[r'enabled'] as bool? ?? false,
     );
   }
@@ -35417,7 +35419,7 @@ class UniqueUsernameConfiguration {
       json[r'separator'] = separator;
     }
     if (strategy != null) {
-      json[r'strategy'] = strategy;
+      json[r'strategy'] = strategy.value;
     }
     json[r'enabled'] = enabled;
     return json;
@@ -35426,7 +35428,7 @@ class UniqueUsernameConfiguration {
   UniqueUsernameConfiguration copyWith(
       {int? numberOfDigits,
       String? separator,
-      String? strategy,
+      UniqueUsernameStrategy? strategy,
       bool? enabled}) {
     return UniqueUsernameConfiguration(
       numberOfDigits: numberOfDigits ?? this.numberOfDigits,
@@ -35441,9 +35443,9 @@ class UniqueUsernameConfiguration {
 /// the user including birthdate, registration information  preferred languages,
 /// global attributes, etc.
 class User {
-  final List<String> preferredLanguages;
+  final List<Locale> preferredLanguages;
   final bool active;
-  final String? birthDate;
+  final LocalDate? birthDate;
   final String? cleanSpeakId;
   final Map<String, dynamic>? data;
   final String? email;
@@ -35458,30 +35460,30 @@ class User {
   final String? mobilePhone;
   final String? parentEmail;
   final String? tenantId;
-  final String? timezone;
+  final ZoneId? timezone;
   final UserTwoFactorConfiguration? twoFactor;
   final List<GroupMember> memberships;
   final List<UserRegistration> registrations;
   final ZonedDateTime? breachedPasswordLastCheckedInstant;
-  final String? breachedPasswordStatus;
+  final BreachedPasswordStatus? breachedPasswordStatus;
   final String? connectorId;
   final String? encryptionScheme;
   final int? factor;
   final String? id;
   final ZonedDateTime? lastLoginInstant;
   final String? password;
-  final String? passwordChangeReason;
+  final ChangePasswordReason? passwordChangeReason;
   final bool passwordChangeRequired;
   final ZonedDateTime? passwordLastUpdateInstant;
   final String? salt;
   final String? uniqueUsername;
   final String? username;
-  final String? usernameStatus;
+  final ContentStatus? usernameStatus;
   final bool verified;
   final ZonedDateTime? verifiedInstant;
 
   User(
-      {List<String>? preferredLanguages,
+      {List<Locale>? preferredLanguages,
       bool? active,
       this.birthDate,
       this.cleanSpeakId,
@@ -35529,7 +35531,7 @@ class User {
   factory User.fromJson(Map<String, Object?> json) {
     return User(
       preferredLanguages: (json[r'preferredLanguages'] as List<Object?>?)
-              ?.map((i) => i as String? ?? '')
+              ?.map((i) => (i as String? ?? '') as Locale)
               .toList() ??
           [],
       active: json[r'active'] as bool? ?? false,
@@ -35537,21 +35539,13 @@ class User {
       cleanSpeakId: json[r'cleanSpeakId'] as String?,
       data: json[r'data'] as Map<String, Object?>?,
       email: json[r'email'] as String?,
-      expiry: json[r'expiry'] != null
-          ? ZonedDateTime.fromJson(json[r'expiry']! as Map<String, Object?>)
-          : null,
+      expiry: (json[r'expiry'] as num?)?.toInt(),
       firstName: json[r'firstName'] as String?,
       fullName: json[r'fullName'] as String?,
       imageUrl: json[r'imageUrl'] as String?,
-      insertInstant: json[r'insertInstant'] != null
-          ? ZonedDateTime.fromJson(
-              json[r'insertInstant']! as Map<String, Object?>)
-          : null,
+      insertInstant: (json[r'insertInstant'] as num?)?.toInt(),
       lastName: json[r'lastName'] as String?,
-      lastUpdateInstant: json[r'lastUpdateInstant'] != null
-          ? ZonedDateTime.fromJson(
-              json[r'lastUpdateInstant']! as Map<String, Object?>)
-          : null,
+      lastUpdateInstant: (json[r'lastUpdateInstant'] as num?)?.toInt(),
       middleName: json[r'middleName'] as String?,
       mobilePhone: json[r'mobilePhone'] as String?,
       parentEmail: json[r'parentEmail'] as String?,
@@ -35572,36 +35566,32 @@ class User {
               .toList() ??
           [],
       breachedPasswordLastCheckedInstant:
-          json[r'breachedPasswordLastCheckedInstant'] != null
-              ? ZonedDateTime.fromJson(
-                  json[r'breachedPasswordLastCheckedInstant']!
-                      as Map<String, Object?>)
-              : null,
-      breachedPasswordStatus: json[r'breachedPasswordStatus'] as String?,
+          (json[r'breachedPasswordLastCheckedInstant'] as num?)?.toInt(),
+      breachedPasswordStatus: json[r'breachedPasswordStatus'] != null
+          ? BreachedPasswordStatus.fromValue(
+              json[r'breachedPasswordStatus']! as String)
+          : null,
       connectorId: json[r'connectorId'] as String?,
       encryptionScheme: json[r'encryptionScheme'] as String?,
       factor: (json[r'factor'] as num?)?.toInt(),
       id: json[r'id'] as String?,
-      lastLoginInstant: json[r'lastLoginInstant'] != null
-          ? ZonedDateTime.fromJson(
-              json[r'lastLoginInstant']! as Map<String, Object?>)
-          : null,
+      lastLoginInstant: (json[r'lastLoginInstant'] as num?)?.toInt(),
       password: json[r'password'] as String?,
-      passwordChangeReason: json[r'passwordChangeReason'] as String?,
-      passwordChangeRequired: json[r'passwordChangeRequired'] as bool? ?? false,
-      passwordLastUpdateInstant: json[r'passwordLastUpdateInstant'] != null
-          ? ZonedDateTime.fromJson(
-              json[r'passwordLastUpdateInstant']! as Map<String, Object?>)
+      passwordChangeReason: json[r'passwordChangeReason'] != null
+          ? ChangePasswordReason.fromValue(
+              json[r'passwordChangeReason']! as String)
           : null,
+      passwordChangeRequired: json[r'passwordChangeRequired'] as bool? ?? false,
+      passwordLastUpdateInstant:
+          (json[r'passwordLastUpdateInstant'] as num?)?.toInt(),
       salt: json[r'salt'] as String?,
       uniqueUsername: json[r'uniqueUsername'] as String?,
       username: json[r'username'] as String?,
-      usernameStatus: json[r'usernameStatus'] as String?,
-      verified: json[r'verified'] as bool? ?? false,
-      verifiedInstant: json[r'verifiedInstant'] != null
-          ? ZonedDateTime.fromJson(
-              json[r'verifiedInstant']! as Map<String, Object?>)
+      usernameStatus: json[r'usernameStatus'] != null
+          ? ContentStatus.fromValue(json[r'usernameStatus']! as String)
           : null,
+      verified: json[r'verified'] as bool? ?? false,
+      verifiedInstant: (json[r'verifiedInstant'] as num?)?.toInt(),
     );
   }
 
@@ -35647,10 +35637,11 @@ class User {
     var verifiedInstant = this.verifiedInstant;
 
     final json = <String, Object?>{};
-    json[r'preferredLanguages'] = preferredLanguages;
+    json[r'preferredLanguages'] =
+        preferredLanguages.map((i) => i.toJson()).toList();
     json[r'active'] = active;
     if (birthDate != null) {
-      json[r'birthDate'] = birthDate;
+      json[r'birthDate'] = birthDate.toJson();
     }
     if (cleanSpeakId != null) {
       json[r'cleanSpeakId'] = cleanSpeakId;
@@ -35695,7 +35686,7 @@ class User {
       json[r'tenantId'] = tenantId;
     }
     if (timezone != null) {
-      json[r'timezone'] = timezone;
+      json[r'timezone'] = timezone.toJson();
     }
     if (twoFactor != null) {
       json[r'twoFactor'] = twoFactor.toJson();
@@ -35707,7 +35698,7 @@ class User {
           breachedPasswordLastCheckedInstant.toJson();
     }
     if (breachedPasswordStatus != null) {
-      json[r'breachedPasswordStatus'] = breachedPasswordStatus;
+      json[r'breachedPasswordStatus'] = breachedPasswordStatus.value;
     }
     if (connectorId != null) {
       json[r'connectorId'] = connectorId;
@@ -35728,7 +35719,7 @@ class User {
       json[r'password'] = password;
     }
     if (passwordChangeReason != null) {
-      json[r'passwordChangeReason'] = passwordChangeReason;
+      json[r'passwordChangeReason'] = passwordChangeReason.value;
     }
     json[r'passwordChangeRequired'] = passwordChangeRequired;
     if (passwordLastUpdateInstant != null) {
@@ -35744,7 +35735,7 @@ class User {
       json[r'username'] = username;
     }
     if (usernameStatus != null) {
-      json[r'usernameStatus'] = usernameStatus;
+      json[r'usernameStatus'] = usernameStatus.value;
     }
     json[r'verified'] = verified;
     if (verifiedInstant != null) {
@@ -35754,9 +35745,9 @@ class User {
   }
 
   User copyWith(
-      {List<String>? preferredLanguages,
+      {List<Locale>? preferredLanguages,
       bool? active,
-      String? birthDate,
+      LocalDate? birthDate,
       String? cleanSpeakId,
       Map<String, dynamic>? data,
       String? email,
@@ -35771,25 +35762,25 @@ class User {
       String? mobilePhone,
       String? parentEmail,
       String? tenantId,
-      String? timezone,
+      ZoneId? timezone,
       UserTwoFactorConfiguration? twoFactor,
       List<GroupMember>? memberships,
       List<UserRegistration>? registrations,
       ZonedDateTime? breachedPasswordLastCheckedInstant,
-      String? breachedPasswordStatus,
+      BreachedPasswordStatus? breachedPasswordStatus,
       String? connectorId,
       String? encryptionScheme,
       int? factor,
       String? id,
       ZonedDateTime? lastLoginInstant,
       String? password,
-      String? passwordChangeReason,
+      ChangePasswordReason? passwordChangeReason,
       bool? passwordChangeRequired,
       ZonedDateTime? passwordLastUpdateInstant,
       String? salt,
       String? uniqueUsername,
       String? username,
-      String? usernameStatus,
+      ContentStatus? usernameStatus,
       bool? verified,
       ZonedDateTime? verifiedInstant}) {
     return User(
@@ -35856,7 +35847,7 @@ class UserAction {
   final bool sendEndEvent;
   final String? startEmailTemplateId;
   final bool temporal;
-  final String? transactionType;
+  final TransactionType? transactionType;
   final bool userEmailingEnabled;
   final bool userNotificationsEnabled;
 
@@ -35896,14 +35887,8 @@ class UserAction {
       id: json[r'id'] as String?,
       includeEmailInEventJson:
           json[r'includeEmailInEventJSON'] as bool? ?? false,
-      insertInstant: json[r'insertInstant'] != null
-          ? ZonedDateTime.fromJson(
-              json[r'insertInstant']! as Map<String, Object?>)
-          : null,
-      lastUpdateInstant: json[r'lastUpdateInstant'] != null
-          ? ZonedDateTime.fromJson(
-              json[r'lastUpdateInstant']! as Map<String, Object?>)
-          : null,
+      insertInstant: (json[r'insertInstant'] as num?)?.toInt(),
+      lastUpdateInstant: (json[r'lastUpdateInstant'] as num?)?.toInt(),
       localizedNames: json[r'localizedNames'] != null
           ? LocalizedStrings.fromJson(
               json[r'localizedNames']! as Map<String, Object?>)
@@ -35919,7 +35904,9 @@ class UserAction {
       sendEndEvent: json[r'sendEndEvent'] as bool? ?? false,
       startEmailTemplateId: json[r'startEmailTemplateId'] as String?,
       temporal: json[r'temporal'] as bool? ?? false,
-      transactionType: json[r'transactionType'] as String?,
+      transactionType: json[r'transactionType'] != null
+          ? TransactionType.fromValue(json[r'transactionType']! as String)
+          : null,
       userEmailingEnabled: json[r'userEmailingEnabled'] as bool? ?? false,
       userNotificationsEnabled:
           json[r'userNotificationsEnabled'] as bool? ?? false,
@@ -35981,7 +35968,7 @@ class UserAction {
     }
     json[r'temporal'] = temporal;
     if (transactionType != null) {
-      json[r'transactionType'] = transactionType;
+      json[r'transactionType'] = transactionType.value;
     }
     json[r'userEmailingEnabled'] = userEmailingEnabled;
     json[r'userNotificationsEnabled'] = userNotificationsEnabled;
@@ -36004,7 +35991,7 @@ class UserAction {
       bool? sendEndEvent,
       String? startEmailTemplateId,
       bool? temporal,
-      String? transactionType,
+      TransactionType? transactionType,
       bool? userEmailingEnabled,
       bool? userNotificationsEnabled}) {
     return UserAction(
@@ -36051,14 +36038,14 @@ class UserActionEvent {
   final String? localizedReason;
   final bool notifyUser;
   final String? option;
-  final String? phase;
+  final UserActionPhase? phase;
   final String? reason;
   final String? reasonCode;
   final ZonedDateTime? createInstant;
   final String? id;
   final EventInfo? info;
   final String? tenantId;
-  final String? type;
+  final EventType? type;
 
   UserActionEvent(
       {List<String>? applicationIds,
@@ -36103,28 +36090,27 @@ class UserActionEvent {
           ? Email.fromJson(json[r'email']! as Map<String, Object?>)
           : null,
       emailedUser: json[r'emailedUser'] as bool? ?? false,
-      expiry: json[r'expiry'] != null
-          ? ZonedDateTime.fromJson(json[r'expiry']! as Map<String, Object?>)
-          : null,
+      expiry: (json[r'expiry'] as num?)?.toInt(),
       localizedAction: json[r'localizedAction'] as String?,
       localizedDuration: json[r'localizedDuration'] as String?,
       localizedOption: json[r'localizedOption'] as String?,
       localizedReason: json[r'localizedReason'] as String?,
       notifyUser: json[r'notifyUser'] as bool? ?? false,
       option: json[r'option'] as String?,
-      phase: json[r'phase'] as String?,
+      phase: json[r'phase'] != null
+          ? UserActionPhase.fromValue(json[r'phase']! as String)
+          : null,
       reason: json[r'reason'] as String?,
       reasonCode: json[r'reasonCode'] as String?,
-      createInstant: json[r'createInstant'] != null
-          ? ZonedDateTime.fromJson(
-              json[r'createInstant']! as Map<String, Object?>)
-          : null,
+      createInstant: (json[r'createInstant'] as num?)?.toInt(),
       id: json[r'id'] as String?,
       info: json[r'info'] != null
           ? EventInfo.fromJson(json[r'info']! as Map<String, Object?>)
           : null,
       tenantId: json[r'tenantId'] as String?,
-      type: json[r'type'] as String?,
+      type: json[r'type'] != null
+          ? EventType.fromValue(json[r'type']! as String)
+          : null,
     );
   }
 
@@ -36194,7 +36180,7 @@ class UserActionEvent {
       json[r'option'] = option;
     }
     if (phase != null) {
-      json[r'phase'] = phase;
+      json[r'phase'] = phase.value;
     }
     if (reason != null) {
       json[r'reason'] = reason;
@@ -36215,7 +36201,7 @@ class UserActionEvent {
       json[r'tenantId'] = tenantId;
     }
     if (type != null) {
-      json[r'type'] = type;
+      json[r'type'] = type.value;
     }
     return json;
   }
@@ -36236,14 +36222,14 @@ class UserActionEvent {
       String? localizedReason,
       bool? notifyUser,
       String? option,
-      String? phase,
+      UserActionPhase? phase,
       String? reason,
       String? reasonCode,
       ZonedDateTime? createInstant,
       String? id,
       EventInfo? info,
       String? tenantId,
-      String? type}) {
+      EventType? type}) {
     return UserActionEvent(
       applicationIds: applicationIds ?? this.applicationIds,
       action: action ?? this.action,
@@ -36330,17 +36316,12 @@ class UserActionLog {
       comment: json[r'comment'] as String?,
       emailUserOnEnd: json[r'emailUserOnEnd'] as bool? ?? false,
       endEventSent: json[r'endEventSent'] as bool? ?? false,
-      expiry: json[r'expiry'] != null
-          ? ZonedDateTime.fromJson(json[r'expiry']! as Map<String, Object?>)
-          : null,
+      expiry: (json[r'expiry'] as num?)?.toInt(),
       history: json[r'history'] != null
           ? LogHistory.fromJson(json[r'history']! as Map<String, Object?>)
           : null,
       id: json[r'id'] as String?,
-      insertInstant: json[r'insertInstant'] != null
-          ? ZonedDateTime.fromJson(
-              json[r'insertInstant']! as Map<String, Object?>)
-          : null,
+      insertInstant: (json[r'insertInstant'] as num?)?.toInt(),
       localizedName: json[r'localizedName'] as String?,
       localizedOption: json[r'localizedOption'] as String?,
       localizedReason: json[r'localizedReason'] as String?,
@@ -36531,14 +36512,8 @@ class UserActionReason {
     return UserActionReason(
       code: json[r'code'] as String?,
       id: json[r'id'] as String?,
-      insertInstant: json[r'insertInstant'] != null
-          ? ZonedDateTime.fromJson(
-              json[r'insertInstant']! as Map<String, Object?>)
-          : null,
-      lastUpdateInstant: json[r'lastUpdateInstant'] != null
-          ? ZonedDateTime.fromJson(
-              json[r'lastUpdateInstant']! as Map<String, Object?>)
-          : null,
+      insertInstant: (json[r'insertInstant'] as num?)?.toInt(),
+      lastUpdateInstant: (json[r'lastUpdateInstant'] as num?)?.toInt(),
       localizedTexts: json[r'localizedTexts'] != null
           ? LocalizedStrings.fromJson(
               json[r'localizedTexts']! as Map<String, Object?>)
@@ -36753,7 +36728,7 @@ class UserBulkCreateEvent {
   final String? id;
   final EventInfo? info;
   final String? tenantId;
-  final String? type;
+  final EventType? type;
 
   UserBulkCreateEvent(
       {List<User>? users,
@@ -36771,16 +36746,15 @@ class UserBulkCreateEvent {
                   (i) => User.fromJson(i as Map<String, Object?>? ?? const {}))
               .toList() ??
           [],
-      createInstant: json[r'createInstant'] != null
-          ? ZonedDateTime.fromJson(
-              json[r'createInstant']! as Map<String, Object?>)
-          : null,
+      createInstant: (json[r'createInstant'] as num?)?.toInt(),
       id: json[r'id'] as String?,
       info: json[r'info'] != null
           ? EventInfo.fromJson(json[r'info']! as Map<String, Object?>)
           : null,
       tenantId: json[r'tenantId'] as String?,
-      type: json[r'type'] as String?,
+      type: json[r'type'] != null
+          ? EventType.fromValue(json[r'type']! as String)
+          : null,
     );
   }
 
@@ -36807,7 +36781,7 @@ class UserBulkCreateEvent {
       json[r'tenantId'] = tenantId;
     }
     if (type != null) {
-      json[r'type'] = type;
+      json[r'type'] = type.value;
     }
     return json;
   }
@@ -36818,7 +36792,7 @@ class UserBulkCreateEvent {
       String? id,
       EventInfo? info,
       String? tenantId,
-      String? type}) {
+      EventType? type}) {
     return UserBulkCreateEvent(
       users: users ?? this.users,
       createInstant: createInstant ?? this.createInstant,
@@ -36850,10 +36824,7 @@ class UserComment {
       comment: json[r'comment'] as String?,
       commenterId: json[r'commenterId'] as String?,
       id: json[r'id'] as String?,
-      insertInstant: json[r'insertInstant'] != null
-          ? ZonedDateTime.fromJson(
-              json[r'insertInstant']! as Map<String, Object?>)
-          : null,
+      insertInstant: (json[r'insertInstant'] as num?)?.toInt(),
       userId: json[r'userId'] as String?,
     );
   }
@@ -37138,7 +37109,7 @@ class UserConsent {
   final String? id;
   final ZonedDateTime? insertInstant;
   final ZonedDateTime? lastUpdateInstant;
-  final String? status;
+  final ConsentStatus? status;
   final String? userId;
   final List<String> values;
 
@@ -37164,15 +37135,11 @@ class UserConsent {
       consentId: json[r'consentId'] as String?,
       giverUserId: json[r'giverUserId'] as String?,
       id: json[r'id'] as String?,
-      insertInstant: json[r'insertInstant'] != null
-          ? ZonedDateTime.fromJson(
-              json[r'insertInstant']! as Map<String, Object?>)
+      insertInstant: (json[r'insertInstant'] as num?)?.toInt(),
+      lastUpdateInstant: (json[r'lastUpdateInstant'] as num?)?.toInt(),
+      status: json[r'status'] != null
+          ? ConsentStatus.fromValue(json[r'status']! as String)
           : null,
-      lastUpdateInstant: json[r'lastUpdateInstant'] != null
-          ? ZonedDateTime.fromJson(
-              json[r'lastUpdateInstant']! as Map<String, Object?>)
-          : null,
-      status: json[r'status'] as String?,
       userId: json[r'userId'] as String?,
       values: (json[r'values'] as List<Object?>?)
               ?.map((i) => i as String? ?? '')
@@ -37216,7 +37183,7 @@ class UserConsent {
       json[r'lastUpdateInstant'] = lastUpdateInstant.toJson();
     }
     if (status != null) {
-      json[r'status'] = status;
+      json[r'status'] = status.value;
     }
     if (userId != null) {
       json[r'userId'] = userId;
@@ -37233,7 +37200,7 @@ class UserConsent {
       String? id,
       ZonedDateTime? insertInstant,
       ZonedDateTime? lastUpdateInstant,
-      String? status,
+      ConsentStatus? status,
       String? userId,
       List<String>? values}) {
     return UserConsent(
@@ -38496,7 +38463,7 @@ class UserReactivateEvent {
 /// User registration information for a single application.
 class UserRegistration {
   final Map<String, dynamic>? data;
-  final List<String> preferredLanguages;
+  final List<Locale> preferredLanguages;
   final Map<String, dynamic>? tokens;
   final String? applicationId;
   final String? authenticationToken;
@@ -38506,15 +38473,15 @@ class UserRegistration {
   final ZonedDateTime? lastLoginInstant;
   final ZonedDateTime? lastUpdateInstant;
   final List<dynamic> roles;
-  final String? timezone;
+  final ZoneId? timezone;
   final String? username;
-  final String? usernameStatus;
+  final ContentStatus? usernameStatus;
   final bool verified;
   final ZonedDateTime? verifiedInstant;
 
   UserRegistration(
       {this.data,
-      List<String>? preferredLanguages,
+      List<Locale>? preferredLanguages,
       this.tokens,
       this.applicationId,
       this.authenticationToken,
@@ -38537,7 +38504,7 @@ class UserRegistration {
     return UserRegistration(
       data: json[r'data'] as Map<String, Object?>?,
       preferredLanguages: (json[r'preferredLanguages'] as List<Object?>?)
-              ?.map((i) => i as String? ?? '')
+              ?.map((i) => (i as String? ?? '') as Locale)
               .toList() ??
           [],
       tokens: json[r'tokens'] as Map<String, Object?>?,
@@ -38545,27 +38512,17 @@ class UserRegistration {
       authenticationToken: json[r'authenticationToken'] as String?,
       cleanSpeakId: json[r'cleanSpeakId'] as String?,
       id: json[r'id'] as String?,
-      insertInstant: json[r'insertInstant'] != null
-          ? ZonedDateTime.fromJson(
-              json[r'insertInstant']! as Map<String, Object?>)
-          : null,
-      lastLoginInstant: json[r'lastLoginInstant'] != null
-          ? ZonedDateTime.fromJson(
-              json[r'lastLoginInstant']! as Map<String, Object?>)
-          : null,
-      lastUpdateInstant: json[r'lastUpdateInstant'] != null
-          ? ZonedDateTime.fromJson(
-              json[r'lastUpdateInstant']! as Map<String, Object?>)
-          : null,
+      insertInstant: (json[r'insertInstant'] as num?)?.toInt(),
+      lastLoginInstant: (json[r'lastLoginInstant'] as num?)?.toInt(),
+      lastUpdateInstant: (json[r'lastUpdateInstant'] as num?)?.toInt(),
       roles: (json[r'roles'] as List<Object?>?)?.map((i) => i).toList() ?? [],
       timezone: json[r'timezone'] as String?,
       username: json[r'username'] as String?,
-      usernameStatus: json[r'usernameStatus'] as String?,
-      verified: json[r'verified'] as bool? ?? false,
-      verifiedInstant: json[r'verifiedInstant'] != null
-          ? ZonedDateTime.fromJson(
-              json[r'verifiedInstant']! as Map<String, Object?>)
+      usernameStatus: json[r'usernameStatus'] != null
+          ? ContentStatus.fromValue(json[r'usernameStatus']! as String)
           : null,
+      verified: json[r'verified'] as bool? ?? false,
+      verifiedInstant: (json[r'verifiedInstant'] as num?)?.toInt(),
     );
   }
 
@@ -38591,7 +38548,8 @@ class UserRegistration {
     if (data != null) {
       json[r'data'] = data;
     }
-    json[r'preferredLanguages'] = preferredLanguages;
+    json[r'preferredLanguages'] =
+        preferredLanguages.map((i) => i.toJson()).toList();
     if (tokens != null) {
       json[r'tokens'] = tokens;
     }
@@ -38618,13 +38576,13 @@ class UserRegistration {
     }
     json[r'roles'] = roles;
     if (timezone != null) {
-      json[r'timezone'] = timezone;
+      json[r'timezone'] = timezone.toJson();
     }
     if (username != null) {
       json[r'username'] = username;
     }
     if (usernameStatus != null) {
-      json[r'usernameStatus'] = usernameStatus;
+      json[r'usernameStatus'] = usernameStatus.value;
     }
     json[r'verified'] = verified;
     if (verifiedInstant != null) {
@@ -38635,7 +38593,7 @@ class UserRegistration {
 
   UserRegistration copyWith(
       {Map<String, dynamic>? data,
-      List<String>? preferredLanguages,
+      List<Locale>? preferredLanguages,
       Map<String, dynamic>? tokens,
       String? applicationId,
       String? authenticationToken,
@@ -38645,9 +38603,9 @@ class UserRegistration {
       ZonedDateTime? lastLoginInstant,
       ZonedDateTime? lastUpdateInstant,
       List<dynamic>? roles,
-      String? timezone,
+      ZoneId? timezone,
       String? username,
-      String? usernameStatus,
+      ContentStatus? usernameStatus,
       bool? verified,
       ZonedDateTime? verifiedInstant}) {
     return UserRegistration(
@@ -39172,10 +39130,8 @@ class UserResponse {
           json[r'registrationVerificationOneTimeCodes']
               as Map<String, Object?>?,
       token: json[r'token'] as String?,
-      tokenExpirationInstant: json[r'tokenExpirationInstant'] != null
-          ? ZonedDateTime.fromJson(
-              json[r'tokenExpirationInstant']! as Map<String, Object?>)
-          : null,
+      tokenExpirationInstant:
+          (json[r'tokenExpirationInstant'] as num?)?.toInt(),
       user: json[r'user'] != null
           ? User.fromJson(json[r'user']! as Map<String, Object?>)
           : null,
@@ -39941,8 +39897,8 @@ class WebAuthnAuthenticatorRegistrationResponse {
 /// A User's WebAuthnCredential. Contains all data required to complete WebAuthn
 /// authentication ceremonies.
 class WebAuthnCredential {
-  final String? algorithm;
-  final String? attestationType;
+  final CoseAlgorithmIdentifier? algorithm;
+  final AttestationType? attestationType;
   final bool authenticatorSupportsUserVerification;
   final String? credentialId;
   final Map<String, dynamic>? data;
@@ -39986,8 +39942,12 @@ class WebAuthnCredential {
 
   factory WebAuthnCredential.fromJson(Map<String, Object?> json) {
     return WebAuthnCredential(
-      algorithm: json[r'algorithm'] as String?,
-      attestationType: json[r'attestationType'] as String?,
+      algorithm: json[r'algorithm'] != null
+          ? CoseAlgorithmIdentifier.fromValue(json[r'algorithm']! as String)
+          : null,
+      attestationType: json[r'attestationType'] != null
+          ? AttestationType.fromValue(json[r'attestationType']! as String)
+          : null,
       authenticatorSupportsUserVerification:
           json[r'authenticatorSupportsUserVerification'] as bool? ?? false,
       credentialId: json[r'credentialId'] as String?,
@@ -39995,14 +39955,8 @@ class WebAuthnCredential {
       discoverable: json[r'discoverable'] as bool? ?? false,
       displayName: json[r'displayName'] as String?,
       id: json[r'id'] as String?,
-      insertInstant: json[r'insertInstant'] != null
-          ? ZonedDateTime.fromJson(
-              json[r'insertInstant']! as Map<String, Object?>)
-          : null,
-      lastUseInstant: json[r'lastUseInstant'] != null
-          ? ZonedDateTime.fromJson(
-              json[r'lastUseInstant']! as Map<String, Object?>)
-          : null,
+      insertInstant: (json[r'insertInstant'] as num?)?.toInt(),
+      lastUseInstant: (json[r'lastUseInstant'] as num?)?.toInt(),
       name: json[r'name'] as String?,
       publicKey: json[r'publicKey'] as String?,
       relyingPartyId: json[r'relyingPartyId'] as String?,
@@ -40040,10 +39994,10 @@ class WebAuthnCredential {
 
     final json = <String, Object?>{};
     if (algorithm != null) {
-      json[r'algorithm'] = algorithm;
+      json[r'algorithm'] = algorithm.value;
     }
     if (attestationType != null) {
-      json[r'attestationType'] = attestationType;
+      json[r'attestationType'] = attestationType.value;
     }
     json[r'authenticatorSupportsUserVerification'] =
         authenticatorSupportsUserVerification;
@@ -40092,8 +40046,8 @@ class WebAuthnCredential {
   }
 
   WebAuthnCredential copyWith(
-      {String? algorithm,
-      String? attestationType,
+      {CoseAlgorithmIdentifier? algorithm,
+      AttestationType? attestationType,
       bool? authenticatorSupportsUserVerification,
       String? credentialId,
       Map<String, dynamic>? data,
@@ -40618,7 +40572,7 @@ class WebAuthnRegisterStartRequest {
   final String? name;
   final String? userAgent;
   final String? userId;
-  final String? workflow;
+  final WebAuthnWorkflow? workflow;
 
   WebAuthnRegisterStartRequest(
       {this.displayName,
@@ -40633,7 +40587,9 @@ class WebAuthnRegisterStartRequest {
       name: json[r'name'] as String?,
       userAgent: json[r'userAgent'] as String?,
       userId: json[r'userId'] as String?,
-      workflow: json[r'workflow'] as String?,
+      workflow: json[r'workflow'] != null
+          ? WebAuthnWorkflow.fromValue(json[r'workflow']! as String)
+          : null,
     );
   }
 
@@ -40658,7 +40614,7 @@ class WebAuthnRegisterStartRequest {
       json[r'userId'] = userId;
     }
     if (workflow != null) {
-      json[r'workflow'] = workflow;
+      json[r'workflow'] = workflow.value;
     }
     return json;
   }
@@ -40668,7 +40624,7 @@ class WebAuthnRegisterStartRequest {
       String? name,
       String? userAgent,
       String? userId,
-      String? workflow}) {
+      WebAuthnWorkflow? workflow}) {
     return WebAuthnRegisterStartRequest(
       displayName: displayName ?? this.displayName,
       name: name ?? this.name,
@@ -40748,7 +40704,7 @@ class WebAuthnStartRequest {
   final String? loginId;
   final Map<String, dynamic>? state;
   final String? userId;
-  final String? workflow;
+  final WebAuthnWorkflow? workflow;
 
   WebAuthnStartRequest(
       {this.applicationId,
@@ -40765,7 +40721,9 @@ class WebAuthnStartRequest {
       loginId: json[r'loginId'] as String?,
       state: json[r'state'] as Map<String, Object?>?,
       userId: json[r'userId'] as String?,
-      workflow: json[r'workflow'] as String?,
+      workflow: json[r'workflow'] != null
+          ? WebAuthnWorkflow.fromValue(json[r'workflow']! as String)
+          : null,
     );
   }
 
@@ -40794,7 +40752,7 @@ class WebAuthnStartRequest {
       json[r'userId'] = userId;
     }
     if (workflow != null) {
-      json[r'workflow'] = workflow;
+      json[r'workflow'] = workflow.value;
     }
     return json;
   }
@@ -40805,7 +40763,7 @@ class WebAuthnStartRequest {
       String? loginId,
       Map<String, dynamic>? state,
       String? userId,
-      String? workflow}) {
+      WebAuthnWorkflow? workflow}) {
     return WebAuthnStartRequest(
       applicationId: applicationId ?? this.applicationId,
       credentialId: credentialId ?? this.credentialId,
@@ -40906,14 +40864,8 @@ class Webhook {
       httpAuthenticationUsername:
           json[r'httpAuthenticationUsername'] as String?,
       id: json[r'id'] as String?,
-      insertInstant: json[r'insertInstant'] != null
-          ? ZonedDateTime.fromJson(
-              json[r'insertInstant']! as Map<String, Object?>)
-          : null,
-      lastUpdateInstant: json[r'lastUpdateInstant'] != null
-          ? ZonedDateTime.fromJson(
-              json[r'lastUpdateInstant']! as Map<String, Object?>)
-          : null,
+      insertInstant: (json[r'insertInstant'] as num?)?.toInt(),
+      lastUpdateInstant: (json[r'lastUpdateInstant'] as num?)?.toInt(),
       readTimeout: (json[r'readTimeout'] as num?)?.toInt(),
       signatureConfiguration: json[r'signatureConfiguration'] != null
           ? WebhookSignatureConfiguration.fromJson(
@@ -41051,7 +41003,7 @@ class WebhookAttemptLog {
   final WebhookCallResponse? webhookCallResponse;
   final String? webhookEventLogId;
   final String? webhookId;
-  final String? attemptResult;
+  final WebhookAttemptResult? attemptResult;
 
   WebhookAttemptLog(
       {this.data,
@@ -41066,21 +41018,18 @@ class WebhookAttemptLog {
   factory WebhookAttemptLog.fromJson(Map<String, Object?> json) {
     return WebhookAttemptLog(
       data: json[r'data'] as Map<String, Object?>?,
-      endInstant: json[r'endInstant'] != null
-          ? ZonedDateTime.fromJson(json[r'endInstant']! as Map<String, Object?>)
-          : null,
+      endInstant: (json[r'endInstant'] as num?)?.toInt(),
       id: json[r'id'] as String?,
-      startInstant: json[r'startInstant'] != null
-          ? ZonedDateTime.fromJson(
-              json[r'startInstant']! as Map<String, Object?>)
-          : null,
+      startInstant: (json[r'startInstant'] as num?)?.toInt(),
       webhookCallResponse: json[r'webhookCallResponse'] != null
           ? WebhookCallResponse.fromJson(
               json[r'webhookCallResponse']! as Map<String, Object?>)
           : null,
       webhookEventLogId: json[r'webhookEventLogId'] as String?,
       webhookId: json[r'webhookId'] as String?,
-      attemptResult: json[r'attemptResult'] as String?,
+      attemptResult: json[r'attemptResult'] != null
+          ? WebhookAttemptResult.fromValue(json[r'attemptResult']! as String)
+          : null,
     );
   }
 
@@ -41117,7 +41066,7 @@ class WebhookAttemptLog {
       json[r'webhookId'] = webhookId;
     }
     if (attemptResult != null) {
-      json[r'attemptResult'] = attemptResult;
+      json[r'attemptResult'] = attemptResult.value;
     }
     return json;
   }
@@ -41130,7 +41079,7 @@ class WebhookAttemptLog {
       WebhookCallResponse? webhookCallResponse,
       String? webhookEventLogId,
       String? webhookId,
-      String? attemptResult}) {
+      WebhookAttemptResult? attemptResult}) {
     return WebhookAttemptLog(
       data: data ?? this.data,
       endInstant: endInstant ?? this.endInstant,
@@ -41224,8 +41173,8 @@ class WebhookEventLog {
   final List<WebhookAttemptLog> attempts;
   final Map<String, dynamic>? data;
   final EventRequest? event;
-  final String? eventResult;
-  final String? eventType;
+  final WebhookEventResult? eventResult;
+  final EventType? eventType;
   final String? id;
   final ZonedDateTime? insertInstant;
   final ZonedDateTime? lastAttemptInstant;
@@ -41262,21 +41211,16 @@ class WebhookEventLog {
       event: json[r'event'] != null
           ? EventRequest.fromJson(json[r'event']! as Map<String, Object?>)
           : null,
-      eventResult: json[r'eventResult'] as String?,
-      eventType: json[r'eventType'] as String?,
+      eventResult: json[r'eventResult'] != null
+          ? WebhookEventResult.fromValue(json[r'eventResult']! as String)
+          : null,
+      eventType: json[r'eventType'] != null
+          ? EventType.fromValue(json[r'eventType']! as String)
+          : null,
       id: json[r'id'] as String?,
-      insertInstant: json[r'insertInstant'] != null
-          ? ZonedDateTime.fromJson(
-              json[r'insertInstant']! as Map<String, Object?>)
-          : null,
-      lastAttemptInstant: json[r'lastAttemptInstant'] != null
-          ? ZonedDateTime.fromJson(
-              json[r'lastAttemptInstant']! as Map<String, Object?>)
-          : null,
-      lastUpdateInstant: json[r'lastUpdateInstant'] != null
-          ? ZonedDateTime.fromJson(
-              json[r'lastUpdateInstant']! as Map<String, Object?>)
-          : null,
+      insertInstant: (json[r'insertInstant'] as num?)?.toInt(),
+      lastAttemptInstant: (json[r'lastAttemptInstant'] as num?)?.toInt(),
+      lastUpdateInstant: (json[r'lastUpdateInstant'] as num?)?.toInt(),
       linkedObjectId: json[r'linkedObjectId'] as String?,
       sequence: (json[r'sequence'] as num?)?.toInt(),
       failedAttempts: (json[r'failedAttempts'] as num?)?.toInt(),
@@ -41308,10 +41252,10 @@ class WebhookEventLog {
       json[r'event'] = event.toJson();
     }
     if (eventResult != null) {
-      json[r'eventResult'] = eventResult;
+      json[r'eventResult'] = eventResult.value;
     }
     if (eventType != null) {
-      json[r'eventType'] = eventType;
+      json[r'eventType'] = eventType.value;
     }
     if (id != null) {
       json[r'id'] = id;
@@ -41344,8 +41288,8 @@ class WebhookEventLog {
       {List<WebhookAttemptLog>? attempts,
       Map<String, dynamic>? data,
       EventRequest? event,
-      String? eventResult,
-      String? eventType,
+      WebhookEventResult? eventResult,
+      EventType? eventType,
       String? id,
       ZonedDateTime? insertInstant,
       ZonedDateTime? lastAttemptInstant,
@@ -41440,8 +41384,8 @@ class WebhookEventLogResponse {
 class WebhookEventLogSearchCriteria {
   final ZonedDateTime? end;
   final String? event;
-  final String? eventResult;
-  final String? eventType;
+  final WebhookEventResult? eventResult;
+  final EventType? eventType;
   final ZonedDateTime? start;
   final int? numberOfResults;
   final String? orderBy;
@@ -41459,15 +41403,15 @@ class WebhookEventLogSearchCriteria {
 
   factory WebhookEventLogSearchCriteria.fromJson(Map<String, Object?> json) {
     return WebhookEventLogSearchCriteria(
-      end: json[r'end'] != null
-          ? ZonedDateTime.fromJson(json[r'end']! as Map<String, Object?>)
-          : null,
+      end: (json[r'end'] as num?)?.toInt(),
       event: json[r'event'] as String?,
-      eventResult: json[r'eventResult'] as String?,
-      eventType: json[r'eventType'] as String?,
-      start: json[r'start'] != null
-          ? ZonedDateTime.fromJson(json[r'start']! as Map<String, Object?>)
+      eventResult: json[r'eventResult'] != null
+          ? WebhookEventResult.fromValue(json[r'eventResult']! as String)
           : null,
+      eventType: json[r'eventType'] != null
+          ? EventType.fromValue(json[r'eventType']! as String)
+          : null,
+      start: (json[r'start'] as num?)?.toInt(),
       numberOfResults: (json[r'numberOfResults'] as num?)?.toInt(),
       orderBy: json[r'orderBy'] as String?,
       startRow: (json[r'startRow'] as num?)?.toInt(),
@@ -41492,10 +41436,10 @@ class WebhookEventLogSearchCriteria {
       json[r'event'] = event;
     }
     if (eventResult != null) {
-      json[r'eventResult'] = eventResult;
+      json[r'eventResult'] = eventResult.value;
     }
     if (eventType != null) {
-      json[r'eventType'] = eventType;
+      json[r'eventType'] = eventType.value;
     }
     if (start != null) {
       json[r'start'] = start.toJson();
@@ -41515,8 +41459,8 @@ class WebhookEventLogSearchCriteria {
   WebhookEventLogSearchCriteria copyWith(
       {ZonedDateTime? end,
       String? event,
-      String? eventResult,
-      String? eventType,
+      WebhookEventResult? eventResult,
+      EventType? eventType,
       ZonedDateTime? start,
       int? numberOfResults,
       String? orderBy,
@@ -41951,10 +41895,10 @@ class XboxIdentityProvider {
   final ZonedDateTime? insertInstant;
   final ProviderLambdaConfiguration? lambdaConfiguration;
   final ZonedDateTime? lastUpdateInstant;
-  final String? linkingStrategy;
+  final IdentityProviderLinkingStrategy? linkingStrategy;
   final String? name;
   final Map<String, dynamic>? tenantConfiguration;
-  final String? type;
+  final IdentityProviderType? type;
 
   XboxIdentityProvider(
       {this.buttonText,
@@ -41985,23 +41929,22 @@ class XboxIdentityProvider {
           json[r'applicationConfiguration'] as Map<String, Object?>?,
       debug: json[r'debug'] as bool? ?? false,
       id: json[r'id'] as String?,
-      insertInstant: json[r'insertInstant'] != null
-          ? ZonedDateTime.fromJson(
-              json[r'insertInstant']! as Map<String, Object?>)
-          : null,
+      insertInstant: (json[r'insertInstant'] as num?)?.toInt(),
       lambdaConfiguration: json[r'lambdaConfiguration'] != null
           ? ProviderLambdaConfiguration.fromJson(
               json[r'lambdaConfiguration']! as Map<String, Object?>)
           : null,
-      lastUpdateInstant: json[r'lastUpdateInstant'] != null
-          ? ZonedDateTime.fromJson(
-              json[r'lastUpdateInstant']! as Map<String, Object?>)
+      lastUpdateInstant: (json[r'lastUpdateInstant'] as num?)?.toInt(),
+      linkingStrategy: json[r'linkingStrategy'] != null
+          ? IdentityProviderLinkingStrategy.fromValue(
+              json[r'linkingStrategy']! as String)
           : null,
-      linkingStrategy: json[r'linkingStrategy'] as String?,
       name: json[r'name'] as String?,
       tenantConfiguration:
           json[r'tenantConfiguration'] as Map<String, Object?>?,
-      type: json[r'type'] as String?,
+      type: json[r'type'] != null
+          ? IdentityProviderType.fromValue(json[r'type']! as String)
+          : null,
     );
   }
 
@@ -42055,7 +41998,7 @@ class XboxIdentityProvider {
       json[r'lastUpdateInstant'] = lastUpdateInstant.toJson();
     }
     if (linkingStrategy != null) {
-      json[r'linkingStrategy'] = linkingStrategy;
+      json[r'linkingStrategy'] = linkingStrategy.value;
     }
     if (name != null) {
       json[r'name'] = name;
@@ -42064,7 +42007,7 @@ class XboxIdentityProvider {
       json[r'tenantConfiguration'] = tenantConfiguration;
     }
     if (type != null) {
-      json[r'type'] = type;
+      json[r'type'] = type.value;
     }
     return json;
   }
@@ -42081,10 +42024,10 @@ class XboxIdentityProvider {
       ZonedDateTime? insertInstant,
       ProviderLambdaConfiguration? lambdaConfiguration,
       ZonedDateTime? lastUpdateInstant,
-      String? linkingStrategy,
+      IdentityProviderLinkingStrategy? linkingStrategy,
       String? name,
       Map<String, dynamic>? tenantConfiguration,
-      String? type}) {
+      IdentityProviderType? type}) {
     return XboxIdentityProvider(
       buttonText: buttonText ?? this.buttonText,
       clientId: clientId ?? this.clientId,
@@ -42106,17 +42049,22 @@ class XboxIdentityProvider {
   }
 }
 
-/// The number of milliseconds since the unix epoch: January 1, 1970 00:00:00
-/// UTC. This value is always in UTC.
-class ZonedDateTime {
-  ZonedDateTime();
+extension type LocalDate(String value) {
+  LocalDate.fromJson(this.value);
+  String toJson() => value;
+}
 
-  factory ZonedDateTime.fromJson(Map<String, Object?> json) {
-    return ZonedDateTime();
-  }
+extension type Locale(String value) {
+  Locale.fromJson(this.value);
+  String toJson() => value;
+}
 
-  Map<String, Object?> toJson() {
-    final json = <String, Object?>{};
-    return json;
-  }
+extension type ZoneId(String value) {
+  ZoneId.fromJson(this.value);
+  String toJson() => value;
+}
+
+extension type ZonedDateTime(int value) {
+  ZonedDateTime.fromJson(this.value);
+  int toJson() => value;
 }

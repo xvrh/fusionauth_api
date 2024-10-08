@@ -1,30 +1,38 @@
-# This file configures the static analysis results for your project (errors,
-# warnings, and lints).
-#
-# This enables the 'recommended' set of lints from `package:lints`.
-# This set helps identify many issues that may lead to problems when running
-# or consuming Dart code, and enforces writing Dart using a single, idiomatic
-# style and format.
-#
-# If you want a smaller set of lints you can change this to specify
-# 'package:lints/core.yaml'. These are just the most critical lints
-# (the recommended set includes the core lints).
-# The core lints are also what is used by pub.dev for scoring packages.
-
 include: package:lints/recommended.yaml
 
-# Uncomment the following section to specify additional rules.
+analyzer:
+  language:
+    strict-casts: true
 
-# linter:
-#   rules:
-#     - camel_case_types
-
-# analyzer:
-#   exclude:
-#     - path/to/excluded/files/**
-
-# For more information about the core and recommended set of lints, see
-# https://dart.dev/go/core-lints
-
-# For additional information about configuring this file, see
-# https://dart.dev/guides/language/analysis-options
+linter:
+  rules:
+    always_declare_return_types: true
+    avoid_dynamic_calls: true
+    avoid_escaping_inner_quotes: true
+    avoid_final_parameters: true
+    avoid_relative_lib_imports: true
+    avoid_setters_without_getters: true
+    cancel_subscriptions: true
+    cast_nullable_to_non_nullable: true
+    close_sinks: true
+    conditional_uri_does_not_exist: true
+    no_adjacent_strings_in_list: true
+    no_default_cases: true
+    no_leading_underscores_for_local_identifiers: true
+    omit_local_variable_types: true
+    only_throw_errors: true
+    prefer_interpolation_to_compose_strings: true
+    prefer_single_quotes: true
+    sort_pub_dependencies: true
+    test_types_in_equals: true
+    unawaited_futures: true
+    unnecessary_late: true
+    unnecessary_parenthesis: true
+    unnecessary_statements: true
+    unsafe_html: true
+    use_raw_strings: true
+    implicit_call_tearoffs: true
+    invalid_case_patterns: true
+    no_self_assignments: true
+    type_literal_in_constant_pattern: true
+    unnecessary_breaks: true

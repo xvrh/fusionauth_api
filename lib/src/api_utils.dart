@@ -8,8 +8,9 @@ export 'package:http/http.dart' show MultipartFile;
 class ApiClient {
   final Client _client;
   final Uri _baseUri;
+  final String? authorization;
 
-  ApiClient(this._baseUri, this._client);
+  ApiClient(this._baseUri, this._client, {required this.authorization});
 
   Future<T> send<T>(
     String method,
@@ -66,6 +67,9 @@ class ApiClient {
     }
 
     request.headers['User-Agent'] = 'Dart/fusionauth';
+    if (authorization case var authorization?) {
+      request.headers['Authorization'] = authorization;
+    }
 
     var response = await Response.fromStream(await _client.send(request));
     ApiException.checkResponse(response);

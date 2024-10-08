@@ -13,7 +13,7 @@ void main() {
         return e.map((key, value) => MapEntry(key.toString(), value));
       }
       return e;
-    }));
+    })) as Map<String, dynamic>;
 
     final spec = Spec.fromJson(jsonSpec);
 
