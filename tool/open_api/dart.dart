@@ -537,7 +537,7 @@ class ComplexType extends DartType {
   String get className => name;
 
   static String _toClassName(String name) {
-    return name.replaceAll(RegExp(r'[^a-z0-9_\$]', caseSensitive: false), '');
+    return name.replaceAll(RegExp(r'[^a-z0-9_$]', caseSensitive: false), '');
   }
 
   bool _isPropertyRequired(Property property) {
@@ -1168,11 +1168,10 @@ class PropertyName {
 
 String _normalizeOperationId(sw.Path path) {
   var id = path.operationId;
-  String? name;
   if (id != null) {
-    name = id.split('.').last.split('_').first;
+    return id;
   }
-  name ??= path.summary;
+  var name = path.summary;
   return name.words.toLowerCamel();
 }
 

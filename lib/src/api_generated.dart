@@ -668,7 +668,7 @@ class FusionauthApi {
   }
 
   /// Retrieves a custom OAuth scope.
-  Future<ApplicationOAuthScopeResponse> retrieveoAuthScopeWithId(
+  Future<ApplicationOAuthScopeResponse> retrieveOAuthScopeWithId(
       {required String applicationId,
       required String scopeId,
       String? tenantIdScope}) async {
@@ -688,7 +688,7 @@ class FusionauthApi {
   /// Hard deletes a custom OAuth scope. OAuth workflows that are still
   /// requesting the deleted OAuth scope may fail depending on the application's
   /// unknown scope policy.
-  Future<void> deleteoAuthScopeWithId(
+  Future<void> deleteOAuthScopeWithId(
       {required String applicationId,
       required String scopeId,
       String? tenantIdScope}) async {
@@ -729,7 +729,7 @@ class FusionauthApi {
   /// Id of the application you are creating the scope for. You can optionally
   /// specify an Id for the OAuth scope on the URL, if not provided one will be
   /// generated.
-  Future<ApplicationOAuthScopeResponse> createoAuthScopeWithId(
+  Future<ApplicationOAuthScopeResponse> createOAuthScopeWithId(
       {required String applicationId,
       required String scopeId,
       String? tenantIdScope,
@@ -3257,7 +3257,7 @@ class FusionauthApi {
   /// Id of the application you are creating the scope for. You can optionally
   /// specify an Id for the OAuth scope on the URL, if not provided one will be
   /// generated.
-  Future<ApplicationOAuthScopeResponse> createoAuthScope(
+  Future<ApplicationOAuthScopeResponse> createOAuthScope(
       {required String applicationId,
       String? tenantIdScope,
       required ApplicationOAuthScopeRequest body}) async {
