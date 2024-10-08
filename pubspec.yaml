@@ -1,0 +1,19 @@
+name: fusionauth_api
+description: A starting point for Dart libraries or applications.
+version: 1.0.0
+
+environment:
+  sdk: ^3.5.3
+
+# Add regular dependencies here.
+dependencies:
+  http:
+  path:
+
+dev_dependencies:
+  collection:
+  dart_style:
+  json_annotation:
+  lints:
+  test:
+  yaml:
