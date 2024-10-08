@@ -19,7 +19,6 @@ class ApiClient {
     Map<String, String>? queryParameters,
     Map<String, String>? headers,
     dynamic body,
-    MultipartFile? file,
   }) async {
     var path = pathTemplate;
 
@@ -43,30 +42,20 @@ class ApiClient {
       });
     }
 
-    if (body is MultipartFile) {
-      file ??= body;
-    }
-
     BaseRequest request;
-    if (file != null) {
-      request = MultipartRequest(method, uri)
-        ..headers['content-type'] = 'multipart/form-data'
-        ..files.add(file);
-    } else {
-      var bodyRequest = Request(method, uri);
-      request = bodyRequest;
+    var bodyRequest = Request(method, uri);
+    request = bodyRequest;
 
-      if (body != null) {
-        bodyRequest
-          ..headers['content-type'] = 'application/json'
-          ..body = jsonEncode(body);
-      }
+    if (body != null) {
+      bodyRequest
+        ..headers['content-type'] = 'application/json'
+        ..body = jsonEncode(body);
     }
+
     if (headers != null) {
       request.headers.addAll(headers);
     }
 
-    request.headers['User-Agent'] = 'Dart/fusionauth';
     if (authorization case var authorization?) {
       request.headers['Authorization'] = authorization;
     }
@@ -127,4 +116,3 @@ class ApiException implements Exception {
     throw ApiException.fromResponse(response);
   }
 }
-

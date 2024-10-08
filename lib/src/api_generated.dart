@@ -9,7 +9,8 @@ import 'api_utils.dart';
 class FusionauthApi {
   final ApiClient _client;
 
-  FusionauthApi(this._client);
+  FusionauthApi(Client httpClient, Uri baseUri, {required String? apiKey})
+      : _client = ApiClient(baseUri, httpClient, authorization: apiKey);
 
   /// Retrieves all the members of a family by the unique Family Id.
   Future<FamilyResponse> retrieveFamilyMembersByFamilyIdWithId(

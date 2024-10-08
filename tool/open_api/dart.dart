@@ -246,9 +246,10 @@ class Service {
     buffer.writeln('''
 
 class $_className {
-    final ApiClient _client;
+  final ApiClient _client;
   
-  $_className(this._client);
+  $_className(Client httpClient, Uri baseUri, {required String? apiKey}):
+    _client = ApiClient(baseUri, httpClient, authorization: apiKey);
 ''');
 
     for (var operation in operations) {
@@ -728,11 +729,7 @@ class AliasableType {
 class AliasType extends DartType {
   final sw.Schema definition;
 
-  static const types = {
-    'integer': 'int',
-    'number': 'num',
-    'string': 'String'
-  };
+  static const types = {'integer': 'int', 'number': 'num', 'string': 'String'};
 
   AliasType(super.api, super.name, this.definition);
 
@@ -1181,8 +1178,7 @@ bool _isObsolete(String? comment) =>
 extension<T> on Iterable<T> {
   List<T> stableSortedBy<K extends Comparable<K>>(K Function(T element) keyOf) {
     var elements = [...this];
-    mergeSort(elements,
-        compare: (a, b) => keyOf(a).compareTo(keyOf(b)));
+    mergeSort(elements, compare: (a, b) => keyOf(a).compareTo(keyOf(b)));
     return elements;
   }
 }

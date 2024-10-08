@@ -289,8 +289,7 @@ class Schema {
   )   : properties = properties ?? const {},
         required = required ?? const [],
         description = description ?? '',
-        enums = _nullIfEmpty(enums
-            ?.nonNulls
+        enums = _nullIfEmpty(enums?.nonNulls
             .map((s) => '$s')
             .where((e) => e.isNotEmpty)
             .toList());
