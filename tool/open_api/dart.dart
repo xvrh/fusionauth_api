@@ -231,7 +231,7 @@ class Service {
   late final String _className;
 
   Service(this.info, String serviceName, this.tag, TypeAliases aliases) {
-    var name = '${serviceName.words.toUpperCamel()}Api';
+    var name = '${serviceName.words.toUpperCamel()}Client';
     _className = aliases[name] ?? name;
   }
 

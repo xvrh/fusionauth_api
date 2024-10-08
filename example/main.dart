@@ -6,7 +6,7 @@ void main() async {
   var apiKey = '<your api key>';
 
   var httpClient = Client();
-  var api = FusionauthApi(
+  var api = FusionauthClient(
     httpClient,
     Uri.https('sandbox.fusionauth.io'),
     apiKey: apiKey,

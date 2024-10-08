@@ -6,10 +6,10 @@ import 'api_utils.dart';
 
 /// This is a FusionAuth server. Find out more at [https://fusionauth.io](https://fusionauth.io). You need to [set up an API key](https://fusionauth.io/docs/v1/tech/apis/authentication#managing-api-keys) in the FusionAuth instance you are using to test out the API calls.
 
-class FusionauthApi {
+class FusionauthClient {
   final ApiClient _client;
 
-  FusionauthApi(Client httpClient, Uri baseUri, {required String? apiKey})
+  FusionauthClient(Client httpClient, Uri baseUri, {required String? apiKey})
       : _client = ApiClient(baseUri, httpClient, authorization: apiKey);
 
   /// Retrieves all the members of a family by the unique Family Id.
