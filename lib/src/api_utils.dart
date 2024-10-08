@@ -80,36 +80,36 @@ class ApiException implements Exception {
   final Uri? url;
   final int statusCode;
   final String? reasonPhrase;
-  final String? errorMessage;
+  final Map<String, dynamic>? fieldErrors;
+  final List<dynamic>? generalErrors;
 
   ApiException(this.url, this.statusCode, this.reasonPhrase,
-      {this.errorMessage});
+      {this.fieldErrors, this.generalErrors});
 
   factory ApiException.fromResponse(Response response) {
-    String? errorMessage;
+    Map<String, dynamic>? fieldErrors;
+    List<dynamic>? generalErrors;
     if (response.body.isNotEmpty) {
       try {
         var decodedBody = jsonDecode(response.body);
         if (decodedBody is Map<String, dynamic>) {
-          // TODO(xha): find out the format
-          errorMessage = decodedBody['message'] as String? ??
-              decodedBody['errorMessage'] as String?;
+          fieldErrors = decodedBody['fieldErrors'] as Map<String, dynamic>?;
+          generalErrors = decodedBody['generalErrors'] as List<dynamic>?;
         } else {
           decodedBody = '$decodedBody';
         }
       } catch (e) {
         // Fail to parse as Json
       }
-      errorMessage ??= response.body;
     }
     return ApiException(
         response.request?.url, response.statusCode, response.reasonPhrase,
-        errorMessage: errorMessage);
+        fieldErrors: fieldErrors, generalErrors: generalErrors);
   }
 
   @override
-  String toString() =>
-      'ApiException($statusCode, $reasonPhrase, url: $url, message: $errorMessage)';
+  String toString() => 'ApiException($statusCode, $reasonPhrase, url: $url, '
+      'fieldErrors: $fieldErrors, generalErrors: $generalErrors)';
 
   static void checkResponse(Response response) {
     if (response.statusCode >= 200 && response.statusCode < 400) return;
