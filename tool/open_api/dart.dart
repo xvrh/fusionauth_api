@@ -736,8 +736,7 @@ class AliasType extends DartType {
   String toCode() {
     var buffer = StringBuffer();
     var dartType = types[definition.type]!;
-    buffer.writeln(
-        documentationComment(definition.description, indent: 2));
+    buffer.writeln(documentationComment(definition.description, indent: 0));
     buffer.writeln('''extension type $name($dartType value) {
   $name.fromJson(this.value);
   $dartType toJson() => value;
