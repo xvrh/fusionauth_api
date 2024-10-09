@@ -705,7 +705,7 @@ class AliasableType {
           type,
           defaultValue: '0',
           castNullable: (a) => '($a as num?)?.toInt() as $type?',
-          castNonNullable: (a) => '($a! as num).toInt() as $type',
+          castNonNullable: (a) => '$type(($a! as num).toInt())',
         ),
       'num' => AliasableType(type, defaultValue: '0'),
       'String' => AliasableType(
@@ -736,6 +736,7 @@ class AliasType extends DartType {
   String toCode() {
     var buffer = StringBuffer();
     var dartType = types[definition.type]!;
+    buffer.writeln(documentationComment(definition.description, indent: 0));
     buffer.writeln('''extension type $name($dartType value) {
   $name.fromJson(this.value);
   $dartType toJson() => value;
@@ -749,20 +750,21 @@ class AliasType extends DartType {
   String fromJsonCode(String accessor, Map<DartType, String> genericTypes,
       {required bool accessorIsNullable, required bool targetIsNullable}) {
     var dartType = types[definition.type]!;
-    var simpleType = AliasableType.fromName(name, dartType);
+    var aliasableType = AliasableType.fromName(name, dartType);
+    var simpleType = SimpleType.all[dartType]!;
 
     if (targetIsNullable && accessorIsNullable) {
-      return simpleType.castNullable(accessor);
+      return aliasableType.castNullable(accessor);
     } else if (!targetIsNullable && accessorIsNullable) {
       var code = simpleType.castNullable(accessor);
       var defaultValue = simpleType.defaultValue;
       if (defaultValue.isNotEmpty) {
-        return '($code ?? ${simpleType.defaultValue}) as $name';
+        return '$name($code ?? ${simpleType.defaultValue})';
       } else {
         return code;
       }
     } else {
-      return simpleType.castNonNullable(accessor);
+      return aliasableType.castNonNullable(accessor);
     }
   }
 }

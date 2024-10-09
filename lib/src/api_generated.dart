@@ -30191,7 +30191,7 @@ class SendRequest {
               .toList() ??
           [],
       preferredLanguages: (json[r'preferredLanguages'] as List<Object?>?)
-              ?.map((i) => (i as Locale? ?? '') as Locale)
+              ?.map((i) => Locale(i as String? ?? ''))
               .toList() ??
           [],
       requestData: json[r'requestData'] as Map<String, Object?>?,
@@ -35641,7 +35641,7 @@ class User {
   factory User.fromJson(Map<String, Object?> json) {
     return User(
       preferredLanguages: (json[r'preferredLanguages'] as List<Object?>?)
-              ?.map((i) => (i as Locale? ?? '') as Locale)
+              ?.map((i) => Locale(i as String? ?? ''))
               .toList() ??
           [],
       active: json[r'active'] as bool? ?? false,
@@ -38629,7 +38629,7 @@ class UserRegistration {
     return UserRegistration(
       data: json[r'data'] as Map<String, Object?>?,
       preferredLanguages: (json[r'preferredLanguages'] as List<Object?>?)
-              ?.map((i) => (i as Locale? ?? '') as Locale)
+              ?.map((i) => Locale(i as String? ?? ''))
               .toList() ??
           [],
       tokens: json[r'tokens'] as Map<String, Object?>?,
@@ -42187,21 +42187,28 @@ class XboxIdentityProvider {
   }
 }
 
+/// A date without a time-zone in the ISO-8601 calendar system, such as
+/// 2007-12-03.
 extension type LocalDate(String value) {
   LocalDate.fromJson(this.value);
   String toJson() => value;
 }
 
+/// A Locale object represents a specific geographical, political, or cultural
+/// region.
 extension type Locale(String value) {
   Locale.fromJson(this.value);
   String toJson() => value;
 }
 
+/// Timezone Identifier
 extension type ZoneId(String value) {
   ZoneId.fromJson(this.value);
   String toJson() => value;
 }
 
+/// The number of milliseconds since the unix epoch: January 1, 1970 00:00:00
+/// UTC. This value is always in UTC.
 extension type ZonedDateTime(int value) {
   ZonedDateTime.fromJson(this.value);
   int toJson() => value;
