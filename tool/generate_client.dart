@@ -6,6 +6,8 @@ import 'open_api/dart.dart' as dart;
 import 'open_api/swagger_spec.dart';
 import 'package:yaml/yaml.dart';
 
+// ignore_for_file: avoid_dynamic_calls
+
 void main() {
   var yamlSpec = loadYaml(specFile.readAsStringSync());
   var jsonSpec = jsonDecode(jsonEncode(yamlSpec, toEncodable: (e) {
@@ -14,6 +16,8 @@ void main() {
     }
     return e;
   })) as Map<String, dynamic>;
+
+  fixApi(jsonSpec);
 
   final spec = Spec.fromJson(jsonSpec);
 
@@ -26,4 +30,15 @@ void main() {
   }
 
   File('lib/src/api_generated.dart').writeAsStringSync(code);
+}
+
+void fixApi(Map<String, dynamic> spec) {
+  addUserSearchPagination(spec);
+}
+
+void addUserSearchPagination(Map<String, dynamic> spec) {
+  var schema = spec['components']['schemas']['UserSearchCriteria'];
+  var properties = schema['properties'] as Map<String, dynamic>;
+  properties['startRow'] = {'type': 'integer'};
+  properties['numberOfResults'] = {'type': 'integer'};
 }
