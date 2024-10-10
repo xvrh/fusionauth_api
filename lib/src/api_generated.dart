@@ -39337,6 +39337,8 @@ class UserSearchCriteria {
   final String? query;
   final String? queryString;
   final List<SortField> sortFields;
+  final int? startRow;
+  final int? numberOfResults;
 
   UserSearchCriteria(
       {bool? accurateTotal,
@@ -39344,7 +39346,9 @@ class UserSearchCriteria {
       this.nextResults,
       this.query,
       this.queryString,
-      List<SortField>? sortFields})
+      List<SortField>? sortFields,
+      this.startRow,
+      this.numberOfResults})
       : accurateTotal = accurateTotal ?? false,
         ids = ids ?? [],
         sortFields = sortFields ?? [];
@@ -39364,6 +39368,8 @@ class UserSearchCriteria {
                   SortField.fromJson(i as Map<String, Object?>? ?? const {}))
               .toList() ??
           [],
+      startRow: (json[r'startRow'] as num?)?.toInt(),
+      numberOfResults: (json[r'numberOfResults'] as num?)?.toInt(),
     );
   }
 
@@ -39374,6 +39380,8 @@ class UserSearchCriteria {
     var query = this.query;
     var queryString = this.queryString;
     var sortFields = this.sortFields;
+    var startRow = this.startRow;
+    var numberOfResults = this.numberOfResults;
 
     final json = <String, Object?>{};
     json[r'accurateTotal'] = accurateTotal;
@@ -39388,6 +39396,12 @@ class UserSearchCriteria {
       json[r'queryString'] = queryString;
     }
     json[r'sortFields'] = sortFields.map((i) => i.toJson()).toList();
+    if (startRow != null) {
+      json[r'startRow'] = startRow;
+    }
+    if (numberOfResults != null) {
+      json[r'numberOfResults'] = numberOfResults;
+    }
     return json;
   }
 
@@ -39397,7 +39411,9 @@ class UserSearchCriteria {
       String? nextResults,
       String? query,
       String? queryString,
-      List<SortField>? sortFields}) {
+      List<SortField>? sortFields,
+      int? startRow,
+      int? numberOfResults}) {
     return UserSearchCriteria(
       accurateTotal: accurateTotal ?? this.accurateTotal,
       ids: ids ?? this.ids,
@@ -39405,6 +39421,8 @@ class UserSearchCriteria {
       query: query ?? this.query,
       queryString: queryString ?? this.queryString,
       sortFields: sortFields ?? this.sortFields,
+      startRow: startRow ?? this.startRow,
+      numberOfResults: numberOfResults ?? this.numberOfResults,
     );
   }
 }
