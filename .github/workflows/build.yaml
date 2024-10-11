@@ -20,8 +20,10 @@ jobs:
       - run: dart --version
       - run: dart pub get
       - run: dart analyze --fatal-infos .
-      - run: dart test
       - run: dart tool/generate_client.dart
+      - run: (cd test && docker compose up -d)
+      - run: dart test
+      - run: (cd test && docker compose down --volumes)
       - run: dart tool/prepare_submit.dart
       - name: "check for uncommitted changes"
         run: git diff --exit-code

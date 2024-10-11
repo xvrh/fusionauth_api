@@ -82,16 +82,18 @@ class ApiException implements Exception {
   final String? reasonPhrase;
   final Map<String, dynamic>? fieldErrors;
   final List<dynamic>? generalErrors;
+  final String rawBody;
 
   ApiException(this.url, this.statusCode, this.reasonPhrase,
-      {this.fieldErrors, this.generalErrors});
+      {this.fieldErrors, this.generalErrors, required this.rawBody});
 
   factory ApiException.fromResponse(Response response) {
     Map<String, dynamic>? fieldErrors;
     List<dynamic>? generalErrors;
-    if (response.body.isNotEmpty) {
+    var rawBody = response.body;
+    if (rawBody.isNotEmpty) {
       try {
-        var decodedBody = jsonDecode(response.body);
+        var decodedBody = jsonDecode(rawBody);
         if (decodedBody is Map<String, dynamic>) {
           fieldErrors = decodedBody['fieldErrors'] as Map<String, dynamic>?;
           generalErrors = decodedBody['generalErrors'] as List<dynamic>?;
@@ -104,12 +106,12 @@ class ApiException implements Exception {
     }
     return ApiException(
         response.request?.url, response.statusCode, response.reasonPhrase,
-        fieldErrors: fieldErrors, generalErrors: generalErrors);
+        fieldErrors: fieldErrors, generalErrors: generalErrors, rawBody: rawBody);
   }
 
   @override
   String toString() => 'ApiException($statusCode, $reasonPhrase, url: $url, '
-      'fieldErrors: $fieldErrors, generalErrors: $generalErrors)';
+      'body: $rawBody)';
 
   static void checkResponse(Response response) {
     if (response.statusCode >= 200 && response.statusCode < 400) return;
