@@ -59,6 +59,9 @@ void main() {
       );
     }
 
+    // Wait for the search engine to complete
+    await Future.delayed(const Duration(seconds: 3));
+
     var response = await api.searchUsersByQueryWithId(
       body: SearchRequest(
         search: UserSearchCriteria(
