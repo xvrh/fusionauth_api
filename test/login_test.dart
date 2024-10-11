@@ -2,36 +2,77 @@ import 'package:fusionauth_api/fusionauth_api.dart';
 import 'package:http/http.dart';
 import 'package:test/test.dart';
 
+import 'utils.dart';
+
+const apiKey = 'abc123456789';
+final server = Uri.http('localhost:9011');
+
 void main() {
   late Client httpClient;
+  late FusionauthClient api;
 
   setUp(() {
     httpClient = Client();
+    api = FusionauthClient(
+      httpClient,
+      server,
+      apiKey: apiKey,
+    );
   });
 
   tearDown(() {
     httpClient.close();
   });
 
-  test('Login test', () async {
-    var apiKey = '<your api key>';
+  test('List tenants', () async {
+    var tenants = await api.searchTenantsWithId(
+      body: TenantSearchRequest(
+        search: TenantSearchCriteria(),
+      ),
+    );
+    expect(tenants.tenants, hasLength(1));
+    expect(tenants.tenants[0].id, '00000000-0000-0000-0000-000000000001');
+  });
 
-    var api = FusionauthClient(
-      httpClient,
-      Uri.https('sandbox.fusionauth.io'),
-      apiKey: apiKey,
+  test('Create user', () async {
+    var email = randomEmail();
+    var user = await api.createUser(
+      body: UserRequest(
+        skipVerification: true,
+        sendSetPasswordEmail: false,
+        user: User(email: email, password: 'Bonjour99'),
+      ),
     );
 
-    try {
-      await api.loginWithId(
-          body: LoginRequest(
-        loginId: 'test@test.com',
-        password: 'AbCd€',
-        applicationId: '00000000-0000-0000-0000-000000000000',
-      ));
-      fail('Should not be ok');
-    } catch (_) {
-      // ok
+    expect(user.user!.email, email);
+  });
+
+  test('List users', () async {
+    for (var i = 0; i < 10; i++) {
+      var email = randomEmail();
+      await api.createUser(
+        body: UserRequest(
+          skipVerification: true,
+          sendSetPasswordEmail: false,
+          user: User(email: email, password: 'Bonjour99'),
+        ),
+      );
     }
+
+    // Wait for the search engine to complete
+    await Future.delayed(const Duration(seconds: 3));
+
+    var response = await api.searchUsersByQueryWithId(
+      body: SearchRequest(
+        search: UserSearchCriteria(
+          queryString: '',
+          startRow: 2,
+          numberOfResults: 3,
+        ),
+      ),
+    );
+
+    expect(response.users, hasLength(3));
+    expect(response.total, greaterThan(10));
   });
 }
