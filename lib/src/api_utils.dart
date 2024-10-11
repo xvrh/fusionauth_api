@@ -106,7 +106,9 @@ class ApiException implements Exception {
     }
     return ApiException(
         response.request?.url, response.statusCode, response.reasonPhrase,
-        fieldErrors: fieldErrors, generalErrors: generalErrors, rawBody: rawBody);
+        fieldErrors: fieldErrors,
+        generalErrors: generalErrors,
+        rawBody: rawBody);
   }
 
   @override
