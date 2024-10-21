@@ -10,7 +10,7 @@ dependencies:
   path:
 
 dev_dependencies:
-  collection:
+  collection: any
   dart_style:
   json_annotation:
   lints:
