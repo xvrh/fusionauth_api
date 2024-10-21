@@ -7,7 +7,7 @@ environment:
 
 dependencies:
   http:
-  path:
+  path: any
 
 dev_dependencies:
   collection:
