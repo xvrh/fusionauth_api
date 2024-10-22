@@ -8,8 +8,3 @@ updates:
     directory: "/"
     schedule:
       interval: "weekly"
-  - package-ecosystem: pub
-    directory: /
-    schedule:
-      interval: "weekly"
-    versioning-strategy: increase-if-necessary
