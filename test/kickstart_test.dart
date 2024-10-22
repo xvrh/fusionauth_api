@@ -1,8 +1,5 @@
-import 'dart:convert';
-
 import 'package:fusionauth_api/kickstart.dart';
 import 'package:test/test.dart';
-import 'utils.dart';
 
 void main() {
   test('Create user', () async {
