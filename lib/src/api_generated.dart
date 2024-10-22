@@ -5,7 +5,6 @@ import 'api_utils.dart';
 // ignore_for_file: deprecated_member_use_from_same_package
 
 /// This is a FusionAuth server. Find out more at [https://fusionauth.io](https://fusionauth.io). You need to [set up an API key](https://fusionauth.io/docs/v1/tech/apis/authentication#managing-api-keys) in the FusionAuth instance you are using to test out the API calls.
-
 class FusionauthClient {
   final ApiClient _client;
 
@@ -181,6 +180,19 @@ class FusionauthClient {
     ));
   }
 
+  /// Updates, via PATCH, the connector with the given Id.
+  Future<ConnectorResponse> patchConnectorWithId(
+      {required String connectorId, required ConnectorRequest body}) async {
+    return ConnectorResponse.fromJson(await _client.send(
+      'patch',
+      'api/connector/{connectorId}',
+      pathParameters: {
+        'connectorId': connectorId,
+      },
+      body: body.toJson(),
+    ));
+  }
+
   /// Retrieves the connector with the given Id.
   Future<ConnectorResponse> retrieveConnectorWithId(String connectorId) async {
     return ConnectorResponse.fromJson(await _client.send(
@@ -242,6 +254,24 @@ class FusionauthClient {
       },
       queryParameters: {
         if (reactivate != null) 'reactivate': reactivate,
+      },
+      headers: {
+        if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
+      },
+      body: body.toJson(),
+    ));
+  }
+
+  /// Updates, via PATCH, the user action with the given Id.
+  Future<UserActionResponse> patchUserActionWithId(
+      {required String userActionId,
+      String? tenantIdScope,
+      required UserActionRequest body}) async {
+    return UserActionResponse.fromJson(await _client.send(
+      'patch',
+      'api/user-action/{userActionId}',
+      pathParameters: {
+        'userActionId': userActionId,
       },
       headers: {
         if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
@@ -513,6 +543,19 @@ class FusionauthClient {
     ));
   }
 
+  /// Updates, via PATCH, the lambda with the given Id.
+  Future<LambdaResponse> patchLambdaWithId(
+      {required String lambdaId, required LambdaRequest body}) async {
+    return LambdaResponse.fromJson(await _client.send(
+      'patch',
+      'api/lambda/{lambdaId}',
+      pathParameters: {
+        'lambdaId': lambdaId,
+      },
+      body: body.toJson(),
+    ));
+  }
+
   /// Retrieves the lambda for the given Id.
   Future<LambdaResponse> retrieveLambdaWithId(String lambdaId) async {
     return LambdaResponse.fromJson(await _client.send(
@@ -647,6 +690,27 @@ class FusionauthClient {
     ));
   }
 
+  /// Updates, via PATCH, the application role with the given Id for the
+  /// application.
+  Future<ApplicationResponse> patchApplicationRoleWithId(
+      {required String applicationId,
+      required String roleId,
+      String? tenantIdScope,
+      required ApplicationRequest body}) async {
+    return ApplicationResponse.fromJson(await _client.send(
+      'patch',
+      'api/application/{applicationId}/role/{roleId}',
+      pathParameters: {
+        'applicationId': applicationId,
+        'roleId': roleId,
+      },
+      headers: {
+        if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
+      },
+      body: body.toJson(),
+    ));
+  }
+
   /// Creates a new role for an application. You must specify the Id of the
   /// application you are creating the role for. You can optionally specify an
   /// Id for the role inside the ApplicationRole object itself, if not provided
@@ -683,6 +747,27 @@ class FusionauthClient {
       headers: {
         if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
       },
+    ));
+  }
+
+  /// Updates, via PATCH, the custom OAuth scope with the given Id for the
+  /// application.
+  Future<ApplicationOAuthScopeResponse> patchOAuthScopeWithId(
+      {required String applicationId,
+      required String scopeId,
+      String? tenantIdScope,
+      required ApplicationOAuthScopeRequest body}) async {
+    return ApplicationOAuthScopeResponse.fromJson(await _client.send(
+      'patch',
+      'api/application/{applicationId}/scope/{scopeId}',
+      pathParameters: {
+        'applicationId': applicationId,
+        'scopeId': scopeId,
+      },
+      headers: {
+        if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
+      },
+      body: body.toJson(),
     ));
   }
 
@@ -846,6 +931,19 @@ class FusionauthClient {
     ));
   }
 
+  /// Updates, via PATCH, the messenger with the given Id.
+  Future<MessengerResponse> patchMessengerWithId(
+      {required String messengerId, required MessengerRequest body}) async {
+    return MessengerResponse.fromJson(await _client.send(
+      'patch',
+      'api/messenger/{messengerId}',
+      pathParameters: {
+        'messengerId': messengerId,
+      },
+      body: body.toJson(),
+    ));
+  }
+
   /// Deletes the messenger for the given Id.
   Future<void> deleteMessengerWithId(String messengerId) async {
     await _client.send(
@@ -901,6 +999,19 @@ class FusionauthClient {
         'entityTypeId': entityTypeId,
       },
     );
+  }
+
+  /// Updates, via PATCH, the Entity Type with the given Id.
+  Future<EntityTypeResponse> patchEntityTypeWithId(
+      {required String entityTypeId, required EntityTypeRequest body}) async {
+    return EntityTypeResponse.fromJson(await _client.send(
+      'patch',
+      'api/entity/type/{entityTypeId}',
+      pathParameters: {
+        'entityTypeId': entityTypeId,
+      },
+      body: body.toJson(),
+    ));
   }
 
   /// Updates the Entity Type with the given Id.
@@ -989,6 +1100,24 @@ class FusionauthClient {
           'identityProviderUserId': identityProviderUserId,
         if (userId != null) 'userId': userId,
       },
+    ));
+  }
+
+  /// Updates, via PATCH, the consent with the given Id.
+  Future<ConsentResponse> patchConsentWithId(
+      {required String consentId,
+      String? tenantIdScope,
+      required ConsentRequest body}) async {
+    return ConsentResponse.fromJson(await _client.send(
+      'patch',
+      'api/consent/{consentId}',
+      pathParameters: {
+        'consentId': consentId,
+      },
+      headers: {
+        if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
+      },
+      body: body.toJson(),
     ));
   }
 
@@ -1381,6 +1510,24 @@ class FusionauthClient {
     ));
   }
 
+  /// Updates, via PATCH, the user with the given Id.
+  Future<UserResponse> patchUserWithId(
+      {required String userId,
+      String? tenantIdScope,
+      required UserRequest body}) async {
+    return UserResponse.fromJson(await _client.send(
+      'patch',
+      'api/user/{userId}',
+      pathParameters: {
+        'userId': userId,
+      },
+      headers: {
+        if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
+      },
+      body: body.toJson(),
+    ));
+  }
+
   /// Retrieves the user for the given Id.
   Future<UserResponse> retrieveUserWithId(
       {required String userId, String? tenantIdScope}) async {
@@ -1494,6 +1641,24 @@ class FusionauthClient {
         if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
       },
     );
+  }
+
+  /// Updates, via PATCH, the application with the given Id.
+  Future<ApplicationResponse> patchApplicationWithId(
+      {required String applicationId,
+      String? tenantIdScope,
+      required ApplicationRequest body}) async {
+    return ApplicationResponse.fromJson(await _client.send(
+      'patch',
+      'api/application/{applicationId}',
+      pathParameters: {
+        'applicationId': applicationId,
+      },
+      headers: {
+        if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
+      },
+      body: body.toJson(),
+    ));
   }
 
   /// Creates an application. You can optionally specify an Id for the
@@ -1659,6 +1824,19 @@ class FusionauthClient {
     ));
   }
 
+  /// Updates, via PATCH, the theme with the given Id.
+  Future<ThemeResponse> patchThemeWithId(
+      {required String themeId, required ThemeRequest body}) async {
+    return ThemeResponse.fromJson(await _client.send(
+      'patch',
+      'api/theme/{themeId}',
+      pathParameters: {
+        'themeId': themeId,
+      },
+      body: body.toJson(),
+    ));
+  }
+
   /// Deletes the theme for the given Id.
   Future<void> deleteThemeWithId(String themeId) async {
     await _client.send(
@@ -1676,6 +1854,20 @@ class FusionauthClient {
     return LoginRecordSearchResponse.fromJson(await _client.send(
       'post',
       'api/system/login-record/search',
+      body: body.toJson(),
+    ));
+  }
+
+  /// Updates, via PATCH, the user action reason with the given Id.
+  Future<UserActionReasonResponse> patchUserActionReasonWithId(
+      {required String userActionReasonId,
+      required UserActionReasonRequest body}) async {
+    return UserActionReasonResponse.fromJson(await _client.send(
+      'patch',
+      'api/user-action-reason/{userActionReasonId}',
+      pathParameters: {
+        'userActionReasonId': userActionReasonId,
+      },
       body: body.toJson(),
     ));
   }
@@ -1793,6 +1985,24 @@ class FusionauthClient {
     ));
   }
 
+  /// Updates, via PATCH, the email template with the given Id.
+  Future<EmailTemplateResponse> patchEmailTemplateWithId(
+      {required String emailTemplateId,
+      String? tenantIdScope,
+      required EmailTemplateRequest body}) async {
+    return EmailTemplateResponse.fromJson(await _client.send(
+      'patch',
+      'api/email/template/{emailTemplateId}',
+      pathParameters: {
+        'emailTemplateId': emailTemplateId,
+      },
+      headers: {
+        if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
+      },
+      body: body.toJson(),
+    ));
+  }
+
   /// Creates an email template. You can optionally specify an Id for the
   /// template, if not provided one will be generated.
   Future<EmailTemplateResponse> createEmailTemplateWithId(
@@ -1851,6 +2061,24 @@ class FusionauthClient {
       headers: {
         if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
       },
+    ));
+  }
+
+  /// Updates, via PATCH, the tenant with the given Id.
+  Future<TenantResponse> patchTenantWithId(
+      {required String tenantId,
+      String? tenantIdScope,
+      required TenantRequest body}) async {
+    return TenantResponse.fromJson(await _client.send(
+      'patch',
+      'api/tenant/{tenantId}',
+      pathParameters: {
+        'tenantId': tenantId,
+      },
+      headers: {
+        if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
+      },
+      body: body.toJson(),
     ));
   }
 
@@ -2042,6 +2270,19 @@ class FusionauthClient {
     ));
   }
 
+  /// Updates, via PATCH, a single User consent by Id.
+  Future<UserConsentResponse> patchUserConsentWithId(
+      {required String userConsentId, required UserConsentRequest body}) async {
+    return UserConsentResponse.fromJson(await _client.send(
+      'patch',
+      'api/user/consent/{userConsentId}',
+      pathParameters: {
+        'userConsentId': userConsentId,
+      },
+      body: body.toJson(),
+    ));
+  }
+
   /// Retrieves all the families that a user belongs to.
   Future<FamilyResponse> retrieveFamiliesWithId(
       {String? userId, String? tenantIdScope}) async {
@@ -2068,6 +2309,16 @@ class FusionauthClient {
       headers: {
         if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
       },
+      body: body.toJson(),
+    ));
+  }
+
+  /// Updates, via PATCH, the available integrations.
+  Future<IntegrationResponse> patchIntegrationsWithId(
+      {required IntegrationRequest body}) async {
+    return IntegrationResponse.fromJson(await _client.send(
+      'patch',
+      'api/integration',
       body: body.toJson(),
     ));
   }
@@ -2201,6 +2452,25 @@ class FusionauthClient {
     ));
   }
 
+  /// Updates, via PATCH, the registration for the user with the given Id and
+  /// the application defined in the request.
+  Future<RegistrationResponse> patchRegistrationWithId(
+      {required String userId,
+      String? tenantIdScope,
+      required RegistrationRequest body}) async {
+    return RegistrationResponse.fromJson(await _client.send(
+      'patch',
+      'api/user/registration/{userId}',
+      pathParameters: {
+        'userId': userId,
+      },
+      headers: {
+        if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
+      },
+      body: body.toJson(),
+    ));
+  }
+
   /// Exchanges an OAuth authorization code and code_verifier for an access
   /// token. Makes a request to the Token endpoint to exchange the authorization
   /// code returned from the Authorize endpoint and a code_verifier for an
@@ -2239,6 +2509,24 @@ class FusionauthClient {
     return WebAuthnStartResponse.fromJson(await _client.send(
       'post',
       'api/webauthn/start',
+      body: body.toJson(),
+    ));
+  }
+
+  /// Updates, via PATCH, the group with the given Id.
+  Future<GroupResponse> patchGroupWithId(
+      {required String groupId,
+      String? tenantIdScope,
+      required GroupRequest body}) async {
+    return GroupResponse.fromJson(await _client.send(
+      'patch',
+      'api/group/{groupId}',
+      pathParameters: {
+        'groupId': groupId,
+      },
+      headers: {
+        if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
+      },
       body: body.toJson(),
     ));
   }
@@ -2415,6 +2703,20 @@ class FusionauthClient {
     ));
   }
 
+  /// Updates, via PATCH, the message template with the given Id.
+  Future<MessageTemplateResponse> patchMessageTemplateWithId(
+      {required String messageTemplateId,
+      required MessageTemplateRequest body}) async {
+    return MessageTemplateResponse.fromJson(await _client.send(
+      'patch',
+      'api/message/template/{messageTemplateId}',
+      pathParameters: {
+        'messageTemplateId': messageTemplateId,
+      },
+      body: body.toJson(),
+    ));
+  }
+
   /// Updates the message template with the given Id.
   Future<MessageTemplateResponse> updateMessageTemplateWithId(
       {required String messageTemplateId,
@@ -2557,6 +2859,20 @@ class FusionauthClient {
     ));
   }
 
+  /// Updates, via PATCH, the identity provider with the given Id.
+  Future<IdentityProviderResponse> patchIdentityProviderWithId(
+      {required String identityProviderId,
+      required IdentityProviderRequest body}) async {
+    return IdentityProviderResponse.fromJson(await _client.send(
+      'patch',
+      'api/identity-provider/{identityProviderId}',
+      pathParameters: {
+        'identityProviderId': identityProviderId,
+      },
+      body: body.toJson(),
+    ));
+  }
+
   /// Retrieves the identity provider for the given Id or all the identity
   /// providers if the Id is null.
   Future<IdentityProviderResponse> retrieveIdentityProviderWithId(
@@ -2638,6 +2954,16 @@ class FusionauthClient {
       {required SystemConfigurationRequest body}) async {
     return SystemConfigurationResponse.fromJson(await _client.send(
       'put',
+      'api/system-configuration',
+      body: body.toJson(),
+    ));
+  }
+
+  /// Updates, via PATCH, the system configuration.
+  Future<SystemConfigurationResponse> patchSystemConfigurationWithId(
+      {required SystemConfigurationRequest body}) async {
+    return SystemConfigurationResponse.fromJson(await _client.send(
+      'patch',
       'api/system-configuration',
       body: body.toJson(),
     ));
@@ -6555,7 +6881,7 @@ class APIKey {
   final ZonedDateTime? insertInstant;
   final String? ipAccessControlListId;
   final String? key;
-  final bool keyManager;
+  final bool? keyManager;
   final ZonedDateTime? lastUpdateInstant;
   final APIKeyMetaData? metaData;
   final APIKeyPermissions? permissions;
@@ -6566,12 +6892,11 @@ class APIKey {
       this.insertInstant,
       this.ipAccessControlListId,
       this.key,
-      bool? keyManager,
+      this.keyManager,
       this.lastUpdateInstant,
       this.metaData,
       this.permissions,
-      this.tenantId})
-      : keyManager = keyManager ?? false;
+      this.tenantId});
 
   factory APIKey.fromJson(Map<String, Object?> json) {
     return APIKey(
@@ -6580,7 +6905,7 @@ class APIKey {
           (json[r'insertInstant'] as num?)?.toInt() as ZonedDateTime?,
       ipAccessControlListId: json[r'ipAccessControlListId'] as String?,
       key: json[r'key'] as String?,
-      keyManager: json[r'keyManager'] as bool? ?? false,
+      keyManager: json[r'keyManager'] as bool?,
       lastUpdateInstant:
           (json[r'lastUpdateInstant'] as num?)?.toInt() as ZonedDateTime?,
       metaData: json[r'metaData'] != null
@@ -6618,7 +6943,9 @@ class APIKey {
     if (key != null) {
       json[r'key'] = key;
     }
-    json[r'keyManager'] = keyManager;
+    if (keyManager != null) {
+      json[r'keyManager'] = keyManager;
+    }
     if (lastUpdateInstant != null) {
       json[r'lastUpdateInstant'] = lastUpdateInstant.toJson();
     }
@@ -6882,11 +7209,11 @@ class AccessToken {
 class ActionData {
   final String? actioneeUserId;
   final String? actionerUserId;
-  final List<String> applicationIds;
+  final List<String>? applicationIds;
   final String? comment;
-  final bool emailUser;
+  final bool? emailUser;
   final ZonedDateTime? expiry;
-  final bool notifyUser;
+  final bool? notifyUser;
   final String? option;
   final String? reasonId;
   final String? userActionId;
@@ -6894,30 +7221,26 @@ class ActionData {
   ActionData(
       {this.actioneeUserId,
       this.actionerUserId,
-      List<String>? applicationIds,
+      this.applicationIds,
       this.comment,
-      bool? emailUser,
+      this.emailUser,
       this.expiry,
-      bool? notifyUser,
+      this.notifyUser,
       this.option,
       this.reasonId,
-      this.userActionId})
-      : applicationIds = applicationIds ?? [],
-        emailUser = emailUser ?? false,
-        notifyUser = notifyUser ?? false;
+      this.userActionId});
 
   factory ActionData.fromJson(Map<String, Object?> json) {
     return ActionData(
       actioneeUserId: json[r'actioneeUserId'] as String?,
       actionerUserId: json[r'actionerUserId'] as String?,
       applicationIds: (json[r'applicationIds'] as List<Object?>?)
-              ?.map((i) => i as String? ?? '')
-              .toList() ??
-          [],
+          ?.map((i) => i as String? ?? '')
+          .toList(),
       comment: json[r'comment'] as String?,
-      emailUser: json[r'emailUser'] as bool? ?? false,
+      emailUser: json[r'emailUser'] as bool?,
       expiry: (json[r'expiry'] as num?)?.toInt() as ZonedDateTime?,
-      notifyUser: json[r'notifyUser'] as bool? ?? false,
+      notifyUser: json[r'notifyUser'] as bool?,
       option: json[r'option'] as String?,
       reasonId: json[r'reasonId'] as String?,
       userActionId: json[r'userActionId'] as String?,
@@ -6943,15 +7266,21 @@ class ActionData {
     if (actionerUserId != null) {
       json[r'actionerUserId'] = actionerUserId;
     }
-    json[r'applicationIds'] = applicationIds;
+    if (applicationIds != null) {
+      json[r'applicationIds'] = applicationIds;
+    }
     if (comment != null) {
       json[r'comment'] = comment;
     }
-    json[r'emailUser'] = emailUser;
+    if (emailUser != null) {
+      json[r'emailUser'] = emailUser;
+    }
     if (expiry != null) {
       json[r'expiry'] = expiry.toJson();
     }
-    json[r'notifyUser'] = notifyUser;
+    if (notifyUser != null) {
+      json[r'notifyUser'] = notifyUser;
+    }
     if (option != null) {
       json[r'option'] = option;
     }
@@ -6993,18 +7322,17 @@ class ActionData {
 /// The user action request object.
 class ActionRequest {
   final ActionData? action;
-  final bool broadcast;
+  final bool? broadcast;
   final EventInfo? eventInfo;
 
-  ActionRequest({this.action, bool? broadcast, this.eventInfo})
-      : broadcast = broadcast ?? false;
+  ActionRequest({this.action, this.broadcast, this.eventInfo});
 
   factory ActionRequest.fromJson(Map<String, Object?> json) {
     return ActionRequest(
       action: json[r'action'] != null
           ? ActionData.fromJson(json[r'action']! as Map<String, Object?>)
           : null,
-      broadcast: json[r'broadcast'] as bool? ?? false,
+      broadcast: json[r'broadcast'] as bool?,
       eventInfo: json[r'eventInfo'] != null
           ? EventInfo.fromJson(json[r'eventInfo']! as Map<String, Object?>)
           : null,
@@ -7020,7 +7348,9 @@ class ActionRequest {
     if (action != null) {
       json[r'action'] = action.toJson();
     }
-    json[r'broadcast'] = broadcast;
+    if (broadcast != null) {
+      json[r'broadcast'] = broadcast;
+    }
     if (eventInfo != null) {
       json[r'eventInfo'] = eventInfo.toJson();
     }
@@ -7040,10 +7370,9 @@ class ActionRequest {
 /// The user action response object.
 class ActionResponse {
   final UserActionLog? action;
-  final List<UserActionLog> actions;
+  final List<UserActionLog>? actions;
 
-  ActionResponse({this.action, List<UserActionLog>? actions})
-      : actions = actions ?? [];
+  ActionResponse({this.action, this.actions});
 
   factory ActionResponse.fromJson(Map<String, Object?> json) {
     return ActionResponse(
@@ -7051,10 +7380,9 @@ class ActionResponse {
           ? UserActionLog.fromJson(json[r'action']! as Map<String, Object?>)
           : null,
       actions: (json[r'actions'] as List<Object?>?)
-              ?.map((i) => UserActionLog.fromJson(
-                  i as Map<String, Object?>? ?? const {}))
-              .toList() ??
-          [],
+          ?.map((i) =>
+              UserActionLog.fromJson(i as Map<String, Object?>? ?? const {}))
+          .toList(),
     );
   }
 
@@ -7066,7 +7394,9 @@ class ActionResponse {
     if (action != null) {
       json[r'action'] = action.toJson();
     }
-    json[r'actions'] = actions.map((i) => i.toJson()).toList();
+    if (actions != null) {
+      json[r'actions'] = actions.map((i) => i.toJson()).toList();
+    }
     return json;
   }
 
@@ -7087,7 +7417,7 @@ class AppleApplicationConfiguration {
   final String? servicesId;
   final String? teamId;
   final Map<String, dynamic>? data;
-  final bool createRegistration;
+  final bool? createRegistration;
 
   AppleApplicationConfiguration(
       {this.bundleId,
@@ -7097,8 +7427,7 @@ class AppleApplicationConfiguration {
       this.servicesId,
       this.teamId,
       this.data,
-      bool? createRegistration})
-      : createRegistration = createRegistration ?? false;
+      this.createRegistration});
 
   factory AppleApplicationConfiguration.fromJson(Map<String, Object?> json) {
     return AppleApplicationConfiguration(
@@ -7109,7 +7438,7 @@ class AppleApplicationConfiguration {
       servicesId: json[r'servicesId'] as String?,
       teamId: json[r'teamId'] as String?,
       data: json[r'data'] as Map<String, Object?>?,
-      createRegistration: json[r'createRegistration'] as bool? ?? false,
+      createRegistration: json[r'createRegistration'] as bool?,
     );
   }
 
@@ -7145,7 +7474,9 @@ class AppleApplicationConfiguration {
     if (data != null) {
       json[r'data'] = data;
     }
-    json[r'createRegistration'] = createRegistration;
+    if (createRegistration != null) {
+      json[r'createRegistration'] = createRegistration;
+    }
     return json;
   }
 
@@ -7180,7 +7511,7 @@ class AppleIdentityProvider {
   final String? teamId;
   final Map<String, dynamic>? data;
   final Map<String, dynamic>? applicationConfiguration;
-  final bool debug;
+  final bool? debug;
   final String? id;
   final ZonedDateTime? insertInstant;
   final ProviderLambdaConfiguration? lambdaConfiguration;
@@ -7199,7 +7530,7 @@ class AppleIdentityProvider {
       this.teamId,
       this.data,
       this.applicationConfiguration,
-      bool? debug,
+      this.debug,
       this.id,
       this.insertInstant,
       this.lambdaConfiguration,
@@ -7207,8 +7538,7 @@ class AppleIdentityProvider {
       this.linkingStrategy,
       this.name,
       this.tenantConfiguration,
-      this.type})
-      : debug = debug ?? false;
+      this.type});
 
   factory AppleIdentityProvider.fromJson(Map<String, Object?> json) {
     return AppleIdentityProvider(
@@ -7221,7 +7551,7 @@ class AppleIdentityProvider {
       data: json[r'data'] as Map<String, Object?>?,
       applicationConfiguration:
           json[r'applicationConfiguration'] as Map<String, Object?>?,
-      debug: json[r'debug'] as bool? ?? false,
+      debug: json[r'debug'] as bool?,
       id: json[r'id'] as String?,
       insertInstant:
           (json[r'insertInstant'] as num?)?.toInt() as ZonedDateTime?,
@@ -7288,7 +7618,9 @@ class AppleIdentityProvider {
     if (applicationConfiguration != null) {
       json[r'applicationConfiguration'] = applicationConfiguration;
     }
-    json[r'debug'] = debug;
+    if (debug != null) {
+      json[r'debug'] = debug;
+    }
     if (id != null) {
       json[r'id'] = id;
     }
@@ -7359,7 +7691,7 @@ class AppleIdentityProvider {
 
 class Application {
   final ApplicationAccessControlConfiguration? accessControlConfiguration;
-  final bool active;
+  final bool? active;
   final AuthenticationTokenConfiguration? authenticationTokenConfiguration;
   final CleanSpeakConfiguration? cleanSpeakConfiguration;
   final Map<String, dynamic>? data;
@@ -7379,21 +7711,21 @@ class Application {
   final PasswordlessConfiguration? passwordlessConfiguration;
   final RegistrationConfiguration? registrationConfiguration;
   final ApplicationRegistrationDeletePolicy? registrationDeletePolicy;
-  final List<ApplicationRole> roles;
+  final List<ApplicationRole>? roles;
   final SAMLv2Configuration? samlv2Configuration;
-  final List<ApplicationOAuthScope> scopes;
+  final List<ApplicationOAuthScope>? scopes;
   final ObjectState? state;
   final String? tenantId;
   final String? themeId;
   final RegistrationUnverifiedOptions? unverified;
   final String? verificationEmailTemplateId;
   final VerificationStrategy? verificationStrategy;
-  final bool verifyRegistration;
+  final bool? verifyRegistration;
   final ApplicationWebAuthnConfiguration? webAuthnConfiguration;
 
   Application(
       {this.accessControlConfiguration,
-      bool? active,
+      this.active,
       this.authenticationTokenConfiguration,
       this.cleanSpeakConfiguration,
       this.data,
@@ -7412,21 +7744,17 @@ class Application {
       this.passwordlessConfiguration,
       this.registrationConfiguration,
       this.registrationDeletePolicy,
-      List<ApplicationRole>? roles,
+      this.roles,
       this.samlv2Configuration,
-      List<ApplicationOAuthScope>? scopes,
+      this.scopes,
       this.state,
       this.tenantId,
       this.themeId,
       this.unverified,
       this.verificationEmailTemplateId,
       this.verificationStrategy,
-      bool? verifyRegistration,
-      this.webAuthnConfiguration})
-      : active = active ?? false,
-        roles = roles ?? [],
-        scopes = scopes ?? [],
-        verifyRegistration = verifyRegistration ?? false;
+      this.verifyRegistration,
+      this.webAuthnConfiguration});
 
   factory Application.fromJson(Map<String, Object?> json) {
     return Application(
@@ -7434,7 +7762,7 @@ class Application {
           ? ApplicationAccessControlConfiguration.fromJson(
               json[r'accessControlConfiguration']! as Map<String, Object?>)
           : null,
-      active: json[r'active'] as bool? ?? false,
+      active: json[r'active'] as bool?,
       authenticationTokenConfiguration:
           json[r'authenticationTokenConfiguration'] != null
               ? AuthenticationTokenConfiguration.fromJson(
@@ -7499,19 +7827,17 @@ class Application {
               json[r'registrationDeletePolicy']! as Map<String, Object?>)
           : null,
       roles: (json[r'roles'] as List<Object?>?)
-              ?.map((i) => ApplicationRole.fromJson(
-                  i as Map<String, Object?>? ?? const {}))
-              .toList() ??
-          [],
+          ?.map((i) =>
+              ApplicationRole.fromJson(i as Map<String, Object?>? ?? const {}))
+          .toList(),
       samlv2Configuration: json[r'samlv2Configuration'] != null
           ? SAMLv2Configuration.fromJson(
               json[r'samlv2Configuration']! as Map<String, Object?>)
           : null,
       scopes: (json[r'scopes'] as List<Object?>?)
-              ?.map((i) => ApplicationOAuthScope.fromJson(
-                  i as Map<String, Object?>? ?? const {}))
-              .toList() ??
-          [],
+          ?.map((i) => ApplicationOAuthScope.fromJson(
+              i as Map<String, Object?>? ?? const {}))
+          .toList(),
       state: json[r'state'] != null
           ? ObjectState.fromValue(json[r'state']! as String)
           : null,
@@ -7527,7 +7853,7 @@ class Application {
           ? VerificationStrategy.fromValue(
               json[r'verificationStrategy']! as String)
           : null,
-      verifyRegistration: json[r'verifyRegistration'] as bool? ?? false,
+      verifyRegistration: json[r'verifyRegistration'] as bool?,
       webAuthnConfiguration: json[r'webAuthnConfiguration'] != null
           ? ApplicationWebAuthnConfiguration.fromJson(
               json[r'webAuthnConfiguration']! as Map<String, Object?>)
@@ -7573,7 +7899,9 @@ class Application {
     if (accessControlConfiguration != null) {
       json[r'accessControlConfiguration'] = accessControlConfiguration.toJson();
     }
-    json[r'active'] = active;
+    if (active != null) {
+      json[r'active'] = active;
+    }
     if (authenticationTokenConfiguration != null) {
       json[r'authenticationTokenConfiguration'] =
           authenticationTokenConfiguration.toJson();
@@ -7630,11 +7958,15 @@ class Application {
     if (registrationDeletePolicy != null) {
       json[r'registrationDeletePolicy'] = registrationDeletePolicy.toJson();
     }
-    json[r'roles'] = roles.map((i) => i.toJson()).toList();
+    if (roles != null) {
+      json[r'roles'] = roles.map((i) => i.toJson()).toList();
+    }
     if (samlv2Configuration != null) {
       json[r'samlv2Configuration'] = samlv2Configuration.toJson();
     }
-    json[r'scopes'] = scopes.map((i) => i.toJson()).toList();
+    if (scopes != null) {
+      json[r'scopes'] = scopes.map((i) => i.toJson()).toList();
+    }
     if (state != null) {
       json[r'state'] = state.value;
     }
@@ -7653,7 +7985,9 @@ class Application {
     if (verificationStrategy != null) {
       json[r'verificationStrategy'] = verificationStrategy.value;
     }
-    json[r'verifyRegistration'] = verifyRegistration;
+    if (verifyRegistration != null) {
+      json[r'verifyRegistration'] = verifyRegistration;
+    }
     if (webAuthnConfiguration != null) {
       json[r'webAuthnConfiguration'] = webAuthnConfiguration.toJson();
     }
@@ -8143,7 +8477,7 @@ class ApplicationOAuthScope {
   final ZonedDateTime? insertInstant;
   final ZonedDateTime? lastUpdateInstant;
   final String? name;
-  final bool required;
+  final bool? required;
 
   ApplicationOAuthScope(
       {this.applicationId,
@@ -8155,8 +8489,7 @@ class ApplicationOAuthScope {
       this.insertInstant,
       this.lastUpdateInstant,
       this.name,
-      bool? required})
-      : required = required ?? false;
+      this.required});
 
   factory ApplicationOAuthScope.fromJson(Map<String, Object?> json) {
     return ApplicationOAuthScope(
@@ -8171,7 +8504,7 @@ class ApplicationOAuthScope {
       lastUpdateInstant:
           (json[r'lastUpdateInstant'] as num?)?.toInt() as ZonedDateTime?,
       name: json[r'name'] as String?,
-      required: json[r'required'] as bool? ?? false,
+      required: json[r'required'] as bool?,
     );
   }
 
@@ -8215,7 +8548,9 @@ class ApplicationOAuthScope {
     if (name != null) {
       json[r'name'] = name;
     }
-    json[r'required'] = required;
+    if (required != null) {
+      json[r'required'] = required;
+    }
     return json;
   }
 
@@ -8408,12 +8743,10 @@ class ApplicationRequest {
 /// The Application API response.
 class ApplicationResponse {
   final Application? application;
-  final List<Application> applications;
+  final List<Application>? applications;
   final ApplicationRole? role;
 
-  ApplicationResponse(
-      {this.application, List<Application>? applications, this.role})
-      : applications = applications ?? [];
+  ApplicationResponse({this.application, this.applications, this.role});
 
   factory ApplicationResponse.fromJson(Map<String, Object?> json) {
     return ApplicationResponse(
@@ -8421,10 +8754,9 @@ class ApplicationResponse {
           ? Application.fromJson(json[r'application']! as Map<String, Object?>)
           : null,
       applications: (json[r'applications'] as List<Object?>?)
-              ?.map((i) =>
-                  Application.fromJson(i as Map<String, Object?>? ?? const {}))
-              .toList() ??
-          [],
+          ?.map((i) =>
+              Application.fromJson(i as Map<String, Object?>? ?? const {}))
+          .toList(),
       role: json[r'role'] != null
           ? ApplicationRole.fromJson(json[r'role']! as Map<String, Object?>)
           : null,
@@ -8440,7 +8772,9 @@ class ApplicationResponse {
     if (application != null) {
       json[r'application'] = application.toJson();
     }
-    json[r'applications'] = applications.map((i) => i.toJson()).toList();
+    if (applications != null) {
+      json[r'applications'] = applications.map((i) => i.toJson()).toList();
+    }
     if (role != null) {
       json[r'role'] = role.toJson();
     }
@@ -8464,8 +8798,8 @@ class ApplicationRole {
   final String? description;
   final String? id;
   final ZonedDateTime? insertInstant;
-  final bool isDefault;
-  final bool isSuperRole;
+  final bool? isDefault;
+  final bool? isSuperRole;
   final ZonedDateTime? lastUpdateInstant;
   final String? name;
 
@@ -8473,12 +8807,10 @@ class ApplicationRole {
       {this.description,
       this.id,
       this.insertInstant,
-      bool? isDefault,
-      bool? isSuperRole,
+      this.isDefault,
+      this.isSuperRole,
       this.lastUpdateInstant,
-      this.name})
-      : isDefault = isDefault ?? false,
-        isSuperRole = isSuperRole ?? false;
+      this.name});
 
   factory ApplicationRole.fromJson(Map<String, Object?> json) {
     return ApplicationRole(
@@ -8486,8 +8818,8 @@ class ApplicationRole {
       id: json[r'id'] as String?,
       insertInstant:
           (json[r'insertInstant'] as num?)?.toInt() as ZonedDateTime?,
-      isDefault: json[r'isDefault'] as bool? ?? false,
-      isSuperRole: json[r'isSuperRole'] as bool? ?? false,
+      isDefault: json[r'isDefault'] as bool?,
+      isSuperRole: json[r'isSuperRole'] as bool?,
       lastUpdateInstant:
           (json[r'lastUpdateInstant'] as num?)?.toInt() as ZonedDateTime?,
       name: json[r'name'] as String?,
@@ -8513,8 +8845,12 @@ class ApplicationRole {
     if (insertInstant != null) {
       json[r'insertInstant'] = insertInstant.toJson();
     }
-    json[r'isDefault'] = isDefault;
-    json[r'isSuperRole'] = isSuperRole;
+    if (isDefault != null) {
+      json[r'isDefault'] = isDefault;
+    }
+    if (isSuperRole != null) {
+      json[r'isSuperRole'] = isSuperRole;
+    }
     if (lastUpdateInstant != null) {
       json[r'lastUpdateInstant'] = lastUpdateInstant.toJson();
     }
@@ -8625,10 +8961,9 @@ class ApplicationSearchCriteria {
 /// Search request for Applications
 class ApplicationSearchRequest {
   final ApplicationSearchCriteria? search;
-  final List<String> expand;
+  final List<String>? expand;
 
-  ApplicationSearchRequest({this.search, List<String>? expand})
-      : expand = expand ?? [];
+  ApplicationSearchRequest({this.search, this.expand});
 
   factory ApplicationSearchRequest.fromJson(Map<String, Object?> json) {
     return ApplicationSearchRequest(
@@ -8637,9 +8972,8 @@ class ApplicationSearchRequest {
               json[r'search']! as Map<String, Object?>)
           : null,
       expand: (json[r'expand'] as List<Object?>?)
-              ?.map((i) => i as String? ?? '')
-              .toList() ??
-          [],
+          ?.map((i) => i as String? ?? '')
+          .toList(),
     );
   }
 
@@ -8651,7 +8985,9 @@ class ApplicationSearchRequest {
     if (search != null) {
       json[r'search'] = search.toJson();
     }
-    json[r'expand'] = expand;
+    if (expand != null) {
+      json[r'expand'] = expand;
+    }
     return json;
   }
 
@@ -8666,27 +9002,22 @@ class ApplicationSearchRequest {
 
 /// Application search response
 class ApplicationSearchResponse {
-  final List<Application> applications;
+  final List<Application>? applications;
   final int? total;
-  final List<String> expandable;
+  final List<String>? expandable;
 
-  ApplicationSearchResponse(
-      {List<Application>? applications, this.total, List<String>? expandable})
-      : applications = applications ?? [],
-        expandable = expandable ?? [];
+  ApplicationSearchResponse({this.applications, this.total, this.expandable});
 
   factory ApplicationSearchResponse.fromJson(Map<String, Object?> json) {
     return ApplicationSearchResponse(
       applications: (json[r'applications'] as List<Object?>?)
-              ?.map((i) =>
-                  Application.fromJson(i as Map<String, Object?>? ?? const {}))
-              .toList() ??
-          [],
+          ?.map((i) =>
+              Application.fromJson(i as Map<String, Object?>? ?? const {}))
+          .toList(),
       total: (json[r'total'] as num?)?.toInt(),
       expandable: (json[r'expandable'] as List<Object?>?)
-              ?.map((i) => i as String? ?? '')
-              .toList() ??
-          [],
+          ?.map((i) => i as String? ?? '')
+          .toList(),
     );
   }
 
@@ -8696,11 +9027,15 @@ class ApplicationSearchResponse {
     var expandable = this.expandable;
 
     final json = <String, Object?>{};
-    json[r'applications'] = applications.map((i) => i.toJson()).toList();
+    if (applications != null) {
+      json[r'applications'] = applications.map((i) => i.toJson()).toList();
+    }
     if (total != null) {
       json[r'total'] = total;
     }
-    json[r'expandable'] = expandable;
+    if (expandable != null) {
+      json[r'expandable'] = expandable;
+    }
     return json;
   }
 
@@ -8718,11 +9053,10 @@ class ApplicationSearchResponse {
 class ApplicationWebAuthnConfiguration {
   final ApplicationWebAuthnWorkflowConfiguration? bootstrapWorkflow;
   final ApplicationWebAuthnWorkflowConfiguration? reauthenticationWorkflow;
-  final bool enabled;
+  final bool? enabled;
 
   ApplicationWebAuthnConfiguration(
-      {this.bootstrapWorkflow, this.reauthenticationWorkflow, bool? enabled})
-      : enabled = enabled ?? false;
+      {this.bootstrapWorkflow, this.reauthenticationWorkflow, this.enabled});
 
   factory ApplicationWebAuthnConfiguration.fromJson(Map<String, Object?> json) {
     return ApplicationWebAuthnConfiguration(
@@ -8734,7 +9068,7 @@ class ApplicationWebAuthnConfiguration {
           ? ApplicationWebAuthnWorkflowConfiguration.fromJson(
               json[r'reauthenticationWorkflow']! as Map<String, Object?>)
           : null,
-      enabled: json[r'enabled'] as bool? ?? false,
+      enabled: json[r'enabled'] as bool?,
     );
   }
 
@@ -8750,7 +9084,9 @@ class ApplicationWebAuthnConfiguration {
     if (reauthenticationWorkflow != null) {
       json[r'reauthenticationWorkflow'] = reauthenticationWorkflow.toJson();
     }
-    json[r'enabled'] = enabled;
+    if (enabled != null) {
+      json[r'enabled'] = enabled;
+    }
     return json;
   }
 
@@ -8768,15 +9104,14 @@ class ApplicationWebAuthnConfiguration {
 }
 
 class ApplicationWebAuthnWorkflowConfiguration {
-  final bool enabled;
+  final bool? enabled;
 
-  ApplicationWebAuthnWorkflowConfiguration({bool? enabled})
-      : enabled = enabled ?? false;
+  ApplicationWebAuthnWorkflowConfiguration({this.enabled});
 
   factory ApplicationWebAuthnWorkflowConfiguration.fromJson(
       Map<String, Object?> json) {
     return ApplicationWebAuthnWorkflowConfiguration(
-      enabled: json[r'enabled'] as bool? ?? false,
+      enabled: json[r'enabled'] as bool?,
     );
   }
 
@@ -8784,7 +9119,9 @@ class ApplicationWebAuthnWorkflowConfiguration {
     var enabled = this.enabled;
 
     final json = <String, Object?>{};
-    json[r'enabled'] = enabled;
+    if (enabled != null) {
+      json[r'enabled'] = enabled;
+    }
     return json;
   }
 
@@ -9311,19 +9648,17 @@ class AuditLogSearchRequest {
 
 /// Audit log response.
 class AuditLogSearchResponse {
-  final List<AuditLog> auditLogs;
+  final List<AuditLog>? auditLogs;
   final int? total;
 
-  AuditLogSearchResponse({List<AuditLog>? auditLogs, this.total})
-      : auditLogs = auditLogs ?? [];
+  AuditLogSearchResponse({this.auditLogs, this.total});
 
   factory AuditLogSearchResponse.fromJson(Map<String, Object?> json) {
     return AuditLogSearchResponse(
       auditLogs: (json[r'auditLogs'] as List<Object?>?)
-              ?.map((i) =>
-                  AuditLog.fromJson(i as Map<String, Object?>? ?? const {}))
-              .toList() ??
-          [],
+          ?.map(
+              (i) => AuditLog.fromJson(i as Map<String, Object?>? ?? const {}))
+          .toList(),
       total: (json[r'total'] as num?)?.toInt(),
     );
   }
@@ -9333,7 +9668,9 @@ class AuditLogSearchResponse {
     var total = this.total;
 
     final json = <String, Object?>{};
-    json[r'auditLogs'] = auditLogs.map((i) => i.toJson()).toList();
+    if (auditLogs != null) {
+      json[r'auditLogs'] = auditLogs.map((i) => i.toJson()).toList();
+    }
     if (total != null) {
       json[r'total'] = total;
     }
@@ -9349,14 +9686,13 @@ class AuditLogSearchResponse {
 }
 
 class AuthenticationTokenConfiguration {
-  final bool enabled;
+  final bool? enabled;
 
-  AuthenticationTokenConfiguration({bool? enabled})
-      : enabled = enabled ?? false;
+  AuthenticationTokenConfiguration({this.enabled});
 
   factory AuthenticationTokenConfiguration.fromJson(Map<String, Object?> json) {
     return AuthenticationTokenConfiguration(
-      enabled: json[r'enabled'] as bool? ?? false,
+      enabled: json[r'enabled'] as bool?,
     );
   }
 
@@ -9364,7 +9700,9 @@ class AuthenticationTokenConfiguration {
     var enabled = this.enabled;
 
     final json = <String, Object?>{};
-    json[r'enabled'] = enabled;
+    if (enabled != null) {
+      json[r'enabled'] = enabled;
+    }
     return json;
   }
 
@@ -9426,16 +9764,15 @@ class AuthenticatorConfiguration {
 /// with WebAuthn Level 1.
 class AuthenticatorSelectionCriteria {
   final AuthenticatorAttachment? authenticatorAttachment;
-  final bool requireResidentKey;
+  final bool? requireResidentKey;
   final ResidentKeyRequirement? residentKey;
   final UserVerificationRequirement? userVerification;
 
   AuthenticatorSelectionCriteria(
       {this.authenticatorAttachment,
-      bool? requireResidentKey,
+      this.requireResidentKey,
       this.residentKey,
-      this.userVerification})
-      : requireResidentKey = requireResidentKey ?? false;
+      this.userVerification});
 
   factory AuthenticatorSelectionCriteria.fromJson(Map<String, Object?> json) {
     return AuthenticatorSelectionCriteria(
@@ -9443,7 +9780,7 @@ class AuthenticatorSelectionCriteria {
           ? AuthenticatorAttachment.fromValue(
               json[r'authenticatorAttachment']! as String)
           : null,
-      requireResidentKey: json[r'requireResidentKey'] as bool? ?? false,
+      requireResidentKey: json[r'requireResidentKey'] as bool?,
       residentKey: json[r'residentKey'] != null
           ? ResidentKeyRequirement.fromValue(json[r'residentKey']! as String)
           : null,
@@ -9464,7 +9801,9 @@ class AuthenticatorSelectionCriteria {
     if (authenticatorAttachment != null) {
       json[r'authenticatorAttachment'] = authenticatorAttachment.value;
     }
-    json[r'requireResidentKey'] = requireResidentKey;
+    if (requireResidentKey != null) {
+      json[r'requireResidentKey'] = requireResidentKey;
+    }
     if (residentKey != null) {
       json[r'residentKey'] = residentKey.value;
     }
@@ -9493,7 +9832,7 @@ class AuthenticatorSelectionCriteria {
 /// is not mutable
 class BaseConnectorConfiguration {
   final Map<String, dynamic>? data;
-  final bool debug;
+  final bool? debug;
   final String? id;
   final ZonedDateTime? insertInstant;
   final ZonedDateTime? lastUpdateInstant;
@@ -9502,18 +9841,17 @@ class BaseConnectorConfiguration {
 
   BaseConnectorConfiguration(
       {this.data,
-      bool? debug,
+      this.debug,
       this.id,
       this.insertInstant,
       this.lastUpdateInstant,
       this.name,
-      this.type})
-      : debug = debug ?? false;
+      this.type});
 
   factory BaseConnectorConfiguration.fromJson(Map<String, Object?> json) {
     return BaseConnectorConfiguration(
       data: json[r'data'] as Map<String, Object?>?,
-      debug: json[r'debug'] as bool? ?? false,
+      debug: json[r'debug'] as bool?,
       id: json[r'id'] as String?,
       insertInstant:
           (json[r'insertInstant'] as num?)?.toInt() as ZonedDateTime?,
@@ -9539,7 +9877,9 @@ class BaseConnectorConfiguration {
     if (data != null) {
       json[r'data'] = data;
     }
-    json[r'debug'] = debug;
+    if (debug != null) {
+      json[r'debug'] = debug;
+    }
     if (id != null) {
       json[r'id'] = id;
     }
@@ -9579,45 +9919,40 @@ class BaseConnectorConfiguration {
 }
 
 class BaseElasticSearchCriteria {
-  final bool accurateTotal;
-  final List<String> ids;
+  final bool? accurateTotal;
+  final List<String>? ids;
   final String? nextResults;
   final String? query;
   final String? queryString;
-  final List<SortField> sortFields;
+  final List<SortField>? sortFields;
   final int? numberOfResults;
   final String? orderBy;
   final int? startRow;
 
   BaseElasticSearchCriteria(
-      {bool? accurateTotal,
-      List<String>? ids,
+      {this.accurateTotal,
+      this.ids,
       this.nextResults,
       this.query,
       this.queryString,
-      List<SortField>? sortFields,
+      this.sortFields,
       this.numberOfResults,
       this.orderBy,
-      this.startRow})
-      : accurateTotal = accurateTotal ?? false,
-        ids = ids ?? [],
-        sortFields = sortFields ?? [];
+      this.startRow});
 
   factory BaseElasticSearchCriteria.fromJson(Map<String, Object?> json) {
     return BaseElasticSearchCriteria(
-      accurateTotal: json[r'accurateTotal'] as bool? ?? false,
+      accurateTotal: json[r'accurateTotal'] as bool?,
       ids: (json[r'ids'] as List<Object?>?)
-              ?.map((i) => i as String? ?? '')
-              .toList() ??
-          [],
+          ?.map((i) => i as String? ?? '')
+          .toList(),
       nextResults: json[r'nextResults'] as String?,
       query: json[r'query'] as String?,
       queryString: json[r'queryString'] as String?,
       sortFields: (json[r'sortFields'] as List<Object?>?)
-              ?.map((i) =>
-                  SortField.fromJson(i as Map<String, Object?>? ?? const {}))
-              .toList() ??
-          [],
+          ?.map(
+              (i) => SortField.fromJson(i as Map<String, Object?>? ?? const {}))
+          .toList(),
       numberOfResults: (json[r'numberOfResults'] as num?)?.toInt(),
       orderBy: json[r'orderBy'] as String?,
       startRow: (json[r'startRow'] as num?)?.toInt(),
@@ -9636,8 +9971,12 @@ class BaseElasticSearchCriteria {
     var startRow = this.startRow;
 
     final json = <String, Object?>{};
-    json[r'accurateTotal'] = accurateTotal;
-    json[r'ids'] = ids;
+    if (accurateTotal != null) {
+      json[r'accurateTotal'] = accurateTotal;
+    }
+    if (ids != null) {
+      json[r'ids'] = ids;
+    }
     if (nextResults != null) {
       json[r'nextResults'] = nextResults;
     }
@@ -9647,7 +9986,9 @@ class BaseElasticSearchCriteria {
     if (queryString != null) {
       json[r'queryString'] = queryString;
     }
-    json[r'sortFields'] = sortFields.map((i) => i.toJson()).toList();
+    if (sortFields != null) {
+      json[r'sortFields'] = sortFields.map((i) => i.toJson()).toList();
+    }
     if (numberOfResults != null) {
       json[r'numberOfResults'] = numberOfResults;
     }
@@ -9906,20 +10247,18 @@ class BaseGroupEvent {
 
 class BaseIdentityProviderApplicationConfiguration {
   final Map<String, dynamic>? data;
-  final bool createRegistration;
-  final bool enabled;
+  final bool? createRegistration;
+  final bool? enabled;
 
   BaseIdentityProviderApplicationConfiguration(
-      {this.data, bool? createRegistration, bool? enabled})
-      : createRegistration = createRegistration ?? false,
-        enabled = enabled ?? false;
+      {this.data, this.createRegistration, this.enabled});
 
   factory BaseIdentityProviderApplicationConfiguration.fromJson(
       Map<String, Object?> json) {
     return BaseIdentityProviderApplicationConfiguration(
       data: json[r'data'] as Map<String, Object?>?,
-      createRegistration: json[r'createRegistration'] as bool? ?? false,
-      enabled: json[r'enabled'] as bool? ?? false,
+      createRegistration: json[r'createRegistration'] as bool?,
+      enabled: json[r'enabled'] as bool?,
     );
   }
 
@@ -9932,8 +10271,12 @@ class BaseIdentityProviderApplicationConfiguration {
     if (data != null) {
       json[r'data'] = data;
     }
-    json[r'createRegistration'] = createRegistration;
-    json[r'enabled'] = enabled;
+    if (createRegistration != null) {
+      json[r'createRegistration'] = createRegistration;
+    }
+    if (enabled != null) {
+      json[r'enabled'] = enabled;
+    }
     return json;
   }
 
@@ -9951,19 +10294,17 @@ class BaseLoginRequest {
   final String? applicationId;
   final String? ipAddress;
   final MetaData? metaData;
-  final bool newDevice;
-  final bool noJwt;
+  final bool? newDevice;
+  final bool? noJwt;
   final EventInfo? eventInfo;
 
   BaseLoginRequest(
       {this.applicationId,
       this.ipAddress,
       this.metaData,
-      bool? newDevice,
-      bool? noJwt,
-      this.eventInfo})
-      : newDevice = newDevice ?? false,
-        noJwt = noJwt ?? false;
+      this.newDevice,
+      this.noJwt,
+      this.eventInfo});
 
   factory BaseLoginRequest.fromJson(Map<String, Object?> json) {
     return BaseLoginRequest(
@@ -9972,8 +10313,8 @@ class BaseLoginRequest {
       metaData: json[r'metaData'] != null
           ? MetaData.fromJson(json[r'metaData']! as Map<String, Object?>)
           : null,
-      newDevice: json[r'newDevice'] as bool? ?? false,
-      noJwt: json[r'noJWT'] as bool? ?? false,
+      newDevice: json[r'newDevice'] as bool?,
+      noJwt: json[r'noJWT'] as bool?,
       eventInfo: json[r'eventInfo'] != null
           ? EventInfo.fromJson(json[r'eventInfo']! as Map<String, Object?>)
           : null,
@@ -9998,8 +10339,12 @@ class BaseLoginRequest {
     if (metaData != null) {
       json[r'metaData'] = metaData.toJson();
     }
-    json[r'newDevice'] = newDevice;
-    json[r'noJWT'] = noJwt;
+    if (newDevice != null) {
+      json[r'newDevice'] = newDevice;
+    }
+    if (noJwt != null) {
+      json[r'noJWT'] = noJwt;
+    }
     if (eventInfo != null) {
       json[r'eventInfo'] = eventInfo.toJson();
     }
@@ -10028,7 +10373,7 @@ class BaseLoginRequest {
 /// is not mutable
 class BaseMessengerConfiguration {
   final Map<String, dynamic>? data;
-  final bool debug;
+  final bool? debug;
   final String? id;
   final ZonedDateTime? insertInstant;
   final ZonedDateTime? lastUpdateInstant;
@@ -10038,19 +10383,18 @@ class BaseMessengerConfiguration {
 
   BaseMessengerConfiguration(
       {this.data,
-      bool? debug,
+      this.debug,
       this.id,
       this.insertInstant,
       this.lastUpdateInstant,
       this.name,
       this.transport,
-      this.type})
-      : debug = debug ?? false;
+      this.type});
 
   factory BaseMessengerConfiguration.fromJson(Map<String, Object?> json) {
     return BaseMessengerConfiguration(
       data: json[r'data'] as Map<String, Object?>?,
-      debug: json[r'debug'] as bool? ?? false,
+      debug: json[r'debug'] as bool?,
       id: json[r'id'] as String?,
       insertInstant:
           (json[r'insertInstant'] as num?)?.toInt() as ZonedDateTime?,
@@ -10078,7 +10422,9 @@ class BaseMessengerConfiguration {
     if (data != null) {
       json[r'data'] = data;
     }
-    json[r'debug'] = debug;
+    if (debug != null) {
+      json[r'debug'] = debug;
+    }
     if (id != null) {
       json[r'id'] = id;
     }
@@ -10329,55 +10675,44 @@ class BreachedPasswordTenantMetric {
 }
 
 class CORSConfiguration {
-  final bool allowCredentials;
-  final List<String> allowedHeaders;
-  final List<HTTPMethod> allowedMethods;
-  final List<String> allowedOrigins;
-  final bool debug;
-  final List<String> exposedHeaders;
+  final bool? allowCredentials;
+  final List<String>? allowedHeaders;
+  final List<HTTPMethod>? allowedMethods;
+  final List<String>? allowedOrigins;
+  final bool? debug;
+  final List<String>? exposedHeaders;
   final int? preflightMaxAgeInSeconds;
-  final bool enabled;
+  final bool? enabled;
 
   CORSConfiguration(
-      {bool? allowCredentials,
-      List<String>? allowedHeaders,
-      List<HTTPMethod>? allowedMethods,
-      List<String>? allowedOrigins,
-      bool? debug,
-      List<String>? exposedHeaders,
+      {this.allowCredentials,
+      this.allowedHeaders,
+      this.allowedMethods,
+      this.allowedOrigins,
+      this.debug,
+      this.exposedHeaders,
       this.preflightMaxAgeInSeconds,
-      bool? enabled})
-      : allowCredentials = allowCredentials ?? false,
-        allowedHeaders = allowedHeaders ?? [],
-        allowedMethods = allowedMethods ?? [],
-        allowedOrigins = allowedOrigins ?? [],
-        debug = debug ?? false,
-        exposedHeaders = exposedHeaders ?? [],
-        enabled = enabled ?? false;
+      this.enabled});
 
   factory CORSConfiguration.fromJson(Map<String, Object?> json) {
     return CORSConfiguration(
-      allowCredentials: json[r'allowCredentials'] as bool? ?? false,
+      allowCredentials: json[r'allowCredentials'] as bool?,
       allowedHeaders: (json[r'allowedHeaders'] as List<Object?>?)
-              ?.map((i) => i as String? ?? '')
-              .toList() ??
-          [],
+          ?.map((i) => i as String? ?? '')
+          .toList(),
       allowedMethods: (json[r'allowedMethods'] as List<Object?>?)
-              ?.map((i) => HTTPMethod.fromValue(i as String? ?? ''))
-              .toList() ??
-          [],
+          ?.map((i) => HTTPMethod.fromValue(i as String? ?? ''))
+          .toList(),
       allowedOrigins: (json[r'allowedOrigins'] as List<Object?>?)
-              ?.map((i) => i as String? ?? '')
-              .toList() ??
-          [],
-      debug: json[r'debug'] as bool? ?? false,
+          ?.map((i) => i as String? ?? '')
+          .toList(),
+      debug: json[r'debug'] as bool?,
       exposedHeaders: (json[r'exposedHeaders'] as List<Object?>?)
-              ?.map((i) => i as String? ?? '')
-              .toList() ??
-          [],
+          ?.map((i) => i as String? ?? '')
+          .toList(),
       preflightMaxAgeInSeconds:
           (json[r'preflightMaxAgeInSeconds'] as num?)?.toInt(),
-      enabled: json[r'enabled'] as bool? ?? false,
+      enabled: json[r'enabled'] as bool?,
     );
   }
 
@@ -10392,16 +10727,30 @@ class CORSConfiguration {
     var enabled = this.enabled;
 
     final json = <String, Object?>{};
-    json[r'allowCredentials'] = allowCredentials;
-    json[r'allowedHeaders'] = allowedHeaders;
-    json[r'allowedMethods'] = allowedMethods.map((i) => i.value).toList();
-    json[r'allowedOrigins'] = allowedOrigins;
-    json[r'debug'] = debug;
-    json[r'exposedHeaders'] = exposedHeaders;
+    if (allowCredentials != null) {
+      json[r'allowCredentials'] = allowCredentials;
+    }
+    if (allowedHeaders != null) {
+      json[r'allowedHeaders'] = allowedHeaders;
+    }
+    if (allowedMethods != null) {
+      json[r'allowedMethods'] = allowedMethods.map((i) => i.value).toList();
+    }
+    if (allowedOrigins != null) {
+      json[r'allowedOrigins'] = allowedOrigins;
+    }
+    if (debug != null) {
+      json[r'debug'] = debug;
+    }
+    if (exposedHeaders != null) {
+      json[r'exposedHeaders'] = exposedHeaders;
+    }
     if (preflightMaxAgeInSeconds != null) {
       json[r'preflightMaxAgeInSeconds'] = preflightMaxAgeInSeconds;
     }
-    json[r'enabled'] = enabled;
+    if (enabled != null) {
+      json[r'enabled'] = enabled;
+    }
     return json;
   }
 
@@ -10684,33 +11033,30 @@ class ChangePasswordResponse {
 /// CleanSpeak configuration at the system and application level.
 class CleanSpeakConfiguration {
   final String? apiKey;
-  final List<String> applicationIds;
+  final List<String>? applicationIds;
   final String? url;
   final UsernameModeration? usernameModeration;
-  final bool enabled;
+  final bool? enabled;
 
   CleanSpeakConfiguration(
       {this.apiKey,
-      List<String>? applicationIds,
+      this.applicationIds,
       this.url,
       this.usernameModeration,
-      bool? enabled})
-      : applicationIds = applicationIds ?? [],
-        enabled = enabled ?? false;
+      this.enabled});
 
   factory CleanSpeakConfiguration.fromJson(Map<String, Object?> json) {
     return CleanSpeakConfiguration(
       apiKey: json[r'apiKey'] as String?,
       applicationIds: (json[r'applicationIds'] as List<Object?>?)
-              ?.map((i) => i as String? ?? '')
-              .toList() ??
-          [],
+          ?.map((i) => i as String? ?? '')
+          .toList(),
       url: json[r'url'] as String?,
       usernameModeration: json[r'usernameModeration'] != null
           ? UsernameModeration.fromJson(
               json[r'usernameModeration']! as Map<String, Object?>)
           : null,
-      enabled: json[r'enabled'] as bool? ?? false,
+      enabled: json[r'enabled'] as bool?,
     );
   }
 
@@ -10725,14 +11071,18 @@ class CleanSpeakConfiguration {
     if (apiKey != null) {
       json[r'apiKey'] = apiKey;
     }
-    json[r'applicationIds'] = applicationIds;
+    if (applicationIds != null) {
+      json[r'applicationIds'] = applicationIds;
+    }
     if (url != null) {
       json[r'url'] = url;
     }
     if (usernameModeration != null) {
       json[r'usernameModeration'] = usernameModeration.toJson();
     }
-    json[r'enabled'] = enabled;
+    if (enabled != null) {
+      json[r'enabled'] = enabled;
+    }
     return json;
   }
 
@@ -10783,21 +11133,17 @@ class ConnectorLambdaConfiguration {
 class ConnectorPolicy {
   final String? connectorId;
   final Map<String, dynamic>? data;
-  final List<dynamic> domains;
-  final bool migrate;
+  final List<dynamic>? domains;
+  final bool? migrate;
 
-  ConnectorPolicy(
-      {this.connectorId, this.data, List<dynamic>? domains, bool? migrate})
-      : domains = domains ?? [],
-        migrate = migrate ?? false;
+  ConnectorPolicy({this.connectorId, this.data, this.domains, this.migrate});
 
   factory ConnectorPolicy.fromJson(Map<String, Object?> json) {
     return ConnectorPolicy(
       connectorId: json[r'connectorId'] as String?,
       data: json[r'data'] as Map<String, Object?>?,
-      domains:
-          (json[r'domains'] as List<Object?>?)?.map((i) => i).toList() ?? [],
-      migrate: json[r'migrate'] as bool? ?? false,
+      domains: (json[r'domains'] as List<Object?>?)?.map((i) => i).toList(),
+      migrate: json[r'migrate'] as bool?,
     );
   }
 
@@ -10814,8 +11160,12 @@ class ConnectorPolicy {
     if (data != null) {
       json[r'data'] = data;
     }
-    json[r'domains'] = domains;
-    json[r'migrate'] = migrate;
+    if (domains != null) {
+      json[r'domains'] = domains;
+    }
+    if (migrate != null) {
+      json[r'migrate'] = migrate;
+    }
     return json;
   }
 
@@ -10866,11 +11216,9 @@ class ConnectorRequest {
 
 class ConnectorResponse {
   final BaseConnectorConfiguration? connector;
-  final List<BaseConnectorConfiguration> connectors;
+  final List<BaseConnectorConfiguration>? connectors;
 
-  ConnectorResponse(
-      {this.connector, List<BaseConnectorConfiguration>? connectors})
-      : connectors = connectors ?? [];
+  ConnectorResponse({this.connector, this.connectors});
 
   factory ConnectorResponse.fromJson(Map<String, Object?> json) {
     return ConnectorResponse(
@@ -10879,10 +11227,9 @@ class ConnectorResponse {
               json[r'connector']! as Map<String, Object?>)
           : null,
       connectors: (json[r'connectors'] as List<Object?>?)
-              ?.map((i) => BaseConnectorConfiguration.fromJson(
-                  i as Map<String, Object?>? ?? const {}))
-              .toList() ??
-          [],
+          ?.map((i) => BaseConnectorConfiguration.fromJson(
+              i as Map<String, Object?>? ?? const {}))
+          .toList(),
     );
   }
 
@@ -10894,7 +11241,9 @@ class ConnectorResponse {
     if (connector != null) {
       json[r'connector'] = connector.toJson();
     }
-    json[r'connectors'] = connectors.map((i) => i.toJson()).toList();
+    if (connectors != null) {
+      json[r'connectors'] = connectors.map((i) => i.toJson()).toList();
+    }
     return json;
   }
 
@@ -10918,9 +11267,9 @@ class Consent {
   final String? id;
   final ZonedDateTime? insertInstant;
   final ZonedDateTime? lastUpdateInstant;
-  final bool multipleValuesAllowed;
+  final bool? multipleValuesAllowed;
   final String? name;
-  final List<String> values;
+  final List<String>? values;
 
   Consent(
       {this.data,
@@ -10931,11 +11280,9 @@ class Consent {
       this.id,
       this.insertInstant,
       this.lastUpdateInstant,
-      bool? multipleValuesAllowed,
+      this.multipleValuesAllowed,
       this.name,
-      List<String>? values})
-      : multipleValuesAllowed = multipleValuesAllowed ?? false,
-        values = values ?? [];
+      this.values});
 
   factory Consent.fromJson(Map<String, Object?> json) {
     return Consent(
@@ -10957,12 +11304,11 @@ class Consent {
           (json[r'insertInstant'] as num?)?.toInt() as ZonedDateTime?,
       lastUpdateInstant:
           (json[r'lastUpdateInstant'] as num?)?.toInt() as ZonedDateTime?,
-      multipleValuesAllowed: json[r'multipleValuesAllowed'] as bool? ?? false,
+      multipleValuesAllowed: json[r'multipleValuesAllowed'] as bool?,
       name: json[r'name'] as String?,
       values: (json[r'values'] as List<Object?>?)
-              ?.map((i) => i as String? ?? '')
-              .toList() ??
-          [],
+          ?.map((i) => i as String? ?? '')
+          .toList(),
     );
   }
 
@@ -11006,11 +11352,15 @@ class Consent {
     if (lastUpdateInstant != null) {
       json[r'lastUpdateInstant'] = lastUpdateInstant.toJson();
     }
-    json[r'multipleValuesAllowed'] = multipleValuesAllowed;
+    if (multipleValuesAllowed != null) {
+      json[r'multipleValuesAllowed'] = multipleValuesAllowed;
+    }
     if (name != null) {
       json[r'name'] = name;
     }
-    json[r'values'] = values;
+    if (values != null) {
+      json[r'values'] = values;
+    }
     return json;
   }
 
@@ -11080,10 +11430,9 @@ class ConsentRequest {
 /// API response for consent.
 class ConsentResponse {
   final Consent? consent;
-  final List<Consent> consents;
+  final List<Consent>? consents;
 
-  ConsentResponse({this.consent, List<Consent>? consents})
-      : consents = consents ?? [];
+  ConsentResponse({this.consent, this.consents});
 
   factory ConsentResponse.fromJson(Map<String, Object?> json) {
     return ConsentResponse(
@@ -11091,10 +11440,8 @@ class ConsentResponse {
           ? Consent.fromJson(json[r'consent']! as Map<String, Object?>)
           : null,
       consents: (json[r'consents'] as List<Object?>?)
-              ?.map((i) =>
-                  Consent.fromJson(i as Map<String, Object?>? ?? const {}))
-              .toList() ??
-          [],
+          ?.map((i) => Consent.fromJson(i as Map<String, Object?>? ?? const {}))
+          .toList(),
     );
   }
 
@@ -11106,7 +11453,9 @@ class ConsentResponse {
     if (consent != null) {
       json[r'consent'] = consent.toJson();
     }
-    json[r'consents'] = consents.map((i) => i.toJson()).toList();
+    if (consents != null) {
+      json[r'consents'] = consents.map((i) => i.toJson()).toList();
+    }
     return json;
   }
 
@@ -11204,19 +11553,16 @@ class ConsentSearchRequest {
 
 /// Consent search response
 class ConsentSearchResponse {
-  final List<Consent> consents;
+  final List<Consent>? consents;
   final int? total;
 
-  ConsentSearchResponse({List<Consent>? consents, this.total})
-      : consents = consents ?? [];
+  ConsentSearchResponse({this.consents, this.total});
 
   factory ConsentSearchResponse.fromJson(Map<String, Object?> json) {
     return ConsentSearchResponse(
       consents: (json[r'consents'] as List<Object?>?)
-              ?.map((i) =>
-                  Consent.fromJson(i as Map<String, Object?>? ?? const {}))
-              .toList() ??
-          [],
+          ?.map((i) => Consent.fromJson(i as Map<String, Object?>? ?? const {}))
+          .toList(),
       total: (json[r'total'] as num?)?.toInt(),
     );
   }
@@ -11226,7 +11572,9 @@ class ConsentSearchResponse {
     var total = this.total;
 
     final json = <String, Object?>{};
-    json[r'consents'] = consents.map((i) => i.toJson()).toList();
+    if (consents != null) {
+      json[r'consents'] = consents.map((i) => i.toJson()).toList();
+    }
     if (total != null) {
       json[r'total'] = total;
     }
@@ -11278,13 +11626,13 @@ class Count {
 
 /// Contains the output for the {@code credProps} extension
 class CredentialPropertiesOutput {
-  final bool rk;
+  final bool? rk;
 
-  CredentialPropertiesOutput({bool? rk}) : rk = rk ?? false;
+  CredentialPropertiesOutput({this.rk});
 
   factory CredentialPropertiesOutput.fromJson(Map<String, Object?> json) {
     return CredentialPropertiesOutput(
-      rk: json[r'rk'] as bool? ?? false,
+      rk: json[r'rk'] as bool?,
     );
   }
 
@@ -11292,7 +11640,9 @@ class CredentialPropertiesOutput {
     var rk = this.rk;
 
     final json = <String, Object?>{};
-    json[r'rk'] = rk;
+    if (rk != null) {
+      json[r'rk'] = rk;
+    }
     return json;
   }
 
@@ -11305,19 +11655,16 @@ class CredentialPropertiesOutput {
 
 /// Response for the daily active user report.
 class DailyActiveUserReportResponse {
-  final List<Count> dailyActiveUsers;
+  final List<Count>? dailyActiveUsers;
   final int? total;
 
-  DailyActiveUserReportResponse({List<Count>? dailyActiveUsers, this.total})
-      : dailyActiveUsers = dailyActiveUsers ?? [];
+  DailyActiveUserReportResponse({this.dailyActiveUsers, this.total});
 
   factory DailyActiveUserReportResponse.fromJson(Map<String, Object?> json) {
     return DailyActiveUserReportResponse(
       dailyActiveUsers: (json[r'dailyActiveUsers'] as List<Object?>?)
-              ?.map(
-                  (i) => Count.fromJson(i as Map<String, Object?>? ?? const {}))
-              .toList() ??
-          [],
+          ?.map((i) => Count.fromJson(i as Map<String, Object?>? ?? const {}))
+          .toList(),
       total: (json[r'total'] as num?)?.toInt(),
     );
   }
@@ -11327,8 +11674,10 @@ class DailyActiveUserReportResponse {
     var total = this.total;
 
     final json = <String, Object?>{};
-    json[r'dailyActiveUsers'] =
-        dailyActiveUsers.map((i) => i.toJson()).toList();
+    if (dailyActiveUsers != null) {
+      json[r'dailyActiveUsers'] =
+          dailyActiveUsers.map((i) => i.toJson()).toList();
+    }
     if (total != null) {
       json[r'total'] = total;
     }
@@ -11346,15 +11695,14 @@ class DailyActiveUserReportResponse {
 
 class DeleteConfiguration {
   final int? numberOfDaysToRetain;
-  final bool enabled;
+  final bool? enabled;
 
-  DeleteConfiguration({this.numberOfDaysToRetain, bool? enabled})
-      : enabled = enabled ?? false;
+  DeleteConfiguration({this.numberOfDaysToRetain, this.enabled});
 
   factory DeleteConfiguration.fromJson(Map<String, Object?> json) {
     return DeleteConfiguration(
       numberOfDaysToRetain: (json[r'numberOfDaysToRetain'] as num?)?.toInt(),
-      enabled: json[r'enabled'] as bool? ?? false,
+      enabled: json[r'enabled'] as bool?,
     );
   }
 
@@ -11366,7 +11714,9 @@ class DeleteConfiguration {
     if (numberOfDaysToRetain != null) {
       json[r'numberOfDaysToRetain'] = numberOfDaysToRetain;
     }
-    json[r'enabled'] = enabled;
+    if (enabled != null) {
+      json[r'enabled'] = enabled;
+    }
     return json;
   }
 
@@ -11743,48 +12093,41 @@ class DomainBasedIdentityProvider {
 
 /// This class is an abstraction of a simple email message.
 class Email {
-  final List<Attachment> attachments;
-  final List<EmailAddress> bcc;
-  final List<EmailAddress> cc;
+  final List<Attachment>? attachments;
+  final List<EmailAddress>? bcc;
+  final List<EmailAddress>? cc;
   final EmailAddress? from;
   final String? html;
   final EmailAddress? replyTo;
   final String? subject;
   final String? text;
-  final List<EmailAddress> to;
+  final List<EmailAddress>? to;
 
   Email(
-      {List<Attachment>? attachments,
-      List<EmailAddress>? bcc,
-      List<EmailAddress>? cc,
+      {this.attachments,
+      this.bcc,
+      this.cc,
       this.from,
       this.html,
       this.replyTo,
       this.subject,
       this.text,
-      List<EmailAddress>? to})
-      : attachments = attachments ?? [],
-        bcc = bcc ?? [],
-        cc = cc ?? [],
-        to = to ?? [];
+      this.to});
 
   factory Email.fromJson(Map<String, Object?> json) {
     return Email(
       attachments: (json[r'attachments'] as List<Object?>?)
-              ?.map((i) =>
-                  Attachment.fromJson(i as Map<String, Object?>? ?? const {}))
-              .toList() ??
-          [],
+          ?.map((i) =>
+              Attachment.fromJson(i as Map<String, Object?>? ?? const {}))
+          .toList(),
       bcc: (json[r'bcc'] as List<Object?>?)
-              ?.map((i) =>
-                  EmailAddress.fromJson(i as Map<String, Object?>? ?? const {}))
-              .toList() ??
-          [],
+          ?.map((i) =>
+              EmailAddress.fromJson(i as Map<String, Object?>? ?? const {}))
+          .toList(),
       cc: (json[r'cc'] as List<Object?>?)
-              ?.map((i) =>
-                  EmailAddress.fromJson(i as Map<String, Object?>? ?? const {}))
-              .toList() ??
-          [],
+          ?.map((i) =>
+              EmailAddress.fromJson(i as Map<String, Object?>? ?? const {}))
+          .toList(),
       from: json[r'from'] != null
           ? EmailAddress.fromJson(json[r'from']! as Map<String, Object?>)
           : null,
@@ -11795,10 +12138,9 @@ class Email {
       subject: json[r'subject'] as String?,
       text: json[r'text'] as String?,
       to: (json[r'to'] as List<Object?>?)
-              ?.map((i) =>
-                  EmailAddress.fromJson(i as Map<String, Object?>? ?? const {}))
-              .toList() ??
-          [],
+          ?.map((i) =>
+              EmailAddress.fromJson(i as Map<String, Object?>? ?? const {}))
+          .toList(),
     );
   }
 
@@ -11814,9 +12156,15 @@ class Email {
     var to = this.to;
 
     final json = <String, Object?>{};
-    json[r'attachments'] = attachments.map((i) => i.toJson()).toList();
-    json[r'bcc'] = bcc.map((i) => i.toJson()).toList();
-    json[r'cc'] = cc.map((i) => i.toJson()).toList();
+    if (attachments != null) {
+      json[r'attachments'] = attachments.map((i) => i.toJson()).toList();
+    }
+    if (bcc != null) {
+      json[r'bcc'] = bcc.map((i) => i.toJson()).toList();
+    }
+    if (cc != null) {
+      json[r'cc'] = cc.map((i) => i.toJson()).toList();
+    }
     if (from != null) {
       json[r'from'] = from.toJson();
     }
@@ -11832,7 +12180,9 @@ class Email {
     if (text != null) {
       json[r'text'] = text;
     }
-    json[r'to'] = to.map((i) => i.toJson()).toList();
+    if (to != null) {
+      json[r'to'] = to.map((i) => i.toJson()).toList();
+    }
     return json;
   }
 
@@ -11897,15 +12247,15 @@ class EmailAddress {
 }
 
 class EmailConfiguration {
-  final List<EmailHeader> additionalHeaders;
-  final bool debug;
+  final List<EmailHeader>? additionalHeaders;
+  final bool? debug;
   final String? defaultFromEmail;
   final String? defaultFromName;
   final String? emailUpdateEmailTemplateId;
   final String? emailVerifiedEmailTemplateId;
   final String? forgotPasswordEmailTemplateId;
   final String? host;
-  final bool implicitEmailVerificationAllowed;
+  final bool? implicitEmailVerificationAllowed;
   final String? loginIdInUseOnCreateEmailTemplateId;
   final String? loginIdInUseOnUpdateEmailTemplateId;
   final String? loginNewDeviceEmailTemplateId;
@@ -11924,19 +12274,19 @@ class EmailConfiguration {
   final String? username;
   final String? verificationEmailTemplateId;
   final VerificationStrategy? verificationStrategy;
-  final bool verifyEmail;
-  final bool verifyEmailWhenChanged;
+  final bool? verifyEmail;
+  final bool? verifyEmailWhenChanged;
 
   EmailConfiguration(
-      {List<EmailHeader>? additionalHeaders,
-      bool? debug,
+      {this.additionalHeaders,
+      this.debug,
       this.defaultFromEmail,
       this.defaultFromName,
       this.emailUpdateEmailTemplateId,
       this.emailVerifiedEmailTemplateId,
       this.forgotPasswordEmailTemplateId,
       this.host,
-      bool? implicitEmailVerificationAllowed,
+      this.implicitEmailVerificationAllowed,
       this.loginIdInUseOnCreateEmailTemplateId,
       this.loginIdInUseOnUpdateEmailTemplateId,
       this.loginNewDeviceEmailTemplateId,
@@ -11955,23 +12305,16 @@ class EmailConfiguration {
       this.username,
       this.verificationEmailTemplateId,
       this.verificationStrategy,
-      bool? verifyEmail,
-      bool? verifyEmailWhenChanged})
-      : additionalHeaders = additionalHeaders ?? [],
-        debug = debug ?? false,
-        implicitEmailVerificationAllowed =
-            implicitEmailVerificationAllowed ?? false,
-        verifyEmail = verifyEmail ?? false,
-        verifyEmailWhenChanged = verifyEmailWhenChanged ?? false;
+      this.verifyEmail,
+      this.verifyEmailWhenChanged});
 
   factory EmailConfiguration.fromJson(Map<String, Object?> json) {
     return EmailConfiguration(
       additionalHeaders: (json[r'additionalHeaders'] as List<Object?>?)
-              ?.map((i) =>
-                  EmailHeader.fromJson(i as Map<String, Object?>? ?? const {}))
-              .toList() ??
-          [],
-      debug: json[r'debug'] as bool? ?? false,
+          ?.map((i) =>
+              EmailHeader.fromJson(i as Map<String, Object?>? ?? const {}))
+          .toList(),
+      debug: json[r'debug'] as bool?,
       defaultFromEmail: json[r'defaultFromEmail'] as String?,
       defaultFromName: json[r'defaultFromName'] as String?,
       emailUpdateEmailTemplateId:
@@ -11982,7 +12325,7 @@ class EmailConfiguration {
           json[r'forgotPasswordEmailTemplateId'] as String?,
       host: json[r'host'] as String?,
       implicitEmailVerificationAllowed:
-          json[r'implicitEmailVerificationAllowed'] as bool? ?? false,
+          json[r'implicitEmailVerificationAllowed'] as bool?,
       loginIdInUseOnCreateEmailTemplateId:
           json[r'loginIdInUseOnCreateEmailTemplateId'] as String?,
       loginIdInUseOnUpdateEmailTemplateId:
@@ -12020,8 +12363,8 @@ class EmailConfiguration {
           ? VerificationStrategy.fromValue(
               json[r'verificationStrategy']! as String)
           : null,
-      verifyEmail: json[r'verifyEmail'] as bool? ?? false,
-      verifyEmailWhenChanged: json[r'verifyEmailWhenChanged'] as bool? ?? false,
+      verifyEmail: json[r'verifyEmail'] as bool?,
+      verifyEmailWhenChanged: json[r'verifyEmailWhenChanged'] as bool?,
     );
   }
 
@@ -12063,9 +12406,13 @@ class EmailConfiguration {
     var verifyEmailWhenChanged = this.verifyEmailWhenChanged;
 
     final json = <String, Object?>{};
-    json[r'additionalHeaders'] =
-        additionalHeaders.map((i) => i.toJson()).toList();
-    json[r'debug'] = debug;
+    if (additionalHeaders != null) {
+      json[r'additionalHeaders'] =
+          additionalHeaders.map((i) => i.toJson()).toList();
+    }
+    if (debug != null) {
+      json[r'debug'] = debug;
+    }
     if (defaultFromEmail != null) {
       json[r'defaultFromEmail'] = defaultFromEmail;
     }
@@ -12084,8 +12431,10 @@ class EmailConfiguration {
     if (host != null) {
       json[r'host'] = host;
     }
-    json[r'implicitEmailVerificationAllowed'] =
-        implicitEmailVerificationAllowed;
+    if (implicitEmailVerificationAllowed != null) {
+      json[r'implicitEmailVerificationAllowed'] =
+          implicitEmailVerificationAllowed;
+    }
     if (loginIdInUseOnCreateEmailTemplateId != null) {
       json[r'loginIdInUseOnCreateEmailTemplateId'] =
           loginIdInUseOnCreateEmailTemplateId;
@@ -12145,8 +12494,12 @@ class EmailConfiguration {
     if (verificationStrategy != null) {
       json[r'verificationStrategy'] = verificationStrategy.value;
     }
-    json[r'verifyEmail'] = verifyEmail;
-    json[r'verifyEmailWhenChanged'] = verifyEmailWhenChanged;
+    if (verifyEmail != null) {
+      json[r'verifyEmail'] = verifyEmail;
+    }
+    if (verifyEmailWhenChanged != null) {
+      json[r'verifyEmailWhenChanged'] = verifyEmailWhenChanged;
+    }
     return json;
   }
 
@@ -12273,14 +12626,13 @@ class EmailPlus {
   final String? emailTemplateId;
   final int? maximumTimeToSendEmailInHours;
   final int? minimumTimeToSendEmailInHours;
-  final bool enabled;
+  final bool? enabled;
 
   EmailPlus(
       {this.emailTemplateId,
       this.maximumTimeToSendEmailInHours,
       this.minimumTimeToSendEmailInHours,
-      bool? enabled})
-      : enabled = enabled ?? false;
+      this.enabled});
 
   factory EmailPlus.fromJson(Map<String, Object?> json) {
     return EmailPlus(
@@ -12289,7 +12641,7 @@ class EmailPlus {
           (json[r'maximumTimeToSendEmailInHours'] as num?)?.toInt(),
       minimumTimeToSendEmailInHours:
           (json[r'minimumTimeToSendEmailInHours'] as num?)?.toInt(),
-      enabled: json[r'enabled'] as bool? ?? false,
+      enabled: json[r'enabled'] as bool?,
     );
   }
 
@@ -12309,7 +12661,9 @@ class EmailPlus {
     if (minimumTimeToSendEmailInHours != null) {
       json[r'minimumTimeToSendEmailInHours'] = minimumTimeToSendEmailInHours;
     }
-    json[r'enabled'] = enabled;
+    if (enabled != null) {
+      json[r'enabled'] = enabled;
+    }
     return json;
   }
 
@@ -12555,11 +12909,9 @@ class EmailTemplateRequest {
 /// Email template response.
 class EmailTemplateResponse {
   final EmailTemplate? emailTemplate;
-  final List<EmailTemplate> emailTemplates;
+  final List<EmailTemplate>? emailTemplates;
 
-  EmailTemplateResponse(
-      {this.emailTemplate, List<EmailTemplate>? emailTemplates})
-      : emailTemplates = emailTemplates ?? [];
+  EmailTemplateResponse({this.emailTemplate, this.emailTemplates});
 
   factory EmailTemplateResponse.fromJson(Map<String, Object?> json) {
     return EmailTemplateResponse(
@@ -12568,10 +12920,9 @@ class EmailTemplateResponse {
               json[r'emailTemplate']! as Map<String, Object?>)
           : null,
       emailTemplates: (json[r'emailTemplates'] as List<Object?>?)
-              ?.map((i) => EmailTemplate.fromJson(
-                  i as Map<String, Object?>? ?? const {}))
-              .toList() ??
-          [],
+          ?.map((i) =>
+              EmailTemplate.fromJson(i as Map<String, Object?>? ?? const {}))
+          .toList(),
     );
   }
 
@@ -12583,7 +12934,9 @@ class EmailTemplateResponse {
     if (emailTemplate != null) {
       json[r'emailTemplate'] = emailTemplate.toJson();
     }
-    json[r'emailTemplates'] = emailTemplates.map((i) => i.toJson()).toList();
+    if (emailTemplates != null) {
+      json[r'emailTemplates'] = emailTemplates.map((i) => i.toJson()).toList();
+    }
     return json;
   }
 
@@ -12682,19 +13035,17 @@ class EmailTemplateSearchRequest {
 
 /// Email template search response
 class EmailTemplateSearchResponse {
-  final List<EmailTemplate> emailTemplates;
+  final List<EmailTemplate>? emailTemplates;
   final int? total;
 
-  EmailTemplateSearchResponse({List<EmailTemplate>? emailTemplates, this.total})
-      : emailTemplates = emailTemplates ?? [];
+  EmailTemplateSearchResponse({this.emailTemplates, this.total});
 
   factory EmailTemplateSearchResponse.fromJson(Map<String, Object?> json) {
     return EmailTemplateSearchResponse(
       emailTemplates: (json[r'emailTemplates'] as List<Object?>?)
-              ?.map((i) => EmailTemplate.fromJson(
-                  i as Map<String, Object?>? ?? const {}))
-              .toList() ??
-          [],
+          ?.map((i) =>
+              EmailTemplate.fromJson(i as Map<String, Object?>? ?? const {}))
+          .toList(),
       total: (json[r'total'] as num?)?.toInt(),
     );
   }
@@ -12704,7 +13055,9 @@ class EmailTemplateSearchResponse {
     var total = this.total;
 
     final json = <String, Object?>{};
-    json[r'emailTemplates'] = emailTemplates.map((i) => i.toJson()).toList();
+    if (emailTemplates != null) {
+      json[r'emailTemplates'] = emailTemplates.map((i) => i.toJson()).toList();
+    }
     if (total != null) {
       json[r'total'] = total;
     }
@@ -12721,16 +13074,14 @@ class EmailTemplateSearchResponse {
 }
 
 class EmailUnverifiedOptions {
-  final bool allowEmailChangeWhenGated;
+  final bool? allowEmailChangeWhenGated;
   final UnverifiedBehavior? behavior;
 
-  EmailUnverifiedOptions({bool? allowEmailChangeWhenGated, this.behavior})
-      : allowEmailChangeWhenGated = allowEmailChangeWhenGated ?? false;
+  EmailUnverifiedOptions({this.allowEmailChangeWhenGated, this.behavior});
 
   factory EmailUnverifiedOptions.fromJson(Map<String, Object?> json) {
     return EmailUnverifiedOptions(
-      allowEmailChangeWhenGated:
-          json[r'allowEmailChangeWhenGated'] as bool? ?? false,
+      allowEmailChangeWhenGated: json[r'allowEmailChangeWhenGated'] as bool?,
       behavior: json[r'behavior'] != null
           ? UnverifiedBehavior.fromValue(json[r'behavior']! as String)
           : null,
@@ -12742,7 +13093,9 @@ class EmailUnverifiedOptions {
     var behavior = this.behavior;
 
     final json = <String, Object?>{};
-    json[r'allowEmailChangeWhenGated'] = allowEmailChangeWhenGated;
+    if (allowEmailChangeWhenGated != null) {
+      json[r'allowEmailChangeWhenGated'] = allowEmailChangeWhenGated;
+    }
     if (behavior != null) {
       json[r'behavior'] = behavior.value;
     }
@@ -12761,13 +13114,13 @@ class EmailUnverifiedOptions {
 
 /// Something that can be enabled and thus also disabled.
 class Enableable {
-  final bool enabled;
+  final bool? enabled;
 
-  Enableable({bool? enabled}) : enabled = enabled ?? false;
+  Enableable({this.enabled});
 
   factory Enableable.fromJson(Map<String, Object?> json) {
     return Enableable(
-      enabled: json[r'enabled'] as bool? ?? false,
+      enabled: json[r'enabled'] as bool?,
     );
   }
 
@@ -12775,7 +13128,9 @@ class Enableable {
     var enabled = this.enabled;
 
     final json = <String, Object?>{};
-    json[r'enabled'] = enabled;
+    if (enabled != null) {
+      json[r'enabled'] = enabled;
+    }
     return json;
   }
 
@@ -12910,7 +13265,7 @@ class EntityGrant {
   final String? id;
   final ZonedDateTime? insertInstant;
   final ZonedDateTime? lastUpdateInstant;
-  final List<dynamic> permissions;
+  final List<dynamic>? permissions;
   final String? recipientEntityId;
   final String? userId;
 
@@ -12920,10 +13275,9 @@ class EntityGrant {
       this.id,
       this.insertInstant,
       this.lastUpdateInstant,
-      List<dynamic>? permissions,
+      this.permissions,
       this.recipientEntityId,
-      this.userId})
-      : permissions = permissions ?? [];
+      this.userId});
 
   factory EntityGrant.fromJson(Map<String, Object?> json) {
     return EntityGrant(
@@ -12937,8 +13291,7 @@ class EntityGrant {
       lastUpdateInstant:
           (json[r'lastUpdateInstant'] as num?)?.toInt() as ZonedDateTime?,
       permissions:
-          (json[r'permissions'] as List<Object?>?)?.map((i) => i).toList() ??
-              [],
+          (json[r'permissions'] as List<Object?>?)?.map((i) => i).toList(),
       recipientEntityId: json[r'recipientEntityId'] as String?,
       userId: json[r'userId'] as String?,
     );
@@ -12970,7 +13323,9 @@ class EntityGrant {
     if (lastUpdateInstant != null) {
       json[r'lastUpdateInstant'] = lastUpdateInstant.toJson();
     }
-    json[r'permissions'] = permissions;
+    if (permissions != null) {
+      json[r'permissions'] = permissions;
+    }
     if (recipientEntityId != null) {
       json[r'recipientEntityId'] = recipientEntityId;
     }
@@ -13035,19 +13390,17 @@ class EntityGrantRequest {
 
 /// Entity grant API response object.
 class EntityGrantResponse {
-  final List<EntityGrant> grants;
+  final List<EntityGrant>? grants;
   final EntityGrant? grant;
 
-  EntityGrantResponse({List<EntityGrant>? grants, this.grant})
-      : grants = grants ?? [];
+  EntityGrantResponse({this.grants, this.grant});
 
   factory EntityGrantResponse.fromJson(Map<String, Object?> json) {
     return EntityGrantResponse(
       grants: (json[r'grants'] as List<Object?>?)
-              ?.map((i) =>
-                  EntityGrant.fromJson(i as Map<String, Object?>? ?? const {}))
-              .toList() ??
-          [],
+          ?.map((i) =>
+              EntityGrant.fromJson(i as Map<String, Object?>? ?? const {}))
+          .toList(),
       grant: json[r'grant'] != null
           ? EntityGrant.fromJson(json[r'grant']! as Map<String, Object?>)
           : null,
@@ -13059,7 +13412,9 @@ class EntityGrantResponse {
     var grant = this.grant;
 
     final json = <String, Object?>{};
-    json[r'grants'] = grants.map((i) => i.toJson()).toList();
+    if (grants != null) {
+      json[r'grants'] = grants.map((i) => i.toJson()).toList();
+    }
     if (grant != null) {
       json[r'grant'] = grant.toJson();
     }
@@ -13185,19 +13540,17 @@ class EntityGrantSearchRequest {
 
 /// Search request for entity grants.
 class EntityGrantSearchResponse {
-  final List<EntityGrant> grants;
+  final List<EntityGrant>? grants;
   final int? total;
 
-  EntityGrantSearchResponse({List<EntityGrant>? grants, this.total})
-      : grants = grants ?? [];
+  EntityGrantSearchResponse({this.grants, this.total});
 
   factory EntityGrantSearchResponse.fromJson(Map<String, Object?> json) {
     return EntityGrantSearchResponse(
       grants: (json[r'grants'] as List<Object?>?)
-              ?.map((i) =>
-                  EntityGrant.fromJson(i as Map<String, Object?>? ?? const {}))
-              .toList() ??
-          [],
+          ?.map((i) =>
+              EntityGrant.fromJson(i as Map<String, Object?>? ?? const {}))
+          .toList(),
       total: (json[r'total'] as num?)?.toInt(),
     );
   }
@@ -13207,7 +13560,9 @@ class EntityGrantSearchResponse {
     var total = this.total;
 
     final json = <String, Object?>{};
-    json[r'grants'] = grants.map((i) => i.toJson()).toList();
+    if (grants != null) {
+      json[r'grants'] = grants.map((i) => i.toJson()).toList();
+    }
     if (total != null) {
       json[r'total'] = total;
     }
@@ -13226,17 +13581,16 @@ class EntityGrantSearchResponse {
 class EntityJWTConfiguration {
   final String? accessTokenKeyId;
   final int? timeToLiveInSeconds;
-  final bool enabled;
+  final bool? enabled;
 
   EntityJWTConfiguration(
-      {this.accessTokenKeyId, this.timeToLiveInSeconds, bool? enabled})
-      : enabled = enabled ?? false;
+      {this.accessTokenKeyId, this.timeToLiveInSeconds, this.enabled});
 
   factory EntityJWTConfiguration.fromJson(Map<String, Object?> json) {
     return EntityJWTConfiguration(
       accessTokenKeyId: json[r'accessTokenKeyId'] as String?,
       timeToLiveInSeconds: (json[r'timeToLiveInSeconds'] as num?)?.toInt(),
-      enabled: json[r'enabled'] as bool? ?? false,
+      enabled: json[r'enabled'] as bool?,
     );
   }
 
@@ -13252,7 +13606,9 @@ class EntityJWTConfiguration {
     if (timeToLiveInSeconds != null) {
       json[r'timeToLiveInSeconds'] = timeToLiveInSeconds;
     }
-    json[r'enabled'] = enabled;
+    if (enabled != null) {
+      json[r'enabled'] = enabled;
+    }
     return json;
   }
 
@@ -13331,39 +13687,34 @@ class EntityResponse {
 /// This class is the entity query. It provides a build pattern as well as
 /// public fields for use on forms and in actions.
 class EntitySearchCriteria {
-  final bool accurateTotal;
-  final List<String> ids;
+  final bool? accurateTotal;
+  final List<String>? ids;
   final String? nextResults;
   final String? query;
   final String? queryString;
-  final List<SortField> sortFields;
+  final List<SortField>? sortFields;
 
   EntitySearchCriteria(
-      {bool? accurateTotal,
-      List<String>? ids,
+      {this.accurateTotal,
+      this.ids,
       this.nextResults,
       this.query,
       this.queryString,
-      List<SortField>? sortFields})
-      : accurateTotal = accurateTotal ?? false,
-        ids = ids ?? [],
-        sortFields = sortFields ?? [];
+      this.sortFields});
 
   factory EntitySearchCriteria.fromJson(Map<String, Object?> json) {
     return EntitySearchCriteria(
-      accurateTotal: json[r'accurateTotal'] as bool? ?? false,
+      accurateTotal: json[r'accurateTotal'] as bool?,
       ids: (json[r'ids'] as List<Object?>?)
-              ?.map((i) => i as String? ?? '')
-              .toList() ??
-          [],
+          ?.map((i) => i as String? ?? '')
+          .toList(),
       nextResults: json[r'nextResults'] as String?,
       query: json[r'query'] as String?,
       queryString: json[r'queryString'] as String?,
       sortFields: (json[r'sortFields'] as List<Object?>?)
-              ?.map((i) =>
-                  SortField.fromJson(i as Map<String, Object?>? ?? const {}))
-              .toList() ??
-          [],
+          ?.map(
+              (i) => SortField.fromJson(i as Map<String, Object?>? ?? const {}))
+          .toList(),
     );
   }
 
@@ -13376,8 +13727,12 @@ class EntitySearchCriteria {
     var sortFields = this.sortFields;
 
     final json = <String, Object?>{};
-    json[r'accurateTotal'] = accurateTotal;
-    json[r'ids'] = ids;
+    if (accurateTotal != null) {
+      json[r'accurateTotal'] = accurateTotal;
+    }
+    if (ids != null) {
+      json[r'ids'] = ids;
+    }
     if (nextResults != null) {
       json[r'nextResults'] = nextResults;
     }
@@ -13387,7 +13742,9 @@ class EntitySearchCriteria {
     if (queryString != null) {
       json[r'queryString'] = queryString;
     }
-    json[r'sortFields'] = sortFields.map((i) => i.toJson()).toList();
+    if (sortFields != null) {
+      json[r'sortFields'] = sortFields.map((i) => i.toJson()).toList();
+    }
     return json;
   }
 
@@ -13443,20 +13800,17 @@ class EntitySearchRequest {
 
 /// Search request for entities
 class EntitySearchResponse {
-  final List<Entity> entities;
+  final List<Entity>? entities;
   final String? nextResults;
   final int? total;
 
-  EntitySearchResponse({List<Entity>? entities, this.nextResults, this.total})
-      : entities = entities ?? [];
+  EntitySearchResponse({this.entities, this.nextResults, this.total});
 
   factory EntitySearchResponse.fromJson(Map<String, Object?> json) {
     return EntitySearchResponse(
       entities: (json[r'entities'] as List<Object?>?)
-              ?.map((i) =>
-                  Entity.fromJson(i as Map<String, Object?>? ?? const {}))
-              .toList() ??
-          [],
+          ?.map((i) => Entity.fromJson(i as Map<String, Object?>? ?? const {}))
+          .toList(),
       nextResults: json[r'nextResults'] as String?,
       total: (json[r'total'] as num?)?.toInt(),
     );
@@ -13468,7 +13822,9 @@ class EntitySearchResponse {
     var total = this.total;
 
     final json = <String, Object?>{};
-    json[r'entities'] = entities.map((i) => i.toJson()).toList();
+    if (entities != null) {
+      json[r'entities'] = entities.map((i) => i.toJson()).toList();
+    }
     if (nextResults != null) {
       json[r'nextResults'] = nextResults;
     }
@@ -13497,7 +13853,7 @@ class EntityType {
   final EntityJWTConfiguration? jwtConfiguration;
   final ZonedDateTime? lastUpdateInstant;
   final String? name;
-  final List<EntityTypePermission> permissions;
+  final List<EntityTypePermission>? permissions;
 
   EntityType(
       {this.data,
@@ -13506,8 +13862,7 @@ class EntityType {
       this.jwtConfiguration,
       this.lastUpdateInstant,
       this.name,
-      List<EntityTypePermission>? permissions})
-      : permissions = permissions ?? [];
+      this.permissions});
 
   factory EntityType.fromJson(Map<String, Object?> json) {
     return EntityType(
@@ -13523,10 +13878,9 @@ class EntityType {
           (json[r'lastUpdateInstant'] as num?)?.toInt() as ZonedDateTime?,
       name: json[r'name'] as String?,
       permissions: (json[r'permissions'] as List<Object?>?)
-              ?.map((i) => EntityTypePermission.fromJson(
-                  i as Map<String, Object?>? ?? const {}))
-              .toList() ??
-          [],
+          ?.map((i) => EntityTypePermission.fromJson(
+              i as Map<String, Object?>? ?? const {}))
+          .toList(),
     );
   }
 
@@ -13558,7 +13912,9 @@ class EntityType {
     if (name != null) {
       json[r'name'] = name;
     }
-    json[r'permissions'] = permissions.map((i) => i.toJson()).toList();
+    if (permissions != null) {
+      json[r'permissions'] = permissions.map((i) => i.toJson()).toList();
+    }
     return json;
   }
 
@@ -13589,7 +13945,7 @@ class EntityTypePermission {
   final String? description;
   final String? id;
   final ZonedDateTime? insertInstant;
-  final bool isDefault;
+  final bool? isDefault;
   final ZonedDateTime? lastUpdateInstant;
   final String? name;
 
@@ -13598,10 +13954,9 @@ class EntityTypePermission {
       this.description,
       this.id,
       this.insertInstant,
-      bool? isDefault,
+      this.isDefault,
       this.lastUpdateInstant,
-      this.name})
-      : isDefault = isDefault ?? false;
+      this.name});
 
   factory EntityTypePermission.fromJson(Map<String, Object?> json) {
     return EntityTypePermission(
@@ -13610,7 +13965,7 @@ class EntityTypePermission {
       id: json[r'id'] as String?,
       insertInstant:
           (json[r'insertInstant'] as num?)?.toInt() as ZonedDateTime?,
-      isDefault: json[r'isDefault'] as bool? ?? false,
+      isDefault: json[r'isDefault'] as bool?,
       lastUpdateInstant:
           (json[r'lastUpdateInstant'] as num?)?.toInt() as ZonedDateTime?,
       name: json[r'name'] as String?,
@@ -13639,7 +13994,9 @@ class EntityTypePermission {
     if (insertInstant != null) {
       json[r'insertInstant'] = insertInstant.toJson();
     }
-    json[r'isDefault'] = isDefault;
+    if (isDefault != null) {
+      json[r'isDefault'] = isDefault;
+    }
     if (lastUpdateInstant != null) {
       json[r'lastUpdateInstant'] = lastUpdateInstant.toJson();
     }
@@ -13714,12 +14071,10 @@ class EntityTypeRequest {
 /// Entity Type API response object.
 class EntityTypeResponse {
   final EntityType? entityType;
-  final List<EntityType> entityTypes;
+  final List<EntityType>? entityTypes;
   final EntityTypePermission? permission;
 
-  EntityTypeResponse(
-      {this.entityType, List<EntityType>? entityTypes, this.permission})
-      : entityTypes = entityTypes ?? [];
+  EntityTypeResponse({this.entityType, this.entityTypes, this.permission});
 
   factory EntityTypeResponse.fromJson(Map<String, Object?> json) {
     return EntityTypeResponse(
@@ -13727,10 +14082,9 @@ class EntityTypeResponse {
           ? EntityType.fromJson(json[r'entityType']! as Map<String, Object?>)
           : null,
       entityTypes: (json[r'entityTypes'] as List<Object?>?)
-              ?.map((i) =>
-                  EntityType.fromJson(i as Map<String, Object?>? ?? const {}))
-              .toList() ??
-          [],
+          ?.map((i) =>
+              EntityType.fromJson(i as Map<String, Object?>? ?? const {}))
+          .toList(),
       permission: json[r'permission'] != null
           ? EntityTypePermission.fromJson(
               json[r'permission']! as Map<String, Object?>)
@@ -13747,7 +14101,9 @@ class EntityTypeResponse {
     if (entityType != null) {
       json[r'entityType'] = entityType.toJson();
     }
-    json[r'entityTypes'] = entityTypes.map((i) => i.toJson()).toList();
+    if (entityTypes != null) {
+      json[r'entityTypes'] = entityTypes.map((i) => i.toJson()).toList();
+    }
     if (permission != null) {
       json[r'permission'] = permission.toJson();
     }
@@ -13852,19 +14208,17 @@ class EntityTypeSearchRequest {
 
 /// Search response for entity types.
 class EntityTypeSearchResponse {
-  final List<EntityType> entityTypes;
+  final List<EntityType>? entityTypes;
   final int? total;
 
-  EntityTypeSearchResponse({List<EntityType>? entityTypes, this.total})
-      : entityTypes = entityTypes ?? [];
+  EntityTypeSearchResponse({this.entityTypes, this.total});
 
   factory EntityTypeSearchResponse.fromJson(Map<String, Object?> json) {
     return EntityTypeSearchResponse(
       entityTypes: (json[r'entityTypes'] as List<Object?>?)
-              ?.map((i) =>
-                  EntityType.fromJson(i as Map<String, Object?>? ?? const {}))
-              .toList() ??
-          [],
+          ?.map((i) =>
+              EntityType.fromJson(i as Map<String, Object?>? ?? const {}))
+          .toList(),
       total: (json[r'total'] as num?)?.toInt(),
     );
   }
@@ -13874,7 +14228,9 @@ class EntityTypeSearchResponse {
     var total = this.total;
 
     final json = <String, Object?>{};
-    json[r'entityTypes'] = entityTypes.map((i) => i.toJson()).toList();
+    if (entityTypes != null) {
+      json[r'entityTypes'] = entityTypes.map((i) => i.toJson()).toList();
+    }
     if (total != null) {
       json[r'total'] = total;
     }
@@ -13896,7 +14252,7 @@ class EpicGamesApplicationConfiguration {
   final String? clientSecret;
   final String? scope;
   final Map<String, dynamic>? data;
-  final bool createRegistration;
+  final bool? createRegistration;
 
   EpicGamesApplicationConfiguration(
       {this.buttonText,
@@ -13904,8 +14260,7 @@ class EpicGamesApplicationConfiguration {
       this.clientSecret,
       this.scope,
       this.data,
-      bool? createRegistration})
-      : createRegistration = createRegistration ?? false;
+      this.createRegistration});
 
   factory EpicGamesApplicationConfiguration.fromJson(
       Map<String, Object?> json) {
@@ -13915,7 +14270,7 @@ class EpicGamesApplicationConfiguration {
       clientSecret: json[r'client_secret'] as String?,
       scope: json[r'scope'] as String?,
       data: json[r'data'] as Map<String, Object?>?,
-      createRegistration: json[r'createRegistration'] as bool? ?? false,
+      createRegistration: json[r'createRegistration'] as bool?,
     );
   }
 
@@ -13943,7 +14298,9 @@ class EpicGamesApplicationConfiguration {
     if (data != null) {
       json[r'data'] = data;
     }
-    json[r'createRegistration'] = createRegistration;
+    if (createRegistration != null) {
+      json[r'createRegistration'] = createRegistration;
+    }
     return json;
   }
 
@@ -13973,7 +14330,7 @@ class EpicGamesIdentityProvider {
   final String? scope;
   final Map<String, dynamic>? data;
   final Map<String, dynamic>? applicationConfiguration;
-  final bool debug;
+  final bool? debug;
   final String? id;
   final ZonedDateTime? insertInstant;
   final ProviderLambdaConfiguration? lambdaConfiguration;
@@ -13990,7 +14347,7 @@ class EpicGamesIdentityProvider {
       this.scope,
       this.data,
       this.applicationConfiguration,
-      bool? debug,
+      this.debug,
       this.id,
       this.insertInstant,
       this.lambdaConfiguration,
@@ -13998,8 +14355,7 @@ class EpicGamesIdentityProvider {
       this.linkingStrategy,
       this.name,
       this.tenantConfiguration,
-      this.type})
-      : debug = debug ?? false;
+      this.type});
 
   factory EpicGamesIdentityProvider.fromJson(Map<String, Object?> json) {
     return EpicGamesIdentityProvider(
@@ -14010,7 +14366,7 @@ class EpicGamesIdentityProvider {
       data: json[r'data'] as Map<String, Object?>?,
       applicationConfiguration:
           json[r'applicationConfiguration'] as Map<String, Object?>?,
-      debug: json[r'debug'] as bool? ?? false,
+      debug: json[r'debug'] as bool?,
       id: json[r'id'] as String?,
       insertInstant:
           (json[r'insertInstant'] as num?)?.toInt() as ZonedDateTime?,
@@ -14069,7 +14425,9 @@ class EpicGamesIdentityProvider {
     if (applicationConfiguration != null) {
       json[r'applicationConfiguration'] = applicationConfiguration;
     }
-    json[r'debug'] = debug;
+    if (debug != null) {
+      json[r'debug'] = debug;
+    }
     if (id != null) {
       json[r'id'] = id;
     }
@@ -14180,25 +14538,19 @@ class Error {
 /// Standard error domain object that can also be used as the response from an
 /// API call.
 class Errors {
-  final List<Error> fieldErrors;
-  final List<Error> generalErrors;
+  final List<Error>? fieldErrors;
+  final List<Error>? generalErrors;
 
-  Errors({List<Error>? fieldErrors, List<Error>? generalErrors})
-      : fieldErrors = fieldErrors ?? [],
-        generalErrors = generalErrors ?? [];
+  Errors({this.fieldErrors, this.generalErrors});
 
   factory Errors.fromJson(Map<String, Object?> json) {
     return Errors(
       fieldErrors: (json[r'fieldErrors'] as List<Object?>?)
-              ?.map(
-                  (i) => Error.fromJson(i as Map<String, Object?>? ?? const {}))
-              .toList() ??
-          [],
+          ?.map((i) => Error.fromJson(i as Map<String, Object?>? ?? const {}))
+          .toList(),
       generalErrors: (json[r'generalErrors'] as List<Object?>?)
-              ?.map(
-                  (i) => Error.fromJson(i as Map<String, Object?>? ?? const {}))
-              .toList() ??
-          [],
+          ?.map((i) => Error.fromJson(i as Map<String, Object?>? ?? const {}))
+          .toList(),
     );
   }
 
@@ -14207,8 +14559,12 @@ class Errors {
     var generalErrors = this.generalErrors;
 
     final json = <String, Object?>{};
-    json[r'fieldErrors'] = fieldErrors.map((i) => i.toJson()).toList();
-    json[r'generalErrors'] = generalErrors.map((i) => i.toJson()).toList();
+    if (fieldErrors != null) {
+      json[r'fieldErrors'] = fieldErrors.map((i) => i.toJson()).toList();
+    }
+    if (generalErrors != null) {
+      json[r'generalErrors'] = generalErrors.map((i) => i.toJson()).toList();
+    }
     return json;
   }
 
@@ -14250,17 +14606,16 @@ class EventConfiguration {
 
 class EventConfigurationData {
   final TransactionType? transactionType;
-  final bool enabled;
+  final bool? enabled;
 
-  EventConfigurationData({this.transactionType, bool? enabled})
-      : enabled = enabled ?? false;
+  EventConfigurationData({this.transactionType, this.enabled});
 
   factory EventConfigurationData.fromJson(Map<String, Object?> json) {
     return EventConfigurationData(
       transactionType: json[r'transactionType'] != null
           ? TransactionType.fromValue(json[r'transactionType']! as String)
           : null,
-      enabled: json[r'enabled'] as bool? ?? false,
+      enabled: json[r'enabled'] as bool?,
     );
   }
 
@@ -14272,7 +14627,9 @@ class EventConfigurationData {
     if (transactionType != null) {
       json[r'transactionType'] = transactionType.value;
     }
-    json[r'enabled'] = enabled;
+    if (enabled != null) {
+      json[r'enabled'] = enabled;
+    }
     return json;
   }
 
@@ -14702,19 +15059,17 @@ class EventLogSearchRequest {
 
 /// Event log response.
 class EventLogSearchResponse {
-  final List<EventLog> eventLogs;
+  final List<EventLog>? eventLogs;
   final int? total;
 
-  EventLogSearchResponse({List<EventLog>? eventLogs, this.total})
-      : eventLogs = eventLogs ?? [];
+  EventLogSearchResponse({this.eventLogs, this.total});
 
   factory EventLogSearchResponse.fromJson(Map<String, Object?> json) {
     return EventLogSearchResponse(
       eventLogs: (json[r'eventLogs'] as List<Object?>?)
-              ?.map((i) =>
-                  EventLog.fromJson(i as Map<String, Object?>? ?? const {}))
-              .toList() ??
-          [],
+          ?.map(
+              (i) => EventLog.fromJson(i as Map<String, Object?>? ?? const {}))
+          .toList(),
       total: (json[r'total'] as num?)?.toInt(),
     );
   }
@@ -14724,7 +15079,9 @@ class EventLogSearchResponse {
     var total = this.total;
 
     final json = <String, Object?>{};
-    json[r'eventLogs'] = eventLogs.map((i) => i.toJson()).toList();
+    if (eventLogs != null) {
+      json[r'eventLogs'] = eventLogs.map((i) => i.toJson()).toList();
+    }
     if (total != null) {
       json[r'total'] = total;
     }
@@ -14773,16 +15130,15 @@ class EventRequest {
 
 /// An expandable API request.
 class ExpandableRequest {
-  final List<String> expand;
+  final List<String>? expand;
 
-  ExpandableRequest({List<String>? expand}) : expand = expand ?? [];
+  ExpandableRequest({this.expand});
 
   factory ExpandableRequest.fromJson(Map<String, Object?> json) {
     return ExpandableRequest(
       expand: (json[r'expand'] as List<Object?>?)
-              ?.map((i) => i as String? ?? '')
-              .toList() ??
-          [],
+          ?.map((i) => i as String? ?? '')
+          .toList(),
     );
   }
 
@@ -14790,7 +15146,9 @@ class ExpandableRequest {
     var expand = this.expand;
 
     final json = <String, Object?>{};
-    json[r'expand'] = expand;
+    if (expand != null) {
+      json[r'expand'] = expand;
+    }
     return json;
   }
 
@@ -14803,17 +15161,15 @@ class ExpandableRequest {
 
 /// An expandable API response.
 class ExpandableResponse {
-  final List<String> expandable;
+  final List<String>? expandable;
 
-  ExpandableResponse({List<String>? expandable})
-      : expandable = expandable ?? [];
+  ExpandableResponse({this.expandable});
 
   factory ExpandableResponse.fromJson(Map<String, Object?> json) {
     return ExpandableResponse(
       expandable: (json[r'expandable'] as List<Object?>?)
-              ?.map((i) => i as String? ?? '')
-              .toList() ??
-          [],
+          ?.map((i) => i as String? ?? '')
+          .toList(),
     );
   }
 
@@ -14821,7 +15177,9 @@ class ExpandableResponse {
     var expandable = this.expandable;
 
     final json = <String, Object?>{};
-    json[r'expandable'] = expandable;
+    if (expandable != null) {
+      json[r'expandable'] = expandable;
+    }
     return json;
   }
 
@@ -15251,16 +15609,15 @@ class ExternalIdentifierConfiguration {
 
 class ExternalJWTApplicationConfiguration {
   final Map<String, dynamic>? data;
-  final bool createRegistration;
+  final bool? createRegistration;
 
-  ExternalJWTApplicationConfiguration({this.data, bool? createRegistration})
-      : createRegistration = createRegistration ?? false;
+  ExternalJWTApplicationConfiguration({this.data, this.createRegistration});
 
   factory ExternalJWTApplicationConfiguration.fromJson(
       Map<String, Object?> json) {
     return ExternalJWTApplicationConfiguration(
       data: json[r'data'] as Map<String, Object?>?,
-      createRegistration: json[r'createRegistration'] as bool? ?? false,
+      createRegistration: json[r'createRegistration'] as bool?,
     );
   }
 
@@ -15272,7 +15629,9 @@ class ExternalJWTApplicationConfiguration {
     if (data != null) {
       json[r'data'] = data;
     }
-    json[r'createRegistration'] = createRegistration;
+    if (createRegistration != null) {
+      json[r'createRegistration'] = createRegistration;
+    }
     return json;
   }
 
@@ -15288,14 +15647,14 @@ class ExternalJWTApplicationConfiguration {
 /// External JWT-only identity provider.
 class ExternalJWTIdentityProvider {
   final Map<String, dynamic>? claimMap;
-  final List<dynamic> domains;
+  final List<dynamic>? domains;
   final String? defaultKeyId;
   final String? headerKeyParameter;
   final IdentityProviderOauth2Configuration? oauth2;
   final String? uniqueIdentityClaim;
   final Map<String, dynamic>? data;
   final Map<String, dynamic>? applicationConfiguration;
-  final bool debug;
+  final bool? debug;
   final String? id;
   final ZonedDateTime? insertInstant;
   final ProviderLambdaConfiguration? lambdaConfiguration;
@@ -15307,14 +15666,14 @@ class ExternalJWTIdentityProvider {
 
   ExternalJWTIdentityProvider(
       {this.claimMap,
-      List<dynamic>? domains,
+      this.domains,
       this.defaultKeyId,
       this.headerKeyParameter,
       this.oauth2,
       this.uniqueIdentityClaim,
       this.data,
       this.applicationConfiguration,
-      bool? debug,
+      this.debug,
       this.id,
       this.insertInstant,
       this.lambdaConfiguration,
@@ -15322,15 +15681,12 @@ class ExternalJWTIdentityProvider {
       this.linkingStrategy,
       this.name,
       this.tenantConfiguration,
-      this.type})
-      : domains = domains ?? [],
-        debug = debug ?? false;
+      this.type});
 
   factory ExternalJWTIdentityProvider.fromJson(Map<String, Object?> json) {
     return ExternalJWTIdentityProvider(
       claimMap: json[r'claimMap'] as Map<String, Object?>?,
-      domains:
-          (json[r'domains'] as List<Object?>?)?.map((i) => i).toList() ?? [],
+      domains: (json[r'domains'] as List<Object?>?)?.map((i) => i).toList(),
       defaultKeyId: json[r'defaultKeyId'] as String?,
       headerKeyParameter: json[r'headerKeyParameter'] as String?,
       oauth2: json[r'oauth2'] != null
@@ -15341,7 +15697,7 @@ class ExternalJWTIdentityProvider {
       data: json[r'data'] as Map<String, Object?>?,
       applicationConfiguration:
           json[r'applicationConfiguration'] as Map<String, Object?>?,
-      debug: json[r'debug'] as bool? ?? false,
+      debug: json[r'debug'] as bool?,
       id: json[r'id'] as String?,
       insertInstant:
           (json[r'insertInstant'] as num?)?.toInt() as ZonedDateTime?,
@@ -15387,7 +15743,9 @@ class ExternalJWTIdentityProvider {
     if (claimMap != null) {
       json[r'claimMap'] = claimMap;
     }
-    json[r'domains'] = domains;
+    if (domains != null) {
+      json[r'domains'] = domains;
+    }
     if (defaultKeyId != null) {
       json[r'defaultKeyId'] = defaultKeyId;
     }
@@ -15406,7 +15764,9 @@ class ExternalJWTIdentityProvider {
     if (applicationConfiguration != null) {
       json[r'applicationConfiguration'] = applicationConfiguration;
     }
-    json[r'debug'] = debug;
+    if (debug != null) {
+      json[r'debug'] = debug;
+    }
     if (id != null) {
       json[r'id'] = id;
     }
@@ -15483,7 +15843,7 @@ class FacebookApplicationConfiguration {
   final IdentityProviderLoginMethod? loginMethod;
   final String? permissions;
   final Map<String, dynamic>? data;
-  final bool createRegistration;
+  final bool? createRegistration;
 
   FacebookApplicationConfiguration(
       {this.appId,
@@ -15493,8 +15853,7 @@ class FacebookApplicationConfiguration {
       this.loginMethod,
       this.permissions,
       this.data,
-      bool? createRegistration})
-      : createRegistration = createRegistration ?? false;
+      this.createRegistration});
 
   factory FacebookApplicationConfiguration.fromJson(Map<String, Object?> json) {
     return FacebookApplicationConfiguration(
@@ -15508,7 +15867,7 @@ class FacebookApplicationConfiguration {
           : null,
       permissions: json[r'permissions'] as String?,
       data: json[r'data'] as Map<String, Object?>?,
-      createRegistration: json[r'createRegistration'] as bool? ?? false,
+      createRegistration: json[r'createRegistration'] as bool?,
     );
   }
 
@@ -15544,7 +15903,9 @@ class FacebookApplicationConfiguration {
     if (data != null) {
       json[r'data'] = data;
     }
-    json[r'createRegistration'] = createRegistration;
+    if (createRegistration != null) {
+      json[r'createRegistration'] = createRegistration;
+    }
     return json;
   }
 
@@ -15580,7 +15941,7 @@ class FacebookIdentityProvider {
   final String? permissions;
   final Map<String, dynamic>? data;
   final Map<String, dynamic>? applicationConfiguration;
-  final bool debug;
+  final bool? debug;
   final String? id;
   final ZonedDateTime? insertInstant;
   final ProviderLambdaConfiguration? lambdaConfiguration;
@@ -15599,7 +15960,7 @@ class FacebookIdentityProvider {
       this.permissions,
       this.data,
       this.applicationConfiguration,
-      bool? debug,
+      this.debug,
       this.id,
       this.insertInstant,
       this.lambdaConfiguration,
@@ -15607,8 +15968,7 @@ class FacebookIdentityProvider {
       this.linkingStrategy,
       this.name,
       this.tenantConfiguration,
-      this.type})
-      : debug = debug ?? false;
+      this.type});
 
   factory FacebookIdentityProvider.fromJson(Map<String, Object?> json) {
     return FacebookIdentityProvider(
@@ -15624,7 +15984,7 @@ class FacebookIdentityProvider {
       data: json[r'data'] as Map<String, Object?>?,
       applicationConfiguration:
           json[r'applicationConfiguration'] as Map<String, Object?>?,
-      debug: json[r'debug'] as bool? ?? false,
+      debug: json[r'debug'] as bool?,
       id: json[r'id'] as String?,
       insertInstant:
           (json[r'insertInstant'] as num?)?.toInt() as ZonedDateTime?,
@@ -15691,7 +16051,9 @@ class FacebookIdentityProvider {
     if (applicationConfiguration != null) {
       json[r'applicationConfiguration'] = applicationConfiguration;
     }
-    json[r'debug'] = debug;
+    if (debug != null) {
+      json[r'debug'] = debug;
+    }
     if (id != null) {
       json[r'id'] = id;
     }
@@ -15763,15 +16125,14 @@ class FacebookIdentityProvider {
 /// A policy to configure if and when the user-action is canceled prior to the
 /// expiration of the action.
 class FailedAuthenticationActionCancelPolicy {
-  final bool onPasswordReset;
+  final bool? onPasswordReset;
 
-  FailedAuthenticationActionCancelPolicy({bool? onPasswordReset})
-      : onPasswordReset = onPasswordReset ?? false;
+  FailedAuthenticationActionCancelPolicy({this.onPasswordReset});
 
   factory FailedAuthenticationActionCancelPolicy.fromJson(
       Map<String, Object?> json) {
     return FailedAuthenticationActionCancelPolicy(
-      onPasswordReset: json[r'onPasswordReset'] as bool? ?? false,
+      onPasswordReset: json[r'onPasswordReset'] as bool?,
     );
   }
 
@@ -15779,7 +16140,9 @@ class FailedAuthenticationActionCancelPolicy {
     var onPasswordReset = this.onPasswordReset;
 
     final json = <String, Object?>{};
-    json[r'onPasswordReset'] = onPasswordReset;
+    if (onPasswordReset != null) {
+      json[r'onPasswordReset'] = onPasswordReset;
+    }
     return json;
   }
 
@@ -15796,7 +16159,7 @@ class FailedAuthenticationConfiguration {
   final FailedAuthenticationActionCancelPolicy? actionCancelPolicy;
   final int? actionDuration;
   final ExpiryUnit? actionDurationUnit;
-  final bool emailUser;
+  final bool? emailUser;
   final int? resetCountInSeconds;
   final int? tooManyAttempts;
   final String? userActionId;
@@ -15805,11 +16168,10 @@ class FailedAuthenticationConfiguration {
       {this.actionCancelPolicy,
       this.actionDuration,
       this.actionDurationUnit,
-      bool? emailUser,
+      this.emailUser,
       this.resetCountInSeconds,
       this.tooManyAttempts,
-      this.userActionId})
-      : emailUser = emailUser ?? false;
+      this.userActionId});
 
   factory FailedAuthenticationConfiguration.fromJson(
       Map<String, Object?> json) {
@@ -15822,7 +16184,7 @@ class FailedAuthenticationConfiguration {
       actionDurationUnit: json[r'actionDurationUnit'] != null
           ? ExpiryUnit.fromValue(json[r'actionDurationUnit']! as String)
           : null,
-      emailUser: json[r'emailUser'] as bool? ?? false,
+      emailUser: json[r'emailUser'] as bool?,
       resetCountInSeconds: (json[r'resetCountInSeconds'] as num?)?.toInt(),
       tooManyAttempts: (json[r'tooManyAttempts'] as num?)?.toInt(),
       userActionId: json[r'userActionId'] as String?,
@@ -15848,7 +16210,9 @@ class FailedAuthenticationConfiguration {
     if (actionDurationUnit != null) {
       json[r'actionDurationUnit'] = actionDurationUnit.value;
     }
-    json[r'emailUser'] = emailUser;
+    if (emailUser != null) {
+      json[r'emailUser'] = emailUser;
+    }
     if (resetCountInSeconds != null) {
       json[r'resetCountInSeconds'] = resetCountInSeconds;
     }
@@ -15883,25 +16247,19 @@ class FailedAuthenticationConfiguration {
 
 /// Models a family grouping of users.
 class Family {
-  final List<FamilyMember> members;
+  final List<FamilyMember>? members;
   final String? id;
   final ZonedDateTime? insertInstant;
   final ZonedDateTime? lastUpdateInstant;
 
-  Family(
-      {List<FamilyMember>? members,
-      this.id,
-      this.insertInstant,
-      this.lastUpdateInstant})
-      : members = members ?? [];
+  Family({this.members, this.id, this.insertInstant, this.lastUpdateInstant});
 
   factory Family.fromJson(Map<String, Object?> json) {
     return Family(
       members: (json[r'members'] as List<Object?>?)
-              ?.map((i) =>
-                  FamilyMember.fromJson(i as Map<String, Object?>? ?? const {}))
-              .toList() ??
-          [],
+          ?.map((i) =>
+              FamilyMember.fromJson(i as Map<String, Object?>? ?? const {}))
+          .toList(),
       id: json[r'id'] as String?,
       insertInstant:
           (json[r'insertInstant'] as num?)?.toInt() as ZonedDateTime?,
@@ -15917,7 +16275,9 @@ class Family {
     var lastUpdateInstant = this.lastUpdateInstant;
 
     final json = <String, Object?>{};
-    json[r'members'] = members.map((i) => i.toJson()).toList();
+    if (members != null) {
+      json[r'members'] = members.map((i) => i.toJson()).toList();
+    }
     if (id != null) {
       json[r'id'] = id;
     }
@@ -15945,50 +16305,45 @@ class Family {
 }
 
 class FamilyConfiguration {
-  final bool allowChildRegistrations;
+  final bool? allowChildRegistrations;
   final String? confirmChildEmailTemplateId;
-  final bool deleteOrphanedAccounts;
+  final bool? deleteOrphanedAccounts;
   final int? deleteOrphanedAccountsDays;
   final String? familyRequestEmailTemplateId;
   final int? maximumChildAge;
   final int? minimumOwnerAge;
-  final bool parentEmailRequired;
+  final bool? parentEmailRequired;
   final String? parentRegistrationEmailTemplateId;
-  final bool enabled;
+  final bool? enabled;
 
   FamilyConfiguration(
-      {bool? allowChildRegistrations,
+      {this.allowChildRegistrations,
       this.confirmChildEmailTemplateId,
-      bool? deleteOrphanedAccounts,
+      this.deleteOrphanedAccounts,
       this.deleteOrphanedAccountsDays,
       this.familyRequestEmailTemplateId,
       this.maximumChildAge,
       this.minimumOwnerAge,
-      bool? parentEmailRequired,
+      this.parentEmailRequired,
       this.parentRegistrationEmailTemplateId,
-      bool? enabled})
-      : allowChildRegistrations = allowChildRegistrations ?? false,
-        deleteOrphanedAccounts = deleteOrphanedAccounts ?? false,
-        parentEmailRequired = parentEmailRequired ?? false,
-        enabled = enabled ?? false;
+      this.enabled});
 
   factory FamilyConfiguration.fromJson(Map<String, Object?> json) {
     return FamilyConfiguration(
-      allowChildRegistrations:
-          json[r'allowChildRegistrations'] as bool? ?? false,
+      allowChildRegistrations: json[r'allowChildRegistrations'] as bool?,
       confirmChildEmailTemplateId:
           json[r'confirmChildEmailTemplateId'] as String?,
-      deleteOrphanedAccounts: json[r'deleteOrphanedAccounts'] as bool? ?? false,
+      deleteOrphanedAccounts: json[r'deleteOrphanedAccounts'] as bool?,
       deleteOrphanedAccountsDays:
           (json[r'deleteOrphanedAccountsDays'] as num?)?.toInt(),
       familyRequestEmailTemplateId:
           json[r'familyRequestEmailTemplateId'] as String?,
       maximumChildAge: (json[r'maximumChildAge'] as num?)?.toInt(),
       minimumOwnerAge: (json[r'minimumOwnerAge'] as num?)?.toInt(),
-      parentEmailRequired: json[r'parentEmailRequired'] as bool? ?? false,
+      parentEmailRequired: json[r'parentEmailRequired'] as bool?,
       parentRegistrationEmailTemplateId:
           json[r'parentRegistrationEmailTemplateId'] as String?,
-      enabled: json[r'enabled'] as bool? ?? false,
+      enabled: json[r'enabled'] as bool?,
     );
   }
 
@@ -16006,11 +16361,15 @@ class FamilyConfiguration {
     var enabled = this.enabled;
 
     final json = <String, Object?>{};
-    json[r'allowChildRegistrations'] = allowChildRegistrations;
+    if (allowChildRegistrations != null) {
+      json[r'allowChildRegistrations'] = allowChildRegistrations;
+    }
     if (confirmChildEmailTemplateId != null) {
       json[r'confirmChildEmailTemplateId'] = confirmChildEmailTemplateId;
     }
-    json[r'deleteOrphanedAccounts'] = deleteOrphanedAccounts;
+    if (deleteOrphanedAccounts != null) {
+      json[r'deleteOrphanedAccounts'] = deleteOrphanedAccounts;
+    }
     if (deleteOrphanedAccountsDays != null) {
       json[r'deleteOrphanedAccountsDays'] = deleteOrphanedAccountsDays;
     }
@@ -16023,12 +16382,16 @@ class FamilyConfiguration {
     if (minimumOwnerAge != null) {
       json[r'minimumOwnerAge'] = minimumOwnerAge;
     }
-    json[r'parentEmailRequired'] = parentEmailRequired;
+    if (parentEmailRequired != null) {
+      json[r'parentEmailRequired'] = parentEmailRequired;
+    }
     if (parentRegistrationEmailTemplateId != null) {
       json[r'parentRegistrationEmailTemplateId'] =
           parentRegistrationEmailTemplateId;
     }
-    json[r'enabled'] = enabled;
+    if (enabled != null) {
+      json[r'enabled'] = enabled;
+    }
     return json;
   }
 
@@ -16098,7 +16461,7 @@ class FamilyMember {
   final Map<String, dynamic>? data;
   final ZonedDateTime? insertInstant;
   final ZonedDateTime? lastUpdateInstant;
-  final bool owner;
+  final bool? owner;
   final FamilyRole? role;
   final String? userId;
 
@@ -16106,10 +16469,9 @@ class FamilyMember {
       {this.data,
       this.insertInstant,
       this.lastUpdateInstant,
-      bool? owner,
+      this.owner,
       this.role,
-      this.userId})
-      : owner = owner ?? false;
+      this.userId});
 
   factory FamilyMember.fromJson(Map<String, Object?> json) {
     return FamilyMember(
@@ -16118,7 +16480,7 @@ class FamilyMember {
           (json[r'insertInstant'] as num?)?.toInt() as ZonedDateTime?,
       lastUpdateInstant:
           (json[r'lastUpdateInstant'] as num?)?.toInt() as ZonedDateTime?,
-      owner: json[r'owner'] as bool? ?? false,
+      owner: json[r'owner'] as bool?,
       role: json[r'role'] != null
           ? FamilyRole.fromValue(json[r'role']! as String)
           : null,
@@ -16144,7 +16506,9 @@ class FamilyMember {
     if (lastUpdateInstant != null) {
       json[r'lastUpdateInstant'] = lastUpdateInstant.toJson();
     }
-    json[r'owner'] = owner;
+    if (owner != null) {
+      json[r'owner'] = owner;
+    }
     if (role != null) {
       json[r'role'] = role.value;
     }
@@ -16206,19 +16570,16 @@ class FamilyRequest {
 
 /// API response for managing families and members.
 class FamilyResponse {
-  final List<Family> families;
+  final List<Family>? families;
   final Family? family;
 
-  FamilyResponse({List<Family>? families, this.family})
-      : families = families ?? [];
+  FamilyResponse({this.families, this.family});
 
   factory FamilyResponse.fromJson(Map<String, Object?> json) {
     return FamilyResponse(
       families: (json[r'families'] as List<Object?>?)
-              ?.map((i) =>
-                  Family.fromJson(i as Map<String, Object?>? ?? const {}))
-              .toList() ??
-          [],
+          ?.map((i) => Family.fromJson(i as Map<String, Object?>? ?? const {}))
+          .toList(),
       family: json[r'family'] != null
           ? Family.fromJson(json[r'family']! as Map<String, Object?>)
           : null,
@@ -16230,7 +16591,9 @@ class FamilyResponse {
     var family = this.family;
 
     final json = <String, Object?>{};
-    json[r'families'] = families.map((i) => i.toJson()).toList();
+    if (families != null) {
+      json[r'families'] = families.map((i) => i.toJson()).toList();
+    }
     if (family != null) {
       json[r'family'] = family.toJson();
     }
@@ -16250,7 +16613,7 @@ class ForgotPasswordRequest {
   final String? applicationId;
   final String? changePasswordId;
   final String? loginId;
-  final bool sendForgotPasswordEmail;
+  final bool? sendForgotPasswordEmail;
   final Map<String, dynamic>? state;
   final String? email;
   final String? username;
@@ -16260,20 +16623,18 @@ class ForgotPasswordRequest {
       {this.applicationId,
       this.changePasswordId,
       this.loginId,
-      bool? sendForgotPasswordEmail,
+      this.sendForgotPasswordEmail,
       this.state,
       this.email,
       this.username,
-      this.eventInfo})
-      : sendForgotPasswordEmail = sendForgotPasswordEmail ?? false;
+      this.eventInfo});
 
   factory ForgotPasswordRequest.fromJson(Map<String, Object?> json) {
     return ForgotPasswordRequest(
       applicationId: json[r'applicationId'] as String?,
       changePasswordId: json[r'changePasswordId'] as String?,
       loginId: json[r'loginId'] as String?,
-      sendForgotPasswordEmail:
-          json[r'sendForgotPasswordEmail'] as bool? ?? false,
+      sendForgotPasswordEmail: json[r'sendForgotPasswordEmail'] as bool?,
       state: json[r'state'] as Map<String, Object?>?,
       email: json[r'email'] as String?,
       username: json[r'username'] as String?,
@@ -16303,7 +16664,9 @@ class ForgotPasswordRequest {
     if (loginId != null) {
       json[r'loginId'] = loginId;
     }
-    json[r'sendForgotPasswordEmail'] = sendForgotPasswordEmail;
+    if (sendForgotPasswordEmail != null) {
+      json[r'sendForgotPasswordEmail'] = sendForgotPasswordEmail;
+    }
     if (state != null) {
       json[r'state'] = state;
     }
@@ -16377,7 +16740,7 @@ class Form {
   final ZonedDateTime? insertInstant;
   final ZonedDateTime? lastUpdateInstant;
   final String? name;
-  final List<FormStep> steps;
+  final List<FormStep>? steps;
   final FormType? type;
 
   Form(
@@ -16386,9 +16749,8 @@ class Form {
       this.insertInstant,
       this.lastUpdateInstant,
       this.name,
-      List<FormStep>? steps,
-      this.type})
-      : steps = steps ?? [];
+      this.steps,
+      this.type});
 
   factory Form.fromJson(Map<String, Object?> json) {
     return Form(
@@ -16400,10 +16762,9 @@ class Form {
           (json[r'lastUpdateInstant'] as num?)?.toInt() as ZonedDateTime?,
       name: json[r'name'] as String?,
       steps: (json[r'steps'] as List<Object?>?)
-              ?.map((i) =>
-                  FormStep.fromJson(i as Map<String, Object?>? ?? const {}))
-              .toList() ??
-          [],
+          ?.map(
+              (i) => FormStep.fromJson(i as Map<String, Object?>? ?? const {}))
+          .toList(),
       type: json[r'type'] != null
           ? FormType.fromValue(json[r'type']! as String)
           : null,
@@ -16435,7 +16796,9 @@ class Form {
     if (name != null) {
       json[r'name'] = name;
     }
-    json[r'steps'] = steps.map((i) => i.toJson()).toList();
+    if (steps != null) {
+      json[r'steps'] = steps.map((i) => i.toJson()).toList();
+    }
     if (type != null) {
       json[r'type'] = type.value;
     }
@@ -16463,7 +16826,7 @@ class Form {
 }
 
 class FormField {
-  final bool confirm;
+  final bool? confirm;
   final String? consentId;
   final FormControl? control;
   final Map<String, dynamic>? data;
@@ -16473,13 +16836,13 @@ class FormField {
   final String? key;
   final ZonedDateTime? lastUpdateInstant;
   final String? name;
-  final List<String> options;
-  final bool required;
+  final List<String>? options;
+  final bool? required;
   final FormDataType? type;
   final FormFieldValidator? validator;
 
   FormField(
-      {bool? confirm,
+      {this.confirm,
       this.consentId,
       this.control,
       this.data,
@@ -16489,17 +16852,14 @@ class FormField {
       this.key,
       this.lastUpdateInstant,
       this.name,
-      List<String>? options,
-      bool? required,
+      this.options,
+      this.required,
       this.type,
-      this.validator})
-      : confirm = confirm ?? false,
-        options = options ?? [],
-        required = required ?? false;
+      this.validator});
 
   factory FormField.fromJson(Map<String, Object?> json) {
     return FormField(
-      confirm: json[r'confirm'] as bool? ?? false,
+      confirm: json[r'confirm'] as bool?,
       consentId: json[r'consentId'] as String?,
       control: json[r'control'] != null
           ? FormControl.fromValue(json[r'control']! as String)
@@ -16514,10 +16874,9 @@ class FormField {
           (json[r'lastUpdateInstant'] as num?)?.toInt() as ZonedDateTime?,
       name: json[r'name'] as String?,
       options: (json[r'options'] as List<Object?>?)
-              ?.map((i) => i as String? ?? '')
-              .toList() ??
-          [],
-      required: json[r'required'] as bool? ?? false,
+          ?.map((i) => i as String? ?? '')
+          .toList(),
+      required: json[r'required'] as bool?,
       type: json[r'type'] != null
           ? FormDataType.fromValue(json[r'type']! as String)
           : null,
@@ -16545,7 +16904,9 @@ class FormField {
     var validator = this.validator;
 
     final json = <String, Object?>{};
-    json[r'confirm'] = confirm;
+    if (confirm != null) {
+      json[r'confirm'] = confirm;
+    }
     if (consentId != null) {
       json[r'consentId'] = consentId;
     }
@@ -16573,8 +16934,12 @@ class FormField {
     if (name != null) {
       json[r'name'] = name;
     }
-    json[r'options'] = options;
-    json[r'required'] = required;
+    if (options != null) {
+      json[r'options'] = options;
+    }
+    if (required != null) {
+      json[r'required'] = required;
+    }
     if (type != null) {
       json[r'type'] = type.value;
     }
@@ -16621,10 +16986,9 @@ class FormField {
 /// The FormField API request object.
 class FormFieldRequest {
   final FormField? field;
-  final List<FormField> fields;
+  final List<FormField>? fields;
 
-  FormFieldRequest({this.field, List<FormField>? fields})
-      : fields = fields ?? [];
+  FormFieldRequest({this.field, this.fields});
 
   factory FormFieldRequest.fromJson(Map<String, Object?> json) {
     return FormFieldRequest(
@@ -16632,10 +16996,9 @@ class FormFieldRequest {
           ? FormField.fromJson(json[r'field']! as Map<String, Object?>)
           : null,
       fields: (json[r'fields'] as List<Object?>?)
-              ?.map((i) =>
-                  FormField.fromJson(i as Map<String, Object?>? ?? const {}))
-              .toList() ??
-          [],
+          ?.map(
+              (i) => FormField.fromJson(i as Map<String, Object?>? ?? const {}))
+          .toList(),
     );
   }
 
@@ -16647,7 +17010,9 @@ class FormFieldRequest {
     if (field != null) {
       json[r'field'] = field.toJson();
     }
-    json[r'fields'] = fields.map((i) => i.toJson()).toList();
+    if (fields != null) {
+      json[r'fields'] = fields.map((i) => i.toJson()).toList();
+    }
     return json;
   }
 
@@ -16662,10 +17027,9 @@ class FormFieldRequest {
 /// Form field response.
 class FormFieldResponse {
   final FormField? field;
-  final List<FormField> fields;
+  final List<FormField>? fields;
 
-  FormFieldResponse({this.field, List<FormField>? fields})
-      : fields = fields ?? [];
+  FormFieldResponse({this.field, this.fields});
 
   factory FormFieldResponse.fromJson(Map<String, Object?> json) {
     return FormFieldResponse(
@@ -16673,10 +17037,9 @@ class FormFieldResponse {
           ? FormField.fromJson(json[r'field']! as Map<String, Object?>)
           : null,
       fields: (json[r'fields'] as List<Object?>?)
-              ?.map((i) =>
-                  FormField.fromJson(i as Map<String, Object?>? ?? const {}))
-              .toList() ??
-          [],
+          ?.map(
+              (i) => FormField.fromJson(i as Map<String, Object?>? ?? const {}))
+          .toList(),
     );
   }
 
@@ -16688,7 +17051,9 @@ class FormFieldResponse {
     if (field != null) {
       json[r'field'] = field.toJson();
     }
-    json[r'fields'] = fields.map((i) => i.toJson()).toList();
+    if (fields != null) {
+      json[r'fields'] = fields.map((i) => i.toJson()).toList();
+    }
     return json;
   }
 
@@ -16702,15 +17067,14 @@ class FormFieldResponse {
 
 class FormFieldValidator {
   final String? expression;
-  final bool enabled;
+  final bool? enabled;
 
-  FormFieldValidator({this.expression, bool? enabled})
-      : enabled = enabled ?? false;
+  FormFieldValidator({this.expression, this.enabled});
 
   factory FormFieldValidator.fromJson(Map<String, Object?> json) {
     return FormFieldValidator(
       expression: json[r'expression'] as String?,
-      enabled: json[r'enabled'] as bool? ?? false,
+      enabled: json[r'enabled'] as bool?,
     );
   }
 
@@ -16722,7 +17086,9 @@ class FormFieldValidator {
     if (expression != null) {
       json[r'expression'] = expression;
     }
-    json[r'enabled'] = enabled;
+    if (enabled != null) {
+      json[r'enabled'] = enabled;
+    }
     return json;
   }
 
@@ -16768,9 +17134,9 @@ class FormRequest {
 /// Form response.
 class FormResponse {
   final Form? form;
-  final List<Form> forms;
+  final List<Form>? forms;
 
-  FormResponse({this.form, List<Form>? forms}) : forms = forms ?? [];
+  FormResponse({this.form, this.forms});
 
   factory FormResponse.fromJson(Map<String, Object?> json) {
     return FormResponse(
@@ -16778,10 +17144,8 @@ class FormResponse {
           ? Form.fromJson(json[r'form']! as Map<String, Object?>)
           : null,
       forms: (json[r'forms'] as List<Object?>?)
-              ?.map(
-                  (i) => Form.fromJson(i as Map<String, Object?>? ?? const {}))
-              .toList() ??
-          [],
+          ?.map((i) => Form.fromJson(i as Map<String, Object?>? ?? const {}))
+          .toList(),
     );
   }
 
@@ -16793,7 +17157,9 @@ class FormResponse {
     if (form != null) {
       json[r'form'] = form.toJson();
     }
-    json[r'forms'] = forms.map((i) => i.toJson()).toList();
+    if (forms != null) {
+      json[r'forms'] = forms.map((i) => i.toJson()).toList();
+    }
     return json;
   }
 
@@ -16806,16 +17172,15 @@ class FormResponse {
 }
 
 class FormStep {
-  final List<String> fields;
+  final List<String>? fields;
 
-  FormStep({List<String>? fields}) : fields = fields ?? [];
+  FormStep({this.fields});
 
   factory FormStep.fromJson(Map<String, Object?> json) {
     return FormStep(
       fields: (json[r'fields'] as List<Object?>?)
-              ?.map((i) => i as String? ?? '')
-              .toList() ??
-          [],
+          ?.map((i) => i as String? ?? '')
+          .toList(),
     );
   }
 
@@ -16823,7 +17188,9 @@ class FormStep {
     var fields = this.fields;
 
     final json = <String, Object?>{};
-    json[r'fields'] = fields;
+    if (fields != null) {
+      json[r'fields'] = fields;
+    }
     return json;
   }
 
@@ -16837,7 +17204,7 @@ class FormStep {
 /// Models the FusionAuth connector.
 class FusionAuthConnectorConfiguration {
   final Map<String, dynamic>? data;
-  final bool debug;
+  final bool? debug;
   final String? id;
   final ZonedDateTime? insertInstant;
   final ZonedDateTime? lastUpdateInstant;
@@ -16846,18 +17213,17 @@ class FusionAuthConnectorConfiguration {
 
   FusionAuthConnectorConfiguration(
       {this.data,
-      bool? debug,
+      this.debug,
       this.id,
       this.insertInstant,
       this.lastUpdateInstant,
       this.name,
-      this.type})
-      : debug = debug ?? false;
+      this.type});
 
   factory FusionAuthConnectorConfiguration.fromJson(Map<String, Object?> json) {
     return FusionAuthConnectorConfiguration(
       data: json[r'data'] as Map<String, Object?>?,
-      debug: json[r'debug'] as bool? ?? false,
+      debug: json[r'debug'] as bool?,
       id: json[r'id'] as String?,
       insertInstant:
           (json[r'insertInstant'] as num?)?.toInt() as ZonedDateTime?,
@@ -16883,7 +17249,9 @@ class FusionAuthConnectorConfiguration {
     if (data != null) {
       json[r'data'] = data;
     }
-    json[r'debug'] = debug;
+    if (debug != null) {
+      json[r'debug'] = debug;
+    }
     if (id != null) {
       json[r'id'] = id;
     }
@@ -16932,7 +17300,7 @@ class GenericConnectorConfiguration {
   final int? readTimeout;
   final String? sslCertificateKeyId;
   final Map<String, dynamic>? data;
-  final bool debug;
+  final bool? debug;
   final String? id;
   final ZonedDateTime? insertInstant;
   final ZonedDateTime? lastUpdateInstant;
@@ -16948,13 +17316,12 @@ class GenericConnectorConfiguration {
       this.readTimeout,
       this.sslCertificateKeyId,
       this.data,
-      bool? debug,
+      this.debug,
       this.id,
       this.insertInstant,
       this.lastUpdateInstant,
       this.name,
-      this.type})
-      : debug = debug ?? false;
+      this.type});
 
   factory GenericConnectorConfiguration.fromJson(Map<String, Object?> json) {
     return GenericConnectorConfiguration(
@@ -16970,7 +17337,7 @@ class GenericConnectorConfiguration {
       readTimeout: (json[r'readTimeout'] as num?)?.toInt(),
       sslCertificateKeyId: json[r'sslCertificateKeyId'] as String?,
       data: json[r'data'] as Map<String, Object?>?,
-      debug: json[r'debug'] as bool? ?? false,
+      debug: json[r'debug'] as bool?,
       id: json[r'id'] as String?,
       insertInstant:
           (json[r'insertInstant'] as num?)?.toInt() as ZonedDateTime?,
@@ -17024,7 +17391,9 @@ class GenericConnectorConfiguration {
     if (data != null) {
       json[r'data'] = data;
     }
-    json[r'debug'] = debug;
+    if (debug != null) {
+      json[r'debug'] = debug;
+    }
     if (id != null) {
       json[r'id'] = id;
     }
@@ -17088,7 +17457,7 @@ class GenericMessengerConfiguration {
   final String? sslCertificate;
   final String? url;
   final Map<String, dynamic>? data;
-  final bool debug;
+  final bool? debug;
   final String? id;
   final ZonedDateTime? insertInstant;
   final ZonedDateTime? lastUpdateInstant;
@@ -17105,14 +17474,13 @@ class GenericMessengerConfiguration {
       this.sslCertificate,
       this.url,
       this.data,
-      bool? debug,
+      this.debug,
       this.id,
       this.insertInstant,
       this.lastUpdateInstant,
       this.name,
       this.transport,
-      this.type})
-      : debug = debug ?? false;
+      this.type});
 
   factory GenericMessengerConfiguration.fromJson(Map<String, Object?> json) {
     return GenericMessengerConfiguration(
@@ -17128,7 +17496,7 @@ class GenericMessengerConfiguration {
       sslCertificate: json[r'sslCertificate'] as String?,
       url: json[r'url'] as String?,
       data: json[r'data'] as Map<String, Object?>?,
-      debug: json[r'debug'] as bool? ?? false,
+      debug: json[r'debug'] as bool?,
       id: json[r'id'] as String?,
       insertInstant:
           (json[r'insertInstant'] as num?)?.toInt() as ZonedDateTime?,
@@ -17184,7 +17552,9 @@ class GenericMessengerConfiguration {
     if (data != null) {
       json[r'data'] = data;
     }
-    json[r'debug'] = debug;
+    if (debug != null) {
+      json[r'debug'] = debug;
+    }
     if (id != null) {
       json[r'id'] = id;
     }
@@ -17252,7 +17622,7 @@ class GoogleApplicationConfiguration {
   final GoogleIdentityProviderProperties? properties;
   final String? scope;
   final Map<String, dynamic>? data;
-  final bool createRegistration;
+  final bool? createRegistration;
 
   GoogleApplicationConfiguration(
       {this.buttonText,
@@ -17262,8 +17632,7 @@ class GoogleApplicationConfiguration {
       this.properties,
       this.scope,
       this.data,
-      bool? createRegistration})
-      : createRegistration = createRegistration ?? false;
+      this.createRegistration});
 
   factory GoogleApplicationConfiguration.fromJson(Map<String, Object?> json) {
     return GoogleApplicationConfiguration(
@@ -17280,7 +17649,7 @@ class GoogleApplicationConfiguration {
           : null,
       scope: json[r'scope'] as String?,
       data: json[r'data'] as Map<String, Object?>?,
-      createRegistration: json[r'createRegistration'] as bool? ?? false,
+      createRegistration: json[r'createRegistration'] as bool?,
     );
   }
 
@@ -17316,7 +17685,9 @@ class GoogleApplicationConfiguration {
     if (data != null) {
       json[r'data'] = data;
     }
-    json[r'createRegistration'] = createRegistration;
+    if (createRegistration != null) {
+      json[r'createRegistration'] = createRegistration;
+    }
     return json;
   }
 
@@ -17352,7 +17723,7 @@ class GoogleIdentityProvider {
   final String? scope;
   final Map<String, dynamic>? data;
   final Map<String, dynamic>? applicationConfiguration;
-  final bool debug;
+  final bool? debug;
   final String? id;
   final ZonedDateTime? insertInstant;
   final ProviderLambdaConfiguration? lambdaConfiguration;
@@ -17371,7 +17742,7 @@ class GoogleIdentityProvider {
       this.scope,
       this.data,
       this.applicationConfiguration,
-      bool? debug,
+      this.debug,
       this.id,
       this.insertInstant,
       this.lambdaConfiguration,
@@ -17379,8 +17750,7 @@ class GoogleIdentityProvider {
       this.linkingStrategy,
       this.name,
       this.tenantConfiguration,
-      this.type})
-      : debug = debug ?? false;
+      this.type});
 
   factory GoogleIdentityProvider.fromJson(Map<String, Object?> json) {
     return GoogleIdentityProvider(
@@ -17399,7 +17769,7 @@ class GoogleIdentityProvider {
       data: json[r'data'] as Map<String, Object?>?,
       applicationConfiguration:
           json[r'applicationConfiguration'] as Map<String, Object?>?,
-      debug: json[r'debug'] as bool? ?? false,
+      debug: json[r'debug'] as bool?,
       id: json[r'id'] as String?,
       insertInstant:
           (json[r'insertInstant'] as num?)?.toInt() as ZonedDateTime?,
@@ -17466,7 +17836,9 @@ class GoogleIdentityProvider {
     if (applicationConfiguration != null) {
       json[r'applicationConfiguration'] = applicationConfiguration;
     }
-    json[r'debug'] = debug;
+    if (debug != null) {
+      json[r'debug'] = debug;
+    }
     if (id != null) {
       json[r'id'] = id;
     }
@@ -17577,7 +17949,7 @@ class Group {
   final ZonedDateTime? insertInstant;
   final ZonedDateTime? lastUpdateInstant;
   final String? name;
-  final List<ApplicationRole> roles;
+  final List<ApplicationRole>? roles;
   final String? tenantId;
 
   Group(
@@ -17586,9 +17958,8 @@ class Group {
       this.insertInstant,
       this.lastUpdateInstant,
       this.name,
-      List<ApplicationRole>? roles,
-      this.tenantId})
-      : roles = roles ?? [];
+      this.roles,
+      this.tenantId});
 
   factory Group.fromJson(Map<String, Object?> json) {
     return Group(
@@ -17600,10 +17971,9 @@ class Group {
           (json[r'lastUpdateInstant'] as num?)?.toInt() as ZonedDateTime?,
       name: json[r'name'] as String?,
       roles: (json[r'roles'] as List<Object?>?)
-              ?.map((i) => ApplicationRole.fromJson(
-                  i as Map<String, Object?>? ?? const {}))
-              .toList() ??
-          [],
+          ?.map((i) =>
+              ApplicationRole.fromJson(i as Map<String, Object?>? ?? const {}))
+          .toList(),
       tenantId: json[r'tenantId'] as String?,
     );
   }
@@ -17633,7 +18003,9 @@ class Group {
     if (name != null) {
       json[r'name'] = name;
     }
-    json[r'roles'] = roles.map((i) => i.toJson()).toList();
+    if (roles != null) {
+      json[r'roles'] = roles.map((i) => i.toJson()).toList();
+    }
     if (tenantId != null) {
       json[r'tenantId'] = tenantId;
     }
@@ -17865,19 +18237,17 @@ class GroupMember {
 
 /// Models the Group Member Add Complete Event.
 class GroupMemberAddCompleteEvent {
-  final List<GroupMember> members;
+  final List<GroupMember>? members;
   final Group? group;
 
-  GroupMemberAddCompleteEvent({List<GroupMember>? members, this.group})
-      : members = members ?? [];
+  GroupMemberAddCompleteEvent({this.members, this.group});
 
   factory GroupMemberAddCompleteEvent.fromJson(Map<String, Object?> json) {
     return GroupMemberAddCompleteEvent(
       members: (json[r'members'] as List<Object?>?)
-              ?.map((i) =>
-                  GroupMember.fromJson(i as Map<String, Object?>? ?? const {}))
-              .toList() ??
-          [],
+          ?.map((i) =>
+              GroupMember.fromJson(i as Map<String, Object?>? ?? const {}))
+          .toList(),
       group: json[r'group'] != null
           ? Group.fromJson(json[r'group']! as Map<String, Object?>)
           : null,
@@ -17889,7 +18259,9 @@ class GroupMemberAddCompleteEvent {
     var group = this.group;
 
     final json = <String, Object?>{};
-    json[r'members'] = members.map((i) => i.toJson()).toList();
+    if (members != null) {
+      json[r'members'] = members.map((i) => i.toJson()).toList();
+    }
     if (group != null) {
       json[r'group'] = group.toJson();
     }
@@ -17907,19 +18279,17 @@ class GroupMemberAddCompleteEvent {
 
 /// Models the Group Member Add Event.
 class GroupMemberAddEvent {
-  final List<GroupMember> members;
+  final List<GroupMember>? members;
   final Group? group;
 
-  GroupMemberAddEvent({List<GroupMember>? members, this.group})
-      : members = members ?? [];
+  GroupMemberAddEvent({this.members, this.group});
 
   factory GroupMemberAddEvent.fromJson(Map<String, Object?> json) {
     return GroupMemberAddEvent(
       members: (json[r'members'] as List<Object?>?)
-              ?.map((i) =>
-                  GroupMember.fromJson(i as Map<String, Object?>? ?? const {}))
-              .toList() ??
-          [],
+          ?.map((i) =>
+              GroupMember.fromJson(i as Map<String, Object?>? ?? const {}))
+          .toList(),
       group: json[r'group'] != null
           ? Group.fromJson(json[r'group']! as Map<String, Object?>)
           : null,
@@ -17931,7 +18301,9 @@ class GroupMemberAddEvent {
     var group = this.group;
 
     final json = <String, Object?>{};
-    json[r'members'] = members.map((i) => i.toJson()).toList();
+    if (members != null) {
+      json[r'members'] = members.map((i) => i.toJson()).toList();
+    }
     if (group != null) {
       json[r'group'] = group.toJson();
     }
@@ -17948,19 +18320,17 @@ class GroupMemberAddEvent {
 
 /// Models the Group Member Remove Complete Event.
 class GroupMemberRemoveCompleteEvent {
-  final List<GroupMember> members;
+  final List<GroupMember>? members;
   final Group? group;
 
-  GroupMemberRemoveCompleteEvent({List<GroupMember>? members, this.group})
-      : members = members ?? [];
+  GroupMemberRemoveCompleteEvent({this.members, this.group});
 
   factory GroupMemberRemoveCompleteEvent.fromJson(Map<String, Object?> json) {
     return GroupMemberRemoveCompleteEvent(
       members: (json[r'members'] as List<Object?>?)
-              ?.map((i) =>
-                  GroupMember.fromJson(i as Map<String, Object?>? ?? const {}))
-              .toList() ??
-          [],
+          ?.map((i) =>
+              GroupMember.fromJson(i as Map<String, Object?>? ?? const {}))
+          .toList(),
       group: json[r'group'] != null
           ? Group.fromJson(json[r'group']! as Map<String, Object?>)
           : null,
@@ -17972,7 +18342,9 @@ class GroupMemberRemoveCompleteEvent {
     var group = this.group;
 
     final json = <String, Object?>{};
-    json[r'members'] = members.map((i) => i.toJson()).toList();
+    if (members != null) {
+      json[r'members'] = members.map((i) => i.toJson()).toList();
+    }
     if (group != null) {
       json[r'group'] = group.toJson();
     }
@@ -17990,19 +18362,17 @@ class GroupMemberRemoveCompleteEvent {
 
 /// Models the Group Member Remove Event.
 class GroupMemberRemoveEvent {
-  final List<GroupMember> members;
+  final List<GroupMember>? members;
   final Group? group;
 
-  GroupMemberRemoveEvent({List<GroupMember>? members, this.group})
-      : members = members ?? [];
+  GroupMemberRemoveEvent({this.members, this.group});
 
   factory GroupMemberRemoveEvent.fromJson(Map<String, Object?> json) {
     return GroupMemberRemoveEvent(
       members: (json[r'members'] as List<Object?>?)
-              ?.map((i) =>
-                  GroupMember.fromJson(i as Map<String, Object?>? ?? const {}))
-              .toList() ??
-          [],
+          ?.map((i) =>
+              GroupMember.fromJson(i as Map<String, Object?>? ?? const {}))
+          .toList(),
       group: json[r'group'] != null
           ? Group.fromJson(json[r'group']! as Map<String, Object?>)
           : null,
@@ -18014,7 +18384,9 @@ class GroupMemberRemoveEvent {
     var group = this.group;
 
     final json = <String, Object?>{};
-    json[r'members'] = members.map((i) => i.toJson()).toList();
+    if (members != null) {
+      json[r'members'] = members.map((i) => i.toJson()).toList();
+    }
     if (group != null) {
       json[r'group'] = group.toJson();
     }
@@ -18139,19 +18511,17 @@ class GroupMemberSearchRequest {
 
 /// Search response for Group Members
 class GroupMemberSearchResponse {
-  final List<GroupMember> members;
+  final List<GroupMember>? members;
   final int? total;
 
-  GroupMemberSearchResponse({List<GroupMember>? members, this.total})
-      : members = members ?? [];
+  GroupMemberSearchResponse({this.members, this.total});
 
   factory GroupMemberSearchResponse.fromJson(Map<String, Object?> json) {
     return GroupMemberSearchResponse(
       members: (json[r'members'] as List<Object?>?)
-              ?.map((i) =>
-                  GroupMember.fromJson(i as Map<String, Object?>? ?? const {}))
-              .toList() ??
-          [],
+          ?.map((i) =>
+              GroupMember.fromJson(i as Map<String, Object?>? ?? const {}))
+          .toList(),
       total: (json[r'total'] as num?)?.toInt(),
     );
   }
@@ -18161,7 +18531,9 @@ class GroupMemberSearchResponse {
     var total = this.total;
 
     final json = <String, Object?>{};
-    json[r'members'] = members.map((i) => i.toJson()).toList();
+    if (members != null) {
+      json[r'members'] = members.map((i) => i.toJson()).toList();
+    }
     if (total != null) {
       json[r'total'] = total;
     }
@@ -18178,19 +18550,17 @@ class GroupMemberSearchResponse {
 
 /// Models the Group Member Update Complete Event.
 class GroupMemberUpdateCompleteEvent {
-  final List<GroupMember> members;
+  final List<GroupMember>? members;
   final Group? group;
 
-  GroupMemberUpdateCompleteEvent({List<GroupMember>? members, this.group})
-      : members = members ?? [];
+  GroupMemberUpdateCompleteEvent({this.members, this.group});
 
   factory GroupMemberUpdateCompleteEvent.fromJson(Map<String, Object?> json) {
     return GroupMemberUpdateCompleteEvent(
       members: (json[r'members'] as List<Object?>?)
-              ?.map((i) =>
-                  GroupMember.fromJson(i as Map<String, Object?>? ?? const {}))
-              .toList() ??
-          [],
+          ?.map((i) =>
+              GroupMember.fromJson(i as Map<String, Object?>? ?? const {}))
+          .toList(),
       group: json[r'group'] != null
           ? Group.fromJson(json[r'group']! as Map<String, Object?>)
           : null,
@@ -18202,7 +18572,9 @@ class GroupMemberUpdateCompleteEvent {
     var group = this.group;
 
     final json = <String, Object?>{};
-    json[r'members'] = members.map((i) => i.toJson()).toList();
+    if (members != null) {
+      json[r'members'] = members.map((i) => i.toJson()).toList();
+    }
     if (group != null) {
       json[r'group'] = group.toJson();
     }
@@ -18220,19 +18592,17 @@ class GroupMemberUpdateCompleteEvent {
 
 /// Models the Group Member Update Event.
 class GroupMemberUpdateEvent {
-  final List<GroupMember> members;
+  final List<GroupMember>? members;
   final Group? group;
 
-  GroupMemberUpdateEvent({List<GroupMember>? members, this.group})
-      : members = members ?? [];
+  GroupMemberUpdateEvent({this.members, this.group});
 
   factory GroupMemberUpdateEvent.fromJson(Map<String, Object?> json) {
     return GroupMemberUpdateEvent(
       members: (json[r'members'] as List<Object?>?)
-              ?.map((i) =>
-                  GroupMember.fromJson(i as Map<String, Object?>? ?? const {}))
-              .toList() ??
-          [],
+          ?.map((i) =>
+              GroupMember.fromJson(i as Map<String, Object?>? ?? const {}))
+          .toList(),
       group: json[r'group'] != null
           ? Group.fromJson(json[r'group']! as Map<String, Object?>)
           : null,
@@ -18244,7 +18614,9 @@ class GroupMemberUpdateEvent {
     var group = this.group;
 
     final json = <String, Object?>{};
-    json[r'members'] = members.map((i) => i.toJson()).toList();
+    if (members != null) {
+      json[r'members'] = members.map((i) => i.toJson()).toList();
+    }
     if (group != null) {
       json[r'group'] = group.toJson();
     }
@@ -18262,9 +18634,9 @@ class GroupMemberUpdateEvent {
 /// Group API request object.
 class GroupRequest {
   final Group? group;
-  final List<String> roleIds;
+  final List<String>? roleIds;
 
-  GroupRequest({this.group, List<String>? roleIds}) : roleIds = roleIds ?? [];
+  GroupRequest({this.group, this.roleIds});
 
   factory GroupRequest.fromJson(Map<String, Object?> json) {
     return GroupRequest(
@@ -18272,9 +18644,8 @@ class GroupRequest {
           ? Group.fromJson(json[r'group']! as Map<String, Object?>)
           : null,
       roleIds: (json[r'roleIds'] as List<Object?>?)
-              ?.map((i) => i as String? ?? '')
-              .toList() ??
-          [],
+          ?.map((i) => i as String? ?? '')
+          .toList(),
     );
   }
 
@@ -18286,7 +18657,9 @@ class GroupRequest {
     if (group != null) {
       json[r'group'] = group.toJson();
     }
-    json[r'roleIds'] = roleIds;
+    if (roleIds != null) {
+      json[r'roleIds'] = roleIds;
+    }
     return json;
   }
 
@@ -18301,9 +18674,9 @@ class GroupRequest {
 /// Group API response object.
 class GroupResponse {
   final Group? group;
-  final List<Group> groups;
+  final List<Group>? groups;
 
-  GroupResponse({this.group, List<Group>? groups}) : groups = groups ?? [];
+  GroupResponse({this.group, this.groups});
 
   factory GroupResponse.fromJson(Map<String, Object?> json) {
     return GroupResponse(
@@ -18311,10 +18684,8 @@ class GroupResponse {
           ? Group.fromJson(json[r'group']! as Map<String, Object?>)
           : null,
       groups: (json[r'groups'] as List<Object?>?)
-              ?.map(
-                  (i) => Group.fromJson(i as Map<String, Object?>? ?? const {}))
-              .toList() ??
-          [],
+          ?.map((i) => Group.fromJson(i as Map<String, Object?>? ?? const {}))
+          .toList(),
     );
   }
 
@@ -18326,7 +18697,9 @@ class GroupResponse {
     if (group != null) {
       json[r'group'] = group.toJson();
     }
-    json[r'groups'] = groups.map((i) => i.toJson()).toList();
+    if (groups != null) {
+      json[r'groups'] = groups.map((i) => i.toJson()).toList();
+    }
     return json;
   }
 
@@ -18439,19 +18812,16 @@ class GroupSearchRequest {
 
 /// Search response for Groups
 class GroupSearchResponse {
-  final List<Group> groups;
+  final List<Group>? groups;
   final int? total;
 
-  GroupSearchResponse({List<Group>? groups, this.total})
-      : groups = groups ?? [];
+  GroupSearchResponse({this.groups, this.total});
 
   factory GroupSearchResponse.fromJson(Map<String, Object?> json) {
     return GroupSearchResponse(
       groups: (json[r'groups'] as List<Object?>?)
-              ?.map(
-                  (i) => Group.fromJson(i as Map<String, Object?>? ?? const {}))
-              .toList() ??
-          [],
+          ?.map((i) => Group.fromJson(i as Map<String, Object?>? ?? const {}))
+          .toList(),
       total: (json[r'total'] as num?)?.toInt(),
     );
   }
@@ -18461,7 +18831,9 @@ class GroupSearchResponse {
     var total = this.total;
 
     final json = <String, Object?>{};
-    json[r'groups'] = groups.map((i) => i.toJson()).toList();
+    if (groups != null) {
+      json[r'groups'] = groups.map((i) => i.toJson()).toList();
+    }
     if (total != null) {
       json[r'total'] = total;
     }
@@ -18574,21 +18946,20 @@ class HYPRApplicationConfiguration {
   final String? relyingPartyApplicationId;
   final String? relyingPartyUrl;
   final Map<String, dynamic>? data;
-  final bool createRegistration;
+  final bool? createRegistration;
 
   HYPRApplicationConfiguration(
       {this.relyingPartyApplicationId,
       this.relyingPartyUrl,
       this.data,
-      bool? createRegistration})
-      : createRegistration = createRegistration ?? false;
+      this.createRegistration});
 
   factory HYPRApplicationConfiguration.fromJson(Map<String, Object?> json) {
     return HYPRApplicationConfiguration(
       relyingPartyApplicationId: json[r'relyingPartyApplicationId'] as String?,
       relyingPartyUrl: json[r'relyingPartyURL'] as String?,
       data: json[r'data'] as Map<String, Object?>?,
-      createRegistration: json[r'createRegistration'] as bool? ?? false,
+      createRegistration: json[r'createRegistration'] as bool?,
     );
   }
 
@@ -18608,7 +18979,9 @@ class HYPRApplicationConfiguration {
     if (data != null) {
       json[r'data'] = data;
     }
-    json[r'createRegistration'] = createRegistration;
+    if (createRegistration != null) {
+      json[r'createRegistration'] = createRegistration;
+    }
     return json;
   }
 
@@ -18632,7 +19005,7 @@ class HYPRIdentityProvider {
   final String? relyingPartyUrl;
   final Map<String, dynamic>? data;
   final Map<String, dynamic>? applicationConfiguration;
-  final bool debug;
+  final bool? debug;
   final String? id;
   final ZonedDateTime? insertInstant;
   final ProviderLambdaConfiguration? lambdaConfiguration;
@@ -18647,7 +19020,7 @@ class HYPRIdentityProvider {
       this.relyingPartyUrl,
       this.data,
       this.applicationConfiguration,
-      bool? debug,
+      this.debug,
       this.id,
       this.insertInstant,
       this.lambdaConfiguration,
@@ -18655,8 +19028,7 @@ class HYPRIdentityProvider {
       this.linkingStrategy,
       this.name,
       this.tenantConfiguration,
-      this.type})
-      : debug = debug ?? false;
+      this.type});
 
   factory HYPRIdentityProvider.fromJson(Map<String, Object?> json) {
     return HYPRIdentityProvider(
@@ -18665,7 +19037,7 @@ class HYPRIdentityProvider {
       data: json[r'data'] as Map<String, Object?>?,
       applicationConfiguration:
           json[r'applicationConfiguration'] as Map<String, Object?>?,
-      debug: json[r'debug'] as bool? ?? false,
+      debug: json[r'debug'] as bool?,
       id: json[r'id'] as String?,
       insertInstant:
           (json[r'insertInstant'] as num?)?.toInt() as ZonedDateTime?,
@@ -18716,7 +19088,9 @@ class HYPRIdentityProvider {
     if (applicationConfiguration != null) {
       json[r'applicationConfiguration'] = applicationConfiguration;
     }
-    json[r'debug'] = debug;
+    if (debug != null) {
+      json[r'debug'] = debug;
+    }
     if (id != null) {
       json[r'id'] = id;
     }
@@ -18882,7 +19256,7 @@ class IPAccessControlEntry {
 
 class IPAccessControlList {
   final Map<String, dynamic>? data;
-  final List<IPAccessControlEntry> entries;
+  final List<IPAccessControlEntry>? entries;
   final String? id;
   final ZonedDateTime? insertInstant;
   final ZonedDateTime? lastUpdateInstant;
@@ -18890,21 +19264,19 @@ class IPAccessControlList {
 
   IPAccessControlList(
       {this.data,
-      List<IPAccessControlEntry>? entries,
+      this.entries,
       this.id,
       this.insertInstant,
       this.lastUpdateInstant,
-      this.name})
-      : entries = entries ?? [];
+      this.name});
 
   factory IPAccessControlList.fromJson(Map<String, Object?> json) {
     return IPAccessControlList(
       data: json[r'data'] as Map<String, Object?>?,
       entries: (json[r'entries'] as List<Object?>?)
-              ?.map((i) => IPAccessControlEntry.fromJson(
-                  i as Map<String, Object?>? ?? const {}))
-              .toList() ??
-          [],
+          ?.map((i) => IPAccessControlEntry.fromJson(
+              i as Map<String, Object?>? ?? const {}))
+          .toList(),
       id: json[r'id'] as String?,
       insertInstant:
           (json[r'insertInstant'] as num?)?.toInt() as ZonedDateTime?,
@@ -18926,7 +19298,9 @@ class IPAccessControlList {
     if (data != null) {
       json[r'data'] = data;
     }
-    json[r'entries'] = entries.map((i) => i.toJson()).toList();
+    if (entries != null) {
+      json[r'entries'] = entries.map((i) => i.toJson()).toList();
+    }
     if (id != null) {
       json[r'id'] = id;
     }
@@ -18994,12 +19368,10 @@ class IPAccessControlListRequest {
 
 class IPAccessControlListResponse {
   final IPAccessControlList? ipAccessControlList;
-  final List<IPAccessControlList> ipAccessControlLists;
+  final List<IPAccessControlList>? ipAccessControlLists;
 
   IPAccessControlListResponse(
-      {this.ipAccessControlList,
-      List<IPAccessControlList>? ipAccessControlLists})
-      : ipAccessControlLists = ipAccessControlLists ?? [];
+      {this.ipAccessControlList, this.ipAccessControlLists});
 
   factory IPAccessControlListResponse.fromJson(Map<String, Object?> json) {
     return IPAccessControlListResponse(
@@ -19008,10 +19380,9 @@ class IPAccessControlListResponse {
               json[r'ipAccessControlList']! as Map<String, Object?>)
           : null,
       ipAccessControlLists: (json[r'ipAccessControlLists'] as List<Object?>?)
-              ?.map((i) => IPAccessControlList.fromJson(
-                  i as Map<String, Object?>? ?? const {}))
-              .toList() ??
-          [],
+          ?.map((i) => IPAccessControlList.fromJson(
+              i as Map<String, Object?>? ?? const {}))
+          .toList(),
     );
   }
 
@@ -19023,8 +19394,10 @@ class IPAccessControlListResponse {
     if (ipAccessControlList != null) {
       json[r'ipAccessControlList'] = ipAccessControlList.toJson();
     }
-    json[r'ipAccessControlLists'] =
-        ipAccessControlLists.map((i) => i.toJson()).toList();
+    if (ipAccessControlLists != null) {
+      json[r'ipAccessControlLists'] =
+          ipAccessControlLists.map((i) => i.toJson()).toList();
+    }
     return json;
   }
 
@@ -19124,21 +19497,18 @@ class IPAccessControlListSearchRequest {
 }
 
 class IPAccessControlListSearchResponse {
-  final List<IPAccessControlList> ipAccessControlLists;
+  final List<IPAccessControlList>? ipAccessControlLists;
   final int? total;
 
-  IPAccessControlListSearchResponse(
-      {List<IPAccessControlList>? ipAccessControlLists, this.total})
-      : ipAccessControlLists = ipAccessControlLists ?? [];
+  IPAccessControlListSearchResponse({this.ipAccessControlLists, this.total});
 
   factory IPAccessControlListSearchResponse.fromJson(
       Map<String, Object?> json) {
     return IPAccessControlListSearchResponse(
       ipAccessControlLists: (json[r'ipAccessControlLists'] as List<Object?>?)
-              ?.map((i) => IPAccessControlList.fromJson(
-                  i as Map<String, Object?>? ?? const {}))
-              .toList() ??
-          [],
+          ?.map((i) => IPAccessControlList.fromJson(
+              i as Map<String, Object?>? ?? const {}))
+          .toList(),
       total: (json[r'total'] as num?)?.toInt(),
     );
   }
@@ -19148,8 +19518,10 @@ class IPAccessControlListSearchResponse {
     var total = this.total;
 
     final json = <String, Object?>{};
-    json[r'ipAccessControlLists'] =
-        ipAccessControlLists.map((i) => i.toJson()).toList();
+    if (ipAccessControlLists != null) {
+      json[r'ipAccessControlLists'] =
+          ipAccessControlLists.map((i) => i.toJson()).toList();
+    }
     if (total != null) {
       json[r'total'] = total;
     }
@@ -19166,7 +19538,7 @@ class IPAccessControlListSearchResponse {
 }
 
 class IdentityProviderDetails {
-  final List<String> applicationIds;
+  final List<String>? applicationIds;
   final String? id;
   final String? idpEndpoint;
   final String? name;
@@ -19174,20 +19546,18 @@ class IdentityProviderDetails {
   final IdentityProviderType? type;
 
   IdentityProviderDetails(
-      {List<String>? applicationIds,
+      {this.applicationIds,
       this.id,
       this.idpEndpoint,
       this.name,
       this.oauth2,
-      this.type})
-      : applicationIds = applicationIds ?? [];
+      this.type});
 
   factory IdentityProviderDetails.fromJson(Map<String, Object?> json) {
     return IdentityProviderDetails(
       applicationIds: (json[r'applicationIds'] as List<Object?>?)
-              ?.map((i) => i as String? ?? '')
-              .toList() ??
-          [],
+          ?.map((i) => i as String? ?? '')
+          .toList(),
       id: json[r'id'] as String?,
       idpEndpoint: json[r'idpEndpoint'] as String?,
       name: json[r'name'] as String?,
@@ -19210,7 +19580,9 @@ class IdentityProviderDetails {
     var type = this.type;
 
     final json = <String, Object?>{};
-    json[r'applicationIds'] = applicationIds;
+    if (applicationIds != null) {
+      json[r'applicationIds'] = applicationIds;
+    }
     if (id != null) {
       json[r'id'] = id;
     }
@@ -19262,16 +19634,15 @@ class IdentityProviderField {
 
 class IdentityProviderLimitUserLinkingPolicy {
   final int? maximumLinks;
-  final bool enabled;
+  final bool? enabled;
 
-  IdentityProviderLimitUserLinkingPolicy({this.maximumLinks, bool? enabled})
-      : enabled = enabled ?? false;
+  IdentityProviderLimitUserLinkingPolicy({this.maximumLinks, this.enabled});
 
   factory IdentityProviderLimitUserLinkingPolicy.fromJson(
       Map<String, Object?> json) {
     return IdentityProviderLimitUserLinkingPolicy(
       maximumLinks: (json[r'maximumLinks'] as num?)?.toInt(),
-      enabled: json[r'enabled'] as bool? ?? false,
+      enabled: json[r'enabled'] as bool?,
     );
   }
 
@@ -19283,7 +19654,9 @@ class IdentityProviderLimitUserLinkingPolicy {
     if (maximumLinks != null) {
       json[r'maximumLinks'] = maximumLinks;
     }
-    json[r'enabled'] = enabled;
+    if (enabled != null) {
+      json[r'enabled'] = enabled;
+    }
     return json;
   }
 
@@ -19475,12 +19848,10 @@ class IdentityProviderLinkRequest {
 
 class IdentityProviderLinkResponse {
   final IdentityProviderLink? identityProviderLink;
-  final List<IdentityProviderLink> identityProviderLinks;
+  final List<IdentityProviderLink>? identityProviderLinks;
 
   IdentityProviderLinkResponse(
-      {this.identityProviderLink,
-      List<IdentityProviderLink>? identityProviderLinks})
-      : identityProviderLinks = identityProviderLinks ?? [];
+      {this.identityProviderLink, this.identityProviderLinks});
 
   factory IdentityProviderLinkResponse.fromJson(Map<String, Object?> json) {
     return IdentityProviderLinkResponse(
@@ -19489,10 +19860,9 @@ class IdentityProviderLinkResponse {
               json[r'identityProviderLink']! as Map<String, Object?>)
           : null,
       identityProviderLinks: (json[r'identityProviderLinks'] as List<Object?>?)
-              ?.map((i) => IdentityProviderLink.fromJson(
-                  i as Map<String, Object?>? ?? const {}))
-              .toList() ??
-          [],
+          ?.map((i) => IdentityProviderLink.fromJson(
+              i as Map<String, Object?>? ?? const {}))
+          .toList(),
     );
   }
 
@@ -19504,8 +19874,10 @@ class IdentityProviderLinkResponse {
     if (identityProviderLink != null) {
       json[r'identityProviderLink'] = identityProviderLink.toJson();
     }
-    json[r'identityProviderLinks'] =
-        identityProviderLinks.map((i) => i.toJson()).toList();
+    if (identityProviderLinks != null) {
+      json[r'identityProviderLinks'] =
+          identityProviderLinks.map((i) => i.toJson()).toList();
+    }
     return json;
   }
 
@@ -19525,41 +19897,38 @@ class IdentityProviderLinkResponse {
 class IdentityProviderLoginRequest {
   final Map<String, dynamic>? data;
   final String? identityProviderId;
-  final bool noLink;
+  final bool? noLink;
   final String? encodedJwt;
   final String? applicationId;
   final String? ipAddress;
   final MetaData? metaData;
-  final bool newDevice;
-  final bool noJwt;
+  final bool? newDevice;
+  final bool? noJwt;
 
   IdentityProviderLoginRequest(
       {this.data,
       this.identityProviderId,
-      bool? noLink,
+      this.noLink,
       this.encodedJwt,
       this.applicationId,
       this.ipAddress,
       this.metaData,
-      bool? newDevice,
-      bool? noJwt})
-      : noLink = noLink ?? false,
-        newDevice = newDevice ?? false,
-        noJwt = noJwt ?? false;
+      this.newDevice,
+      this.noJwt});
 
   factory IdentityProviderLoginRequest.fromJson(Map<String, Object?> json) {
     return IdentityProviderLoginRequest(
       data: json[r'data'] as Map<String, Object?>?,
       identityProviderId: json[r'identityProviderId'] as String?,
-      noLink: json[r'noLink'] as bool? ?? false,
+      noLink: json[r'noLink'] as bool?,
       encodedJwt: json[r'encodedJWT'] as String?,
       applicationId: json[r'applicationId'] as String?,
       ipAddress: json[r'ipAddress'] as String?,
       metaData: json[r'metaData'] != null
           ? MetaData.fromJson(json[r'metaData']! as Map<String, Object?>)
           : null,
-      newDevice: json[r'newDevice'] as bool? ?? false,
-      noJwt: json[r'noJWT'] as bool? ?? false,
+      newDevice: json[r'newDevice'] as bool?,
+      noJwt: json[r'noJWT'] as bool?,
     );
   }
 
@@ -19581,7 +19950,9 @@ class IdentityProviderLoginRequest {
     if (identityProviderId != null) {
       json[r'identityProviderId'] = identityProviderId;
     }
-    json[r'noLink'] = noLink;
+    if (noLink != null) {
+      json[r'noLink'] = noLink;
+    }
     if (encodedJwt != null) {
       json[r'encodedJWT'] = encodedJwt;
     }
@@ -19594,8 +19965,12 @@ class IdentityProviderLoginRequest {
     if (metaData != null) {
       json[r'metaData'] = metaData.toJson();
     }
-    json[r'newDevice'] = newDevice;
-    json[r'noJWT'] = noJwt;
+    if (newDevice != null) {
+      json[r'newDevice'] = newDevice;
+    }
+    if (noJwt != null) {
+      json[r'noJWT'] = noJwt;
+    }
     return json;
   }
 
@@ -19853,11 +20228,9 @@ class IdentityProviderRequest {
 
 class IdentityProviderResponse {
   final IdentityProviderField? identityProvider;
-  final List<IdentityProviderField> identityProviders;
+  final List<IdentityProviderField>? identityProviders;
 
-  IdentityProviderResponse(
-      {this.identityProvider, List<IdentityProviderField>? identityProviders})
-      : identityProviders = identityProviders ?? [];
+  IdentityProviderResponse({this.identityProvider, this.identityProviders});
 
   factory IdentityProviderResponse.fromJson(Map<String, Object?> json) {
     return IdentityProviderResponse(
@@ -19866,10 +20239,9 @@ class IdentityProviderResponse {
               json[r'identityProvider']! as Map<String, Object?>)
           : null,
       identityProviders: (json[r'identityProviders'] as List<Object?>?)
-              ?.map((i) => IdentityProviderField.fromJson(
-                  i as Map<String, Object?>? ?? const {}))
-              .toList() ??
-          [],
+          ?.map((i) => IdentityProviderField.fromJson(
+              i as Map<String, Object?>? ?? const {}))
+          .toList(),
     );
   }
 
@@ -19881,8 +20253,10 @@ class IdentityProviderResponse {
     if (identityProvider != null) {
       json[r'identityProvider'] = identityProvider.toJson();
     }
-    json[r'identityProviders'] =
-        identityProviders.map((i) => i.toJson()).toList();
+    if (identityProviders != null) {
+      json[r'identityProviders'] =
+          identityProviders.map((i) => i.toJson()).toList();
+    }
     return json;
   }
 
@@ -20009,20 +20383,17 @@ class IdentityProviderSearchRequest {
 
 /// Identity Provider response.
 class IdentityProviderSearchResponse {
-  final List<IdentityProviderField> identityProviders;
+  final List<IdentityProviderField>? identityProviders;
   final int? total;
 
-  IdentityProviderSearchResponse(
-      {List<IdentityProviderField>? identityProviders, this.total})
-      : identityProviders = identityProviders ?? [];
+  IdentityProviderSearchResponse({this.identityProviders, this.total});
 
   factory IdentityProviderSearchResponse.fromJson(Map<String, Object?> json) {
     return IdentityProviderSearchResponse(
       identityProviders: (json[r'identityProviders'] as List<Object?>?)
-              ?.map((i) => IdentityProviderField.fromJson(
-                  i as Map<String, Object?>? ?? const {}))
-              .toList() ??
-          [],
+          ?.map((i) => IdentityProviderField.fromJson(
+              i as Map<String, Object?>? ?? const {}))
+          .toList(),
       total: (json[r'total'] as num?)?.toInt(),
     );
   }
@@ -20032,8 +20403,10 @@ class IdentityProviderSearchResponse {
     var total = this.total;
 
     final json = <String, Object?>{};
-    json[r'identityProviders'] =
-        identityProviders.map((i) => i.toJson()).toList();
+    if (identityProviders != null) {
+      json[r'identityProviders'] =
+          identityProviders.map((i) => i.toJson()).toList();
+    }
     if (total != null) {
       json[r'total'] = total;
     }
@@ -20057,8 +20430,8 @@ class IdentityProviderStartLoginRequest {
   final String? applicationId;
   final String? ipAddress;
   final MetaData? metaData;
-  final bool newDevice;
-  final bool noJwt;
+  final bool? newDevice;
+  final bool? noJwt;
 
   IdentityProviderStartLoginRequest(
       {this.data,
@@ -20068,10 +20441,8 @@ class IdentityProviderStartLoginRequest {
       this.applicationId,
       this.ipAddress,
       this.metaData,
-      bool? newDevice,
-      bool? noJwt})
-      : newDevice = newDevice ?? false,
-        noJwt = noJwt ?? false;
+      this.newDevice,
+      this.noJwt});
 
   factory IdentityProviderStartLoginRequest.fromJson(
       Map<String, Object?> json) {
@@ -20085,8 +20456,8 @@ class IdentityProviderStartLoginRequest {
       metaData: json[r'metaData'] != null
           ? MetaData.fromJson(json[r'metaData']! as Map<String, Object?>)
           : null,
-      newDevice: json[r'newDevice'] as bool? ?? false,
-      noJwt: json[r'noJWT'] as bool? ?? false,
+      newDevice: json[r'newDevice'] as bool?,
+      noJwt: json[r'noJWT'] as bool?,
     );
   }
 
@@ -20123,8 +20494,12 @@ class IdentityProviderStartLoginRequest {
     if (metaData != null) {
       json[r'metaData'] = metaData.toJson();
     }
-    json[r'newDevice'] = newDevice;
-    json[r'noJWT'] = noJwt;
+    if (newDevice != null) {
+      json[r'newDevice'] = newDevice;
+    }
+    if (noJwt != null) {
+      json[r'noJWT'] = noJwt;
+    }
     return json;
   }
 
@@ -20226,29 +20601,25 @@ class IdentityProviderTenantConfiguration {
 class ImportRequest {
   final String? encryptionScheme;
   final int? factor;
-  final List<User> users;
-  final bool validateDbConstraints;
+  final List<User>? users;
+  final bool? validateDbConstraints;
   final EventInfo? eventInfo;
 
   ImportRequest(
       {this.encryptionScheme,
       this.factor,
-      List<User>? users,
-      bool? validateDbConstraints,
-      this.eventInfo})
-      : users = users ?? [],
-        validateDbConstraints = validateDbConstraints ?? false;
+      this.users,
+      this.validateDbConstraints,
+      this.eventInfo});
 
   factory ImportRequest.fromJson(Map<String, Object?> json) {
     return ImportRequest(
       encryptionScheme: json[r'encryptionScheme'] as String?,
       factor: (json[r'factor'] as num?)?.toInt(),
       users: (json[r'users'] as List<Object?>?)
-              ?.map(
-                  (i) => User.fromJson(i as Map<String, Object?>? ?? const {}))
-              .toList() ??
-          [],
-      validateDbConstraints: json[r'validateDbConstraints'] as bool? ?? false,
+          ?.map((i) => User.fromJson(i as Map<String, Object?>? ?? const {}))
+          .toList(),
+      validateDbConstraints: json[r'validateDbConstraints'] as bool?,
       eventInfo: json[r'eventInfo'] != null
           ? EventInfo.fromJson(json[r'eventInfo']! as Map<String, Object?>)
           : null,
@@ -20269,8 +20640,12 @@ class ImportRequest {
     if (factor != null) {
       json[r'factor'] = factor;
     }
-    json[r'users'] = users.map((i) => i.toJson()).toList();
-    json[r'validateDbConstraints'] = validateDbConstraints;
+    if (users != null) {
+      json[r'users'] = users.map((i) => i.toJson()).toList();
+    }
+    if (validateDbConstraints != null) {
+      json[r'validateDbConstraints'] = validateDbConstraints;
+    }
     if (eventInfo != null) {
       json[r'eventInfo'] = eventInfo.toJson();
     }
@@ -20483,7 +20858,7 @@ class JSONWebKey {
   final String? qi;
   final String? use;
   final String? x;
-  final List<String> x5c;
+  final List<String>? x5c;
   final String? x5t;
   final String? x5tS256;
   final String? y;
@@ -20504,11 +20879,10 @@ class JSONWebKey {
       this.qi,
       this.use,
       this.x,
-      List<String>? x5c,
+      this.x5c,
       this.x5t,
       this.x5tS256,
-      this.y})
-      : x5c = x5c ?? [];
+      this.y});
 
   factory JSONWebKey.fromJson(Map<String, Object?> json) {
     return JSONWebKey(
@@ -20532,9 +20906,8 @@ class JSONWebKey {
       use: json[r'use'] as String?,
       x: json[r'x'] as String?,
       x5c: (json[r'x5c'] as List<Object?>?)
-              ?.map((i) => i as String? ?? '')
-              .toList() ??
-          [],
+          ?.map((i) => i as String? ?? '')
+          .toList(),
       x5t: json[r'x5t'] as String?,
       x5tS256: json[r'x5t#S256'] as String?,
       y: json[r'y'] as String?,
@@ -20608,7 +20981,9 @@ class JSONWebKey {
     if (x != null) {
       json[r'x'] = x;
     }
-    json[r'x5c'] = x5c;
+    if (x5c != null) {
+      json[r'x5c'] = x5c;
+    }
     if (x5t != null) {
       json[r'x5t'] = x5t;
     }
@@ -20680,17 +21055,16 @@ class JSONWebKeyInfoProvider {
 }
 
 class JWKSResponse {
-  final List<JSONWebKey> keys;
+  final List<JSONWebKey>? keys;
 
-  JWKSResponse({List<JSONWebKey>? keys}) : keys = keys ?? [];
+  JWKSResponse({this.keys});
 
   factory JWKSResponse.fromJson(Map<String, Object?> json) {
     return JWKSResponse(
       keys: (json[r'keys'] as List<Object?>?)
-              ?.map((i) =>
-                  JSONWebKey.fromJson(i as Map<String, Object?>? ?? const {}))
-              .toList() ??
-          [],
+          ?.map((i) =>
+              JSONWebKey.fromJson(i as Map<String, Object?>? ?? const {}))
+          .toList(),
     );
   }
 
@@ -20698,7 +21072,9 @@ class JWKSResponse {
     var keys = this.keys;
 
     final json = <String, Object?>{};
-    json[r'keys'] = keys.map((i) => i.toJson()).toList();
+    if (keys != null) {
+      json[r'keys'] = keys.map((i) => i.toJson()).toList();
+    }
     return json;
   }
 
@@ -20819,7 +21195,7 @@ class JWTConfiguration {
   final int? refreshTokenTimeToLiveInMinutes;
   final RefreshTokenUsagePolicy? refreshTokenUsagePolicy;
   final int? timeToLiveInSeconds;
-  final bool enabled;
+  final bool? enabled;
 
   JWTConfiguration(
       {this.accessTokenKeyId,
@@ -20830,8 +21206,7 @@ class JWTConfiguration {
       this.refreshTokenTimeToLiveInMinutes,
       this.refreshTokenUsagePolicy,
       this.timeToLiveInSeconds,
-      bool? enabled})
-      : enabled = enabled ?? false;
+      this.enabled});
 
   factory JWTConfiguration.fromJson(Map<String, Object?> json) {
     return JWTConfiguration(
@@ -20860,7 +21235,7 @@ class JWTConfiguration {
               json[r'refreshTokenUsagePolicy']! as String)
           : null,
       timeToLiveInSeconds: (json[r'timeToLiveInSeconds'] as num?)?.toInt(),
-      enabled: json[r'enabled'] as bool? ?? false,
+      enabled: json[r'enabled'] as bool?,
     );
   }
 
@@ -20905,7 +21280,9 @@ class JWTConfiguration {
     if (timeToLiveInSeconds != null) {
       json[r'timeToLiveInSeconds'] = timeToLiveInSeconds;
     }
-    json[r'enabled'] = enabled;
+    if (enabled != null) {
+      json[r'enabled'] = enabled;
+    }
     return json;
   }
 
@@ -20943,7 +21320,7 @@ class JWTConfiguration {
 /// Models the JWT public key Refresh Token Revoke Event. This event might be
 /// for a single  token, a user or an entire application.
 class JWTPublicKeyUpdateEvent {
-  final List<dynamic> applicationIds;
+  final List<dynamic>? applicationIds;
   final ZonedDateTime? createInstant;
   final String? id;
   final EventInfo? info;
@@ -20951,19 +21328,17 @@ class JWTPublicKeyUpdateEvent {
   final EventType? type;
 
   JWTPublicKeyUpdateEvent(
-      {List<dynamic>? applicationIds,
+      {this.applicationIds,
       this.createInstant,
       this.id,
       this.info,
       this.tenantId,
-      this.type})
-      : applicationIds = applicationIds ?? [];
+      this.type});
 
   factory JWTPublicKeyUpdateEvent.fromJson(Map<String, Object?> json) {
     return JWTPublicKeyUpdateEvent(
       applicationIds:
-          (json[r'applicationIds'] as List<Object?>?)?.map((i) => i).toList() ??
-              [],
+          (json[r'applicationIds'] as List<Object?>?)?.map((i) => i).toList(),
       createInstant:
           (json[r'createInstant'] as num?)?.toInt() as ZonedDateTime?,
       id: json[r'id'] as String?,
@@ -20986,7 +21361,9 @@ class JWTPublicKeyUpdateEvent {
     var type = this.type;
 
     final json = <String, Object?>{};
-    json[r'applicationIds'] = applicationIds;
+    if (applicationIds != null) {
+      json[r'applicationIds'] = applicationIds;
+    }
     if (createInstant != null) {
       json[r'createInstant'] = createInstant.toJson();
     }
@@ -21386,16 +21763,15 @@ class JWTVendResponse {
 class KafkaConfiguration {
   final String? defaultTopic;
   final Map<String, dynamic>? producer;
-  final bool enabled;
+  final bool? enabled;
 
-  KafkaConfiguration({this.defaultTopic, this.producer, bool? enabled})
-      : enabled = enabled ?? false;
+  KafkaConfiguration({this.defaultTopic, this.producer, this.enabled});
 
   factory KafkaConfiguration.fromJson(Map<String, Object?> json) {
     return KafkaConfiguration(
       defaultTopic: json[r'defaultTopic'] as String?,
       producer: json[r'producer'] as Map<String, Object?>?,
-      enabled: json[r'enabled'] as bool? ?? false,
+      enabled: json[r'enabled'] as bool?,
     );
   }
 
@@ -21411,7 +21787,9 @@ class KafkaConfiguration {
     if (producer != null) {
       json[r'producer'] = producer;
     }
-    json[r'enabled'] = enabled;
+    if (enabled != null) {
+      json[r'enabled'] = enabled;
+    }
     return json;
   }
 
@@ -21429,7 +21807,7 @@ class KafkaMessengerConfiguration {
   final String? defaultTopic;
   final Map<String, dynamic>? producer;
   final Map<String, dynamic>? data;
-  final bool debug;
+  final bool? debug;
   final String? id;
   final ZonedDateTime? insertInstant;
   final ZonedDateTime? lastUpdateInstant;
@@ -21441,21 +21819,20 @@ class KafkaMessengerConfiguration {
       {this.defaultTopic,
       this.producer,
       this.data,
-      bool? debug,
+      this.debug,
       this.id,
       this.insertInstant,
       this.lastUpdateInstant,
       this.name,
       this.transport,
-      this.type})
-      : debug = debug ?? false;
+      this.type});
 
   factory KafkaMessengerConfiguration.fromJson(Map<String, Object?> json) {
     return KafkaMessengerConfiguration(
       defaultTopic: json[r'defaultTopic'] as String?,
       producer: json[r'producer'] as Map<String, Object?>?,
       data: json[r'data'] as Map<String, Object?>?,
-      debug: json[r'debug'] as bool? ?? false,
+      debug: json[r'debug'] as bool?,
       id: json[r'id'] as String?,
       insertInstant:
           (json[r'insertInstant'] as num?)?.toInt() as ZonedDateTime?,
@@ -21491,7 +21868,9 @@ class KafkaMessengerConfiguration {
     if (data != null) {
       json[r'data'] = data;
     }
-    json[r'debug'] = debug;
+    if (debug != null) {
+      json[r'debug'] = debug;
+    }
     if (id != null) {
       json[r'id'] = id;
     }
@@ -21546,7 +21925,7 @@ class Key {
   final String? certificate;
   final CertificateInformation? certificateInformation;
   final ZonedDateTime? expirationInstant;
-  final bool hasPrivateKey;
+  final bool? hasPrivateKey;
   final String? id;
   final ZonedDateTime? insertInstant;
   final String? issuer;
@@ -21564,7 +21943,7 @@ class Key {
       this.certificate,
       this.certificateInformation,
       this.expirationInstant,
-      bool? hasPrivateKey,
+      this.hasPrivateKey,
       this.id,
       this.insertInstant,
       this.issuer,
@@ -21575,8 +21954,7 @@ class Key {
       this.privateKey,
       this.publicKey,
       this.secret,
-      this.type})
-      : hasPrivateKey = hasPrivateKey ?? false;
+      this.type});
 
   factory Key.fromJson(Map<String, Object?> json) {
     return Key(
@@ -21590,7 +21968,7 @@ class Key {
           : null,
       expirationInstant:
           (json[r'expirationInstant'] as num?)?.toInt() as ZonedDateTime?,
-      hasPrivateKey: json[r'hasPrivateKey'] as bool? ?? false,
+      hasPrivateKey: json[r'hasPrivateKey'] as bool?,
       id: json[r'id'] as String?,
       insertInstant:
           (json[r'insertInstant'] as num?)?.toInt() as ZonedDateTime?,
@@ -21640,7 +22018,9 @@ class Key {
     if (expirationInstant != null) {
       json[r'expirationInstant'] = expirationInstant.toJson();
     }
-    json[r'hasPrivateKey'] = hasPrivateKey;
+    if (hasPrivateKey != null) {
+      json[r'hasPrivateKey'] = hasPrivateKey;
+    }
     if (id != null) {
       json[r'id'] = id;
     }
@@ -21750,9 +22130,9 @@ class KeyRequest {
 /// Key API response object.
 class KeyResponse {
   final Key? key;
-  final List<Key> keys;
+  final List<Key>? keys;
 
-  KeyResponse({this.key, List<Key>? keys}) : keys = keys ?? [];
+  KeyResponse({this.key, this.keys});
 
   factory KeyResponse.fromJson(Map<String, Object?> json) {
     return KeyResponse(
@@ -21760,9 +22140,8 @@ class KeyResponse {
           ? Key.fromJson(json[r'key']! as Map<String, Object?>)
           : null,
       keys: (json[r'keys'] as List<Object?>?)
-              ?.map((i) => Key.fromJson(i as Map<String, Object?>? ?? const {}))
-              .toList() ??
-          [],
+          ?.map((i) => Key.fromJson(i as Map<String, Object?>? ?? const {}))
+          .toList(),
     );
   }
 
@@ -21774,7 +22153,9 @@ class KeyResponse {
     if (key != null) {
       json[r'key'] = key.toJson();
     }
-    json[r'keys'] = keys.map((i) => i.toJson()).toList();
+    if (keys != null) {
+      json[r'keys'] = keys.map((i) => i.toJson()).toList();
+    }
     return json;
   }
 
@@ -21899,17 +22280,16 @@ class KeySearchRequest {
 
 /// Key search response
 class KeySearchResponse {
-  final List<Key> keys;
+  final List<Key>? keys;
   final int? total;
 
-  KeySearchResponse({List<Key>? keys, this.total}) : keys = keys ?? [];
+  KeySearchResponse({this.keys, this.total});
 
   factory KeySearchResponse.fromJson(Map<String, Object?> json) {
     return KeySearchResponse(
       keys: (json[r'keys'] as List<Object?>?)
-              ?.map((i) => Key.fromJson(i as Map<String, Object?>? ?? const {}))
-              .toList() ??
-          [],
+          ?.map((i) => Key.fromJson(i as Map<String, Object?>? ?? const {}))
+          .toList(),
       total: (json[r'total'] as num?)?.toInt(),
     );
   }
@@ -21919,7 +22299,9 @@ class KeySearchResponse {
     var total = this.total;
 
     final json = <String, Object?>{};
-    json[r'keys'] = keys.map((i) => i.toJson()).toList();
+    if (keys != null) {
+      json[r'keys'] = keys.map((i) => i.toJson()).toList();
+    }
     if (total != null) {
       json[r'total'] = total;
     }
@@ -22024,12 +22406,12 @@ class LDAPConnectorConfiguration {
   final ConnectorLambdaConfiguration? lambdaConfiguration;
   final String? loginIdAttribute;
   final int? readTimeout;
-  final List<String> requestedAttributes;
+  final List<String>? requestedAttributes;
   final LDAPSecurityMethod? securityMethod;
   final String? systemAccountDn;
   final String? systemAccountPassword;
   final Map<String, dynamic>? data;
-  final bool debug;
+  final bool? debug;
   final String? id;
   final ZonedDateTime? insertInstant;
   final ZonedDateTime? lastUpdateInstant;
@@ -22044,19 +22426,17 @@ class LDAPConnectorConfiguration {
       this.lambdaConfiguration,
       this.loginIdAttribute,
       this.readTimeout,
-      List<String>? requestedAttributes,
+      this.requestedAttributes,
       this.securityMethod,
       this.systemAccountDn,
       this.systemAccountPassword,
       this.data,
-      bool? debug,
+      this.debug,
       this.id,
       this.insertInstant,
       this.lastUpdateInstant,
       this.name,
-      this.type})
-      : requestedAttributes = requestedAttributes ?? [],
-        debug = debug ?? false;
+      this.type});
 
   factory LDAPConnectorConfiguration.fromJson(Map<String, Object?> json) {
     return LDAPConnectorConfiguration(
@@ -22071,16 +22451,15 @@ class LDAPConnectorConfiguration {
       loginIdAttribute: json[r'loginIdAttribute'] as String?,
       readTimeout: (json[r'readTimeout'] as num?)?.toInt(),
       requestedAttributes: (json[r'requestedAttributes'] as List<Object?>?)
-              ?.map((i) => i as String? ?? '')
-              .toList() ??
-          [],
+          ?.map((i) => i as String? ?? '')
+          .toList(),
       securityMethod: json[r'securityMethod'] != null
           ? LDAPSecurityMethod.fromValue(json[r'securityMethod']! as String)
           : null,
       systemAccountDn: json[r'systemAccountDN'] as String?,
       systemAccountPassword: json[r'systemAccountPassword'] as String?,
       data: json[r'data'] as Map<String, Object?>?,
-      debug: json[r'debug'] as bool? ?? false,
+      debug: json[r'debug'] as bool?,
       id: json[r'id'] as String?,
       insertInstant:
           (json[r'insertInstant'] as num?)?.toInt() as ZonedDateTime?,
@@ -22135,7 +22514,9 @@ class LDAPConnectorConfiguration {
     if (readTimeout != null) {
       json[r'readTimeout'] = readTimeout;
     }
-    json[r'requestedAttributes'] = requestedAttributes;
+    if (requestedAttributes != null) {
+      json[r'requestedAttributes'] = requestedAttributes;
+    }
     if (securityMethod != null) {
       json[r'securityMethod'] = securityMethod.value;
     }
@@ -22148,7 +22529,9 @@ class LDAPConnectorConfiguration {
     if (data != null) {
       json[r'data'] = data;
     }
-    json[r'debug'] = debug;
+    if (debug != null) {
+      json[r'debug'] = debug;
+    }
     if (id != null) {
       json[r'id'] = id;
     }
@@ -22214,7 +22597,7 @@ class LDAPConnectorConfiguration {
 /// FusionAuth.
 class Lambda {
   final String? body;
-  final bool debug;
+  final bool? debug;
   final LambdaEngineType? engineType;
   final String? id;
   final ZonedDateTime? insertInstant;
@@ -22224,19 +22607,18 @@ class Lambda {
 
   Lambda(
       {this.body,
-      bool? debug,
+      this.debug,
       this.engineType,
       this.id,
       this.insertInstant,
       this.lastUpdateInstant,
       this.name,
-      this.type})
-      : debug = debug ?? false;
+      this.type});
 
   factory Lambda.fromJson(Map<String, Object?> json) {
     return Lambda(
       body: json[r'body'] as String?,
-      debug: json[r'debug'] as bool? ?? false,
+      debug: json[r'debug'] as bool?,
       engineType: json[r'engineType'] != null
           ? LambdaEngineType.fromValue(json[r'engineType']! as String)
           : null,
@@ -22266,7 +22648,9 @@ class Lambda {
     if (body != null) {
       json[r'body'] = body;
     }
-    json[r'debug'] = debug;
+    if (debug != null) {
+      json[r'debug'] = debug;
+    }
     if (engineType != null) {
       json[r'engineType'] = engineType.value;
     }
@@ -22416,10 +22800,9 @@ class LambdaRequest {
 /// Lambda API response object.
 class LambdaResponse {
   final Lambda? lambda;
-  final List<Lambda> lambdas;
+  final List<Lambda>? lambdas;
 
-  LambdaResponse({this.lambda, List<Lambda>? lambdas})
-      : lambdas = lambdas ?? [];
+  LambdaResponse({this.lambda, this.lambdas});
 
   factory LambdaResponse.fromJson(Map<String, Object?> json) {
     return LambdaResponse(
@@ -22427,10 +22810,8 @@ class LambdaResponse {
           ? Lambda.fromJson(json[r'lambda']! as Map<String, Object?>)
           : null,
       lambdas: (json[r'lambdas'] as List<Object?>?)
-              ?.map((i) =>
-                  Lambda.fromJson(i as Map<String, Object?>? ?? const {}))
-              .toList() ??
-          [],
+          ?.map((i) => Lambda.fromJson(i as Map<String, Object?>? ?? const {}))
+          .toList(),
     );
   }
 
@@ -22442,7 +22823,9 @@ class LambdaResponse {
     if (lambda != null) {
       json[r'lambda'] = lambda.toJson();
     }
-    json[r'lambdas'] = lambdas.map((i) => i.toJson()).toList();
+    if (lambdas != null) {
+      json[r'lambdas'] = lambdas.map((i) => i.toJson()).toList();
+    }
     return json;
   }
 
@@ -22566,19 +22949,16 @@ class LambdaSearchRequest {
 
 /// Lambda search response
 class LambdaSearchResponse {
-  final List<Lambda> lambdas;
+  final List<Lambda>? lambdas;
   final int? total;
 
-  LambdaSearchResponse({List<Lambda>? lambdas, this.total})
-      : lambdas = lambdas ?? [];
+  LambdaSearchResponse({this.lambdas, this.total});
 
   factory LambdaSearchResponse.fromJson(Map<String, Object?> json) {
     return LambdaSearchResponse(
       lambdas: (json[r'lambdas'] as List<Object?>?)
-              ?.map((i) =>
-                  Lambda.fromJson(i as Map<String, Object?>? ?? const {}))
-              .toList() ??
-          [],
+          ?.map((i) => Lambda.fromJson(i as Map<String, Object?>? ?? const {}))
+          .toList(),
       total: (json[r'total'] as num?)?.toInt(),
     );
   }
@@ -22588,7 +22968,9 @@ class LambdaSearchResponse {
     var total = this.total;
 
     final json = <String, Object?>{};
-    json[r'lambdas'] = lambdas.map((i) => i.toJson()).toList();
+    if (lambdas != null) {
+      json[r'lambdas'] = lambdas.map((i) => i.toJson()).toList();
+    }
     if (total != null) {
       json[r'total'] = total;
     }
@@ -22609,7 +22991,7 @@ class LinkedInApplicationConfiguration {
   final String? clientSecret;
   final String? scope;
   final Map<String, dynamic>? data;
-  final bool createRegistration;
+  final bool? createRegistration;
 
   LinkedInApplicationConfiguration(
       {this.buttonText,
@@ -22617,8 +22999,7 @@ class LinkedInApplicationConfiguration {
       this.clientSecret,
       this.scope,
       this.data,
-      bool? createRegistration})
-      : createRegistration = createRegistration ?? false;
+      this.createRegistration});
 
   factory LinkedInApplicationConfiguration.fromJson(Map<String, Object?> json) {
     return LinkedInApplicationConfiguration(
@@ -22627,7 +23008,7 @@ class LinkedInApplicationConfiguration {
       clientSecret: json[r'client_secret'] as String?,
       scope: json[r'scope'] as String?,
       data: json[r'data'] as Map<String, Object?>?,
-      createRegistration: json[r'createRegistration'] as bool? ?? false,
+      createRegistration: json[r'createRegistration'] as bool?,
     );
   }
 
@@ -22655,7 +23036,9 @@ class LinkedInApplicationConfiguration {
     if (data != null) {
       json[r'data'] = data;
     }
-    json[r'createRegistration'] = createRegistration;
+    if (createRegistration != null) {
+      json[r'createRegistration'] = createRegistration;
+    }
     return json;
   }
 
@@ -22684,7 +23067,7 @@ class LinkedInIdentityProvider {
   final String? scope;
   final Map<String, dynamic>? data;
   final Map<String, dynamic>? applicationConfiguration;
-  final bool debug;
+  final bool? debug;
   final String? id;
   final ZonedDateTime? insertInstant;
   final ProviderLambdaConfiguration? lambdaConfiguration;
@@ -22701,7 +23084,7 @@ class LinkedInIdentityProvider {
       this.scope,
       this.data,
       this.applicationConfiguration,
-      bool? debug,
+      this.debug,
       this.id,
       this.insertInstant,
       this.lambdaConfiguration,
@@ -22709,8 +23092,7 @@ class LinkedInIdentityProvider {
       this.linkingStrategy,
       this.name,
       this.tenantConfiguration,
-      this.type})
-      : debug = debug ?? false;
+      this.type});
 
   factory LinkedInIdentityProvider.fromJson(Map<String, Object?> json) {
     return LinkedInIdentityProvider(
@@ -22721,7 +23103,7 @@ class LinkedInIdentityProvider {
       data: json[r'data'] as Map<String, Object?>?,
       applicationConfiguration:
           json[r'applicationConfiguration'] as Map<String, Object?>?,
-      debug: json[r'debug'] as bool? ?? false,
+      debug: json[r'debug'] as bool?,
       id: json[r'id'] as String?,
       insertInstant:
           (json[r'insertInstant'] as num?)?.toInt() as ZonedDateTime?,
@@ -22780,7 +23162,9 @@ class LinkedInIdentityProvider {
     if (applicationConfiguration != null) {
       json[r'applicationConfiguration'] = applicationConfiguration;
     }
-    json[r'debug'] = debug;
+    if (debug != null) {
+      json[r'debug'] = debug;
+    }
     if (id != null) {
       json[r'id'] = id;
     }
@@ -22962,18 +23346,16 @@ class Location {
 /// A historical state of a user log event. Since events can be modified, this
 /// stores the historical state.
 class LogHistory {
-  final List<HistoryItem> historyItems;
+  final List<HistoryItem>? historyItems;
 
-  LogHistory({List<HistoryItem>? historyItems})
-      : historyItems = historyItems ?? [];
+  LogHistory({this.historyItems});
 
   factory LogHistory.fromJson(Map<String, Object?> json) {
     return LogHistory(
       historyItems: (json[r'historyItems'] as List<Object?>?)
-              ?.map((i) =>
-                  HistoryItem.fromJson(i as Map<String, Object?>? ?? const {}))
-              .toList() ??
-          [],
+          ?.map((i) =>
+              HistoryItem.fromJson(i as Map<String, Object?>? ?? const {}))
+          .toList(),
     );
   }
 
@@ -22981,7 +23363,9 @@ class LogHistory {
     var historyItems = this.historyItems;
 
     final json = <String, Object?>{};
-    json[r'historyItems'] = historyItems.map((i) => i.toJson()).toList();
+    if (historyItems != null) {
+      json[r'historyItems'] = historyItems.map((i) => i.toJson()).toList();
+    }
     return json;
   }
 
@@ -22993,23 +23377,20 @@ class LogHistory {
 }
 
 class LoginConfiguration {
-  final bool allowTokenRefresh;
-  final bool generateRefreshTokens;
-  final bool requireAuthentication;
+  final bool? allowTokenRefresh;
+  final bool? generateRefreshTokens;
+  final bool? requireAuthentication;
 
   LoginConfiguration(
-      {bool? allowTokenRefresh,
-      bool? generateRefreshTokens,
-      bool? requireAuthentication})
-      : allowTokenRefresh = allowTokenRefresh ?? false,
-        generateRefreshTokens = generateRefreshTokens ?? false,
-        requireAuthentication = requireAuthentication ?? false;
+      {this.allowTokenRefresh,
+      this.generateRefreshTokens,
+      this.requireAuthentication});
 
   factory LoginConfiguration.fromJson(Map<String, Object?> json) {
     return LoginConfiguration(
-      allowTokenRefresh: json[r'allowTokenRefresh'] as bool? ?? false,
-      generateRefreshTokens: json[r'generateRefreshTokens'] as bool? ?? false,
-      requireAuthentication: json[r'requireAuthentication'] as bool? ?? false,
+      allowTokenRefresh: json[r'allowTokenRefresh'] as bool?,
+      generateRefreshTokens: json[r'generateRefreshTokens'] as bool?,
+      requireAuthentication: json[r'requireAuthentication'] as bool?,
     );
   }
 
@@ -23019,9 +23400,15 @@ class LoginConfiguration {
     var requireAuthentication = this.requireAuthentication;
 
     final json = <String, Object?>{};
-    json[r'allowTokenRefresh'] = allowTokenRefresh;
-    json[r'generateRefreshTokens'] = generateRefreshTokens;
-    json[r'requireAuthentication'] = requireAuthentication;
+    if (allowTokenRefresh != null) {
+      json[r'allowTokenRefresh'] = allowTokenRefresh;
+    }
+    if (generateRefreshTokens != null) {
+      json[r'generateRefreshTokens'] = generateRefreshTokens;
+    }
+    if (requireAuthentication != null) {
+      json[r'requireAuthentication'] = requireAuthentication;
+    }
     return json;
   }
 
@@ -23041,15 +23428,14 @@ class LoginConfiguration {
 
 class LoginHintConfiguration {
   final String? parameterName;
-  final bool enabled;
+  final bool? enabled;
 
-  LoginHintConfiguration({this.parameterName, bool? enabled})
-      : enabled = enabled ?? false;
+  LoginHintConfiguration({this.parameterName, this.enabled});
 
   factory LoginHintConfiguration.fromJson(Map<String, Object?> json) {
     return LoginHintConfiguration(
       parameterName: json[r'parameterName'] as String?,
-      enabled: json[r'enabled'] as bool? ?? false,
+      enabled: json[r'enabled'] as bool?,
     );
   }
 
@@ -23061,7 +23447,9 @@ class LoginHintConfiguration {
     if (parameterName != null) {
       json[r'parameterName'] = parameterName;
     }
-    json[r'enabled'] = enabled;
+    if (enabled != null) {
+      json[r'enabled'] = enabled;
+    }
     return json;
   }
 
@@ -23079,18 +23467,16 @@ class LoginPingRequest {
   final String? applicationId;
   final String? ipAddress;
   final MetaData? metaData;
-  final bool newDevice;
-  final bool noJwt;
+  final bool? newDevice;
+  final bool? noJwt;
 
   LoginPingRequest(
       {this.userId,
       this.applicationId,
       this.ipAddress,
       this.metaData,
-      bool? newDevice,
-      bool? noJwt})
-      : newDevice = newDevice ?? false,
-        noJwt = noJwt ?? false;
+      this.newDevice,
+      this.noJwt});
 
   factory LoginPingRequest.fromJson(Map<String, Object?> json) {
     return LoginPingRequest(
@@ -23100,8 +23486,8 @@ class LoginPingRequest {
       metaData: json[r'metaData'] != null
           ? MetaData.fromJson(json[r'metaData']! as Map<String, Object?>)
           : null,
-      newDevice: json[r'newDevice'] as bool? ?? false,
-      noJwt: json[r'noJWT'] as bool? ?? false,
+      newDevice: json[r'newDevice'] as bool?,
+      noJwt: json[r'noJWT'] as bool?,
     );
   }
 
@@ -23126,8 +23512,12 @@ class LoginPingRequest {
     if (metaData != null) {
       json[r'metaData'] = metaData.toJson();
     }
-    json[r'newDevice'] = newDevice;
-    json[r'noJWT'] = noJwt;
+    if (newDevice != null) {
+      json[r'newDevice'] = newDevice;
+    }
+    if (noJwt != null) {
+      json[r'noJWT'] = noJwt;
+    }
     return json;
   }
 
@@ -23428,15 +23818,14 @@ class LoginRecordSearchCriteria {
 }
 
 class LoginRecordSearchRequest {
-  final bool retrieveTotal;
+  final bool? retrieveTotal;
   final LoginRecordSearchCriteria? search;
 
-  LoginRecordSearchRequest({bool? retrieveTotal, this.search})
-      : retrieveTotal = retrieveTotal ?? false;
+  LoginRecordSearchRequest({this.retrieveTotal, this.search});
 
   factory LoginRecordSearchRequest.fromJson(Map<String, Object?> json) {
     return LoginRecordSearchRequest(
-      retrieveTotal: json[r'retrieveTotal'] as bool? ?? false,
+      retrieveTotal: json[r'retrieveTotal'] as bool?,
       search: json[r'search'] != null
           ? LoginRecordSearchCriteria.fromJson(
               json[r'search']! as Map<String, Object?>)
@@ -23449,7 +23838,9 @@ class LoginRecordSearchRequest {
     var search = this.search;
 
     final json = <String, Object?>{};
-    json[r'retrieveTotal'] = retrieveTotal;
+    if (retrieveTotal != null) {
+      json[r'retrieveTotal'] = retrieveTotal;
+    }
     if (search != null) {
       json[r'search'] = search.toJson();
     }
@@ -23467,19 +23858,17 @@ class LoginRecordSearchRequest {
 
 /// A raw login record response
 class LoginRecordSearchResponse {
-  final List<DisplayableRawLogin> logins;
+  final List<DisplayableRawLogin>? logins;
   final int? total;
 
-  LoginRecordSearchResponse({List<DisplayableRawLogin>? logins, this.total})
-      : logins = logins ?? [];
+  LoginRecordSearchResponse({this.logins, this.total});
 
   factory LoginRecordSearchResponse.fromJson(Map<String, Object?> json) {
     return LoginRecordSearchResponse(
       logins: (json[r'logins'] as List<Object?>?)
-              ?.map((i) => DisplayableRawLogin.fromJson(
-                  i as Map<String, Object?>? ?? const {}))
-              .toList() ??
-          [],
+          ?.map((i) => DisplayableRawLogin.fromJson(
+              i as Map<String, Object?>? ?? const {}))
+          .toList(),
       total: (json[r'total'] as num?)?.toInt(),
     );
   }
@@ -23489,7 +23878,9 @@ class LoginRecordSearchResponse {
     var total = this.total;
 
     final json = <String, Object?>{};
-    json[r'logins'] = logins.map((i) => i.toJson()).toList();
+    if (logins != null) {
+      json[r'logins'] = logins.map((i) => i.toJson()).toList();
+    }
     if (total != null) {
       json[r'total'] = total;
     }
@@ -23507,19 +23898,16 @@ class LoginRecordSearchResponse {
 
 /// Response for the login report.
 class LoginReportResponse {
-  final List<Count> hourlyCounts;
+  final List<Count>? hourlyCounts;
   final int? total;
 
-  LoginReportResponse({List<Count>? hourlyCounts, this.total})
-      : hourlyCounts = hourlyCounts ?? [];
+  LoginReportResponse({this.hourlyCounts, this.total});
 
   factory LoginReportResponse.fromJson(Map<String, Object?> json) {
     return LoginReportResponse(
       hourlyCounts: (json[r'hourlyCounts'] as List<Object?>?)
-              ?.map(
-                  (i) => Count.fromJson(i as Map<String, Object?>? ?? const {}))
-              .toList() ??
-          [],
+          ?.map((i) => Count.fromJson(i as Map<String, Object?>? ?? const {}))
+          .toList(),
       total: (json[r'total'] as num?)?.toInt(),
     );
   }
@@ -23529,7 +23917,9 @@ class LoginReportResponse {
     var total = this.total;
 
     final json = <String, Object?>{};
-    json[r'hourlyCounts'] = hourlyCounts.map((i) => i.toJson()).toList();
+    if (hourlyCounts != null) {
+      json[r'hourlyCounts'] = hourlyCounts.map((i) => i.toJson()).toList();
+    }
     if (total != null) {
       json[r'total'] = total;
     }
@@ -23553,8 +23943,8 @@ class LoginRequest {
   final String? applicationId;
   final String? ipAddress;
   final MetaData? metaData;
-  final bool newDevice;
-  final bool noJwt;
+  final bool? newDevice;
+  final bool? noJwt;
 
   LoginRequest(
       {this.loginId,
@@ -23564,10 +23954,8 @@ class LoginRequest {
       this.applicationId,
       this.ipAddress,
       this.metaData,
-      bool? newDevice,
-      bool? noJwt})
-      : newDevice = newDevice ?? false,
-        noJwt = noJwt ?? false;
+      this.newDevice,
+      this.noJwt});
 
   factory LoginRequest.fromJson(Map<String, Object?> json) {
     return LoginRequest(
@@ -23580,8 +23968,8 @@ class LoginRequest {
       metaData: json[r'metaData'] != null
           ? MetaData.fromJson(json[r'metaData']! as Map<String, Object?>)
           : null,
-      newDevice: json[r'newDevice'] as bool? ?? false,
-      noJwt: json[r'noJWT'] as bool? ?? false,
+      newDevice: json[r'newDevice'] as bool?,
+      noJwt: json[r'noJWT'] as bool?,
     );
   }
 
@@ -23618,8 +24006,12 @@ class LoginRequest {
     if (metaData != null) {
       json[r'metaData'] = metaData.toJson();
     }
-    json[r'newDevice'] = newDevice;
-    json[r'noJWT'] = noJwt;
+    if (newDevice != null) {
+      json[r'newDevice'] = newDevice;
+    }
+    if (noJwt != null) {
+      json[r'noJWT'] = noJwt;
+    }
     return json;
   }
 
@@ -23648,18 +24040,18 @@ class LoginRequest {
 }
 
 class LoginResponse {
-  final List<LoginPreventedResponse> actions;
+  final List<LoginPreventedResponse>? actions;
   final String? changePasswordId;
   final ChangePasswordReason? changePasswordReason;
-  final List<String> configurableMethods;
+  final List<String>? configurableMethods;
   final String? emailVerificationId;
-  final List<TwoFactorMethod> methods;
+  final List<TwoFactorMethod>? methods;
   final String? pendingIdpLinkId;
   final String? refreshToken;
   final String? refreshTokenId;
   final String? registrationVerificationId;
   final Map<String, dynamic>? state;
-  final List<dynamic> threatsDetected;
+  final List<dynamic>? threatsDetected;
   final String? token;
   final ZonedDateTime? tokenExpirationInstant;
   final String? trustToken;
@@ -23668,61 +24060,52 @@ class LoginResponse {
   final User? user;
 
   LoginResponse(
-      {List<LoginPreventedResponse>? actions,
+      {this.actions,
       this.changePasswordId,
       this.changePasswordReason,
-      List<String>? configurableMethods,
+      this.configurableMethods,
       this.emailVerificationId,
-      List<TwoFactorMethod>? methods,
+      this.methods,
       this.pendingIdpLinkId,
       this.refreshToken,
       this.refreshTokenId,
       this.registrationVerificationId,
       this.state,
-      List<dynamic>? threatsDetected,
+      this.threatsDetected,
       this.token,
       this.tokenExpirationInstant,
       this.trustToken,
       this.twoFactorId,
       this.twoFactorTrustId,
-      this.user})
-      : actions = actions ?? [],
-        configurableMethods = configurableMethods ?? [],
-        methods = methods ?? [],
-        threatsDetected = threatsDetected ?? [];
+      this.user});
 
   factory LoginResponse.fromJson(Map<String, Object?> json) {
     return LoginResponse(
       actions: (json[r'actions'] as List<Object?>?)
-              ?.map((i) => LoginPreventedResponse.fromJson(
-                  i as Map<String, Object?>? ?? const {}))
-              .toList() ??
-          [],
+          ?.map((i) => LoginPreventedResponse.fromJson(
+              i as Map<String, Object?>? ?? const {}))
+          .toList(),
       changePasswordId: json[r'changePasswordId'] as String?,
       changePasswordReason: json[r'changePasswordReason'] != null
           ? ChangePasswordReason.fromValue(
               json[r'changePasswordReason']! as String)
           : null,
       configurableMethods: (json[r'configurableMethods'] as List<Object?>?)
-              ?.map((i) => i as String? ?? '')
-              .toList() ??
-          [],
+          ?.map((i) => i as String? ?? '')
+          .toList(),
       emailVerificationId: json[r'emailVerificationId'] as String?,
       methods: (json[r'methods'] as List<Object?>?)
-              ?.map((i) => TwoFactorMethod.fromJson(
-                  i as Map<String, Object?>? ?? const {}))
-              .toList() ??
-          [],
+          ?.map((i) =>
+              TwoFactorMethod.fromJson(i as Map<String, Object?>? ?? const {}))
+          .toList(),
       pendingIdpLinkId: json[r'pendingIdPLinkId'] as String?,
       refreshToken: json[r'refreshToken'] as String?,
       refreshTokenId: json[r'refreshTokenId'] as String?,
       registrationVerificationId:
           json[r'registrationVerificationId'] as String?,
       state: json[r'state'] as Map<String, Object?>?,
-      threatsDetected: (json[r'threatsDetected'] as List<Object?>?)
-              ?.map((i) => i)
-              .toList() ??
-          [],
+      threatsDetected:
+          (json[r'threatsDetected'] as List<Object?>?)?.map((i) => i).toList(),
       token: json[r'token'] as String?,
       tokenExpirationInstant:
           (json[r'tokenExpirationInstant'] as num?)?.toInt() as ZonedDateTime?,
@@ -23756,18 +24139,24 @@ class LoginResponse {
     var user = this.user;
 
     final json = <String, Object?>{};
-    json[r'actions'] = actions.map((i) => i.toJson()).toList();
+    if (actions != null) {
+      json[r'actions'] = actions.map((i) => i.toJson()).toList();
+    }
     if (changePasswordId != null) {
       json[r'changePasswordId'] = changePasswordId;
     }
     if (changePasswordReason != null) {
       json[r'changePasswordReason'] = changePasswordReason.value;
     }
-    json[r'configurableMethods'] = configurableMethods;
+    if (configurableMethods != null) {
+      json[r'configurableMethods'] = configurableMethods;
+    }
     if (emailVerificationId != null) {
       json[r'emailVerificationId'] = emailVerificationId;
     }
-    json[r'methods'] = methods.map((i) => i.toJson()).toList();
+    if (methods != null) {
+      json[r'methods'] = methods.map((i) => i.toJson()).toList();
+    }
     if (pendingIdpLinkId != null) {
       json[r'pendingIdPLinkId'] = pendingIdpLinkId;
     }
@@ -23783,7 +24172,9 @@ class LoginResponse {
     if (state != null) {
       json[r'state'] = state;
     }
-    json[r'threatsDetected'] = threatsDetected;
+    if (threatsDetected != null) {
+      json[r'threatsDetected'] = threatsDetected;
+    }
     if (token != null) {
       json[r'token'] = token;
     }
@@ -23852,16 +24243,15 @@ class LoginResponse {
 /// Request for the Logout API that can be used as an alternative to URL
 /// parameters.
 class LogoutRequest {
-  final bool global;
+  final bool? global;
   final String? refreshToken;
   final EventInfo? eventInfo;
 
-  LogoutRequest({bool? global, this.refreshToken, this.eventInfo})
-      : global = global ?? false;
+  LogoutRequest({this.global, this.refreshToken, this.eventInfo});
 
   factory LogoutRequest.fromJson(Map<String, Object?> json) {
     return LogoutRequest(
-      global: json[r'global'] as bool? ?? false,
+      global: json[r'global'] as bool?,
       refreshToken: json[r'refreshToken'] as String?,
       eventInfo: json[r'eventInfo'] != null
           ? EventInfo.fromJson(json[r'eventInfo']! as Map<String, Object?>)
@@ -23875,7 +24265,9 @@ class LogoutRequest {
     var eventInfo = this.eventInfo;
 
     final json = <String, Object?>{};
-    json[r'global'] = global;
+    if (global != null) {
+      json[r'global'] = global;
+    }
     if (refreshToken != null) {
       json[r'refreshToken'] = refreshToken;
     }
@@ -23946,14 +24338,14 @@ class ManagedFields {
 
 class MaximumPasswordAge {
   final int? days;
-  final bool enabled;
+  final bool? enabled;
 
-  MaximumPasswordAge({this.days, bool? enabled}) : enabled = enabled ?? false;
+  MaximumPasswordAge({this.days, this.enabled});
 
   factory MaximumPasswordAge.fromJson(Map<String, Object?> json) {
     return MaximumPasswordAge(
       days: (json[r'days'] as num?)?.toInt(),
-      enabled: json[r'enabled'] as bool? ?? false,
+      enabled: json[r'enabled'] as bool?,
     );
   }
 
@@ -23965,7 +24357,9 @@ class MaximumPasswordAge {
     if (days != null) {
       json[r'days'] = days;
     }
-    json[r'enabled'] = enabled;
+    if (enabled != null) {
+      json[r'enabled'] = enabled;
+    }
     return json;
   }
 
@@ -23979,23 +24373,19 @@ class MaximumPasswordAge {
 
 /// Group Member Delete Request
 class MemberDeleteRequest {
-  final List<String> memberIds;
-  final List<String> members;
+  final List<String>? memberIds;
+  final List<String>? members;
 
-  MemberDeleteRequest({List<String>? memberIds, List<String>? members})
-      : memberIds = memberIds ?? [],
-        members = members ?? [];
+  MemberDeleteRequest({this.memberIds, this.members});
 
   factory MemberDeleteRequest.fromJson(Map<String, Object?> json) {
     return MemberDeleteRequest(
       memberIds: (json[r'memberIds'] as List<Object?>?)
-              ?.map((i) => i as String? ?? '')
-              .toList() ??
-          [],
+          ?.map((i) => i as String? ?? '')
+          .toList(),
       members: (json[r'members'] as List<Object?>?)
-              ?.map((i) => i as String? ?? '')
-              .toList() ??
-          [],
+          ?.map((i) => i as String? ?? '')
+          .toList(),
     );
   }
 
@@ -24004,8 +24394,12 @@ class MemberDeleteRequest {
     var members = this.members;
 
     final json = <String, Object?>{};
-    json[r'memberIds'] = memberIds;
-    json[r'members'] = members;
+    if (memberIds != null) {
+      json[r'memberIds'] = memberIds;
+    }
+    if (members != null) {
+      json[r'members'] = members;
+    }
     return json;
   }
 
@@ -24020,17 +24414,16 @@ class MemberDeleteRequest {
 
 /// Group Member Request
 class MemberRequest {
-  final List<GroupMember> members;
+  final List<GroupMember>? members;
 
-  MemberRequest({List<GroupMember>? members}) : members = members ?? [];
+  MemberRequest({this.members});
 
   factory MemberRequest.fromJson(Map<String, Object?> json) {
     return MemberRequest(
       members: (json[r'members'] as List<Object?>?)
-              ?.map((i) =>
-                  GroupMember.fromJson(i as Map<String, Object?>? ?? const {}))
-              .toList() ??
-          [],
+          ?.map((i) =>
+              GroupMember.fromJson(i as Map<String, Object?>? ?? const {}))
+          .toList(),
     );
   }
 
@@ -24038,7 +24431,9 @@ class MemberRequest {
     var members = this.members;
 
     final json = <String, Object?>{};
-    json[r'members'] = members.map((i) => i.toJson()).toList();
+    if (members != null) {
+      json[r'members'] = members.map((i) => i.toJson()).toList();
+    }
     return json;
   }
 
@@ -24051,17 +24446,16 @@ class MemberRequest {
 
 /// Group Member Response
 class MemberResponse {
-  final List<GroupMember> members;
+  final List<GroupMember>? members;
 
-  MemberResponse({List<GroupMember>? members}) : members = members ?? [];
+  MemberResponse({this.members});
 
   factory MemberResponse.fromJson(Map<String, Object?> json) {
     return MemberResponse(
       members: (json[r'members'] as List<Object?>?)
-              ?.map((i) =>
-                  GroupMember.fromJson(i as Map<String, Object?>? ?? const {}))
-              .toList() ??
-          [],
+          ?.map((i) =>
+              GroupMember.fromJson(i as Map<String, Object?>? ?? const {}))
+          .toList(),
     );
   }
 
@@ -24069,7 +24463,9 @@ class MemberResponse {
     var members = this.members;
 
     final json = <String, Object?>{};
-    json[r'members'] = members.map((i) => i.toJson()).toList();
+    if (members != null) {
+      json[r'members'] = members.map((i) => i.toJson()).toList();
+    }
     return json;
   }
 
@@ -24207,11 +24603,9 @@ class MessageTemplateRequest {
 
 class MessageTemplateResponse {
   final MessageTemplate? messageTemplate;
-  final List<MessageTemplate> messageTemplates;
+  final List<MessageTemplate>? messageTemplates;
 
-  MessageTemplateResponse(
-      {this.messageTemplate, List<MessageTemplate>? messageTemplates})
-      : messageTemplates = messageTemplates ?? [];
+  MessageTemplateResponse({this.messageTemplate, this.messageTemplates});
 
   factory MessageTemplateResponse.fromJson(Map<String, Object?> json) {
     return MessageTemplateResponse(
@@ -24220,10 +24614,9 @@ class MessageTemplateResponse {
               json[r'messageTemplate']! as Map<String, Object?>)
           : null,
       messageTemplates: (json[r'messageTemplates'] as List<Object?>?)
-              ?.map((i) => MessageTemplate.fromJson(
-                  i as Map<String, Object?>? ?? const {}))
-              .toList() ??
-          [],
+          ?.map((i) =>
+              MessageTemplate.fromJson(i as Map<String, Object?>? ?? const {}))
+          .toList(),
     );
   }
 
@@ -24235,8 +24628,10 @@ class MessageTemplateResponse {
     if (messageTemplate != null) {
       json[r'messageTemplate'] = messageTemplate.toJson();
     }
-    json[r'messageTemplates'] =
-        messageTemplates.map((i) => i.toJson()).toList();
+    if (messageTemplates != null) {
+      json[r'messageTemplates'] =
+          messageTemplates.map((i) => i.toJson()).toList();
+    }
     return json;
   }
 
@@ -24283,11 +24678,9 @@ class MessengerRequest {
 
 class MessengerResponse {
   final BaseMessengerConfiguration? messenger;
-  final List<BaseMessengerConfiguration> messengers;
+  final List<BaseMessengerConfiguration>? messengers;
 
-  MessengerResponse(
-      {this.messenger, List<BaseMessengerConfiguration>? messengers})
-      : messengers = messengers ?? [];
+  MessengerResponse({this.messenger, this.messengers});
 
   factory MessengerResponse.fromJson(Map<String, Object?> json) {
     return MessengerResponse(
@@ -24296,10 +24689,9 @@ class MessengerResponse {
               json[r'messenger']! as Map<String, Object?>)
           : null,
       messengers: (json[r'messengers'] as List<Object?>?)
-              ?.map((i) => BaseMessengerConfiguration.fromJson(
-                  i as Map<String, Object?>? ?? const {}))
-              .toList() ??
-          [],
+          ?.map((i) => BaseMessengerConfiguration.fromJson(
+              i as Map<String, Object?>? ?? const {}))
+          .toList(),
     );
   }
 
@@ -24311,7 +24703,9 @@ class MessengerResponse {
     if (messenger != null) {
       json[r'messenger'] = messenger.toJson();
     }
-    json[r'messengers'] = messengers.map((i) => i.toJson()).toList();
+    if (messengers != null) {
+      json[r'messengers'] = messengers.map((i) => i.toJson()).toList();
+    }
     return json;
   }
 
@@ -24341,10 +24735,9 @@ class MessengerTransport {
 class MetaData {
   final Map<String, dynamic>? data;
   final DeviceInfo? device;
-  final List<dynamic> scopes;
+  final List<dynamic>? scopes;
 
-  MetaData({this.data, this.device, List<dynamic>? scopes})
-      : scopes = scopes ?? [];
+  MetaData({this.data, this.device, this.scopes});
 
   factory MetaData.fromJson(Map<String, Object?> json) {
     return MetaData(
@@ -24352,7 +24745,7 @@ class MetaData {
       device: json[r'device'] != null
           ? DeviceInfo.fromJson(json[r'device']! as Map<String, Object?>)
           : null,
-      scopes: (json[r'scopes'] as List<Object?>?)?.map((i) => i).toList() ?? [],
+      scopes: (json[r'scopes'] as List<Object?>?)?.map((i) => i).toList(),
     );
   }
 
@@ -24368,7 +24761,9 @@ class MetaData {
     if (device != null) {
       json[r'device'] = device.toJson();
     }
-    json[r'scopes'] = scopes;
+    if (scopes != null) {
+      json[r'scopes'] = scopes;
+    }
     return json;
   }
 
@@ -24384,15 +24779,14 @@ class MetaData {
 
 class MinimumPasswordAge {
   final int? seconds;
-  final bool enabled;
+  final bool? enabled;
 
-  MinimumPasswordAge({this.seconds, bool? enabled})
-      : enabled = enabled ?? false;
+  MinimumPasswordAge({this.seconds, this.enabled});
 
   factory MinimumPasswordAge.fromJson(Map<String, Object?> json) {
     return MinimumPasswordAge(
       seconds: (json[r'seconds'] as num?)?.toInt(),
-      enabled: json[r'enabled'] as bool? ?? false,
+      enabled: json[r'enabled'] as bool?,
     );
   }
 
@@ -24404,7 +24798,9 @@ class MinimumPasswordAge {
     if (seconds != null) {
       json[r'seconds'] = seconds;
     }
-    json[r'enabled'] = enabled;
+    if (enabled != null) {
+      json[r'enabled'] = enabled;
+    }
     return json;
   }
 
@@ -24418,19 +24814,16 @@ class MinimumPasswordAge {
 
 /// Response for the daily active user report.
 class MonthlyActiveUserReportResponse {
-  final List<Count> monthlyActiveUsers;
+  final List<Count>? monthlyActiveUsers;
   final int? total;
 
-  MonthlyActiveUserReportResponse({List<Count>? monthlyActiveUsers, this.total})
-      : monthlyActiveUsers = monthlyActiveUsers ?? [];
+  MonthlyActiveUserReportResponse({this.monthlyActiveUsers, this.total});
 
   factory MonthlyActiveUserReportResponse.fromJson(Map<String, Object?> json) {
     return MonthlyActiveUserReportResponse(
       monthlyActiveUsers: (json[r'monthlyActiveUsers'] as List<Object?>?)
-              ?.map(
-                  (i) => Count.fromJson(i as Map<String, Object?>? ?? const {}))
-              .toList() ??
-          [],
+          ?.map((i) => Count.fromJson(i as Map<String, Object?>? ?? const {}))
+          .toList(),
       total: (json[r'total'] as num?)?.toInt(),
     );
   }
@@ -24440,8 +24833,10 @@ class MonthlyActiveUserReportResponse {
     var total = this.total;
 
     final json = <String, Object?>{};
-    json[r'monthlyActiveUsers'] =
-        monthlyActiveUsers.map((i) => i.toJson()).toList();
+    if (monthlyActiveUsers != null) {
+      json[r'monthlyActiveUsers'] =
+          monthlyActiveUsers.map((i) => i.toJson()).toList();
+    }
     if (total != null) {
       json[r'total'] = total;
     }
@@ -24461,11 +24856,10 @@ class MultiFactorAuthenticatorMethod {
   final TOTPAlgorithm? algorithm;
   final int? codeLength;
   final int? timeStep;
-  final bool enabled;
+  final bool? enabled;
 
   MultiFactorAuthenticatorMethod(
-      {this.algorithm, this.codeLength, this.timeStep, bool? enabled})
-      : enabled = enabled ?? false;
+      {this.algorithm, this.codeLength, this.timeStep, this.enabled});
 
   factory MultiFactorAuthenticatorMethod.fromJson(Map<String, Object?> json) {
     return MultiFactorAuthenticatorMethod(
@@ -24474,7 +24868,7 @@ class MultiFactorAuthenticatorMethod {
           : null,
       codeLength: (json[r'codeLength'] as num?)?.toInt(),
       timeStep: (json[r'timeStep'] as num?)?.toInt(),
-      enabled: json[r'enabled'] as bool? ?? false,
+      enabled: json[r'enabled'] as bool?,
     );
   }
 
@@ -24494,7 +24888,9 @@ class MultiFactorAuthenticatorMethod {
     if (timeStep != null) {
       json[r'timeStep'] = timeStep;
     }
-    json[r'enabled'] = enabled;
+    if (enabled != null) {
+      json[r'enabled'] = enabled;
+    }
     return json;
   }
 
@@ -24514,15 +24910,14 @@ class MultiFactorAuthenticatorMethod {
 
 class MultiFactorEmailMethod {
   final String? templateId;
-  final bool enabled;
+  final bool? enabled;
 
-  MultiFactorEmailMethod({this.templateId, bool? enabled})
-      : enabled = enabled ?? false;
+  MultiFactorEmailMethod({this.templateId, this.enabled});
 
   factory MultiFactorEmailMethod.fromJson(Map<String, Object?> json) {
     return MultiFactorEmailMethod(
       templateId: json[r'templateId'] as String?,
-      enabled: json[r'enabled'] as bool? ?? false,
+      enabled: json[r'enabled'] as bool?,
     );
   }
 
@@ -24534,7 +24929,9 @@ class MultiFactorEmailMethod {
     if (templateId != null) {
       json[r'templateId'] = templateId;
     }
-    json[r'enabled'] = enabled;
+    if (enabled != null) {
+      json[r'enabled'] = enabled;
+    }
     return json;
   }
 
@@ -24577,16 +24974,15 @@ class MultiFactorEmailTemplate {
 class MultiFactorSMSMethod {
   final String? messengerId;
   final String? templateId;
-  final bool enabled;
+  final bool? enabled;
 
-  MultiFactorSMSMethod({this.messengerId, this.templateId, bool? enabled})
-      : enabled = enabled ?? false;
+  MultiFactorSMSMethod({this.messengerId, this.templateId, this.enabled});
 
   factory MultiFactorSMSMethod.fromJson(Map<String, Object?> json) {
     return MultiFactorSMSMethod(
       messengerId: json[r'messengerId'] as String?,
       templateId: json[r'templateId'] as String?,
-      enabled: json[r'enabled'] as bool? ?? false,
+      enabled: json[r'enabled'] as bool?,
     );
   }
 
@@ -24602,7 +24998,9 @@ class MultiFactorSMSMethod {
     if (templateId != null) {
       json[r'templateId'] = templateId;
     }
-    json[r'enabled'] = enabled;
+    if (enabled != null) {
+      json[r'enabled'] = enabled;
+    }
     return json;
   }
 
@@ -24653,7 +25051,7 @@ class NintendoApplicationConfiguration {
   final String? uniqueIdClaim;
   final String? usernameClaim;
   final Map<String, dynamic>? data;
-  final bool createRegistration;
+  final bool? createRegistration;
 
   NintendoApplicationConfiguration(
       {this.buttonText,
@@ -24664,8 +25062,7 @@ class NintendoApplicationConfiguration {
       this.uniqueIdClaim,
       this.usernameClaim,
       this.data,
-      bool? createRegistration})
-      : createRegistration = createRegistration ?? false;
+      this.createRegistration});
 
   factory NintendoApplicationConfiguration.fromJson(Map<String, Object?> json) {
     return NintendoApplicationConfiguration(
@@ -24677,7 +25074,7 @@ class NintendoApplicationConfiguration {
       uniqueIdClaim: json[r'uniqueIdClaim'] as String?,
       usernameClaim: json[r'usernameClaim'] as String?,
       data: json[r'data'] as Map<String, Object?>?,
-      createRegistration: json[r'createRegistration'] as bool? ?? false,
+      createRegistration: json[r'createRegistration'] as bool?,
     );
   }
 
@@ -24717,7 +25114,9 @@ class NintendoApplicationConfiguration {
     if (data != null) {
       json[r'data'] = data;
     }
-    json[r'createRegistration'] = createRegistration;
+    if (createRegistration != null) {
+      json[r'createRegistration'] = createRegistration;
+    }
     return json;
   }
 
@@ -24756,7 +25155,7 @@ class NintendoIdentityProvider {
   final String? usernameClaim;
   final Map<String, dynamic>? data;
   final Map<String, dynamic>? applicationConfiguration;
-  final bool debug;
+  final bool? debug;
   final String? id;
   final ZonedDateTime? insertInstant;
   final ProviderLambdaConfiguration? lambdaConfiguration;
@@ -24776,7 +25175,7 @@ class NintendoIdentityProvider {
       this.usernameClaim,
       this.data,
       this.applicationConfiguration,
-      bool? debug,
+      this.debug,
       this.id,
       this.insertInstant,
       this.lambdaConfiguration,
@@ -24784,8 +25183,7 @@ class NintendoIdentityProvider {
       this.linkingStrategy,
       this.name,
       this.tenantConfiguration,
-      this.type})
-      : debug = debug ?? false;
+      this.type});
 
   factory NintendoIdentityProvider.fromJson(Map<String, Object?> json) {
     return NintendoIdentityProvider(
@@ -24799,7 +25197,7 @@ class NintendoIdentityProvider {
       data: json[r'data'] as Map<String, Object?>?,
       applicationConfiguration:
           json[r'applicationConfiguration'] as Map<String, Object?>?,
-      debug: json[r'debug'] as bool? ?? false,
+      debug: json[r'debug'] as bool?,
       id: json[r'id'] as String?,
       insertInstant:
           (json[r'insertInstant'] as num?)?.toInt() as ZonedDateTime?,
@@ -24870,7 +25268,9 @@ class NintendoIdentityProvider {
     if (applicationConfiguration != null) {
       json[r'applicationConfiguration'] = applicationConfiguration;
     }
-    json[r'debug'] = debug;
+    if (debug != null) {
+      json[r'debug'] = debug;
+    }
     if (id != null) {
       json[r'id'] = id;
     }
@@ -24956,67 +25356,58 @@ class NonTransactionalEvent {
 }
 
 class OAuth2Configuration {
-  final List<String> authorizedOriginUrLs;
-  final List<String> authorizedRedirectUrLs;
+  final List<String>? authorizedOriginUrLs;
+  final List<String>? authorizedRedirectUrLs;
   final Oauth2AuthorizedURLValidationPolicy? authorizedUrlValidationPolicy;
   final ClientAuthenticationPolicy? clientAuthenticationPolicy;
   final String? clientId;
   final String? clientSecret;
   final OAuthScopeConsentMode? consentMode;
-  final bool debug;
+  final bool? debug;
   final String? deviceVerificationUrl;
-  final List<dynamic> enabledGrants;
-  final bool generateRefreshTokens;
+  final List<dynamic>? enabledGrants;
+  final bool? generateRefreshTokens;
   final LogoutBehavior? logoutBehavior;
   final String? logoutUrl;
   final ProofKeyForCodeExchangePolicy? proofKeyForCodeExchangePolicy;
   final ProvidedScopePolicy? providedScopePolicy;
   final OAuthApplicationRelationship? relationship;
-  final bool requireClientAuthentication;
-  final bool requireRegistration;
+  final bool? requireClientAuthentication;
+  final bool? requireRegistration;
   final OAuthScopeHandlingPolicy? scopeHandlingPolicy;
   final UnknownScopePolicy? unknownScopePolicy;
 
   OAuth2Configuration(
-      {List<String>? authorizedOriginUrLs,
-      List<String>? authorizedRedirectUrLs,
+      {this.authorizedOriginUrLs,
+      this.authorizedRedirectUrLs,
       this.authorizedUrlValidationPolicy,
       this.clientAuthenticationPolicy,
       this.clientId,
       this.clientSecret,
       this.consentMode,
-      bool? debug,
+      this.debug,
       this.deviceVerificationUrl,
-      List<dynamic>? enabledGrants,
-      bool? generateRefreshTokens,
+      this.enabledGrants,
+      this.generateRefreshTokens,
       this.logoutBehavior,
       this.logoutUrl,
       this.proofKeyForCodeExchangePolicy,
       this.providedScopePolicy,
       this.relationship,
-      bool? requireClientAuthentication,
-      bool? requireRegistration,
+      this.requireClientAuthentication,
+      this.requireRegistration,
       this.scopeHandlingPolicy,
-      this.unknownScopePolicy})
-      : authorizedOriginUrLs = authorizedOriginUrLs ?? [],
-        authorizedRedirectUrLs = authorizedRedirectUrLs ?? [],
-        debug = debug ?? false,
-        enabledGrants = enabledGrants ?? [],
-        generateRefreshTokens = generateRefreshTokens ?? false,
-        requireClientAuthentication = requireClientAuthentication ?? false,
-        requireRegistration = requireRegistration ?? false;
+      this.unknownScopePolicy});
 
   factory OAuth2Configuration.fromJson(Map<String, Object?> json) {
     return OAuth2Configuration(
       authorizedOriginUrLs: (json[r'authorizedOriginURLs'] as List<Object?>?)
-              ?.map((i) => i as String? ?? '')
-              .toList() ??
-          [],
+          ?.map((i) => i as String? ?? '')
+          .toList(),
       authorizedRedirectUrLs:
           (json[r'authorizedRedirectURLs'] as List<Object?>?)
-                  ?.map((i) => i as String? ?? '')
-                  .toList() ??
-              [],
+              ?.map((i) => i as String? ?? '')
+              .toList(),
       authorizedUrlValidationPolicy:
           json[r'authorizedURLValidationPolicy'] != null
               ? Oauth2AuthorizedURLValidationPolicy.fromValue(
@@ -25031,12 +25422,11 @@ class OAuth2Configuration {
       consentMode: json[r'consentMode'] != null
           ? OAuthScopeConsentMode.fromValue(json[r'consentMode']! as String)
           : null,
-      debug: json[r'debug'] as bool? ?? false,
+      debug: json[r'debug'] as bool?,
       deviceVerificationUrl: json[r'deviceVerificationURL'] as String?,
       enabledGrants:
-          (json[r'enabledGrants'] as List<Object?>?)?.map((i) => i).toList() ??
-              [],
-      generateRefreshTokens: json[r'generateRefreshTokens'] as bool? ?? false,
+          (json[r'enabledGrants'] as List<Object?>?)?.map((i) => i).toList(),
+      generateRefreshTokens: json[r'generateRefreshTokens'] as bool?,
       logoutBehavior: json[r'logoutBehavior'] != null
           ? LogoutBehavior.fromValue(json[r'logoutBehavior']! as String)
           : null,
@@ -25055,8 +25445,8 @@ class OAuth2Configuration {
               json[r'relationship']! as String)
           : null,
       requireClientAuthentication:
-          json[r'requireClientAuthentication'] as bool? ?? false,
-      requireRegistration: json[r'requireRegistration'] as bool? ?? false,
+          json[r'requireClientAuthentication'] as bool?,
+      requireRegistration: json[r'requireRegistration'] as bool?,
       scopeHandlingPolicy: json[r'scopeHandlingPolicy'] != null
           ? OAuthScopeHandlingPolicy.fromValue(
               json[r'scopeHandlingPolicy']! as String)
@@ -25090,8 +25480,12 @@ class OAuth2Configuration {
     var unknownScopePolicy = this.unknownScopePolicy;
 
     final json = <String, Object?>{};
-    json[r'authorizedOriginURLs'] = authorizedOriginUrLs;
-    json[r'authorizedRedirectURLs'] = authorizedRedirectUrLs;
+    if (authorizedOriginUrLs != null) {
+      json[r'authorizedOriginURLs'] = authorizedOriginUrLs;
+    }
+    if (authorizedRedirectUrLs != null) {
+      json[r'authorizedRedirectURLs'] = authorizedRedirectUrLs;
+    }
     if (authorizedUrlValidationPolicy != null) {
       json[r'authorizedURLValidationPolicy'] =
           authorizedUrlValidationPolicy.value;
@@ -25108,12 +25502,18 @@ class OAuth2Configuration {
     if (consentMode != null) {
       json[r'consentMode'] = consentMode.value;
     }
-    json[r'debug'] = debug;
+    if (debug != null) {
+      json[r'debug'] = debug;
+    }
     if (deviceVerificationUrl != null) {
       json[r'deviceVerificationURL'] = deviceVerificationUrl;
     }
-    json[r'enabledGrants'] = enabledGrants;
-    json[r'generateRefreshTokens'] = generateRefreshTokens;
+    if (enabledGrants != null) {
+      json[r'enabledGrants'] = enabledGrants;
+    }
+    if (generateRefreshTokens != null) {
+      json[r'generateRefreshTokens'] = generateRefreshTokens;
+    }
     if (logoutBehavior != null) {
       json[r'logoutBehavior'] = logoutBehavior.value;
     }
@@ -25130,8 +25530,12 @@ class OAuth2Configuration {
     if (relationship != null) {
       json[r'relationship'] = relationship.value;
     }
-    json[r'requireClientAuthentication'] = requireClientAuthentication;
-    json[r'requireRegistration'] = requireRegistration;
+    if (requireClientAuthentication != null) {
+      json[r'requireClientAuthentication'] = requireClientAuthentication;
+    }
+    if (requireRegistration != null) {
+      json[r'requireRegistration'] = requireRegistration;
+    }
     if (scopeHandlingPolicy != null) {
       json[r'scopeHandlingPolicy'] = scopeHandlingPolicy.value;
     }
@@ -25252,7 +25656,7 @@ class OAuthError {
   final String? errorDescription;
   final OAuthErrorType? error;
   final String? errorUri;
-  final List<TwoFactorMethod> twoFactorMethods;
+  final List<TwoFactorMethod>? twoFactorMethods;
   final OAuthErrorReason? errorReason;
   final String? twoFactorId;
 
@@ -25261,10 +25665,9 @@ class OAuthError {
       this.errorDescription,
       this.error,
       this.errorUri,
-      List<TwoFactorMethod>? twoFactorMethods,
+      this.twoFactorMethods,
       this.errorReason,
-      this.twoFactorId})
-      : twoFactorMethods = twoFactorMethods ?? [];
+      this.twoFactorId});
 
   factory OAuthError.fromJson(Map<String, Object?> json) {
     return OAuthError(
@@ -25275,10 +25678,9 @@ class OAuthError {
           : null,
       errorUri: json[r'error_uri'] as String?,
       twoFactorMethods: (json[r'two_factor_methods'] as List<Object?>?)
-              ?.map((i) => TwoFactorMethod.fromJson(
-                  i as Map<String, Object?>? ?? const {}))
-              .toList() ??
-          [],
+          ?.map((i) =>
+              TwoFactorMethod.fromJson(i as Map<String, Object?>? ?? const {}))
+          .toList(),
       errorReason: json[r'error_reason'] != null
           ? OAuthErrorReason.fromValue(json[r'error_reason']! as String)
           : null,
@@ -25308,8 +25710,10 @@ class OAuthError {
     if (errorUri != null) {
       json[r'error_uri'] = errorUri;
     }
-    json[r'two_factor_methods'] =
-        twoFactorMethods.map((i) => i.toJson()).toList();
+    if (twoFactorMethods != null) {
+      json[r'two_factor_methods'] =
+          twoFactorMethods.map((i) => i.toJson()).toList();
+    }
     if (errorReason != null) {
       json[r'error_reason'] = errorReason.value;
     }
@@ -25372,114 +25776,91 @@ class ObjectIdentifiable {
 ///  Provider Metadata<a>.
 class OpenIdConfiguration {
   final String? authorizationEndpoint;
-  final bool backchannelLogoutSupported;
-  final List<String> claimsSupported;
+  final bool? backchannelLogoutSupported;
+  final List<String>? claimsSupported;
   final String? deviceAuthorizationEndpoint;
   final String? endSessionEndpoint;
-  final bool frontchannelLogoutSupported;
-  final List<String> grantTypesSupported;
-  final List<String> idTokenSigningAlgValuesSupported;
+  final bool? frontchannelLogoutSupported;
+  final List<String>? grantTypesSupported;
+  final List<String>? idTokenSigningAlgValuesSupported;
   final String? issuer;
   final String? jwksUri;
-  final List<String> responseModesSupported;
-  final List<String> responseTypesSupported;
-  final List<String> scopesSupported;
-  final List<String> subjectTypesSupported;
+  final List<String>? responseModesSupported;
+  final List<String>? responseTypesSupported;
+  final List<String>? scopesSupported;
+  final List<String>? subjectTypesSupported;
   final String? tokenEndpoint;
-  final List<String> tokenEndpointAuthMethodsSupported;
+  final List<String>? tokenEndpointAuthMethodsSupported;
   final String? userinfoEndpoint;
-  final List<String> userinfoSigningAlgValuesSupported;
+  final List<String>? userinfoSigningAlgValuesSupported;
 
   OpenIdConfiguration(
       {this.authorizationEndpoint,
-      bool? backchannelLogoutSupported,
-      List<String>? claimsSupported,
+      this.backchannelLogoutSupported,
+      this.claimsSupported,
       this.deviceAuthorizationEndpoint,
       this.endSessionEndpoint,
-      bool? frontchannelLogoutSupported,
-      List<String>? grantTypesSupported,
-      List<String>? idTokenSigningAlgValuesSupported,
+      this.frontchannelLogoutSupported,
+      this.grantTypesSupported,
+      this.idTokenSigningAlgValuesSupported,
       this.issuer,
       this.jwksUri,
-      List<String>? responseModesSupported,
-      List<String>? responseTypesSupported,
-      List<String>? scopesSupported,
-      List<String>? subjectTypesSupported,
+      this.responseModesSupported,
+      this.responseTypesSupported,
+      this.scopesSupported,
+      this.subjectTypesSupported,
       this.tokenEndpoint,
-      List<String>? tokenEndpointAuthMethodsSupported,
+      this.tokenEndpointAuthMethodsSupported,
       this.userinfoEndpoint,
-      List<String>? userinfoSigningAlgValuesSupported})
-      : backchannelLogoutSupported = backchannelLogoutSupported ?? false,
-        claimsSupported = claimsSupported ?? [],
-        frontchannelLogoutSupported = frontchannelLogoutSupported ?? false,
-        grantTypesSupported = grantTypesSupported ?? [],
-        idTokenSigningAlgValuesSupported =
-            idTokenSigningAlgValuesSupported ?? [],
-        responseModesSupported = responseModesSupported ?? [],
-        responseTypesSupported = responseTypesSupported ?? [],
-        scopesSupported = scopesSupported ?? [],
-        subjectTypesSupported = subjectTypesSupported ?? [],
-        tokenEndpointAuthMethodsSupported =
-            tokenEndpointAuthMethodsSupported ?? [],
-        userinfoSigningAlgValuesSupported =
-            userinfoSigningAlgValuesSupported ?? [];
+      this.userinfoSigningAlgValuesSupported});
 
   factory OpenIdConfiguration.fromJson(Map<String, Object?> json) {
     return OpenIdConfiguration(
       authorizationEndpoint: json[r'authorization_endpoint'] as String?,
       backchannelLogoutSupported:
-          json[r'backchannel_logout_supported'] as bool? ?? false,
+          json[r'backchannel_logout_supported'] as bool?,
       claimsSupported: (json[r'claims_supported'] as List<Object?>?)
-              ?.map((i) => i as String? ?? '')
-              .toList() ??
-          [],
+          ?.map((i) => i as String? ?? '')
+          .toList(),
       deviceAuthorizationEndpoint:
           json[r'device_authorization_endpoint'] as String?,
       endSessionEndpoint: json[r'end_session_endpoint'] as String?,
       frontchannelLogoutSupported:
-          json[r'frontchannel_logout_supported'] as bool? ?? false,
+          json[r'frontchannel_logout_supported'] as bool?,
       grantTypesSupported: (json[r'grant_types_supported'] as List<Object?>?)
-              ?.map((i) => i as String? ?? '')
-              .toList() ??
-          [],
+          ?.map((i) => i as String? ?? '')
+          .toList(),
       idTokenSigningAlgValuesSupported:
           (json[r'id_token_signing_alg_values_supported'] as List<Object?>?)
-                  ?.map((i) => i as String? ?? '')
-                  .toList() ??
-              [],
+              ?.map((i) => i as String? ?? '')
+              .toList(),
       issuer: json[r'issuer'] as String?,
       jwksUri: json[r'jwks_uri'] as String?,
       responseModesSupported:
           (json[r'response_modes_supported'] as List<Object?>?)
-                  ?.map((i) => i as String? ?? '')
-                  .toList() ??
-              [],
+              ?.map((i) => i as String? ?? '')
+              .toList(),
       responseTypesSupported:
           (json[r'response_types_supported'] as List<Object?>?)
-                  ?.map((i) => i as String? ?? '')
-                  .toList() ??
-              [],
-      scopesSupported: (json[r'scopes_supported'] as List<Object?>?)
               ?.map((i) => i as String? ?? '')
-              .toList() ??
-          [],
+              .toList(),
+      scopesSupported: (json[r'scopes_supported'] as List<Object?>?)
+          ?.map((i) => i as String? ?? '')
+          .toList(),
       subjectTypesSupported:
           (json[r'subject_types_supported'] as List<Object?>?)
-                  ?.map((i) => i as String? ?? '')
-                  .toList() ??
-              [],
+              ?.map((i) => i as String? ?? '')
+              .toList(),
       tokenEndpoint: json[r'token_endpoint'] as String?,
       tokenEndpointAuthMethodsSupported:
           (json[r'token_endpoint_auth_methods_supported'] as List<Object?>?)
-                  ?.map((i) => i as String? ?? '')
-                  .toList() ??
-              [],
+              ?.map((i) => i as String? ?? '')
+              .toList(),
       userinfoEndpoint: json[r'userinfo_endpoint'] as String?,
       userinfoSigningAlgValuesSupported:
           (json[r'userinfo_signing_alg_values_supported'] as List<Object?>?)
-                  ?.map((i) => i as String? ?? '')
-                  .toList() ??
-              [],
+              ?.map((i) => i as String? ?? '')
+              .toList(),
     );
   }
 
@@ -25510,38 +25891,60 @@ class OpenIdConfiguration {
     if (authorizationEndpoint != null) {
       json[r'authorization_endpoint'] = authorizationEndpoint;
     }
-    json[r'backchannel_logout_supported'] = backchannelLogoutSupported;
-    json[r'claims_supported'] = claimsSupported;
+    if (backchannelLogoutSupported != null) {
+      json[r'backchannel_logout_supported'] = backchannelLogoutSupported;
+    }
+    if (claimsSupported != null) {
+      json[r'claims_supported'] = claimsSupported;
+    }
     if (deviceAuthorizationEndpoint != null) {
       json[r'device_authorization_endpoint'] = deviceAuthorizationEndpoint;
     }
     if (endSessionEndpoint != null) {
       json[r'end_session_endpoint'] = endSessionEndpoint;
     }
-    json[r'frontchannel_logout_supported'] = frontchannelLogoutSupported;
-    json[r'grant_types_supported'] = grantTypesSupported;
-    json[r'id_token_signing_alg_values_supported'] =
-        idTokenSigningAlgValuesSupported;
+    if (frontchannelLogoutSupported != null) {
+      json[r'frontchannel_logout_supported'] = frontchannelLogoutSupported;
+    }
+    if (grantTypesSupported != null) {
+      json[r'grant_types_supported'] = grantTypesSupported;
+    }
+    if (idTokenSigningAlgValuesSupported != null) {
+      json[r'id_token_signing_alg_values_supported'] =
+          idTokenSigningAlgValuesSupported;
+    }
     if (issuer != null) {
       json[r'issuer'] = issuer;
     }
     if (jwksUri != null) {
       json[r'jwks_uri'] = jwksUri;
     }
-    json[r'response_modes_supported'] = responseModesSupported;
-    json[r'response_types_supported'] = responseTypesSupported;
-    json[r'scopes_supported'] = scopesSupported;
-    json[r'subject_types_supported'] = subjectTypesSupported;
+    if (responseModesSupported != null) {
+      json[r'response_modes_supported'] = responseModesSupported;
+    }
+    if (responseTypesSupported != null) {
+      json[r'response_types_supported'] = responseTypesSupported;
+    }
+    if (scopesSupported != null) {
+      json[r'scopes_supported'] = scopesSupported;
+    }
+    if (subjectTypesSupported != null) {
+      json[r'subject_types_supported'] = subjectTypesSupported;
+    }
     if (tokenEndpoint != null) {
       json[r'token_endpoint'] = tokenEndpoint;
     }
-    json[r'token_endpoint_auth_methods_supported'] =
-        tokenEndpointAuthMethodsSupported;
+    if (tokenEndpointAuthMethodsSupported != null) {
+      json[r'token_endpoint_auth_methods_supported'] =
+          tokenEndpointAuthMethodsSupported;
+    }
     if (userinfoEndpoint != null) {
       json[r'userinfo_endpoint'] = userinfoEndpoint;
     }
-    json[r'userinfo_signing_alg_values_supported'] =
-        userinfoSigningAlgValuesSupported;
+    if (userinfoSigningAlgValuesSupported != null) {
+      json[r'userinfo_signing_alg_values_supported'] =
+          userinfoSigningAlgValuesSupported;
+    }
     return json;
   }
 
@@ -25602,15 +26005,14 @@ class OpenIdConnectApplicationConfiguration {
   final String? buttonText;
   final IdentityProviderOauth2Configuration? oauth2;
   final Map<String, dynamic>? data;
-  final bool createRegistration;
+  final bool? createRegistration;
 
   OpenIdConnectApplicationConfiguration(
       {this.buttonImageUrl,
       this.buttonText,
       this.oauth2,
       this.data,
-      bool? createRegistration})
-      : createRegistration = createRegistration ?? false;
+      this.createRegistration});
 
   factory OpenIdConnectApplicationConfiguration.fromJson(
       Map<String, Object?> json) {
@@ -25622,7 +26024,7 @@ class OpenIdConnectApplicationConfiguration {
               json[r'oauth2']! as Map<String, Object?>)
           : null,
       data: json[r'data'] as Map<String, Object?>?,
-      createRegistration: json[r'createRegistration'] as bool? ?? false,
+      createRegistration: json[r'createRegistration'] as bool?,
     );
   }
 
@@ -25646,7 +26048,9 @@ class OpenIdConnectApplicationConfiguration {
     if (data != null) {
       json[r'data'] = data;
     }
-    json[r'createRegistration'] = createRegistration;
+    if (createRegistration != null) {
+      json[r'createRegistration'] = createRegistration;
+    }
     return json;
   }
 
@@ -25667,14 +26071,14 @@ class OpenIdConnectApplicationConfiguration {
 }
 
 class OpenIdConnectIdentityProvider {
-  final List<dynamic> domains;
+  final List<dynamic>? domains;
   final String? buttonImageUrl;
   final String? buttonText;
   final IdentityProviderOauth2Configuration? oauth2;
-  final bool postRequest;
+  final bool? postRequest;
   final Map<String, dynamic>? data;
   final Map<String, dynamic>? applicationConfiguration;
-  final bool debug;
+  final bool? debug;
   final String? id;
   final ZonedDateTime? insertInstant;
   final ProviderLambdaConfiguration? lambdaConfiguration;
@@ -25685,14 +26089,14 @@ class OpenIdConnectIdentityProvider {
   final IdentityProviderType? type;
 
   OpenIdConnectIdentityProvider(
-      {List<dynamic>? domains,
+      {this.domains,
       this.buttonImageUrl,
       this.buttonText,
       this.oauth2,
-      bool? postRequest,
+      this.postRequest,
       this.data,
       this.applicationConfiguration,
-      bool? debug,
+      this.debug,
       this.id,
       this.insertInstant,
       this.lambdaConfiguration,
@@ -25700,26 +26104,22 @@ class OpenIdConnectIdentityProvider {
       this.linkingStrategy,
       this.name,
       this.tenantConfiguration,
-      this.type})
-      : domains = domains ?? [],
-        postRequest = postRequest ?? false,
-        debug = debug ?? false;
+      this.type});
 
   factory OpenIdConnectIdentityProvider.fromJson(Map<String, Object?> json) {
     return OpenIdConnectIdentityProvider(
-      domains:
-          (json[r'domains'] as List<Object?>?)?.map((i) => i).toList() ?? [],
+      domains: (json[r'domains'] as List<Object?>?)?.map((i) => i).toList(),
       buttonImageUrl: json[r'buttonImageURL'] as String?,
       buttonText: json[r'buttonText'] as String?,
       oauth2: json[r'oauth2'] != null
           ? IdentityProviderOauth2Configuration.fromJson(
               json[r'oauth2']! as Map<String, Object?>)
           : null,
-      postRequest: json[r'postRequest'] as bool? ?? false,
+      postRequest: json[r'postRequest'] as bool?,
       data: json[r'data'] as Map<String, Object?>?,
       applicationConfiguration:
           json[r'applicationConfiguration'] as Map<String, Object?>?,
-      debug: json[r'debug'] as bool? ?? false,
+      debug: json[r'debug'] as bool?,
       id: json[r'id'] as String?,
       insertInstant:
           (json[r'insertInstant'] as num?)?.toInt() as ZonedDateTime?,
@@ -25761,7 +26161,9 @@ class OpenIdConnectIdentityProvider {
     var type = this.type;
 
     final json = <String, Object?>{};
-    json[r'domains'] = domains;
+    if (domains != null) {
+      json[r'domains'] = domains;
+    }
     if (buttonImageUrl != null) {
       json[r'buttonImageURL'] = buttonImageUrl;
     }
@@ -25771,14 +26173,18 @@ class OpenIdConnectIdentityProvider {
     if (oauth2 != null) {
       json[r'oauth2'] = oauth2.toJson();
     }
-    json[r'postRequest'] = postRequest;
+    if (postRequest != null) {
+      json[r'postRequest'] = postRequest;
+    }
     if (data != null) {
       json[r'data'] = data;
     }
     if (applicationConfiguration != null) {
       json[r'applicationConfiguration'] = applicationConfiguration;
     }
-    json[r'debug'] = debug;
+    if (debug != null) {
+      json[r'debug'] = debug;
+    }
     if (id != null) {
       json[r'id'] = id;
     }
@@ -25849,14 +26255,13 @@ class PasswordBreachDetection {
   final BreachMatchMode? matchMode;
   final String? notifyUserEmailTemplateId;
   final BreachAction? onLogin;
-  final bool enabled;
+  final bool? enabled;
 
   PasswordBreachDetection(
       {this.matchMode,
       this.notifyUserEmailTemplateId,
       this.onLogin,
-      bool? enabled})
-      : enabled = enabled ?? false;
+      this.enabled});
 
   factory PasswordBreachDetection.fromJson(Map<String, Object?> json) {
     return PasswordBreachDetection(
@@ -25867,7 +26272,7 @@ class PasswordBreachDetection {
       onLogin: json[r'onLogin'] != null
           ? BreachAction.fromValue(json[r'onLogin']! as String)
           : null,
-      enabled: json[r'enabled'] as bool? ?? false,
+      enabled: json[r'enabled'] as bool?,
     );
   }
 
@@ -25887,7 +26292,9 @@ class PasswordBreachDetection {
     if (onLogin != null) {
       json[r'onLogin'] = onLogin.value;
     }
-    json[r'enabled'] = enabled;
+    if (enabled != null) {
+      json[r'enabled'] = enabled;
+    }
     return json;
   }
 
@@ -25910,13 +26317,12 @@ class PasswordBreachDetection {
 class PasswordEncryptionConfiguration {
   final String? encryptionScheme;
   final int? encryptionSchemeFactor;
-  final bool modifyEncryptionSchemeOnLogin;
+  final bool? modifyEncryptionSchemeOnLogin;
 
   PasswordEncryptionConfiguration(
       {this.encryptionScheme,
       this.encryptionSchemeFactor,
-      bool? modifyEncryptionSchemeOnLogin})
-      : modifyEncryptionSchemeOnLogin = modifyEncryptionSchemeOnLogin ?? false;
+      this.modifyEncryptionSchemeOnLogin});
 
   factory PasswordEncryptionConfiguration.fromJson(Map<String, Object?> json) {
     return PasswordEncryptionConfiguration(
@@ -25924,7 +26330,7 @@ class PasswordEncryptionConfiguration {
       encryptionSchemeFactor:
           (json[r'encryptionSchemeFactor'] as num?)?.toInt(),
       modifyEncryptionSchemeOnLogin:
-          json[r'modifyEncryptionSchemeOnLogin'] as bool? ?? false,
+          json[r'modifyEncryptionSchemeOnLogin'] as bool?,
     );
   }
 
@@ -25940,7 +26346,9 @@ class PasswordEncryptionConfiguration {
     if (encryptionSchemeFactor != null) {
       json[r'encryptionSchemeFactor'] = encryptionSchemeFactor;
     }
-    json[r'modifyEncryptionSchemeOnLogin'] = modifyEncryptionSchemeOnLogin;
+    if (modifyEncryptionSchemeOnLogin != null) {
+      json[r'modifyEncryptionSchemeOnLogin'] = modifyEncryptionSchemeOnLogin;
+    }
     return json;
   }
 
@@ -25963,24 +26371,20 @@ class PasswordValidationRules {
   final int? maxLength;
   final int? minLength;
   final RememberPreviousPasswords? rememberPreviousPasswords;
-  final bool requireMixedCase;
-  final bool requireNonAlpha;
-  final bool requireNumber;
-  final bool validateOnLogin;
+  final bool? requireMixedCase;
+  final bool? requireNonAlpha;
+  final bool? requireNumber;
+  final bool? validateOnLogin;
 
   PasswordValidationRules(
       {this.breachDetection,
       this.maxLength,
       this.minLength,
       this.rememberPreviousPasswords,
-      bool? requireMixedCase,
-      bool? requireNonAlpha,
-      bool? requireNumber,
-      bool? validateOnLogin})
-      : requireMixedCase = requireMixedCase ?? false,
-        requireNonAlpha = requireNonAlpha ?? false,
-        requireNumber = requireNumber ?? false,
-        validateOnLogin = validateOnLogin ?? false;
+      this.requireMixedCase,
+      this.requireNonAlpha,
+      this.requireNumber,
+      this.validateOnLogin});
 
   factory PasswordValidationRules.fromJson(Map<String, Object?> json) {
     return PasswordValidationRules(
@@ -25994,10 +26398,10 @@ class PasswordValidationRules {
           ? RememberPreviousPasswords.fromJson(
               json[r'rememberPreviousPasswords']! as Map<String, Object?>)
           : null,
-      requireMixedCase: json[r'requireMixedCase'] as bool? ?? false,
-      requireNonAlpha: json[r'requireNonAlpha'] as bool? ?? false,
-      requireNumber: json[r'requireNumber'] as bool? ?? false,
-      validateOnLogin: json[r'validateOnLogin'] as bool? ?? false,
+      requireMixedCase: json[r'requireMixedCase'] as bool?,
+      requireNonAlpha: json[r'requireNonAlpha'] as bool?,
+      requireNumber: json[r'requireNumber'] as bool?,
+      validateOnLogin: json[r'validateOnLogin'] as bool?,
     );
   }
 
@@ -26024,10 +26428,18 @@ class PasswordValidationRules {
     if (rememberPreviousPasswords != null) {
       json[r'rememberPreviousPasswords'] = rememberPreviousPasswords.toJson();
     }
-    json[r'requireMixedCase'] = requireMixedCase;
-    json[r'requireNonAlpha'] = requireNonAlpha;
-    json[r'requireNumber'] = requireNumber;
-    json[r'validateOnLogin'] = validateOnLogin;
+    if (requireMixedCase != null) {
+      json[r'requireMixedCase'] = requireMixedCase;
+    }
+    if (requireNonAlpha != null) {
+      json[r'requireNonAlpha'] = requireNonAlpha;
+    }
+    if (requireNumber != null) {
+      json[r'requireNumber'] = requireNumber;
+    }
+    if (validateOnLogin != null) {
+      json[r'validateOnLogin'] = validateOnLogin;
+    }
     return json;
   }
 
@@ -26088,13 +26500,13 @@ class PasswordValidationRulesResponse {
 }
 
 class PasswordlessConfiguration {
-  final bool enabled;
+  final bool? enabled;
 
-  PasswordlessConfiguration({bool? enabled}) : enabled = enabled ?? false;
+  PasswordlessConfiguration({this.enabled});
 
   factory PasswordlessConfiguration.fromJson(Map<String, Object?> json) {
     return PasswordlessConfiguration(
-      enabled: json[r'enabled'] as bool? ?? false,
+      enabled: json[r'enabled'] as bool?,
     );
   }
 
@@ -26102,7 +26514,9 @@ class PasswordlessConfiguration {
     var enabled = this.enabled;
 
     final json = <String, Object?>{};
-    json[r'enabled'] = enabled;
+    if (enabled != null) {
+      json[r'enabled'] = enabled;
+    }
     return json;
   }
 
@@ -26134,8 +26548,8 @@ class PasswordlessLoginRequest {
   final String? applicationId;
   final String? ipAddress;
   final MetaData? metaData;
-  final bool newDevice;
-  final bool noJwt;
+  final bool? newDevice;
+  final bool? noJwt;
 
   PasswordlessLoginRequest(
       {this.code,
@@ -26143,10 +26557,8 @@ class PasswordlessLoginRequest {
       this.applicationId,
       this.ipAddress,
       this.metaData,
-      bool? newDevice,
-      bool? noJwt})
-      : newDevice = newDevice ?? false,
-        noJwt = noJwt ?? false;
+      this.newDevice,
+      this.noJwt});
 
   factory PasswordlessLoginRequest.fromJson(Map<String, Object?> json) {
     return PasswordlessLoginRequest(
@@ -26157,8 +26569,8 @@ class PasswordlessLoginRequest {
       metaData: json[r'metaData'] != null
           ? MetaData.fromJson(json[r'metaData']! as Map<String, Object?>)
           : null,
-      newDevice: json[r'newDevice'] as bool? ?? false,
-      noJwt: json[r'noJWT'] as bool? ?? false,
+      newDevice: json[r'newDevice'] as bool?,
+      noJwt: json[r'noJWT'] as bool?,
     );
   }
 
@@ -26187,8 +26599,12 @@ class PasswordlessLoginRequest {
     if (metaData != null) {
       json[r'metaData'] = metaData.toJson();
     }
-    json[r'newDevice'] = newDevice;
-    json[r'noJWT'] = noJwt;
+    if (newDevice != null) {
+      json[r'newDevice'] = newDevice;
+    }
+    if (noJwt != null) {
+      json[r'noJWT'] = noJwt;
+    }
     return json;
   }
 
@@ -26341,7 +26757,7 @@ class PendingIdPLink {
   final String? displayName;
   final String? email;
   final String? identityProviderId;
-  final List<IdentityProviderLink> identityProviderLinks;
+  final List<IdentityProviderLink>? identityProviderLinks;
   final String? identityProviderName;
   final IdentityProviderTenantConfiguration?
       identityProviderTenantConfiguration;
@@ -26354,14 +26770,13 @@ class PendingIdPLink {
       {this.displayName,
       this.email,
       this.identityProviderId,
-      List<IdentityProviderLink>? identityProviderLinks,
+      this.identityProviderLinks,
       this.identityProviderName,
       this.identityProviderTenantConfiguration,
       this.identityProviderType,
       this.identityProviderUserId,
       this.user,
-      this.username})
-      : identityProviderLinks = identityProviderLinks ?? [];
+      this.username});
 
   factory PendingIdPLink.fromJson(Map<String, Object?> json) {
     return PendingIdPLink(
@@ -26369,10 +26784,9 @@ class PendingIdPLink {
       email: json[r'email'] as String?,
       identityProviderId: json[r'identityProviderId'] as String?,
       identityProviderLinks: (json[r'identityProviderLinks'] as List<Object?>?)
-              ?.map((i) => IdentityProviderLink.fromJson(
-                  i as Map<String, Object?>? ?? const {}))
-              .toList() ??
-          [],
+          ?.map((i) => IdentityProviderLink.fromJson(
+              i as Map<String, Object?>? ?? const {}))
+          .toList(),
       identityProviderName: json[r'identityProviderName'] as String?,
       identityProviderTenantConfiguration:
           json[r'identityProviderTenantConfiguration'] != null
@@ -26415,8 +26829,10 @@ class PendingIdPLink {
     if (identityProviderId != null) {
       json[r'identityProviderId'] = identityProviderId;
     }
-    json[r'identityProviderLinks'] =
-        identityProviderLinks.map((i) => i.toJson()).toList();
+    if (identityProviderLinks != null) {
+      json[r'identityProviderLinks'] =
+          identityProviderLinks.map((i) => i.toJson()).toList();
+    }
     if (identityProviderName != null) {
       json[r'identityProviderName'] = identityProviderName;
     }
@@ -26470,17 +26886,15 @@ class PendingIdPLink {
 }
 
 class PendingResponse {
-  final List<User> users;
+  final List<User>? users;
 
-  PendingResponse({List<User>? users}) : users = users ?? [];
+  PendingResponse({this.users});
 
   factory PendingResponse.fromJson(Map<String, Object?> json) {
     return PendingResponse(
       users: (json[r'users'] as List<Object?>?)
-              ?.map(
-                  (i) => User.fromJson(i as Map<String, Object?>? ?? const {}))
-              .toList() ??
-          [],
+          ?.map((i) => User.fromJson(i as Map<String, Object?>? ?? const {}))
+          .toList(),
     );
   }
 
@@ -26488,7 +26902,9 @@ class PendingResponse {
     var users = this.users;
 
     final json = <String, Object?>{};
-    json[r'users'] = users.map((i) => i.toJson()).toList();
+    if (users != null) {
+      json[r'users'] = users.map((i) => i.toJson()).toList();
+    }
     return json;
   }
 
@@ -26750,9 +27166,9 @@ class PublicKeyCredentialCreationOptions {
   final AttestationConveyancePreference? attestation;
   final AuthenticatorSelectionCriteria? authenticatorSelection;
   final String? challenge;
-  final List<PublicKeyCredentialDescriptor> excludeCredentials;
+  final List<PublicKeyCredentialDescriptor>? excludeCredentials;
   final WebAuthnRegistrationExtensionOptions? extensions;
-  final List<PublicKeyCredentialParameters> pubKeyCredParams;
+  final List<PublicKeyCredentialParameters>? pubKeyCredParams;
   final PublicKeyCredentialRelyingPartyEntity? rp;
   final int? timeout;
   final PublicKeyCredentialUserEntity? user;
@@ -26761,14 +27177,12 @@ class PublicKeyCredentialCreationOptions {
       {this.attestation,
       this.authenticatorSelection,
       this.challenge,
-      List<PublicKeyCredentialDescriptor>? excludeCredentials,
+      this.excludeCredentials,
       this.extensions,
-      List<PublicKeyCredentialParameters>? pubKeyCredParams,
+      this.pubKeyCredParams,
       this.rp,
       this.timeout,
-      this.user})
-      : excludeCredentials = excludeCredentials ?? [],
-        pubKeyCredParams = pubKeyCredParams ?? [];
+      this.user});
 
   factory PublicKeyCredentialCreationOptions.fromJson(
       Map<String, Object?> json) {
@@ -26783,19 +27197,17 @@ class PublicKeyCredentialCreationOptions {
           : null,
       challenge: json[r'challenge'] as String?,
       excludeCredentials: (json[r'excludeCredentials'] as List<Object?>?)
-              ?.map((i) => PublicKeyCredentialDescriptor.fromJson(
-                  i as Map<String, Object?>? ?? const {}))
-              .toList() ??
-          [],
+          ?.map((i) => PublicKeyCredentialDescriptor.fromJson(
+              i as Map<String, Object?>? ?? const {}))
+          .toList(),
       extensions: json[r'extensions'] != null
           ? WebAuthnRegistrationExtensionOptions.fromJson(
               json[r'extensions']! as Map<String, Object?>)
           : null,
       pubKeyCredParams: (json[r'pubKeyCredParams'] as List<Object?>?)
-              ?.map((i) => PublicKeyCredentialParameters.fromJson(
-                  i as Map<String, Object?>? ?? const {}))
-              .toList() ??
-          [],
+          ?.map((i) => PublicKeyCredentialParameters.fromJson(
+              i as Map<String, Object?>? ?? const {}))
+          .toList(),
       rp: json[r'rp'] != null
           ? PublicKeyCredentialRelyingPartyEntity.fromJson(
               json[r'rp']! as Map<String, Object?>)
@@ -26829,13 +27241,17 @@ class PublicKeyCredentialCreationOptions {
     if (challenge != null) {
       json[r'challenge'] = challenge;
     }
-    json[r'excludeCredentials'] =
-        excludeCredentials.map((i) => i.toJson()).toList();
+    if (excludeCredentials != null) {
+      json[r'excludeCredentials'] =
+          excludeCredentials.map((i) => i.toJson()).toList();
+    }
     if (extensions != null) {
       json[r'extensions'] = extensions.toJson();
     }
-    json[r'pubKeyCredParams'] =
-        pubKeyCredParams.map((i) => i.toJson()).toList();
+    if (pubKeyCredParams != null) {
+      json[r'pubKeyCredParams'] =
+          pubKeyCredParams.map((i) => i.toJson()).toList();
+    }
     if (rp != null) {
       json[r'rp'] = rp.toJson();
     }
@@ -26877,19 +27293,17 @@ class PublicKeyCredentialCreationOptions {
 /// credential as an input parameter.
 class PublicKeyCredentialDescriptor {
   final String? id;
-  final List<String> transports;
+  final List<String>? transports;
   final PublicKeyCredentialType? type;
 
-  PublicKeyCredentialDescriptor({this.id, List<String>? transports, this.type})
-      : transports = transports ?? [];
+  PublicKeyCredentialDescriptor({this.id, this.transports, this.type});
 
   factory PublicKeyCredentialDescriptor.fromJson(Map<String, Object?> json) {
     return PublicKeyCredentialDescriptor(
       id: json[r'id'] as String?,
       transports: (json[r'transports'] as List<Object?>?)
-              ?.map((i) => i as String? ?? '')
-              .toList() ??
-          [],
+          ?.map((i) => i as String? ?? '')
+          .toList(),
       type: json[r'type'] != null
           ? PublicKeyCredentialType.fromValue(json[r'type']! as String)
           : null,
@@ -26905,7 +27319,9 @@ class PublicKeyCredentialDescriptor {
     if (id != null) {
       json[r'id'] = id;
     }
-    json[r'transports'] = transports;
+    if (transports != null) {
+      json[r'transports'] = transports;
+    }
     if (type != null) {
       json[r'type'] = type.value;
     }
@@ -27035,28 +27451,26 @@ class PublicKeyCredentialRelyingPartyEntity {
 /// Provides the <i>authenticator<i> with the data it needs to generate an
 /// assertion.
 class PublicKeyCredentialRequestOptions {
-  final List<PublicKeyCredentialDescriptor> allowCredentials;
+  final List<PublicKeyCredentialDescriptor>? allowCredentials;
   final String? challenge;
   final String? rpId;
   final int? timeout;
   final UserVerificationRequirement? userVerification;
 
   PublicKeyCredentialRequestOptions(
-      {List<PublicKeyCredentialDescriptor>? allowCredentials,
+      {this.allowCredentials,
       this.challenge,
       this.rpId,
       this.timeout,
-      this.userVerification})
-      : allowCredentials = allowCredentials ?? [];
+      this.userVerification});
 
   factory PublicKeyCredentialRequestOptions.fromJson(
       Map<String, Object?> json) {
     return PublicKeyCredentialRequestOptions(
       allowCredentials: (json[r'allowCredentials'] as List<Object?>?)
-              ?.map((i) => PublicKeyCredentialDescriptor.fromJson(
-                  i as Map<String, Object?>? ?? const {}))
-              .toList() ??
-          [],
+          ?.map((i) => PublicKeyCredentialDescriptor.fromJson(
+              i as Map<String, Object?>? ?? const {}))
+          .toList(),
       challenge: json[r'challenge'] as String?,
       rpId: json[r'rpId'] as String?,
       timeout: (json[r'timeout'] as num?)?.toInt(),
@@ -27075,8 +27489,10 @@ class PublicKeyCredentialRequestOptions {
     var userVerification = this.userVerification;
 
     final json = <String, Object?>{};
-    json[r'allowCredentials'] =
-        allowCredentials.map((i) => i.toJson()).toList();
+    if (allowCredentials != null) {
+      json[r'allowCredentials'] =
+          allowCredentials.map((i) => i.toJson()).toList();
+    }
     if (challenge != null) {
       json[r'challenge'] = challenge;
     }
@@ -27193,17 +27609,16 @@ class PublicKeyResponse {
 class RateLimitedRequestConfiguration {
   final int? limit;
   final int? timePeriodInSeconds;
-  final bool enabled;
+  final bool? enabled;
 
   RateLimitedRequestConfiguration(
-      {this.limit, this.timePeriodInSeconds, bool? enabled})
-      : enabled = enabled ?? false;
+      {this.limit, this.timePeriodInSeconds, this.enabled});
 
   factory RateLimitedRequestConfiguration.fromJson(Map<String, Object?> json) {
     return RateLimitedRequestConfiguration(
       limit: (json[r'limit'] as num?)?.toInt(),
       timePeriodInSeconds: (json[r'timePeriodInSeconds'] as num?)?.toInt(),
-      enabled: json[r'enabled'] as bool? ?? false,
+      enabled: json[r'enabled'] as bool?,
     );
   }
 
@@ -27219,7 +27634,9 @@ class RateLimitedRequestConfiguration {
     if (timePeriodInSeconds != null) {
       json[r'timePeriodInSeconds'] = timePeriodInSeconds;
     }
-    json[r'enabled'] = enabled;
+    if (enabled != null) {
+      json[r'enabled'] = enabled;
+    }
     return json;
   }
 
@@ -27428,7 +27845,7 @@ class ReactorStatus {
   final ReactorFeatureStatus? entityManagement;
   final LocalDate? expiration;
   final Map<String, dynamic>? licenseAttributes;
-  final bool licensed;
+  final bool? licensed;
   final ReactorFeatureStatus? scimServer;
   final ReactorFeatureStatus? threatDetection;
   final ReactorFeatureStatus? webAuthn;
@@ -27450,13 +27867,12 @@ class ReactorStatus {
       this.entityManagement,
       this.expiration,
       this.licenseAttributes,
-      bool? licensed,
+      this.licensed,
       this.scimServer,
       this.threatDetection,
       this.webAuthn,
       this.webAuthnPlatformAuthenticators,
-      this.webAuthnRoamingAuthenticators})
-      : licensed = licensed ?? false;
+      this.webAuthnRoamingAuthenticators});
 
   factory ReactorStatus.fromJson(Map<String, Object?> json) {
     return ReactorStatus(
@@ -27511,7 +27927,7 @@ class ReactorStatus {
           : null,
       expiration: json[r'expiration'] as LocalDate?,
       licenseAttributes: json[r'licenseAttributes'] as Map<String, Object?>?,
-      licensed: json[r'licensed'] as bool? ?? false,
+      licensed: json[r'licensed'] as bool?,
       scimServer: json[r'scimServer'] != null
           ? ReactorFeatureStatus.fromValue(json[r'scimServer']! as String)
           : null,
@@ -27606,7 +28022,9 @@ class ReactorStatus {
     if (licenseAttributes != null) {
       json[r'licenseAttributes'] = licenseAttributes;
     }
-    json[r'licensed'] = licensed;
+    if (licensed != null) {
+      json[r'licensed'] = licensed;
+    }
     if (scimServer != null) {
       json[r'scimServer'] = scimServer.value;
     }
@@ -27685,18 +28103,16 @@ class ReactorStatus {
 
 /// Response for the user login report.
 class RecentLoginResponse {
-  final List<DisplayableRawLogin> logins;
+  final List<DisplayableRawLogin>? logins;
 
-  RecentLoginResponse({List<DisplayableRawLogin>? logins})
-      : logins = logins ?? [];
+  RecentLoginResponse({this.logins});
 
   factory RecentLoginResponse.fromJson(Map<String, Object?> json) {
     return RecentLoginResponse(
       logins: (json[r'logins'] as List<Object?>?)
-              ?.map((i) => DisplayableRawLogin.fromJson(
-                  i as Map<String, Object?>? ?? const {}))
-              .toList() ??
-          [],
+          ?.map((i) => DisplayableRawLogin.fromJson(
+              i as Map<String, Object?>? ?? const {}))
+          .toList(),
     );
   }
 
@@ -27704,7 +28120,9 @@ class RecentLoginResponse {
     var logins = this.logins;
 
     final json = <String, Object?>{};
-    json[r'logins'] = logins.map((i) => i.toJson()).toList();
+    if (logins != null) {
+      json[r'logins'] = logins.map((i) => i.toJson()).toList();
+    }
     return json;
   }
 
@@ -27881,22 +28299,18 @@ class RefreshToken {
 
 /// Refresh Token Import request.
 class RefreshTokenImportRequest {
-  final List<RefreshToken> refreshTokens;
-  final bool validateDbConstraints;
+  final List<RefreshToken>? refreshTokens;
+  final bool? validateDbConstraints;
 
-  RefreshTokenImportRequest(
-      {List<RefreshToken>? refreshTokens, bool? validateDbConstraints})
-      : refreshTokens = refreshTokens ?? [],
-        validateDbConstraints = validateDbConstraints ?? false;
+  RefreshTokenImportRequest({this.refreshTokens, this.validateDbConstraints});
 
   factory RefreshTokenImportRequest.fromJson(Map<String, Object?> json) {
     return RefreshTokenImportRequest(
       refreshTokens: (json[r'refreshTokens'] as List<Object?>?)
-              ?.map((i) =>
-                  RefreshToken.fromJson(i as Map<String, Object?>? ?? const {}))
-              .toList() ??
-          [],
-      validateDbConstraints: json[r'validateDbConstraints'] as bool? ?? false,
+          ?.map((i) =>
+              RefreshToken.fromJson(i as Map<String, Object?>? ?? const {}))
+          .toList(),
+      validateDbConstraints: json[r'validateDbConstraints'] as bool?,
     );
   }
 
@@ -27905,8 +28319,12 @@ class RefreshTokenImportRequest {
     var validateDbConstraints = this.validateDbConstraints;
 
     final json = <String, Object?>{};
-    json[r'refreshTokens'] = refreshTokens.map((i) => i.toJson()).toList();
-    json[r'validateDbConstraints'] = validateDbConstraints;
+    if (refreshTokens != null) {
+      json[r'refreshTokens'] = refreshTokens.map((i) => i.toJson()).toList();
+    }
+    if (validateDbConstraints != null) {
+      json[r'validateDbConstraints'] = validateDbConstraints;
+    }
     return json;
   }
 
@@ -27923,10 +28341,9 @@ class RefreshTokenImportRequest {
 /// API response for retrieving Refresh Tokens
 class RefreshTokenResponse {
   final RefreshToken? refreshToken;
-  final List<RefreshToken> refreshTokens;
+  final List<RefreshToken>? refreshTokens;
 
-  RefreshTokenResponse({this.refreshToken, List<RefreshToken>? refreshTokens})
-      : refreshTokens = refreshTokens ?? [];
+  RefreshTokenResponse({this.refreshToken, this.refreshTokens});
 
   factory RefreshTokenResponse.fromJson(Map<String, Object?> json) {
     return RefreshTokenResponse(
@@ -27935,10 +28352,9 @@ class RefreshTokenResponse {
               json[r'refreshToken']! as Map<String, Object?>)
           : null,
       refreshTokens: (json[r'refreshTokens'] as List<Object?>?)
-              ?.map((i) =>
-                  RefreshToken.fromJson(i as Map<String, Object?>? ?? const {}))
-              .toList() ??
-          [],
+          ?.map((i) =>
+              RefreshToken.fromJson(i as Map<String, Object?>? ?? const {}))
+          .toList(),
     );
   }
 
@@ -27950,7 +28366,9 @@ class RefreshTokenResponse {
     if (refreshToken != null) {
       json[r'refreshToken'] = refreshToken.toJson();
     }
-    json[r'refreshTokens'] = refreshTokens.map((i) => i.toJson()).toList();
+    if (refreshTokens != null) {
+      json[r'refreshTokens'] = refreshTokens.map((i) => i.toJson()).toList();
+    }
     return json;
   }
 
@@ -27964,23 +28382,20 @@ class RefreshTokenResponse {
 }
 
 class RefreshTokenRevocationPolicy {
-  final bool onLoginPrevented;
-  final bool onMultiFactorEnable;
-  final bool onPasswordChanged;
+  final bool? onLoginPrevented;
+  final bool? onMultiFactorEnable;
+  final bool? onPasswordChanged;
 
   RefreshTokenRevocationPolicy(
-      {bool? onLoginPrevented,
-      bool? onMultiFactorEnable,
-      bool? onPasswordChanged})
-      : onLoginPrevented = onLoginPrevented ?? false,
-        onMultiFactorEnable = onMultiFactorEnable ?? false,
-        onPasswordChanged = onPasswordChanged ?? false;
+      {this.onLoginPrevented,
+      this.onMultiFactorEnable,
+      this.onPasswordChanged});
 
   factory RefreshTokenRevocationPolicy.fromJson(Map<String, Object?> json) {
     return RefreshTokenRevocationPolicy(
-      onLoginPrevented: json[r'onLoginPrevented'] as bool? ?? false,
-      onMultiFactorEnable: json[r'onMultiFactorEnable'] as bool? ?? false,
-      onPasswordChanged: json[r'onPasswordChanged'] as bool? ?? false,
+      onLoginPrevented: json[r'onLoginPrevented'] as bool?,
+      onMultiFactorEnable: json[r'onMultiFactorEnable'] as bool?,
+      onPasswordChanged: json[r'onPasswordChanged'] as bool?,
     );
   }
 
@@ -27990,9 +28405,15 @@ class RefreshTokenRevocationPolicy {
     var onPasswordChanged = this.onPasswordChanged;
 
     final json = <String, Object?>{};
-    json[r'onLoginPrevented'] = onLoginPrevented;
-    json[r'onMultiFactorEnable'] = onMultiFactorEnable;
-    json[r'onPasswordChanged'] = onPasswordChanged;
+    if (onLoginPrevented != null) {
+      json[r'onLoginPrevented'] = onLoginPrevented;
+    }
+    if (onMultiFactorEnable != null) {
+      json[r'onMultiFactorEnable'] = onMultiFactorEnable;
+    }
+    if (onPasswordChanged != null) {
+      json[r'onPasswordChanged'] = onPasswordChanged;
+    }
     return json;
   }
 
@@ -28100,7 +28521,7 @@ class RefreshTokenSlidingWindowConfiguration {
 
 class RegistrationConfiguration {
   final Requirable? birthDate;
-  final bool confirmPassword;
+  final bool? confirmPassword;
   final Requirable? firstName;
   final String? formId;
   final Requirable? fullName;
@@ -28110,11 +28531,11 @@ class RegistrationConfiguration {
   final Requirable? mobilePhone;
   final Requirable? preferredLanguages;
   final RegistrationType? type;
-  final bool enabled;
+  final bool? enabled;
 
   RegistrationConfiguration(
       {this.birthDate,
-      bool? confirmPassword,
+      this.confirmPassword,
       this.firstName,
       this.formId,
       this.fullName,
@@ -28124,16 +28545,14 @@ class RegistrationConfiguration {
       this.mobilePhone,
       this.preferredLanguages,
       this.type,
-      bool? enabled})
-      : confirmPassword = confirmPassword ?? false,
-        enabled = enabled ?? false;
+      this.enabled});
 
   factory RegistrationConfiguration.fromJson(Map<String, Object?> json) {
     return RegistrationConfiguration(
       birthDate: json[r'birthDate'] != null
           ? Requirable.fromJson(json[r'birthDate']! as Map<String, Object?>)
           : null,
-      confirmPassword: json[r'confirmPassword'] as bool? ?? false,
+      confirmPassword: json[r'confirmPassword'] as bool?,
       firstName: json[r'firstName'] != null
           ? Requirable.fromJson(json[r'firstName']! as Map<String, Object?>)
           : null,
@@ -28160,7 +28579,7 @@ class RegistrationConfiguration {
       type: json[r'type'] != null
           ? RegistrationType.fromValue(json[r'type']! as String)
           : null,
-      enabled: json[r'enabled'] as bool? ?? false,
+      enabled: json[r'enabled'] as bool?,
     );
   }
 
@@ -28182,7 +28601,9 @@ class RegistrationConfiguration {
     if (birthDate != null) {
       json[r'birthDate'] = birthDate.toJson();
     }
-    json[r'confirmPassword'] = confirmPassword;
+    if (confirmPassword != null) {
+      json[r'confirmPassword'] = confirmPassword;
+    }
     if (firstName != null) {
       json[r'firstName'] = firstName.toJson();
     }
@@ -28210,7 +28631,9 @@ class RegistrationConfiguration {
     if (type != null) {
       json[r'type'] = type.value;
     }
-    json[r'enabled'] = enabled;
+    if (enabled != null) {
+      json[r'enabled'] = enabled;
+    }
     return json;
   }
 
@@ -28277,19 +28700,16 @@ class RegistrationDeleteRequest {
 
 /// Response for the registration report.
 class RegistrationReportResponse {
-  final List<Count> hourlyCounts;
+  final List<Count>? hourlyCounts;
   final int? total;
 
-  RegistrationReportResponse({List<Count>? hourlyCounts, this.total})
-      : hourlyCounts = hourlyCounts ?? [];
+  RegistrationReportResponse({this.hourlyCounts, this.total});
 
   factory RegistrationReportResponse.fromJson(Map<String, Object?> json) {
     return RegistrationReportResponse(
       hourlyCounts: (json[r'hourlyCounts'] as List<Object?>?)
-              ?.map(
-                  (i) => Count.fromJson(i as Map<String, Object?>? ?? const {}))
-              .toList() ??
-          [],
+          ?.map((i) => Count.fromJson(i as Map<String, Object?>? ?? const {}))
+          .toList(),
       total: (json[r'total'] as num?)?.toInt(),
     );
   }
@@ -28299,7 +28719,9 @@ class RegistrationReportResponse {
     var total = this.total;
 
     final json = <String, Object?>{};
-    json[r'hourlyCounts'] = hourlyCounts.map((i) => i.toJson()).toList();
+    if (hourlyCounts != null) {
+      json[r'hourlyCounts'] = hourlyCounts.map((i) => i.toJson()).toList();
+    }
     if (total != null) {
       json[r'total'] = total;
     }
@@ -28316,43 +28738,38 @@ class RegistrationReportResponse {
 
 /// Registration API request object.
 class RegistrationRequest {
-  final bool disableDomainBlock;
-  final bool generateAuthenticationToken;
+  final bool? disableDomainBlock;
+  final bool? generateAuthenticationToken;
   final UserRegistration? registration;
-  final bool sendSetPasswordEmail;
-  final bool skipRegistrationVerification;
-  final bool skipVerification;
+  final bool? sendSetPasswordEmail;
+  final bool? skipRegistrationVerification;
+  final bool? skipVerification;
   final User? user;
   final EventInfo? eventInfo;
 
   RegistrationRequest(
-      {bool? disableDomainBlock,
-      bool? generateAuthenticationToken,
+      {this.disableDomainBlock,
+      this.generateAuthenticationToken,
       this.registration,
-      bool? sendSetPasswordEmail,
-      bool? skipRegistrationVerification,
-      bool? skipVerification,
+      this.sendSetPasswordEmail,
+      this.skipRegistrationVerification,
+      this.skipVerification,
       this.user,
-      this.eventInfo})
-      : disableDomainBlock = disableDomainBlock ?? false,
-        generateAuthenticationToken = generateAuthenticationToken ?? false,
-        sendSetPasswordEmail = sendSetPasswordEmail ?? false,
-        skipRegistrationVerification = skipRegistrationVerification ?? false,
-        skipVerification = skipVerification ?? false;
+      this.eventInfo});
 
   factory RegistrationRequest.fromJson(Map<String, Object?> json) {
     return RegistrationRequest(
-      disableDomainBlock: json[r'disableDomainBlock'] as bool? ?? false,
+      disableDomainBlock: json[r'disableDomainBlock'] as bool?,
       generateAuthenticationToken:
-          json[r'generateAuthenticationToken'] as bool? ?? false,
+          json[r'generateAuthenticationToken'] as bool?,
       registration: json[r'registration'] != null
           ? UserRegistration.fromJson(
               json[r'registration']! as Map<String, Object?>)
           : null,
-      sendSetPasswordEmail: json[r'sendSetPasswordEmail'] as bool? ?? false,
+      sendSetPasswordEmail: json[r'sendSetPasswordEmail'] as bool?,
       skipRegistrationVerification:
-          json[r'skipRegistrationVerification'] as bool? ?? false,
-      skipVerification: json[r'skipVerification'] as bool? ?? false,
+          json[r'skipRegistrationVerification'] as bool?,
+      skipVerification: json[r'skipVerification'] as bool?,
       user: json[r'user'] != null
           ? User.fromJson(json[r'user']! as Map<String, Object?>)
           : null,
@@ -28373,14 +28790,24 @@ class RegistrationRequest {
     var eventInfo = this.eventInfo;
 
     final json = <String, Object?>{};
-    json[r'disableDomainBlock'] = disableDomainBlock;
-    json[r'generateAuthenticationToken'] = generateAuthenticationToken;
+    if (disableDomainBlock != null) {
+      json[r'disableDomainBlock'] = disableDomainBlock;
+    }
+    if (generateAuthenticationToken != null) {
+      json[r'generateAuthenticationToken'] = generateAuthenticationToken;
+    }
     if (registration != null) {
       json[r'registration'] = registration.toJson();
     }
-    json[r'sendSetPasswordEmail'] = sendSetPasswordEmail;
-    json[r'skipRegistrationVerification'] = skipRegistrationVerification;
-    json[r'skipVerification'] = skipVerification;
+    if (sendSetPasswordEmail != null) {
+      json[r'sendSetPasswordEmail'] = sendSetPasswordEmail;
+    }
+    if (skipRegistrationVerification != null) {
+      json[r'skipRegistrationVerification'] = skipRegistrationVerification;
+    }
+    if (skipVerification != null) {
+      json[r'skipVerification'] = skipVerification;
+    }
     if (user != null) {
       json[r'user'] = user.toJson();
     }
@@ -28573,16 +29000,15 @@ class ReindexRequest {
 }
 
 class ReloadRequest {
-  final List<String> names;
+  final List<String>? names;
 
-  ReloadRequest({List<String>? names}) : names = names ?? [];
+  ReloadRequest({this.names});
 
   factory ReloadRequest.fromJson(Map<String, Object?> json) {
     return ReloadRequest(
       names: (json[r'names'] as List<Object?>?)
-              ?.map((i) => i as String? ?? '')
-              .toList() ??
-          [],
+          ?.map((i) => i as String? ?? '')
+          .toList(),
     );
   }
 
@@ -28590,7 +29016,9 @@ class ReloadRequest {
     var names = this.names;
 
     final json = <String, Object?>{};
-    json[r'names'] = names;
+    if (names != null) {
+      json[r'names'] = names;
+    }
     return json;
   }
 
@@ -28603,15 +29031,14 @@ class ReloadRequest {
 
 class RememberPreviousPasswords {
   final int? count;
-  final bool enabled;
+  final bool? enabled;
 
-  RememberPreviousPasswords({this.count, bool? enabled})
-      : enabled = enabled ?? false;
+  RememberPreviousPasswords({this.count, this.enabled});
 
   factory RememberPreviousPasswords.fromJson(Map<String, Object?> json) {
     return RememberPreviousPasswords(
       count: (json[r'count'] as num?)?.toInt(),
-      enabled: json[r'enabled'] as bool? ?? false,
+      enabled: json[r'enabled'] as bool?,
     );
   }
 
@@ -28623,7 +29050,9 @@ class RememberPreviousPasswords {
     if (count != null) {
       json[r'count'] = count;
     }
-    json[r'enabled'] = enabled;
+    if (enabled != null) {
+      json[r'enabled'] = enabled;
+    }
     return json;
   }
 
@@ -28639,17 +29068,15 @@ class RememberPreviousPasswords {
 /// extends Enableable because anything that is  requiredoptional is almost
 /// always enableable as well.
 class Requirable {
-  final bool required;
-  final bool enabled;
+  final bool? required;
+  final bool? enabled;
 
-  Requirable({bool? required, bool? enabled})
-      : required = required ?? false,
-        enabled = enabled ?? false;
+  Requirable({this.required, this.enabled});
 
   factory Requirable.fromJson(Map<String, Object?> json) {
     return Requirable(
-      required: json[r'required'] as bool? ?? false,
-      enabled: json[r'enabled'] as bool? ?? false,
+      required: json[r'required'] as bool?,
+      enabled: json[r'enabled'] as bool?,
     );
   }
 
@@ -28658,8 +29085,12 @@ class Requirable {
     var enabled = this.enabled;
 
     final json = <String, Object?>{};
-    json[r'required'] = required;
-    json[r'enabled'] = enabled;
+    if (required != null) {
+      json[r'required'] = required;
+    }
+    if (enabled != null) {
+      json[r'enabled'] = enabled;
+    }
     return json;
   }
 
@@ -28689,21 +29120,20 @@ class SAMLv2ApplicationConfiguration {
   final String? buttonImageUrl;
   final String? buttonText;
   final Map<String, dynamic>? data;
-  final bool createRegistration;
+  final bool? createRegistration;
 
   SAMLv2ApplicationConfiguration(
       {this.buttonImageUrl,
       this.buttonText,
       this.data,
-      bool? createRegistration})
-      : createRegistration = createRegistration ?? false;
+      this.createRegistration});
 
   factory SAMLv2ApplicationConfiguration.fromJson(Map<String, Object?> json) {
     return SAMLv2ApplicationConfiguration(
       buttonImageUrl: json[r'buttonImageURL'] as String?,
       buttonText: json[r'buttonText'] as String?,
       data: json[r'data'] as Map<String, Object?>?,
-      createRegistration: json[r'createRegistration'] as bool? ?? false,
+      createRegistration: json[r'createRegistration'] as bool?,
     );
   }
 
@@ -28723,7 +29153,9 @@ class SAMLv2ApplicationConfiguration {
     if (data != null) {
       json[r'data'] = data;
     }
-    json[r'createRegistration'] = createRegistration;
+    if (createRegistration != null) {
+      json[r'createRegistration'] = createRegistration;
+    }
     return json;
   }
 
@@ -28780,7 +29212,7 @@ class SAMLv2AssertionEncryptionConfiguration {
   final String? keyTransportAlgorithm;
   final String? keyTransportEncryptionKeyId;
   final String? maskGenerationFunction;
-  final bool enabled;
+  final bool? enabled;
 
   SAMLv2AssertionEncryptionConfiguration(
       {this.digestAlgorithm,
@@ -28789,8 +29221,7 @@ class SAMLv2AssertionEncryptionConfiguration {
       this.keyTransportAlgorithm,
       this.keyTransportEncryptionKeyId,
       this.maskGenerationFunction,
-      bool? enabled})
-      : enabled = enabled ?? false;
+      this.enabled});
 
   factory SAMLv2AssertionEncryptionConfiguration.fromJson(
       Map<String, Object?> json) {
@@ -28802,7 +29233,7 @@ class SAMLv2AssertionEncryptionConfiguration {
       keyTransportEncryptionKeyId:
           json[r'keyTransportEncryptionKeyId'] as String?,
       maskGenerationFunction: json[r'maskGenerationFunction'] as String?,
-      enabled: json[r'enabled'] as bool? ?? false,
+      enabled: json[r'enabled'] as bool?,
     );
   }
 
@@ -28834,7 +29265,9 @@ class SAMLv2AssertionEncryptionConfiguration {
     if (maskGenerationFunction != null) {
       json[r'maskGenerationFunction'] = maskGenerationFunction;
     }
-    json[r'enabled'] = enabled;
+    if (enabled != null) {
+      json[r'enabled'] = enabled;
+    }
     return json;
   }
 
@@ -28865,8 +29298,8 @@ class SAMLv2Configuration {
   final SAMLv2AssertionEncryptionConfiguration?
       assertionEncryptionConfiguration;
   final String? audience;
-  final List<String> authorizedRedirectUrLs;
-  final bool debug;
+  final List<String>? authorizedRedirectUrLs;
+  final bool? debug;
   final String? defaultVerificationKeyId;
   final SAMLv2IdPInitiatedLoginConfiguration? initiatedLogin;
   final String? issuer;
@@ -28874,17 +29307,17 @@ class SAMLv2Configuration {
   final LoginHintConfiguration? loginHintConfiguration;
   final SAMLv2Logout? logout;
   final String? logoutUrl;
-  final bool requireSignedRequests;
+  final bool? requireSignedRequests;
   final CanonicalizationMethod? xmlSignatureC14nMethod;
   final XMLSignatureLocation? xmlSignatureLocation;
   final String? callbackUrl;
-  final bool enabled;
+  final bool? enabled;
 
   SAMLv2Configuration(
       {this.assertionEncryptionConfiguration,
       this.audience,
-      List<String>? authorizedRedirectUrLs,
-      bool? debug,
+      this.authorizedRedirectUrLs,
+      this.debug,
       this.defaultVerificationKeyId,
       this.initiatedLogin,
       this.issuer,
@@ -28892,15 +29325,11 @@ class SAMLv2Configuration {
       this.loginHintConfiguration,
       this.logout,
       this.logoutUrl,
-      bool? requireSignedRequests,
+      this.requireSignedRequests,
       this.xmlSignatureC14nMethod,
       this.xmlSignatureLocation,
       this.callbackUrl,
-      bool? enabled})
-      : authorizedRedirectUrLs = authorizedRedirectUrLs ?? [],
-        debug = debug ?? false,
-        requireSignedRequests = requireSignedRequests ?? false,
-        enabled = enabled ?? false;
+      this.enabled});
 
   factory SAMLv2Configuration.fromJson(Map<String, Object?> json) {
     return SAMLv2Configuration(
@@ -28913,10 +29342,9 @@ class SAMLv2Configuration {
       audience: json[r'audience'] as String?,
       authorizedRedirectUrLs:
           (json[r'authorizedRedirectURLs'] as List<Object?>?)
-                  ?.map((i) => i as String? ?? '')
-                  .toList() ??
-              [],
-      debug: json[r'debug'] as bool? ?? false,
+              ?.map((i) => i as String? ?? '')
+              .toList(),
+      debug: json[r'debug'] as bool?,
       defaultVerificationKeyId: json[r'defaultVerificationKeyId'] as String?,
       initiatedLogin: json[r'initiatedLogin'] != null
           ? SAMLv2IdPInitiatedLoginConfiguration.fromJson(
@@ -28932,7 +29360,7 @@ class SAMLv2Configuration {
           ? SAMLv2Logout.fromJson(json[r'logout']! as Map<String, Object?>)
           : null,
       logoutUrl: json[r'logoutURL'] as String?,
-      requireSignedRequests: json[r'requireSignedRequests'] as bool? ?? false,
+      requireSignedRequests: json[r'requireSignedRequests'] as bool?,
       xmlSignatureC14nMethod: json[r'xmlSignatureC14nMethod'] != null
           ? CanonicalizationMethod.fromValue(
               json[r'xmlSignatureC14nMethod']! as String)
@@ -28942,7 +29370,7 @@ class SAMLv2Configuration {
               json[r'xmlSignatureLocation']! as String)
           : null,
       callbackUrl: json[r'callbackURL'] as String?,
-      enabled: json[r'enabled'] as bool? ?? false,
+      enabled: json[r'enabled'] as bool?,
     );
   }
 
@@ -28973,8 +29401,12 @@ class SAMLv2Configuration {
     if (audience != null) {
       json[r'audience'] = audience;
     }
-    json[r'authorizedRedirectURLs'] = authorizedRedirectUrLs;
-    json[r'debug'] = debug;
+    if (authorizedRedirectUrLs != null) {
+      json[r'authorizedRedirectURLs'] = authorizedRedirectUrLs;
+    }
+    if (debug != null) {
+      json[r'debug'] = debug;
+    }
     if (defaultVerificationKeyId != null) {
       json[r'defaultVerificationKeyId'] = defaultVerificationKeyId;
     }
@@ -28996,7 +29428,9 @@ class SAMLv2Configuration {
     if (logoutUrl != null) {
       json[r'logoutURL'] = logoutUrl;
     }
-    json[r'requireSignedRequests'] = requireSignedRequests;
+    if (requireSignedRequests != null) {
+      json[r'requireSignedRequests'] = requireSignedRequests;
+    }
     if (xmlSignatureC14nMethod != null) {
       json[r'xmlSignatureC14nMethod'] = xmlSignatureC14nMethod.value;
     }
@@ -29006,7 +29440,9 @@ class SAMLv2Configuration {
     if (callbackUrl != null) {
       json[r'callbackURL'] = callbackUrl;
     }
-    json[r'enabled'] = enabled;
+    if (enabled != null) {
+      json[r'enabled'] = enabled;
+    }
     return json;
   }
 
@@ -29055,20 +29491,17 @@ class SAMLv2Configuration {
 }
 
 class SAMLv2DestinationAssertionConfiguration {
-  final List<String> alternates;
+  final List<String>? alternates;
   final SAMLv2DestinationAssertionPolicy? policy;
 
-  SAMLv2DestinationAssertionConfiguration(
-      {List<String>? alternates, this.policy})
-      : alternates = alternates ?? [];
+  SAMLv2DestinationAssertionConfiguration({this.alternates, this.policy});
 
   factory SAMLv2DestinationAssertionConfiguration.fromJson(
       Map<String, Object?> json) {
     return SAMLv2DestinationAssertionConfiguration(
       alternates: (json[r'alternates'] as List<Object?>?)
-              ?.map((i) => i as String? ?? '')
-              .toList() ??
-          [],
+          ?.map((i) => i as String? ?? '')
+          .toList(),
       policy: json[r'policy'] != null
           ? SAMLv2DestinationAssertionPolicy.fromValue(
               json[r'policy']! as String)
@@ -29081,7 +29514,9 @@ class SAMLv2DestinationAssertionConfiguration {
     var policy = this.policy;
 
     final json = <String, Object?>{};
-    json[r'alternates'] = alternates;
+    if (alternates != null) {
+      json[r'alternates'] = alternates;
+    }
     if (policy != null) {
       json[r'policy'] = policy.value;
     }
@@ -29099,17 +29534,16 @@ class SAMLv2DestinationAssertionConfiguration {
 
 class SAMLv2IdPInitiatedApplicationConfiguration {
   final Map<String, dynamic>? data;
-  final bool createRegistration;
+  final bool? createRegistration;
 
   SAMLv2IdPInitiatedApplicationConfiguration(
-      {this.data, bool? createRegistration})
-      : createRegistration = createRegistration ?? false;
+      {this.data, this.createRegistration});
 
   factory SAMLv2IdPInitiatedApplicationConfiguration.fromJson(
       Map<String, Object?> json) {
     return SAMLv2IdPInitiatedApplicationConfiguration(
       data: json[r'data'] as Map<String, Object?>?,
-      createRegistration: json[r'createRegistration'] as bool? ?? false,
+      createRegistration: json[r'createRegistration'] as bool?,
     );
   }
 
@@ -29121,7 +29555,9 @@ class SAMLv2IdPInitiatedApplicationConfiguration {
     if (data != null) {
       json[r'data'] = data;
     }
-    json[r'createRegistration'] = createRegistration;
+    if (createRegistration != null) {
+      json[r'createRegistration'] = createRegistration;
+    }
     return json;
   }
 
@@ -29140,7 +29576,7 @@ class SAMLv2IdPInitiatedIdentityProvider {
   final String? emailClaim;
   final String? keyId;
   final String? uniqueIdClaim;
-  final bool useNameIdForEmail;
+  final bool? useNameIdForEmail;
   final String? usernameClaim;
 
   SAMLv2IdPInitiatedIdentityProvider(
@@ -29148,9 +29584,8 @@ class SAMLv2IdPInitiatedIdentityProvider {
       this.emailClaim,
       this.keyId,
       this.uniqueIdClaim,
-      bool? useNameIdForEmail,
-      this.usernameClaim})
-      : useNameIdForEmail = useNameIdForEmail ?? false;
+      this.useNameIdForEmail,
+      this.usernameClaim});
 
   factory SAMLv2IdPInitiatedIdentityProvider.fromJson(
       Map<String, Object?> json) {
@@ -29159,7 +29594,7 @@ class SAMLv2IdPInitiatedIdentityProvider {
       emailClaim: json[r'emailClaim'] as String?,
       keyId: json[r'keyId'] as String?,
       uniqueIdClaim: json[r'uniqueIdClaim'] as String?,
-      useNameIdForEmail: json[r'useNameIdForEmail'] as bool? ?? false,
+      useNameIdForEmail: json[r'useNameIdForEmail'] as bool?,
       usernameClaim: json[r'usernameClaim'] as String?,
     );
   }
@@ -29185,7 +29620,9 @@ class SAMLv2IdPInitiatedIdentityProvider {
     if (uniqueIdClaim != null) {
       json[r'uniqueIdClaim'] = uniqueIdClaim;
     }
-    json[r'useNameIdForEmail'] = useNameIdForEmail;
+    if (useNameIdForEmail != null) {
+      json[r'useNameIdForEmail'] = useNameIdForEmail;
+    }
     if (usernameClaim != null) {
       json[r'usernameClaim'] = usernameClaim;
     }
@@ -29213,16 +29650,15 @@ class SAMLv2IdPInitiatedIdentityProvider {
 /// IdP Initiated login configuration
 class SAMLv2IdPInitiatedLoginConfiguration {
   final String? nameIdFormat;
-  final bool enabled;
+  final bool? enabled;
 
-  SAMLv2IdPInitiatedLoginConfiguration({this.nameIdFormat, bool? enabled})
-      : enabled = enabled ?? false;
+  SAMLv2IdPInitiatedLoginConfiguration({this.nameIdFormat, this.enabled});
 
   factory SAMLv2IdPInitiatedLoginConfiguration.fromJson(
       Map<String, Object?> json) {
     return SAMLv2IdPInitiatedLoginConfiguration(
       nameIdFormat: json[r'nameIdFormat'] as String?,
-      enabled: json[r'enabled'] as bool? ?? false,
+      enabled: json[r'enabled'] as bool?,
     );
   }
 
@@ -29234,7 +29670,9 @@ class SAMLv2IdPInitiatedLoginConfiguration {
     if (nameIdFormat != null) {
       json[r'nameIdFormat'] = nameIdFormat;
     }
-    json[r'enabled'] = enabled;
+    if (enabled != null) {
+      json[r'enabled'] = enabled;
+    }
     return json;
   }
 
@@ -29249,7 +29687,7 @@ class SAMLv2IdPInitiatedLoginConfiguration {
 
 /// SAML v2 identity provider configuration.
 class SAMLv2IdentityProvider {
-  final List<dynamic> domains;
+  final List<dynamic>? domains;
   final SAMLv2AssertionConfiguration? assertionConfiguration;
   final String? buttonImageUrl;
   final String? buttonText;
@@ -29258,18 +29696,18 @@ class SAMLv2IdentityProvider {
   final String? issuer;
   final LoginHintConfiguration? loginHintConfiguration;
   final String? nameIdFormat;
-  final bool postRequest;
+  final bool? postRequest;
   final String? requestSigningKeyId;
-  final bool signRequest;
+  final bool? signRequest;
   final CanonicalizationMethod? xmlSignatureC14nMethod;
   final String? emailClaim;
   final String? keyId;
   final String? uniqueIdClaim;
-  final bool useNameIdForEmail;
+  final bool? useNameIdForEmail;
   final String? usernameClaim;
 
   SAMLv2IdentityProvider(
-      {List<dynamic>? domains,
+      {this.domains,
       this.assertionConfiguration,
       this.buttonImageUrl,
       this.buttonText,
@@ -29278,24 +29716,19 @@ class SAMLv2IdentityProvider {
       this.issuer,
       this.loginHintConfiguration,
       this.nameIdFormat,
-      bool? postRequest,
+      this.postRequest,
       this.requestSigningKeyId,
-      bool? signRequest,
+      this.signRequest,
       this.xmlSignatureC14nMethod,
       this.emailClaim,
       this.keyId,
       this.uniqueIdClaim,
-      bool? useNameIdForEmail,
-      this.usernameClaim})
-      : domains = domains ?? [],
-        postRequest = postRequest ?? false,
-        signRequest = signRequest ?? false,
-        useNameIdForEmail = useNameIdForEmail ?? false;
+      this.useNameIdForEmail,
+      this.usernameClaim});
 
   factory SAMLv2IdentityProvider.fromJson(Map<String, Object?> json) {
     return SAMLv2IdentityProvider(
-      domains:
-          (json[r'domains'] as List<Object?>?)?.map((i) => i).toList() ?? [],
+      domains: (json[r'domains'] as List<Object?>?)?.map((i) => i).toList(),
       assertionConfiguration: json[r'assertionConfiguration'] != null
           ? SAMLv2AssertionConfiguration.fromJson(
               json[r'assertionConfiguration']! as Map<String, Object?>)
@@ -29313,9 +29746,9 @@ class SAMLv2IdentityProvider {
               json[r'loginHintConfiguration']! as Map<String, Object?>)
           : null,
       nameIdFormat: json[r'nameIdFormat'] as String?,
-      postRequest: json[r'postRequest'] as bool? ?? false,
+      postRequest: json[r'postRequest'] as bool?,
       requestSigningKeyId: json[r'requestSigningKeyId'] as String?,
-      signRequest: json[r'signRequest'] as bool? ?? false,
+      signRequest: json[r'signRequest'] as bool?,
       xmlSignatureC14nMethod: json[r'xmlSignatureC14nMethod'] != null
           ? CanonicalizationMethod.fromValue(
               json[r'xmlSignatureC14nMethod']! as String)
@@ -29323,7 +29756,7 @@ class SAMLv2IdentityProvider {
       emailClaim: json[r'emailClaim'] as String?,
       keyId: json[r'keyId'] as String?,
       uniqueIdClaim: json[r'uniqueIdClaim'] as String?,
-      useNameIdForEmail: json[r'useNameIdForEmail'] as bool? ?? false,
+      useNameIdForEmail: json[r'useNameIdForEmail'] as bool?,
       usernameClaim: json[r'usernameClaim'] as String?,
     );
   }
@@ -29349,7 +29782,9 @@ class SAMLv2IdentityProvider {
     var usernameClaim = this.usernameClaim;
 
     final json = <String, Object?>{};
-    json[r'domains'] = domains;
+    if (domains != null) {
+      json[r'domains'] = domains;
+    }
     if (assertionConfiguration != null) {
       json[r'assertionConfiguration'] = assertionConfiguration.toJson();
     }
@@ -29374,11 +29809,15 @@ class SAMLv2IdentityProvider {
     if (nameIdFormat != null) {
       json[r'nameIdFormat'] = nameIdFormat;
     }
-    json[r'postRequest'] = postRequest;
+    if (postRequest != null) {
+      json[r'postRequest'] = postRequest;
+    }
     if (requestSigningKeyId != null) {
       json[r'requestSigningKeyId'] = requestSigningKeyId;
     }
-    json[r'signRequest'] = signRequest;
+    if (signRequest != null) {
+      json[r'signRequest'] = signRequest;
+    }
     if (xmlSignatureC14nMethod != null) {
       json[r'xmlSignatureC14nMethod'] = xmlSignatureC14nMethod.value;
     }
@@ -29391,7 +29830,9 @@ class SAMLv2IdentityProvider {
     if (uniqueIdClaim != null) {
       json[r'uniqueIdClaim'] = uniqueIdClaim;
     }
-    json[r'useNameIdForEmail'] = useNameIdForEmail;
+    if (useNameIdForEmail != null) {
+      json[r'useNameIdForEmail'] = useNameIdForEmail;
+    }
     if (usernameClaim != null) {
       json[r'usernameClaim'] = usernameClaim;
     }
@@ -29448,15 +29889,14 @@ class SAMLv2IdentityProvider {
 /// requests
 class SAMLv2IdpInitiatedConfiguration {
   final String? issuer;
-  final bool enabled;
+  final bool? enabled;
 
-  SAMLv2IdpInitiatedConfiguration({this.issuer, bool? enabled})
-      : enabled = enabled ?? false;
+  SAMLv2IdpInitiatedConfiguration({this.issuer, this.enabled});
 
   factory SAMLv2IdpInitiatedConfiguration.fromJson(Map<String, Object?> json) {
     return SAMLv2IdpInitiatedConfiguration(
       issuer: json[r'issuer'] as String?,
-      enabled: json[r'enabled'] as bool? ?? false,
+      enabled: json[r'enabled'] as bool?,
     );
   }
 
@@ -29468,7 +29908,9 @@ class SAMLv2IdpInitiatedConfiguration {
     if (issuer != null) {
       json[r'issuer'] = issuer;
     }
-    json[r'enabled'] = enabled;
+    if (enabled != null) {
+      json[r'enabled'] = enabled;
+    }
     return json;
   }
 
@@ -29484,7 +29926,7 @@ class SAMLv2Logout {
   final SAMLLogoutBehavior? behavior;
   final String? defaultVerificationKeyId;
   final String? keyId;
-  final bool requireSignedRequests;
+  final bool? requireSignedRequests;
   final SAMLv2SingleLogout? singleLogout;
   final CanonicalizationMethod? xmlSignatureC14nMethod;
 
@@ -29492,10 +29934,9 @@ class SAMLv2Logout {
       {this.behavior,
       this.defaultVerificationKeyId,
       this.keyId,
-      bool? requireSignedRequests,
+      this.requireSignedRequests,
       this.singleLogout,
-      this.xmlSignatureC14nMethod})
-      : requireSignedRequests = requireSignedRequests ?? false;
+      this.xmlSignatureC14nMethod});
 
   factory SAMLv2Logout.fromJson(Map<String, Object?> json) {
     return SAMLv2Logout(
@@ -29504,7 +29945,7 @@ class SAMLv2Logout {
           : null,
       defaultVerificationKeyId: json[r'defaultVerificationKeyId'] as String?,
       keyId: json[r'keyId'] as String?,
-      requireSignedRequests: json[r'requireSignedRequests'] as bool? ?? false,
+      requireSignedRequests: json[r'requireSignedRequests'] as bool?,
       singleLogout: json[r'singleLogout'] != null
           ? SAMLv2SingleLogout.fromJson(
               json[r'singleLogout']! as Map<String, Object?>)
@@ -29534,7 +29975,9 @@ class SAMLv2Logout {
     if (keyId != null) {
       json[r'keyId'] = keyId;
     }
-    json[r'requireSignedRequests'] = requireSignedRequests;
+    if (requireSignedRequests != null) {
+      json[r'requireSignedRequests'] = requireSignedRequests;
+    }
     if (singleLogout != null) {
       json[r'singleLogout'] = singleLogout.toJson();
     }
@@ -29569,11 +30012,10 @@ class SAMLv2SingleLogout {
   final String? keyId;
   final String? url;
   final CanonicalizationMethod? xmlSignatureC14nMethod;
-  final bool enabled;
+  final bool? enabled;
 
   SAMLv2SingleLogout(
-      {this.keyId, this.url, this.xmlSignatureC14nMethod, bool? enabled})
-      : enabled = enabled ?? false;
+      {this.keyId, this.url, this.xmlSignatureC14nMethod, this.enabled});
 
   factory SAMLv2SingleLogout.fromJson(Map<String, Object?> json) {
     return SAMLv2SingleLogout(
@@ -29583,7 +30025,7 @@ class SAMLv2SingleLogout {
           ? CanonicalizationMethod.fromValue(
               json[r'xmlSignatureC14nMethod']! as String)
           : null,
-      enabled: json[r'enabled'] as bool? ?? false,
+      enabled: json[r'enabled'] as bool?,
     );
   }
 
@@ -29603,7 +30045,9 @@ class SAMLv2SingleLogout {
     if (xmlSignatureC14nMethod != null) {
       json[r'xmlSignatureC14nMethod'] = xmlSignatureC14nMethod.value;
     }
-    json[r'enabled'] = enabled;
+    if (enabled != null) {
+      json[r'enabled'] = enabled;
+    }
     return json;
   }
 
@@ -29699,9 +30143,9 @@ class SMSMessageTemplate {
 /// Search API request.
 class SearchRequest {
   final UserSearchCriteria? search;
-  final List<String> expand;
+  final List<String>? expand;
 
-  SearchRequest({this.search, List<String>? expand}) : expand = expand ?? [];
+  SearchRequest({this.search, this.expand});
 
   factory SearchRequest.fromJson(Map<String, Object?> json) {
     return SearchRequest(
@@ -29710,9 +30154,8 @@ class SearchRequest {
               json[r'search']! as Map<String, Object?>)
           : null,
       expand: (json[r'expand'] as List<Object?>?)
-              ?.map((i) => i as String? ?? '')
-              .toList() ??
-          [],
+          ?.map((i) => i as String? ?? '')
+          .toList(),
     );
   }
 
@@ -29724,7 +30167,9 @@ class SearchRequest {
     if (search != null) {
       json[r'search'] = search.toJson();
     }
-    json[r'expand'] = expand;
+    if (expand != null) {
+      json[r'expand'] = expand;
+    }
     return json;
   }
 
@@ -29740,30 +30185,21 @@ class SearchRequest {
 class SearchResponse {
   final int? total;
   final String? nextResults;
-  final List<User> users;
-  final List<String> expandable;
+  final List<User>? users;
+  final List<String>? expandable;
 
-  SearchResponse(
-      {this.total,
-      this.nextResults,
-      List<User>? users,
-      List<String>? expandable})
-      : users = users ?? [],
-        expandable = expandable ?? [];
+  SearchResponse({this.total, this.nextResults, this.users, this.expandable});
 
   factory SearchResponse.fromJson(Map<String, Object?> json) {
     return SearchResponse(
       total: (json[r'total'] as num?)?.toInt(),
       nextResults: json[r'nextResults'] as String?,
       users: (json[r'users'] as List<Object?>?)
-              ?.map(
-                  (i) => User.fromJson(i as Map<String, Object?>? ?? const {}))
-              .toList() ??
-          [],
+          ?.map((i) => User.fromJson(i as Map<String, Object?>? ?? const {}))
+          .toList(),
       expandable: (json[r'expandable'] as List<Object?>?)
-              ?.map((i) => i as String? ?? '')
-              .toList() ??
-          [],
+          ?.map((i) => i as String? ?? '')
+          .toList(),
     );
   }
 
@@ -29780,8 +30216,12 @@ class SearchResponse {
     if (nextResults != null) {
       json[r'nextResults'] = nextResults;
     }
-    json[r'users'] = users.map((i) => i.toJson()).toList();
-    json[r'expandable'] = expandable;
+    if (users != null) {
+      json[r'users'] = users.map((i) => i.toJson()).toList();
+    }
+    if (expandable != null) {
+      json[r'expandable'] = expandable;
+    }
     return json;
   }
 
@@ -29802,27 +30242,21 @@ class SearchResponse {
 /// Search results.
 class SearchResults {
   final String? nextResults;
-  final List<Map<String, dynamic>> results;
+  final List<Map<String, dynamic>>? results;
   final int? total;
-  final bool totalEqualToActual;
+  final bool? totalEqualToActual;
 
   SearchResults(
-      {this.nextResults,
-      List<Map<String, dynamic>>? results,
-      this.total,
-      bool? totalEqualToActual})
-      : results = results ?? [],
-        totalEqualToActual = totalEqualToActual ?? false;
+      {this.nextResults, this.results, this.total, this.totalEqualToActual});
 
   factory SearchResults.fromJson(Map<String, Object?> json) {
     return SearchResults(
       nextResults: json[r'nextResults'] as String?,
       results: (json[r'results'] as List<Object?>?)
-              ?.map((i) => i as Map<String, Object?>? ?? {})
-              .toList() ??
-          [],
+          ?.map((i) => i as Map<String, Object?>? ?? {})
+          .toList(),
       total: (json[r'total'] as num?)?.toInt(),
-      totalEqualToActual: json[r'totalEqualToActual'] as bool? ?? false,
+      totalEqualToActual: json[r'totalEqualToActual'] as bool?,
     );
   }
 
@@ -29836,11 +30270,15 @@ class SearchResults {
     if (nextResults != null) {
       json[r'nextResults'] = nextResults;
     }
-    json[r'results'] = results;
+    if (results != null) {
+      json[r'results'] = results;
+    }
     if (total != null) {
       json[r'total'] = total;
     }
-    json[r'totalEqualToActual'] = totalEqualToActual;
+    if (totalEqualToActual != null) {
+      json[r'totalEqualToActual'] = totalEqualToActual;
+    }
     return json;
   }
 
@@ -29941,13 +30379,13 @@ class SecureIdentity {
   final ZonedDateTime? lastLoginInstant;
   final String? password;
   final ChangePasswordReason? passwordChangeReason;
-  final bool passwordChangeRequired;
+  final bool? passwordChangeRequired;
   final ZonedDateTime? passwordLastUpdateInstant;
   final String? salt;
   final String? uniqueUsername;
   final String? username;
   final ContentStatus? usernameStatus;
-  final bool verified;
+  final bool? verified;
   final ZonedDateTime? verifiedInstant;
 
   SecureIdentity(
@@ -29960,16 +30398,14 @@ class SecureIdentity {
       this.lastLoginInstant,
       this.password,
       this.passwordChangeReason,
-      bool? passwordChangeRequired,
+      this.passwordChangeRequired,
       this.passwordLastUpdateInstant,
       this.salt,
       this.uniqueUsername,
       this.username,
       this.usernameStatus,
-      bool? verified,
-      this.verifiedInstant})
-      : passwordChangeRequired = passwordChangeRequired ?? false,
-        verified = verified ?? false;
+      this.verified,
+      this.verifiedInstant});
 
   factory SecureIdentity.fromJson(Map<String, Object?> json) {
     return SecureIdentity(
@@ -29991,7 +30427,7 @@ class SecureIdentity {
           ? ChangePasswordReason.fromValue(
               json[r'passwordChangeReason']! as String)
           : null,
-      passwordChangeRequired: json[r'passwordChangeRequired'] as bool? ?? false,
+      passwordChangeRequired: json[r'passwordChangeRequired'] as bool?,
       passwordLastUpdateInstant: (json[r'passwordLastUpdateInstant'] as num?)
           ?.toInt() as ZonedDateTime?,
       salt: json[r'salt'] as String?,
@@ -30000,7 +30436,7 @@ class SecureIdentity {
       usernameStatus: json[r'usernameStatus'] != null
           ? ContentStatus.fromValue(json[r'usernameStatus']! as String)
           : null,
-      verified: json[r'verified'] as bool? ?? false,
+      verified: json[r'verified'] as bool?,
       verifiedInstant:
           (json[r'verifiedInstant'] as num?)?.toInt() as ZonedDateTime?,
     );
@@ -30055,7 +30491,9 @@ class SecureIdentity {
     if (passwordChangeReason != null) {
       json[r'passwordChangeReason'] = passwordChangeReason.value;
     }
-    json[r'passwordChangeRequired'] = passwordChangeRequired;
+    if (passwordChangeRequired != null) {
+      json[r'passwordChangeRequired'] = passwordChangeRequired;
+    }
     if (passwordLastUpdateInstant != null) {
       json[r'passwordLastUpdateInstant'] = passwordLastUpdateInstant.toJson();
     }
@@ -30071,7 +30509,9 @@ class SecureIdentity {
     if (usernameStatus != null) {
       json[r'usernameStatus'] = usernameStatus.value;
     }
-    json[r'verified'] = verified;
+    if (verified != null) {
+      json[r'verified'] = verified;
+    }
     if (verifiedInstant != null) {
       json[r'verifiedInstant'] = verifiedInstant.toJson();
     }
@@ -30123,16 +30563,14 @@ class SecureIdentity {
 }
 
 class SelfServiceFormConfiguration {
-  final bool requireCurrentPasswordOnPasswordChange;
+  final bool? requireCurrentPasswordOnPasswordChange;
 
-  SelfServiceFormConfiguration({bool? requireCurrentPasswordOnPasswordChange})
-      : requireCurrentPasswordOnPasswordChange =
-            requireCurrentPasswordOnPasswordChange ?? false;
+  SelfServiceFormConfiguration({this.requireCurrentPasswordOnPasswordChange});
 
   factory SelfServiceFormConfiguration.fromJson(Map<String, Object?> json) {
     return SelfServiceFormConfiguration(
       requireCurrentPasswordOnPasswordChange:
-          json[r'requireCurrentPasswordOnPasswordChange'] as bool? ?? false,
+          json[r'requireCurrentPasswordOnPasswordChange'] as bool?,
     );
   }
 
@@ -30141,8 +30579,10 @@ class SelfServiceFormConfiguration {
         this.requireCurrentPasswordOnPasswordChange;
 
     final json = <String, Object?>{};
-    json[r'requireCurrentPasswordOnPasswordChange'] =
-        requireCurrentPasswordOnPasswordChange;
+    if (requireCurrentPasswordOnPasswordChange != null) {
+      json[r'requireCurrentPasswordOnPasswordChange'] =
+          requireCurrentPasswordOnPasswordChange;
+    }
     return json;
   }
 
@@ -30158,52 +30598,42 @@ class SelfServiceFormConfiguration {
 
 class SendRequest {
   final String? applicationId;
-  final List<String> bccAddresses;
-  final List<String> ccAddresses;
-  final List<Locale> preferredLanguages;
+  final List<String>? bccAddresses;
+  final List<String>? ccAddresses;
+  final List<Locale>? preferredLanguages;
   final Map<String, dynamic>? requestData;
-  final List<EmailAddress> toAddresses;
-  final List<String> userIds;
+  final List<EmailAddress>? toAddresses;
+  final List<String>? userIds;
 
   SendRequest(
       {this.applicationId,
-      List<String>? bccAddresses,
-      List<String>? ccAddresses,
-      List<Locale>? preferredLanguages,
+      this.bccAddresses,
+      this.ccAddresses,
+      this.preferredLanguages,
       this.requestData,
-      List<EmailAddress>? toAddresses,
-      List<String>? userIds})
-      : bccAddresses = bccAddresses ?? [],
-        ccAddresses = ccAddresses ?? [],
-        preferredLanguages = preferredLanguages ?? [],
-        toAddresses = toAddresses ?? [],
-        userIds = userIds ?? [];
+      this.toAddresses,
+      this.userIds});
 
   factory SendRequest.fromJson(Map<String, Object?> json) {
     return SendRequest(
       applicationId: json[r'applicationId'] as String?,
       bccAddresses: (json[r'bccAddresses'] as List<Object?>?)
-              ?.map((i) => i as String? ?? '')
-              .toList() ??
-          [],
+          ?.map((i) => i as String? ?? '')
+          .toList(),
       ccAddresses: (json[r'ccAddresses'] as List<Object?>?)
-              ?.map((i) => i as String? ?? '')
-              .toList() ??
-          [],
+          ?.map((i) => i as String? ?? '')
+          .toList(),
       preferredLanguages: (json[r'preferredLanguages'] as List<Object?>?)
-              ?.map((i) => Locale(i as String? ?? ''))
-              .toList() ??
-          [],
+          ?.map((i) => Locale(i as String? ?? ''))
+          .toList(),
       requestData: json[r'requestData'] as Map<String, Object?>?,
       toAddresses: (json[r'toAddresses'] as List<Object?>?)
-              ?.map((i) =>
-                  EmailAddress.fromJson(i as Map<String, Object?>? ?? const {}))
-              .toList() ??
-          [],
+          ?.map((i) =>
+              EmailAddress.fromJson(i as Map<String, Object?>? ?? const {}))
+          .toList(),
       userIds: (json[r'userIds'] as List<Object?>?)
-              ?.map((i) => i as String? ?? '')
-              .toList() ??
-          [],
+          ?.map((i) => i as String? ?? '')
+          .toList(),
     );
   }
 
@@ -30220,15 +30650,25 @@ class SendRequest {
     if (applicationId != null) {
       json[r'applicationId'] = applicationId;
     }
-    json[r'bccAddresses'] = bccAddresses;
-    json[r'ccAddresses'] = ccAddresses;
-    json[r'preferredLanguages'] =
-        preferredLanguages.map((i) => i.toJson()).toList();
+    if (bccAddresses != null) {
+      json[r'bccAddresses'] = bccAddresses;
+    }
+    if (ccAddresses != null) {
+      json[r'ccAddresses'] = ccAddresses;
+    }
+    if (preferredLanguages != null) {
+      json[r'preferredLanguages'] =
+          preferredLanguages.map((i) => i.toJson()).toList();
+    }
     if (requestData != null) {
       json[r'requestData'] = requestData;
     }
-    json[r'toAddresses'] = toAddresses.map((i) => i.toJson()).toList();
-    json[r'userIds'] = userIds;
+    if (toAddresses != null) {
+      json[r'toAddresses'] = toAddresses.map((i) => i.toJson()).toList();
+    }
+    if (userIds != null) {
+      json[r'userIds'] = userIds;
+    }
     return json;
   }
 
@@ -30303,7 +30743,7 @@ class SimpleThemeVariables {
   final String? errorIconColor;
   final String? fontColor;
   final String? fontFamily;
-  final bool footerDisplay;
+  final bool? footerDisplay;
   final String? iconBackgroundColor;
   final String? iconColor;
   final String? infoIconColor;
@@ -30337,7 +30777,7 @@ class SimpleThemeVariables {
       this.errorIconColor,
       this.fontColor,
       this.fontFamily,
-      bool? footerDisplay,
+      this.footerDisplay,
       this.iconBackgroundColor,
       this.iconColor,
       this.infoIconColor,
@@ -30355,8 +30795,7 @@ class SimpleThemeVariables {
       this.primaryButtonColor,
       this.primaryButtonFocusColor,
       this.primaryButtonTextColor,
-      this.primaryButtonTextFocusColor})
-      : footerDisplay = footerDisplay ?? false;
+      this.primaryButtonTextFocusColor});
 
   factory SimpleThemeVariables.fromJson(Map<String, Object?> json) {
     return SimpleThemeVariables(
@@ -30374,7 +30813,7 @@ class SimpleThemeVariables {
       errorIconColor: json[r'errorIconColor'] as String?,
       fontColor: json[r'fontColor'] as String?,
       fontFamily: json[r'fontFamily'] as String?,
-      footerDisplay: json[r'footerDisplay'] as bool? ?? false,
+      footerDisplay: json[r'footerDisplay'] as bool?,
       iconBackgroundColor: json[r'iconBackgroundColor'] as String?,
       iconColor: json[r'iconColor'] as String?,
       infoIconColor: json[r'infoIconColor'] as String?,
@@ -30471,7 +30910,9 @@ class SimpleThemeVariables {
     if (fontFamily != null) {
       json[r'fontFamily'] = fontFamily;
     }
-    json[r'footerDisplay'] = footerDisplay;
+    if (footerDisplay != null) {
+      json[r'footerDisplay'] = footerDisplay;
+    }
     if (iconBackgroundColor != null) {
       json[r'iconBackgroundColor'] = iconBackgroundColor;
     }
@@ -30611,7 +31052,7 @@ class SonyPSNApplicationConfiguration {
   final String? clientSecret;
   final String? scope;
   final Map<String, dynamic>? data;
-  final bool createRegistration;
+  final bool? createRegistration;
 
   SonyPSNApplicationConfiguration(
       {this.buttonText,
@@ -30619,8 +31060,7 @@ class SonyPSNApplicationConfiguration {
       this.clientSecret,
       this.scope,
       this.data,
-      bool? createRegistration})
-      : createRegistration = createRegistration ?? false;
+      this.createRegistration});
 
   factory SonyPSNApplicationConfiguration.fromJson(Map<String, Object?> json) {
     return SonyPSNApplicationConfiguration(
@@ -30629,7 +31069,7 @@ class SonyPSNApplicationConfiguration {
       clientSecret: json[r'client_secret'] as String?,
       scope: json[r'scope'] as String?,
       data: json[r'data'] as Map<String, Object?>?,
-      createRegistration: json[r'createRegistration'] as bool? ?? false,
+      createRegistration: json[r'createRegistration'] as bool?,
     );
   }
 
@@ -30657,7 +31097,9 @@ class SonyPSNApplicationConfiguration {
     if (data != null) {
       json[r'data'] = data;
     }
-    json[r'createRegistration'] = createRegistration;
+    if (createRegistration != null) {
+      json[r'createRegistration'] = createRegistration;
+    }
     return json;
   }
 
@@ -30687,7 +31129,7 @@ class SonyPSNIdentityProvider {
   final String? scope;
   final Map<String, dynamic>? data;
   final Map<String, dynamic>? applicationConfiguration;
-  final bool debug;
+  final bool? debug;
   final String? id;
   final ZonedDateTime? insertInstant;
   final ProviderLambdaConfiguration? lambdaConfiguration;
@@ -30704,7 +31146,7 @@ class SonyPSNIdentityProvider {
       this.scope,
       this.data,
       this.applicationConfiguration,
-      bool? debug,
+      this.debug,
       this.id,
       this.insertInstant,
       this.lambdaConfiguration,
@@ -30712,8 +31154,7 @@ class SonyPSNIdentityProvider {
       this.linkingStrategy,
       this.name,
       this.tenantConfiguration,
-      this.type})
-      : debug = debug ?? false;
+      this.type});
 
   factory SonyPSNIdentityProvider.fromJson(Map<String, Object?> json) {
     return SonyPSNIdentityProvider(
@@ -30724,7 +31165,7 @@ class SonyPSNIdentityProvider {
       data: json[r'data'] as Map<String, Object?>?,
       applicationConfiguration:
           json[r'applicationConfiguration'] as Map<String, Object?>?,
-      debug: json[r'debug'] as bool? ?? false,
+      debug: json[r'debug'] as bool?,
       id: json[r'id'] as String?,
       insertInstant:
           (json[r'insertInstant'] as num?)?.toInt() as ZonedDateTime?,
@@ -30783,7 +31224,9 @@ class SonyPSNIdentityProvider {
     if (applicationConfiguration != null) {
       json[r'applicationConfiguration'] = applicationConfiguration;
     }
-    json[r'debug'] = debug;
+    if (debug != null) {
+      json[r'debug'] = debug;
+    }
     if (id != null) {
       json[r'id'] = id;
     }
@@ -30913,7 +31356,7 @@ class SteamApplicationConfiguration {
   final String? scope;
   final String? webApiKey;
   final Map<String, dynamic>? data;
-  final bool createRegistration;
+  final bool? createRegistration;
 
   SteamApplicationConfiguration(
       {this.apiMode,
@@ -30922,8 +31365,7 @@ class SteamApplicationConfiguration {
       this.scope,
       this.webApiKey,
       this.data,
-      bool? createRegistration})
-      : createRegistration = createRegistration ?? false;
+      this.createRegistration});
 
   factory SteamApplicationConfiguration.fromJson(Map<String, Object?> json) {
     return SteamApplicationConfiguration(
@@ -30935,7 +31377,7 @@ class SteamApplicationConfiguration {
       scope: json[r'scope'] as String?,
       webApiKey: json[r'webAPIKey'] as String?,
       data: json[r'data'] as Map<String, Object?>?,
-      createRegistration: json[r'createRegistration'] as bool? ?? false,
+      createRegistration: json[r'createRegistration'] as bool?,
     );
   }
 
@@ -30967,7 +31409,9 @@ class SteamApplicationConfiguration {
     if (data != null) {
       json[r'data'] = data;
     }
-    json[r'createRegistration'] = createRegistration;
+    if (createRegistration != null) {
+      json[r'createRegistration'] = createRegistration;
+    }
     return json;
   }
 
@@ -31000,7 +31444,7 @@ class SteamIdentityProvider {
   final String? webApiKey;
   final Map<String, dynamic>? data;
   final Map<String, dynamic>? applicationConfiguration;
-  final bool debug;
+  final bool? debug;
   final String? id;
   final ZonedDateTime? insertInstant;
   final ProviderLambdaConfiguration? lambdaConfiguration;
@@ -31018,7 +31462,7 @@ class SteamIdentityProvider {
       this.webApiKey,
       this.data,
       this.applicationConfiguration,
-      bool? debug,
+      this.debug,
       this.id,
       this.insertInstant,
       this.lambdaConfiguration,
@@ -31026,8 +31470,7 @@ class SteamIdentityProvider {
       this.linkingStrategy,
       this.name,
       this.tenantConfiguration,
-      this.type})
-      : debug = debug ?? false;
+      this.type});
 
   factory SteamIdentityProvider.fromJson(Map<String, Object?> json) {
     return SteamIdentityProvider(
@@ -31041,7 +31484,7 @@ class SteamIdentityProvider {
       data: json[r'data'] as Map<String, Object?>?,
       applicationConfiguration:
           json[r'applicationConfiguration'] as Map<String, Object?>?,
-      debug: json[r'debug'] as bool? ?? false,
+      debug: json[r'debug'] as bool?,
       id: json[r'id'] as String?,
       insertInstant:
           (json[r'insertInstant'] as num?)?.toInt() as ZonedDateTime?,
@@ -31104,7 +31547,9 @@ class SteamIdentityProvider {
     if (applicationConfiguration != null) {
       json[r'applicationConfiguration'] = applicationConfiguration;
     }
-    json[r'debug'] = debug;
+    if (debug != null) {
+      json[r'debug'] = debug;
+    }
     if (id != null) {
       json[r'id'] = id;
     }
@@ -31403,21 +31848,20 @@ class SystemConfigurationResponse {
 }
 
 class SystemLogsExportRequest {
-  final bool includeArchived;
+  final bool? includeArchived;
   final int? lastnBytes;
   final String? dateTimeSecondsFormat;
   final ZoneId? zoneId;
 
   SystemLogsExportRequest(
-      {bool? includeArchived,
+      {this.includeArchived,
       this.lastnBytes,
       this.dateTimeSecondsFormat,
-      this.zoneId})
-      : includeArchived = includeArchived ?? false;
+      this.zoneId});
 
   factory SystemLogsExportRequest.fromJson(Map<String, Object?> json) {
     return SystemLogsExportRequest(
-      includeArchived: json[r'includeArchived'] as bool? ?? false,
+      includeArchived: json[r'includeArchived'] as bool?,
       lastnBytes: (json[r'lastNBytes'] as num?)?.toInt(),
       dateTimeSecondsFormat: json[r'dateTimeSecondsFormat'] as String?,
       zoneId: json[r'zoneId'] as ZoneId?,
@@ -31431,7 +31875,9 @@ class SystemLogsExportRequest {
     var zoneId = this.zoneId;
 
     final json = <String, Object?>{};
-    json[r'includeArchived'] = includeArchived;
+    if (includeArchived != null) {
+      json[r'includeArchived'] = includeArchived;
+    }
     if (lastnBytes != null) {
       json[r'lastNBytes'] = lastnBytes;
     }
@@ -31461,10 +31907,9 @@ class SystemLogsExportRequest {
 
 class SystemTrustedProxyConfiguration {
   final SystemTrustedProxyConfigurationPolicy? trustPolicy;
-  final List<String> trusted;
+  final List<String>? trusted;
 
-  SystemTrustedProxyConfiguration({this.trustPolicy, List<String>? trusted})
-      : trusted = trusted ?? [];
+  SystemTrustedProxyConfiguration({this.trustPolicy, this.trusted});
 
   factory SystemTrustedProxyConfiguration.fromJson(Map<String, Object?> json) {
     return SystemTrustedProxyConfiguration(
@@ -31473,9 +31918,8 @@ class SystemTrustedProxyConfiguration {
               json[r'trustPolicy']! as String)
           : null,
       trusted: (json[r'trusted'] as List<Object?>?)
-              ?.map((i) => i as String? ?? '')
-              .toList() ??
-          [],
+          ?.map((i) => i as String? ?? '')
+          .toList(),
     );
   }
 
@@ -31487,7 +31931,9 @@ class SystemTrustedProxyConfiguration {
     if (trustPolicy != null) {
       json[r'trustPolicy'] = trustPolicy.value;
     }
-    json[r'trusted'] = trusted;
+    if (trusted != null) {
+      json[r'trusted'] = trusted;
+    }
     return json;
   }
 
@@ -31986,8 +32432,8 @@ class Tenant {
   final Map<String, dynamic>? data;
   final TenantAccessControlConfiguration? accessControlConfiguration;
   final TenantCaptchaConfiguration? captchaConfiguration;
-  final bool configured;
-  final List<ConnectorPolicy> connectorPolicies;
+  final bool? configured;
+  final List<ConnectorPolicy>? connectorPolicies;
   final EmailConfiguration? emailConfiguration;
   final EventConfiguration? eventConfiguration;
   final ExternalIdentifierConfiguration? externalIdentifierConfiguration;
@@ -32024,8 +32470,8 @@ class Tenant {
       {this.data,
       this.accessControlConfiguration,
       this.captchaConfiguration,
-      bool? configured,
-      List<ConnectorPolicy>? connectorPolicies,
+      this.configured,
+      this.connectorPolicies,
       this.emailConfiguration,
       this.eventConfiguration,
       this.externalIdentifierConfiguration,
@@ -32056,9 +32502,7 @@ class Tenant {
       this.themeId,
       this.userDeletePolicy,
       this.usernameConfiguration,
-      this.webAuthnConfiguration})
-      : configured = configured ?? false,
-        connectorPolicies = connectorPolicies ?? [];
+      this.webAuthnConfiguration});
 
   factory Tenant.fromJson(Map<String, Object?> json) {
     return Tenant(
@@ -32071,12 +32515,11 @@ class Tenant {
           ? TenantCaptchaConfiguration.fromJson(
               json[r'captchaConfiguration']! as Map<String, Object?>)
           : null,
-      configured: json[r'configured'] as bool? ?? false,
+      configured: json[r'configured'] as bool?,
       connectorPolicies: (json[r'connectorPolicies'] as List<Object?>?)
-              ?.map((i) => ConnectorPolicy.fromJson(
-                  i as Map<String, Object?>? ?? const {}))
-              .toList() ??
-          [],
+          ?.map((i) =>
+              ConnectorPolicy.fromJson(i as Map<String, Object?>? ?? const {}))
+          .toList(),
       emailConfiguration: json[r'emailConfiguration'] != null
           ? EmailConfiguration.fromJson(
               json[r'emailConfiguration']! as Map<String, Object?>)
@@ -32237,9 +32680,13 @@ class Tenant {
     if (captchaConfiguration != null) {
       json[r'captchaConfiguration'] = captchaConfiguration.toJson();
     }
-    json[r'configured'] = configured;
-    json[r'connectorPolicies'] =
-        connectorPolicies.map((i) => i.toJson()).toList();
+    if (configured != null) {
+      json[r'configured'] = configured;
+    }
+    if (connectorPolicies != null) {
+      json[r'connectorPolicies'] =
+          connectorPolicies.map((i) => i.toJson()).toList();
+    }
     if (emailConfiguration != null) {
       json[r'emailConfiguration'] = emailConfiguration.toJson();
     }
@@ -32463,15 +32910,14 @@ class TenantCaptchaConfiguration {
   final String? secretKey;
   final String? siteKey;
   final num? threshold;
-  final bool enabled;
+  final bool? enabled;
 
   TenantCaptchaConfiguration(
       {this.captchaMethod,
       this.secretKey,
       this.siteKey,
       this.threshold,
-      bool? enabled})
-      : enabled = enabled ?? false;
+      this.enabled});
 
   factory TenantCaptchaConfiguration.fromJson(Map<String, Object?> json) {
     return TenantCaptchaConfiguration(
@@ -32481,7 +32927,7 @@ class TenantCaptchaConfiguration {
       secretKey: json[r'secretKey'] as String?,
       siteKey: json[r'siteKey'] as String?,
       threshold: json[r'threshold'] as num?,
-      enabled: json[r'enabled'] as bool? ?? false,
+      enabled: json[r'enabled'] as bool?,
     );
   }
 
@@ -32505,7 +32951,9 @@ class TenantCaptchaConfiguration {
     if (threshold != null) {
       json[r'threshold'] = threshold;
     }
-    json[r'enabled'] = enabled;
+    if (enabled != null) {
+      json[r'enabled'] = enabled;
+    }
     return json;
   }
 
@@ -32528,15 +32976,14 @@ class TenantCaptchaConfiguration {
 /// Request for the Tenant API to delete a tenant rather than using the URL
 /// parameters.
 class TenantDeleteRequest {
-  final bool async$;
+  final bool? async$;
   final EventInfo? eventInfo;
 
-  TenantDeleteRequest({bool? async$, this.eventInfo})
-      : async$ = async$ ?? false;
+  TenantDeleteRequest({this.async$, this.eventInfo});
 
   factory TenantDeleteRequest.fromJson(Map<String, Object?> json) {
     return TenantDeleteRequest(
-      async$: json[r'async'] as bool? ?? false,
+      async$: json[r'async'] as bool?,
       eventInfo: json[r'eventInfo'] != null
           ? EventInfo.fromJson(json[r'eventInfo']! as Map<String, Object?>)
           : null,
@@ -32548,7 +32995,9 @@ class TenantDeleteRequest {
     var eventInfo = this.eventInfo;
 
     final json = <String, Object?>{};
-    json[r'async'] = async$;
+    if (async$ != null) {
+      json[r'async'] = async$;
+    }
     if (eventInfo != null) {
       json[r'eventInfo'] = eventInfo.toJson();
     }
@@ -32694,14 +33143,13 @@ class TenantLambdaConfiguration {
 }
 
 class TenantLoginConfiguration {
-  final bool requireAuthentication;
+  final bool? requireAuthentication;
 
-  TenantLoginConfiguration({bool? requireAuthentication})
-      : requireAuthentication = requireAuthentication ?? false;
+  TenantLoginConfiguration({this.requireAuthentication});
 
   factory TenantLoginConfiguration.fromJson(Map<String, Object?> json) {
     return TenantLoginConfiguration(
-      requireAuthentication: json[r'requireAuthentication'] as bool? ?? false,
+      requireAuthentication: json[r'requireAuthentication'] as bool?,
     );
   }
 
@@ -32709,7 +33157,9 @@ class TenantLoginConfiguration {
     var requireAuthentication = this.requireAuthentication;
 
     final json = <String, Object?>{};
-    json[r'requireAuthentication'] = requireAuthentication;
+    if (requireAuthentication != null) {
+      json[r'requireAuthentication'] = requireAuthentication;
+    }
     return json;
   }
 
@@ -32918,16 +33368,14 @@ class TenantRateLimitConfiguration {
 }
 
 class TenantRegistrationConfiguration {
-  final List<dynamic> blockedDomains;
+  final List<dynamic>? blockedDomains;
 
-  TenantRegistrationConfiguration({List<dynamic>? blockedDomains})
-      : blockedDomains = blockedDomains ?? [];
+  TenantRegistrationConfiguration({this.blockedDomains});
 
   factory TenantRegistrationConfiguration.fromJson(Map<String, Object?> json) {
     return TenantRegistrationConfiguration(
       blockedDomains:
-          (json[r'blockedDomains'] as List<Object?>?)?.map((i) => i).toList() ??
-              [],
+          (json[r'blockedDomains'] as List<Object?>?)?.map((i) => i).toList(),
     );
   }
 
@@ -32935,7 +33383,9 @@ class TenantRegistrationConfiguration {
     var blockedDomains = this.blockedDomains;
 
     final json = <String, Object?>{};
-    json[r'blockedDomains'] = blockedDomains;
+    if (blockedDomains != null) {
+      json[r'blockedDomains'] = blockedDomains;
+    }
     return json;
   }
 
@@ -32949,15 +33399,11 @@ class TenantRegistrationConfiguration {
 class TenantRequest {
   final String? sourceTenantId;
   final Tenant? tenant;
-  final List<String> webhookIds;
+  final List<String>? webhookIds;
   final EventInfo? eventInfo;
 
   TenantRequest(
-      {this.sourceTenantId,
-      this.tenant,
-      List<String>? webhookIds,
-      this.eventInfo})
-      : webhookIds = webhookIds ?? [];
+      {this.sourceTenantId, this.tenant, this.webhookIds, this.eventInfo});
 
   factory TenantRequest.fromJson(Map<String, Object?> json) {
     return TenantRequest(
@@ -32966,9 +33412,8 @@ class TenantRequest {
           ? Tenant.fromJson(json[r'tenant']! as Map<String, Object?>)
           : null,
       webhookIds: (json[r'webhookIds'] as List<Object?>?)
-              ?.map((i) => i as String? ?? '')
-              .toList() ??
-          [],
+          ?.map((i) => i as String? ?? '')
+          .toList(),
       eventInfo: json[r'eventInfo'] != null
           ? EventInfo.fromJson(json[r'eventInfo']! as Map<String, Object?>)
           : null,
@@ -32988,7 +33433,9 @@ class TenantRequest {
     if (tenant != null) {
       json[r'tenant'] = tenant.toJson();
     }
-    json[r'webhookIds'] = webhookIds;
+    if (webhookIds != null) {
+      json[r'webhookIds'] = webhookIds;
+    }
     if (eventInfo != null) {
       json[r'eventInfo'] = eventInfo.toJson();
     }
@@ -33011,10 +33458,9 @@ class TenantRequest {
 
 class TenantResponse {
   final Tenant? tenant;
-  final List<Tenant> tenants;
+  final List<Tenant>? tenants;
 
-  TenantResponse({this.tenant, List<Tenant>? tenants})
-      : tenants = tenants ?? [];
+  TenantResponse({this.tenant, this.tenants});
 
   factory TenantResponse.fromJson(Map<String, Object?> json) {
     return TenantResponse(
@@ -33022,10 +33468,8 @@ class TenantResponse {
           ? Tenant.fromJson(json[r'tenant']! as Map<String, Object?>)
           : null,
       tenants: (json[r'tenants'] as List<Object?>?)
-              ?.map((i) =>
-                  Tenant.fromJson(i as Map<String, Object?>? ?? const {}))
-              .toList() ??
-          [],
+          ?.map((i) => Tenant.fromJson(i as Map<String, Object?>? ?? const {}))
+          .toList(),
     );
   }
 
@@ -33037,7 +33481,9 @@ class TenantResponse {
     if (tenant != null) {
       json[r'tenant'] = tenant.toJson();
     }
-    json[r'tenants'] = tenants.map((i) => i.toJson()).toList();
+    if (tenants != null) {
+      json[r'tenants'] = tenants.map((i) => i.toJson()).toList();
+    }
     return json;
   }
 
@@ -33053,21 +33499,20 @@ class TenantSCIMServerConfiguration {
   final String? clientEntityTypeId;
   final Map<String, dynamic>? schemas;
   final String? serverEntityTypeId;
-  final bool enabled;
+  final bool? enabled;
 
   TenantSCIMServerConfiguration(
       {this.clientEntityTypeId,
       this.schemas,
       this.serverEntityTypeId,
-      bool? enabled})
-      : enabled = enabled ?? false;
+      this.enabled});
 
   factory TenantSCIMServerConfiguration.fromJson(Map<String, Object?> json) {
     return TenantSCIMServerConfiguration(
       clientEntityTypeId: json[r'clientEntityTypeId'] as String?,
       schemas: json[r'schemas'] as Map<String, Object?>?,
       serverEntityTypeId: json[r'serverEntityTypeId'] as String?,
-      enabled: json[r'enabled'] as bool? ?? false,
+      enabled: json[r'enabled'] as bool?,
     );
   }
 
@@ -33087,7 +33532,9 @@ class TenantSCIMServerConfiguration {
     if (serverEntityTypeId != null) {
       json[r'serverEntityTypeId'] = serverEntityTypeId;
     }
-    json[r'enabled'] = enabled;
+    if (enabled != null) {
+      json[r'enabled'] = enabled;
+    }
     return json;
   }
 
@@ -33221,19 +33668,16 @@ class TenantSearchRequest {
 
 /// Tenant search response
 class TenantSearchResponse {
-  final List<Tenant> tenants;
+  final List<Tenant>? tenants;
   final int? total;
 
-  TenantSearchResponse({List<Tenant>? tenants, this.total})
-      : tenants = tenants ?? [];
+  TenantSearchResponse({this.tenants, this.total});
 
   factory TenantSearchResponse.fromJson(Map<String, Object?> json) {
     return TenantSearchResponse(
       tenants: (json[r'tenants'] as List<Object?>?)
-              ?.map((i) =>
-                  Tenant.fromJson(i as Map<String, Object?>? ?? const {}))
-              .toList() ??
-          [],
+          ?.map((i) => Tenant.fromJson(i as Map<String, Object?>? ?? const {}))
+          .toList(),
       total: (json[r'total'] as num?)?.toInt(),
     );
   }
@@ -33243,7 +33687,9 @@ class TenantSearchResponse {
     var total = this.total;
 
     final json = <String, Object?>{};
-    json[r'tenants'] = tenants.map((i) => i.toJson()).toList();
+    if (tenants != null) {
+      json[r'tenants'] = tenants.map((i) => i.toJson()).toList();
+    }
     if (total != null) {
       json[r'total'] = total;
     }
@@ -33365,21 +33811,19 @@ class TenantUsernameConfiguration {
 /// Tenant-level configuration for WebAuthn
 class TenantWebAuthnConfiguration {
   final TenantWebAuthnWorkflowConfiguration? bootstrapWorkflow;
-  final bool debug;
+  final bool? debug;
   final TenantWebAuthnWorkflowConfiguration? reauthenticationWorkflow;
   final String? relyingPartyId;
   final String? relyingPartyName;
-  final bool enabled;
+  final bool? enabled;
 
   TenantWebAuthnConfiguration(
       {this.bootstrapWorkflow,
-      bool? debug,
+      this.debug,
       this.reauthenticationWorkflow,
       this.relyingPartyId,
       this.relyingPartyName,
-      bool? enabled})
-      : debug = debug ?? false,
-        enabled = enabled ?? false;
+      this.enabled});
 
   factory TenantWebAuthnConfiguration.fromJson(Map<String, Object?> json) {
     return TenantWebAuthnConfiguration(
@@ -33387,14 +33831,14 @@ class TenantWebAuthnConfiguration {
           ? TenantWebAuthnWorkflowConfiguration.fromJson(
               json[r'bootstrapWorkflow']! as Map<String, Object?>)
           : null,
-      debug: json[r'debug'] as bool? ?? false,
+      debug: json[r'debug'] as bool?,
       reauthenticationWorkflow: json[r'reauthenticationWorkflow'] != null
           ? TenantWebAuthnWorkflowConfiguration.fromJson(
               json[r'reauthenticationWorkflow']! as Map<String, Object?>)
           : null,
       relyingPartyId: json[r'relyingPartyId'] as String?,
       relyingPartyName: json[r'relyingPartyName'] as String?,
-      enabled: json[r'enabled'] as bool? ?? false,
+      enabled: json[r'enabled'] as bool?,
     );
   }
 
@@ -33410,7 +33854,9 @@ class TenantWebAuthnConfiguration {
     if (bootstrapWorkflow != null) {
       json[r'bootstrapWorkflow'] = bootstrapWorkflow.toJson();
     }
-    json[r'debug'] = debug;
+    if (debug != null) {
+      json[r'debug'] = debug;
+    }
     if (reauthenticationWorkflow != null) {
       json[r'reauthenticationWorkflow'] = reauthenticationWorkflow.toJson();
     }
@@ -33420,7 +33866,9 @@ class TenantWebAuthnConfiguration {
     if (relyingPartyName != null) {
       json[r'relyingPartyName'] = relyingPartyName;
     }
-    json[r'enabled'] = enabled;
+    if (enabled != null) {
+      json[r'enabled'] = enabled;
+    }
     return json;
   }
 
@@ -33446,13 +33894,12 @@ class TenantWebAuthnConfiguration {
 class TenantWebAuthnWorkflowConfiguration {
   final AuthenticatorAttachmentPreference? authenticatorAttachmentPreference;
   final UserVerificationRequirement? userVerificationRequirement;
-  final bool enabled;
+  final bool? enabled;
 
   TenantWebAuthnWorkflowConfiguration(
       {this.authenticatorAttachmentPreference,
       this.userVerificationRequirement,
-      bool? enabled})
-      : enabled = enabled ?? false;
+      this.enabled});
 
   factory TenantWebAuthnWorkflowConfiguration.fromJson(
       Map<String, Object?> json) {
@@ -33466,7 +33913,7 @@ class TenantWebAuthnWorkflowConfiguration {
           ? UserVerificationRequirement.fromValue(
               json[r'userVerificationRequirement']! as String)
           : null,
-      enabled: json[r'enabled'] as bool? ?? false,
+      enabled: json[r'enabled'] as bool?,
     );
   }
 
@@ -33484,7 +33931,9 @@ class TenantWebAuthnWorkflowConfiguration {
     if (userVerificationRequirement != null) {
       json[r'userVerificationRequirement'] = userVerificationRequirement.value;
     }
-    json[r'enabled'] = enabled;
+    if (enabled != null) {
+      json[r'enabled'] = enabled;
+    }
     return json;
   }
 
@@ -33768,9 +34217,9 @@ class ThemeRequest {
 /// Theme API response object.
 class ThemeResponse {
   final Theme? theme;
-  final List<Theme> themes;
+  final List<Theme>? themes;
 
-  ThemeResponse({this.theme, List<Theme>? themes}) : themes = themes ?? [];
+  ThemeResponse({this.theme, this.themes});
 
   factory ThemeResponse.fromJson(Map<String, Object?> json) {
     return ThemeResponse(
@@ -33778,10 +34227,8 @@ class ThemeResponse {
           ? Theme.fromJson(json[r'theme']! as Map<String, Object?>)
           : null,
       themes: (json[r'themes'] as List<Object?>?)
-              ?.map(
-                  (i) => Theme.fromJson(i as Map<String, Object?>? ?? const {}))
-              .toList() ??
-          [],
+          ?.map((i) => Theme.fromJson(i as Map<String, Object?>? ?? const {}))
+          .toList(),
     );
   }
 
@@ -33793,7 +34240,9 @@ class ThemeResponse {
     if (theme != null) {
       json[r'theme'] = theme.toJson();
     }
-    json[r'themes'] = themes.map((i) => i.toJson()).toList();
+    if (themes != null) {
+      json[r'themes'] = themes.map((i) => i.toJson()).toList();
+    }
     return json;
   }
 
@@ -33908,19 +34357,16 @@ class ThemeSearchRequest {
 
 /// Search response for Themes
 class ThemeSearchResponse {
-  final List<Theme> themes;
+  final List<Theme>? themes;
   final int? total;
 
-  ThemeSearchResponse({List<Theme>? themes, this.total})
-      : themes = themes ?? [];
+  ThemeSearchResponse({this.themes, this.total});
 
   factory ThemeSearchResponse.fromJson(Map<String, Object?> json) {
     return ThemeSearchResponse(
       themes: (json[r'themes'] as List<Object?>?)
-              ?.map(
-                  (i) => Theme.fromJson(i as Map<String, Object?>? ?? const {}))
-              .toList() ??
-          [],
+          ?.map((i) => Theme.fromJson(i as Map<String, Object?>? ?? const {}))
+          .toList(),
       total: (json[r'total'] as num?)?.toInt(),
     );
   }
@@ -33930,7 +34376,9 @@ class ThemeSearchResponse {
     var total = this.total;
 
     final json = <String, Object?>{};
-    json[r'themes'] = themes.map((i) => i.toJson()).toList();
+    if (themes != null) {
+      json[r'themes'] = themes.map((i) => i.toJson()).toList();
+    }
     if (total != null) {
       json[r'total'] = total;
     }
@@ -33949,18 +34397,17 @@ class ThemeSearchResponse {
 class TimeBasedDeletePolicy {
   final ZonedDateTime? enabledInstant;
   final int? numberOfDaysToRetain;
-  final bool enabled;
+  final bool? enabled;
 
   TimeBasedDeletePolicy(
-      {this.enabledInstant, this.numberOfDaysToRetain, bool? enabled})
-      : enabled = enabled ?? false;
+      {this.enabledInstant, this.numberOfDaysToRetain, this.enabled});
 
   factory TimeBasedDeletePolicy.fromJson(Map<String, Object?> json) {
     return TimeBasedDeletePolicy(
       enabledInstant:
           (json[r'enabledInstant'] as num?)?.toInt() as ZonedDateTime?,
       numberOfDaysToRetain: (json[r'numberOfDaysToRetain'] as num?)?.toInt(),
-      enabled: json[r'enabled'] as bool? ?? false,
+      enabled: json[r'enabled'] as bool?,
     );
   }
 
@@ -33976,7 +34423,9 @@ class TimeBasedDeletePolicy {
     if (numberOfDaysToRetain != null) {
       json[r'numberOfDaysToRetain'] = numberOfDaysToRetain;
     }
-    json[r'enabled'] = enabled;
+    if (enabled != null) {
+      json[r'enabled'] = enabled;
+    }
     return json;
   }
 
@@ -34093,7 +34542,7 @@ class TwilioMessengerConfiguration {
   final String? messagingServiceSid;
   final String? url;
   final Map<String, dynamic>? data;
-  final bool debug;
+  final bool? debug;
   final String? id;
   final ZonedDateTime? insertInstant;
   final ZonedDateTime? lastUpdateInstant;
@@ -34108,14 +34557,13 @@ class TwilioMessengerConfiguration {
       this.messagingServiceSid,
       this.url,
       this.data,
-      bool? debug,
+      this.debug,
       this.id,
       this.insertInstant,
       this.lastUpdateInstant,
       this.name,
       this.transport,
-      this.type})
-      : debug = debug ?? false;
+      this.type});
 
   factory TwilioMessengerConfiguration.fromJson(Map<String, Object?> json) {
     return TwilioMessengerConfiguration(
@@ -34125,7 +34573,7 @@ class TwilioMessengerConfiguration {
       messagingServiceSid: json[r'messagingServiceSid'] as String?,
       url: json[r'url'] as String?,
       data: json[r'data'] as Map<String, Object?>?,
-      debug: json[r'debug'] as bool? ?? false,
+      debug: json[r'debug'] as bool?,
       id: json[r'id'] as String?,
       insertInstant:
           (json[r'insertInstant'] as num?)?.toInt() as ZonedDateTime?,
@@ -34173,7 +34621,9 @@ class TwilioMessengerConfiguration {
     if (data != null) {
       json[r'data'] = data;
     }
-    json[r'debug'] = debug;
+    if (debug != null) {
+      json[r'debug'] = debug;
+    }
     if (id != null) {
       json[r'id'] = id;
     }
@@ -34233,7 +34683,7 @@ class TwitchApplicationConfiguration {
   final String? clientSecret;
   final String? scope;
   final Map<String, dynamic>? data;
-  final bool createRegistration;
+  final bool? createRegistration;
 
   TwitchApplicationConfiguration(
       {this.buttonText,
@@ -34241,8 +34691,7 @@ class TwitchApplicationConfiguration {
       this.clientSecret,
       this.scope,
       this.data,
-      bool? createRegistration})
-      : createRegistration = createRegistration ?? false;
+      this.createRegistration});
 
   factory TwitchApplicationConfiguration.fromJson(Map<String, Object?> json) {
     return TwitchApplicationConfiguration(
@@ -34251,7 +34700,7 @@ class TwitchApplicationConfiguration {
       clientSecret: json[r'client_secret'] as String?,
       scope: json[r'scope'] as String?,
       data: json[r'data'] as Map<String, Object?>?,
-      createRegistration: json[r'createRegistration'] as bool? ?? false,
+      createRegistration: json[r'createRegistration'] as bool?,
     );
   }
 
@@ -34279,7 +34728,9 @@ class TwitchApplicationConfiguration {
     if (data != null) {
       json[r'data'] = data;
     }
-    json[r'createRegistration'] = createRegistration;
+    if (createRegistration != null) {
+      json[r'createRegistration'] = createRegistration;
+    }
     return json;
   }
 
@@ -34309,7 +34760,7 @@ class TwitchIdentityProvider {
   final String? scope;
   final Map<String, dynamic>? data;
   final Map<String, dynamic>? applicationConfiguration;
-  final bool debug;
+  final bool? debug;
   final String? id;
   final ZonedDateTime? insertInstant;
   final ProviderLambdaConfiguration? lambdaConfiguration;
@@ -34326,7 +34777,7 @@ class TwitchIdentityProvider {
       this.scope,
       this.data,
       this.applicationConfiguration,
-      bool? debug,
+      this.debug,
       this.id,
       this.insertInstant,
       this.lambdaConfiguration,
@@ -34334,8 +34785,7 @@ class TwitchIdentityProvider {
       this.linkingStrategy,
       this.name,
       this.tenantConfiguration,
-      this.type})
-      : debug = debug ?? false;
+      this.type});
 
   factory TwitchIdentityProvider.fromJson(Map<String, Object?> json) {
     return TwitchIdentityProvider(
@@ -34346,7 +34796,7 @@ class TwitchIdentityProvider {
       data: json[r'data'] as Map<String, Object?>?,
       applicationConfiguration:
           json[r'applicationConfiguration'] as Map<String, Object?>?,
-      debug: json[r'debug'] as bool? ?? false,
+      debug: json[r'debug'] as bool?,
       id: json[r'id'] as String?,
       insertInstant:
           (json[r'insertInstant'] as num?)?.toInt() as ZonedDateTime?,
@@ -34405,7 +34855,9 @@ class TwitchIdentityProvider {
     if (applicationConfiguration != null) {
       json[r'applicationConfiguration'] = applicationConfiguration;
     }
-    json[r'debug'] = debug;
+    if (debug != null) {
+      json[r'debug'] = debug;
+    }
     if (id != null) {
       json[r'id'] = id;
     }
@@ -34475,15 +34927,14 @@ class TwitterApplicationConfiguration {
   final String? consumerKey;
   final String? consumerSecret;
   final Map<String, dynamic>? data;
-  final bool createRegistration;
+  final bool? createRegistration;
 
   TwitterApplicationConfiguration(
       {this.buttonText,
       this.consumerKey,
       this.consumerSecret,
       this.data,
-      bool? createRegistration})
-      : createRegistration = createRegistration ?? false;
+      this.createRegistration});
 
   factory TwitterApplicationConfiguration.fromJson(Map<String, Object?> json) {
     return TwitterApplicationConfiguration(
@@ -34491,7 +34942,7 @@ class TwitterApplicationConfiguration {
       consumerKey: json[r'consumerKey'] as String?,
       consumerSecret: json[r'consumerSecret'] as String?,
       data: json[r'data'] as Map<String, Object?>?,
-      createRegistration: json[r'createRegistration'] as bool? ?? false,
+      createRegistration: json[r'createRegistration'] as bool?,
     );
   }
 
@@ -34515,7 +34966,9 @@ class TwitterApplicationConfiguration {
     if (data != null) {
       json[r'data'] = data;
     }
-    json[r'createRegistration'] = createRegistration;
+    if (createRegistration != null) {
+      json[r'createRegistration'] = createRegistration;
+    }
     return json;
   }
 
@@ -34542,7 +34995,7 @@ class TwitterIdentityProvider {
   final String? consumerSecret;
   final Map<String, dynamic>? data;
   final Map<String, dynamic>? applicationConfiguration;
-  final bool debug;
+  final bool? debug;
   final String? id;
   final ZonedDateTime? insertInstant;
   final ProviderLambdaConfiguration? lambdaConfiguration;
@@ -34558,7 +35011,7 @@ class TwitterIdentityProvider {
       this.consumerSecret,
       this.data,
       this.applicationConfiguration,
-      bool? debug,
+      this.debug,
       this.id,
       this.insertInstant,
       this.lambdaConfiguration,
@@ -34566,8 +35019,7 @@ class TwitterIdentityProvider {
       this.linkingStrategy,
       this.name,
       this.tenantConfiguration,
-      this.type})
-      : debug = debug ?? false;
+      this.type});
 
   factory TwitterIdentityProvider.fromJson(Map<String, Object?> json) {
     return TwitterIdentityProvider(
@@ -34577,7 +35029,7 @@ class TwitterIdentityProvider {
       data: json[r'data'] as Map<String, Object?>?,
       applicationConfiguration:
           json[r'applicationConfiguration'] as Map<String, Object?>?,
-      debug: json[r'debug'] as bool? ?? false,
+      debug: json[r'debug'] as bool?,
       id: json[r'id'] as String?,
       insertInstant:
           (json[r'insertInstant'] as num?)?.toInt() as ZonedDateTime?,
@@ -34632,7 +35084,9 @@ class TwitterIdentityProvider {
     if (applicationConfiguration != null) {
       json[r'applicationConfiguration'] = applicationConfiguration;
     }
-    json[r'debug'] = debug;
+    if (debug != null) {
+      json[r'debug'] = debug;
+    }
     if (id != null) {
       json[r'id'] = id;
     }
@@ -34805,33 +35259,30 @@ class TwoFactorEnableDisableSendRequest {
 
 class TwoFactorLoginRequest {
   final String? code;
-  final bool trustComputer;
+  final bool? trustComputer;
   final String? twoFactorId;
   final String? userId;
   final String? applicationId;
   final String? ipAddress;
   final MetaData? metaData;
-  final bool newDevice;
-  final bool noJwt;
+  final bool? newDevice;
+  final bool? noJwt;
 
   TwoFactorLoginRequest(
       {this.code,
-      bool? trustComputer,
+      this.trustComputer,
       this.twoFactorId,
       this.userId,
       this.applicationId,
       this.ipAddress,
       this.metaData,
-      bool? newDevice,
-      bool? noJwt})
-      : trustComputer = trustComputer ?? false,
-        newDevice = newDevice ?? false,
-        noJwt = noJwt ?? false;
+      this.newDevice,
+      this.noJwt});
 
   factory TwoFactorLoginRequest.fromJson(Map<String, Object?> json) {
     return TwoFactorLoginRequest(
       code: json[r'code'] as String?,
-      trustComputer: json[r'trustComputer'] as bool? ?? false,
+      trustComputer: json[r'trustComputer'] as bool?,
       twoFactorId: json[r'twoFactorId'] as String?,
       userId: json[r'userId'] as String?,
       applicationId: json[r'applicationId'] as String?,
@@ -34839,8 +35290,8 @@ class TwoFactorLoginRequest {
       metaData: json[r'metaData'] != null
           ? MetaData.fromJson(json[r'metaData']! as Map<String, Object?>)
           : null,
-      newDevice: json[r'newDevice'] as bool? ?? false,
-      noJwt: json[r'noJWT'] as bool? ?? false,
+      newDevice: json[r'newDevice'] as bool?,
+      noJwt: json[r'noJWT'] as bool?,
     );
   }
 
@@ -34859,7 +35310,9 @@ class TwoFactorLoginRequest {
     if (code != null) {
       json[r'code'] = code;
     }
-    json[r'trustComputer'] = trustComputer;
+    if (trustComputer != null) {
+      json[r'trustComputer'] = trustComputer;
+    }
     if (twoFactorId != null) {
       json[r'twoFactorId'] = twoFactorId;
     }
@@ -34875,8 +35328,12 @@ class TwoFactorLoginRequest {
     if (metaData != null) {
       json[r'metaData'] = metaData.toJson();
     }
-    json[r'newDevice'] = newDevice;
-    json[r'noJWT'] = noJwt;
+    if (newDevice != null) {
+      json[r'newDevice'] = newDevice;
+    }
+    if (noJwt != null) {
+      json[r'noJWT'] = noJwt;
+    }
     return json;
   }
 
@@ -34908,7 +35365,7 @@ class TwoFactorMethod {
   final AuthenticatorConfiguration? authenticator;
   final String? email;
   final String? id;
-  final bool lastUsed;
+  final bool? lastUsed;
   final String? method;
   final String? mobilePhone;
   final String? secret;
@@ -34917,11 +35374,10 @@ class TwoFactorMethod {
       {this.authenticator,
       this.email,
       this.id,
-      bool? lastUsed,
+      this.lastUsed,
       this.method,
       this.mobilePhone,
-      this.secret})
-      : lastUsed = lastUsed ?? false;
+      this.secret});
 
   factory TwoFactorMethod.fromJson(Map<String, Object?> json) {
     return TwoFactorMethod(
@@ -34931,7 +35387,7 @@ class TwoFactorMethod {
           : null,
       email: json[r'email'] as String?,
       id: json[r'id'] as String?,
-      lastUsed: json[r'lastUsed'] as bool? ?? false,
+      lastUsed: json[r'lastUsed'] as bool?,
       method: json[r'method'] as String?,
       mobilePhone: json[r'mobilePhone'] as String?,
       secret: json[r'secret'] as String?,
@@ -34957,7 +35413,9 @@ class TwoFactorMethod {
     if (id != null) {
       json[r'id'] = id;
     }
-    json[r'lastUsed'] = lastUsed;
+    if (lastUsed != null) {
+      json[r'lastUsed'] = lastUsed;
+    }
     if (method != null) {
       json[r'method'] = method;
     }
@@ -34991,17 +35449,15 @@ class TwoFactorMethod {
 }
 
 class TwoFactorRecoveryCodeResponse {
-  final List<String> recoveryCodes;
+  final List<String>? recoveryCodes;
 
-  TwoFactorRecoveryCodeResponse({List<String>? recoveryCodes})
-      : recoveryCodes = recoveryCodes ?? [];
+  TwoFactorRecoveryCodeResponse({this.recoveryCodes});
 
   factory TwoFactorRecoveryCodeResponse.fromJson(Map<String, Object?> json) {
     return TwoFactorRecoveryCodeResponse(
       recoveryCodes: (json[r'recoveryCodes'] as List<Object?>?)
-              ?.map((i) => i as String? ?? '')
-              .toList() ??
-          [],
+          ?.map((i) => i as String? ?? '')
+          .toList(),
     );
   }
 
@@ -35009,7 +35465,9 @@ class TwoFactorRecoveryCodeResponse {
     var recoveryCodes = this.recoveryCodes;
 
     final json = <String, Object?>{};
-    json[r'recoveryCodes'] = recoveryCodes;
+    if (recoveryCodes != null) {
+      json[r'recoveryCodes'] = recoveryCodes;
+    }
     return json;
   }
 
@@ -35135,18 +35593,16 @@ class TwoFactorRequest {
 
 class TwoFactorResponse {
   final String? code;
-  final List<String> recoveryCodes;
+  final List<String>? recoveryCodes;
 
-  TwoFactorResponse({this.code, List<String>? recoveryCodes})
-      : recoveryCodes = recoveryCodes ?? [];
+  TwoFactorResponse({this.code, this.recoveryCodes});
 
   factory TwoFactorResponse.fromJson(Map<String, Object?> json) {
     return TwoFactorResponse(
       code: json[r'code'] as String?,
       recoveryCodes: (json[r'recoveryCodes'] as List<Object?>?)
-              ?.map((i) => i as String? ?? '')
-              .toList() ??
-          [],
+          ?.map((i) => i as String? ?? '')
+          .toList(),
     );
   }
 
@@ -35158,7 +35614,9 @@ class TwoFactorResponse {
     if (code != null) {
       json[r'code'] = code;
     }
-    json[r'recoveryCodes'] = recoveryCodes;
+    if (recoveryCodes != null) {
+      json[r'recoveryCodes'] = recoveryCodes;
+    }
     return json;
   }
 
@@ -35322,21 +35780,18 @@ class TwoFactorStartRequest {
 
 class TwoFactorStartResponse {
   final String? code;
-  final List<TwoFactorMethod> methods;
+  final List<TwoFactorMethod>? methods;
   final String? twoFactorId;
 
-  TwoFactorStartResponse(
-      {this.code, List<TwoFactorMethod>? methods, this.twoFactorId})
-      : methods = methods ?? [];
+  TwoFactorStartResponse({this.code, this.methods, this.twoFactorId});
 
   factory TwoFactorStartResponse.fromJson(Map<String, Object?> json) {
     return TwoFactorStartResponse(
       code: json[r'code'] as String?,
       methods: (json[r'methods'] as List<Object?>?)
-              ?.map((i) => TwoFactorMethod.fromJson(
-                  i as Map<String, Object?>? ?? const {}))
-              .toList() ??
-          [],
+          ?.map((i) =>
+              TwoFactorMethod.fromJson(i as Map<String, Object?>? ?? const {}))
+          .toList(),
       twoFactorId: json[r'twoFactorId'] as String?,
     );
   }
@@ -35350,7 +35805,9 @@ class TwoFactorStartResponse {
     if (code != null) {
       json[r'code'] = code;
     }
-    json[r'methods'] = methods.map((i) => i.toJson()).toList();
+    if (methods != null) {
+      json[r'methods'] = methods.map((i) => i.toJson()).toList();
+    }
     if (twoFactorId != null) {
       json[r'twoFactorId'] = twoFactorId;
     }
@@ -35368,19 +35825,17 @@ class TwoFactorStartResponse {
 }
 
 class TwoFactorStatusResponse {
-  final List<TwoFactorTrust> trusts;
+  final List<TwoFactorTrust>? trusts;
   final String? twoFactorTrustId;
 
-  TwoFactorStatusResponse({List<TwoFactorTrust>? trusts, this.twoFactorTrustId})
-      : trusts = trusts ?? [];
+  TwoFactorStatusResponse({this.trusts, this.twoFactorTrustId});
 
   factory TwoFactorStatusResponse.fromJson(Map<String, Object?> json) {
     return TwoFactorStatusResponse(
       trusts: (json[r'trusts'] as List<Object?>?)
-              ?.map((i) => TwoFactorTrust.fromJson(
-                  i as Map<String, Object?>? ?? const {}))
-              .toList() ??
-          [],
+          ?.map((i) =>
+              TwoFactorTrust.fromJson(i as Map<String, Object?>? ?? const {}))
+          .toList(),
       twoFactorTrustId: json[r'twoFactorTrustId'] as String?,
     );
   }
@@ -35390,7 +35845,9 @@ class TwoFactorStatusResponse {
     var twoFactorTrustId = this.twoFactorTrustId;
 
     final json = <String, Object?>{};
-    json[r'trusts'] = trusts.map((i) => i.toJson()).toList();
+    if (trusts != null) {
+      json[r'trusts'] = trusts.map((i) => i.toJson()).toList();
+    }
     if (twoFactorTrustId != null) {
       json[r'twoFactorTrustId'] = twoFactorTrustId;
     }
@@ -35498,11 +35955,10 @@ class UniqueUsernameConfiguration {
   final int? numberOfDigits;
   final String? separator;
   final UniqueUsernameStrategy? strategy;
-  final bool enabled;
+  final bool? enabled;
 
   UniqueUsernameConfiguration(
-      {this.numberOfDigits, this.separator, this.strategy, bool? enabled})
-      : enabled = enabled ?? false;
+      {this.numberOfDigits, this.separator, this.strategy, this.enabled});
 
   factory UniqueUsernameConfiguration.fromJson(Map<String, Object?> json) {
     return UniqueUsernameConfiguration(
@@ -35511,7 +35967,7 @@ class UniqueUsernameConfiguration {
       strategy: json[r'strategy'] != null
           ? UniqueUsernameStrategy.fromValue(json[r'strategy']! as String)
           : null,
-      enabled: json[r'enabled'] as bool? ?? false,
+      enabled: json[r'enabled'] as bool?,
     );
   }
 
@@ -35531,7 +35987,9 @@ class UniqueUsernameConfiguration {
     if (strategy != null) {
       json[r'strategy'] = strategy.value;
     }
-    json[r'enabled'] = enabled;
+    if (enabled != null) {
+      json[r'enabled'] = enabled;
+    }
     return json;
   }
 
@@ -35553,8 +36011,8 @@ class UniqueUsernameConfiguration {
 /// the user including birthdate, registration information  preferred languages,
 /// global attributes, etc.
 class User {
-  final List<Locale> preferredLanguages;
-  final bool active;
+  final List<Locale>? preferredLanguages;
+  final bool? active;
   final LocalDate? birthDate;
   final String? cleanSpeakId;
   final Map<String, dynamic>? data;
@@ -35572,8 +36030,8 @@ class User {
   final String? tenantId;
   final ZoneId? timezone;
   final UserTwoFactorConfiguration? twoFactor;
-  final List<GroupMember> memberships;
-  final List<UserRegistration> registrations;
+  final List<GroupMember>? memberships;
+  final List<UserRegistration>? registrations;
   final ZonedDateTime? breachedPasswordLastCheckedInstant;
   final BreachedPasswordStatus? breachedPasswordStatus;
   final String? connectorId;
@@ -35583,18 +36041,18 @@ class User {
   final ZonedDateTime? lastLoginInstant;
   final String? password;
   final ChangePasswordReason? passwordChangeReason;
-  final bool passwordChangeRequired;
+  final bool? passwordChangeRequired;
   final ZonedDateTime? passwordLastUpdateInstant;
   final String? salt;
   final String? uniqueUsername;
   final String? username;
   final ContentStatus? usernameStatus;
-  final bool verified;
+  final bool? verified;
   final ZonedDateTime? verifiedInstant;
 
   User(
-      {List<Locale>? preferredLanguages,
-      bool? active,
+      {this.preferredLanguages,
+      this.active,
       this.birthDate,
       this.cleanSpeakId,
       this.data,
@@ -35612,8 +36070,8 @@ class User {
       this.tenantId,
       this.timezone,
       this.twoFactor,
-      List<GroupMember>? memberships,
-      List<UserRegistration>? registrations,
+      this.memberships,
+      this.registrations,
       this.breachedPasswordLastCheckedInstant,
       this.breachedPasswordStatus,
       this.connectorId,
@@ -35623,28 +36081,21 @@ class User {
       this.lastLoginInstant,
       this.password,
       this.passwordChangeReason,
-      bool? passwordChangeRequired,
+      this.passwordChangeRequired,
       this.passwordLastUpdateInstant,
       this.salt,
       this.uniqueUsername,
       this.username,
       this.usernameStatus,
-      bool? verified,
-      this.verifiedInstant})
-      : preferredLanguages = preferredLanguages ?? [],
-        active = active ?? false,
-        memberships = memberships ?? [],
-        registrations = registrations ?? [],
-        passwordChangeRequired = passwordChangeRequired ?? false,
-        verified = verified ?? false;
+      this.verified,
+      this.verifiedInstant});
 
   factory User.fromJson(Map<String, Object?> json) {
     return User(
       preferredLanguages: (json[r'preferredLanguages'] as List<Object?>?)
-              ?.map((i) => Locale(i as String? ?? ''))
-              .toList() ??
-          [],
-      active: json[r'active'] as bool? ?? false,
+          ?.map((i) => Locale(i as String? ?? ''))
+          .toList(),
+      active: json[r'active'] as bool?,
       birthDate: json[r'birthDate'] as LocalDate?,
       cleanSpeakId: json[r'cleanSpeakId'] as String?,
       data: json[r'data'] as Map<String, Object?>?,
@@ -35668,15 +36119,13 @@ class User {
               json[r'twoFactor']! as Map<String, Object?>)
           : null,
       memberships: (json[r'memberships'] as List<Object?>?)
-              ?.map((i) =>
-                  GroupMember.fromJson(i as Map<String, Object?>? ?? const {}))
-              .toList() ??
-          [],
+          ?.map((i) =>
+              GroupMember.fromJson(i as Map<String, Object?>? ?? const {}))
+          .toList(),
       registrations: (json[r'registrations'] as List<Object?>?)
-              ?.map((i) => UserRegistration.fromJson(
-                  i as Map<String, Object?>? ?? const {}))
-              .toList() ??
-          [],
+          ?.map((i) =>
+              UserRegistration.fromJson(i as Map<String, Object?>? ?? const {}))
+          .toList(),
       breachedPasswordLastCheckedInstant:
           (json[r'breachedPasswordLastCheckedInstant'] as num?)?.toInt()
               as ZonedDateTime?,
@@ -35695,7 +36144,7 @@ class User {
           ? ChangePasswordReason.fromValue(
               json[r'passwordChangeReason']! as String)
           : null,
-      passwordChangeRequired: json[r'passwordChangeRequired'] as bool? ?? false,
+      passwordChangeRequired: json[r'passwordChangeRequired'] as bool?,
       passwordLastUpdateInstant: (json[r'passwordLastUpdateInstant'] as num?)
           ?.toInt() as ZonedDateTime?,
       salt: json[r'salt'] as String?,
@@ -35704,7 +36153,7 @@ class User {
       usernameStatus: json[r'usernameStatus'] != null
           ? ContentStatus.fromValue(json[r'usernameStatus']! as String)
           : null,
-      verified: json[r'verified'] as bool? ?? false,
+      verified: json[r'verified'] as bool?,
       verifiedInstant:
           (json[r'verifiedInstant'] as num?)?.toInt() as ZonedDateTime?,
     );
@@ -35752,9 +36201,13 @@ class User {
     var verifiedInstant = this.verifiedInstant;
 
     final json = <String, Object?>{};
-    json[r'preferredLanguages'] =
-        preferredLanguages.map((i) => i.toJson()).toList();
-    json[r'active'] = active;
+    if (preferredLanguages != null) {
+      json[r'preferredLanguages'] =
+          preferredLanguages.map((i) => i.toJson()).toList();
+    }
+    if (active != null) {
+      json[r'active'] = active;
+    }
     if (birthDate != null) {
       json[r'birthDate'] = birthDate.toJson();
     }
@@ -35806,8 +36259,12 @@ class User {
     if (twoFactor != null) {
       json[r'twoFactor'] = twoFactor.toJson();
     }
-    json[r'memberships'] = memberships.map((i) => i.toJson()).toList();
-    json[r'registrations'] = registrations.map((i) => i.toJson()).toList();
+    if (memberships != null) {
+      json[r'memberships'] = memberships.map((i) => i.toJson()).toList();
+    }
+    if (registrations != null) {
+      json[r'registrations'] = registrations.map((i) => i.toJson()).toList();
+    }
     if (breachedPasswordLastCheckedInstant != null) {
       json[r'breachedPasswordLastCheckedInstant'] =
           breachedPasswordLastCheckedInstant.toJson();
@@ -35836,7 +36293,9 @@ class User {
     if (passwordChangeReason != null) {
       json[r'passwordChangeReason'] = passwordChangeReason.value;
     }
-    json[r'passwordChangeRequired'] = passwordChangeRequired;
+    if (passwordChangeRequired != null) {
+      json[r'passwordChangeRequired'] = passwordChangeRequired;
+    }
     if (passwordLastUpdateInstant != null) {
       json[r'passwordLastUpdateInstant'] = passwordLastUpdateInstant.toJson();
     }
@@ -35852,7 +36311,9 @@ class User {
     if (usernameStatus != null) {
       json[r'usernameStatus'] = usernameStatus.value;
     }
-    json[r'verified'] = verified;
+    if (verified != null) {
+      json[r'verified'] = verified;
+    }
     if (verifiedInstant != null) {
       json[r'verifiedInstant'] = verifiedInstant.toJson();
     }
@@ -35947,61 +36408,52 @@ class User {
 
 /// An action that can be executed on a user (discipline or reward potentially).
 class UserAction {
-  final bool active;
+  final bool? active;
   final String? cancelEmailTemplateId;
   final String? endEmailTemplateId;
   final String? id;
-  final bool includeEmailInEventJson;
+  final bool? includeEmailInEventJson;
   final ZonedDateTime? insertInstant;
   final ZonedDateTime? lastUpdateInstant;
   final LocalizedStrings? localizedNames;
   final String? modifyEmailTemplateId;
   final String? name;
-  final List<UserActionOption> options;
-  final bool preventLogin;
-  final bool sendEndEvent;
+  final List<UserActionOption>? options;
+  final bool? preventLogin;
+  final bool? sendEndEvent;
   final String? startEmailTemplateId;
-  final bool temporal;
+  final bool? temporal;
   final TransactionType? transactionType;
-  final bool userEmailingEnabled;
-  final bool userNotificationsEnabled;
+  final bool? userEmailingEnabled;
+  final bool? userNotificationsEnabled;
 
   UserAction(
-      {bool? active,
+      {this.active,
       this.cancelEmailTemplateId,
       this.endEmailTemplateId,
       this.id,
-      bool? includeEmailInEventJson,
+      this.includeEmailInEventJson,
       this.insertInstant,
       this.lastUpdateInstant,
       this.localizedNames,
       this.modifyEmailTemplateId,
       this.name,
-      List<UserActionOption>? options,
-      bool? preventLogin,
-      bool? sendEndEvent,
+      this.options,
+      this.preventLogin,
+      this.sendEndEvent,
       this.startEmailTemplateId,
-      bool? temporal,
+      this.temporal,
       this.transactionType,
-      bool? userEmailingEnabled,
-      bool? userNotificationsEnabled})
-      : active = active ?? false,
-        includeEmailInEventJson = includeEmailInEventJson ?? false,
-        options = options ?? [],
-        preventLogin = preventLogin ?? false,
-        sendEndEvent = sendEndEvent ?? false,
-        temporal = temporal ?? false,
-        userEmailingEnabled = userEmailingEnabled ?? false,
-        userNotificationsEnabled = userNotificationsEnabled ?? false;
+      this.userEmailingEnabled,
+      this.userNotificationsEnabled});
 
   factory UserAction.fromJson(Map<String, Object?> json) {
     return UserAction(
-      active: json[r'active'] as bool? ?? false,
+      active: json[r'active'] as bool?,
       cancelEmailTemplateId: json[r'cancelEmailTemplateId'] as String?,
       endEmailTemplateId: json[r'endEmailTemplateId'] as String?,
       id: json[r'id'] as String?,
-      includeEmailInEventJson:
-          json[r'includeEmailInEventJSON'] as bool? ?? false,
+      includeEmailInEventJson: json[r'includeEmailInEventJSON'] as bool?,
       insertInstant:
           (json[r'insertInstant'] as num?)?.toInt() as ZonedDateTime?,
       lastUpdateInstant:
@@ -36013,20 +36465,18 @@ class UserAction {
       modifyEmailTemplateId: json[r'modifyEmailTemplateId'] as String?,
       name: json[r'name'] as String?,
       options: (json[r'options'] as List<Object?>?)
-              ?.map((i) => UserActionOption.fromJson(
-                  i as Map<String, Object?>? ?? const {}))
-              .toList() ??
-          [],
-      preventLogin: json[r'preventLogin'] as bool? ?? false,
-      sendEndEvent: json[r'sendEndEvent'] as bool? ?? false,
+          ?.map((i) =>
+              UserActionOption.fromJson(i as Map<String, Object?>? ?? const {}))
+          .toList(),
+      preventLogin: json[r'preventLogin'] as bool?,
+      sendEndEvent: json[r'sendEndEvent'] as bool?,
       startEmailTemplateId: json[r'startEmailTemplateId'] as String?,
-      temporal: json[r'temporal'] as bool? ?? false,
+      temporal: json[r'temporal'] as bool?,
       transactionType: json[r'transactionType'] != null
           ? TransactionType.fromValue(json[r'transactionType']! as String)
           : null,
-      userEmailingEnabled: json[r'userEmailingEnabled'] as bool? ?? false,
-      userNotificationsEnabled:
-          json[r'userNotificationsEnabled'] as bool? ?? false,
+      userEmailingEnabled: json[r'userEmailingEnabled'] as bool?,
+      userNotificationsEnabled: json[r'userNotificationsEnabled'] as bool?,
     );
   }
 
@@ -36051,7 +36501,9 @@ class UserAction {
     var userNotificationsEnabled = this.userNotificationsEnabled;
 
     final json = <String, Object?>{};
-    json[r'active'] = active;
+    if (active != null) {
+      json[r'active'] = active;
+    }
     if (cancelEmailTemplateId != null) {
       json[r'cancelEmailTemplateId'] = cancelEmailTemplateId;
     }
@@ -36061,7 +36513,9 @@ class UserAction {
     if (id != null) {
       json[r'id'] = id;
     }
-    json[r'includeEmailInEventJSON'] = includeEmailInEventJson;
+    if (includeEmailInEventJson != null) {
+      json[r'includeEmailInEventJSON'] = includeEmailInEventJson;
+    }
     if (insertInstant != null) {
       json[r'insertInstant'] = insertInstant.toJson();
     }
@@ -36077,18 +36531,30 @@ class UserAction {
     if (name != null) {
       json[r'name'] = name;
     }
-    json[r'options'] = options.map((i) => i.toJson()).toList();
-    json[r'preventLogin'] = preventLogin;
-    json[r'sendEndEvent'] = sendEndEvent;
+    if (options != null) {
+      json[r'options'] = options.map((i) => i.toJson()).toList();
+    }
+    if (preventLogin != null) {
+      json[r'preventLogin'] = preventLogin;
+    }
+    if (sendEndEvent != null) {
+      json[r'sendEndEvent'] = sendEndEvent;
+    }
     if (startEmailTemplateId != null) {
       json[r'startEmailTemplateId'] = startEmailTemplateId;
     }
-    json[r'temporal'] = temporal;
+    if (temporal != null) {
+      json[r'temporal'] = temporal;
+    }
     if (transactionType != null) {
       json[r'transactionType'] = transactionType.value;
     }
-    json[r'userEmailingEnabled'] = userEmailingEnabled;
-    json[r'userNotificationsEnabled'] = userNotificationsEnabled;
+    if (userEmailingEnabled != null) {
+      json[r'userEmailingEnabled'] = userEmailingEnabled;
+    }
+    if (userNotificationsEnabled != null) {
+      json[r'userNotificationsEnabled'] = userNotificationsEnabled;
+    }
     return json;
   }
 
@@ -36140,20 +36606,20 @@ class UserAction {
 
 /// Models the user action Event.
 class UserActionEvent {
-  final List<String> applicationIds;
+  final List<String>? applicationIds;
   final String? action;
   final String? actionId;
   final String? actioneeUserId;
   final String? actionerUserId;
   final String? comment;
   final Email? email;
-  final bool emailedUser;
+  final bool? emailedUser;
   final ZonedDateTime? expiry;
   final String? localizedAction;
   final String? localizedDuration;
   final String? localizedOption;
   final String? localizedReason;
-  final bool notifyUser;
+  final bool? notifyUser;
   final String? option;
   final UserActionPhase? phase;
   final String? reason;
@@ -36165,20 +36631,20 @@ class UserActionEvent {
   final EventType? type;
 
   UserActionEvent(
-      {List<String>? applicationIds,
+      {this.applicationIds,
       this.action,
       this.actionId,
       this.actioneeUserId,
       this.actionerUserId,
       this.comment,
       this.email,
-      bool? emailedUser,
+      this.emailedUser,
       this.expiry,
       this.localizedAction,
       this.localizedDuration,
       this.localizedOption,
       this.localizedReason,
-      bool? notifyUser,
+      this.notifyUser,
       this.option,
       this.phase,
       this.reason,
@@ -36187,17 +36653,13 @@ class UserActionEvent {
       this.id,
       this.info,
       this.tenantId,
-      this.type})
-      : applicationIds = applicationIds ?? [],
-        emailedUser = emailedUser ?? false,
-        notifyUser = notifyUser ?? false;
+      this.type});
 
   factory UserActionEvent.fromJson(Map<String, Object?> json) {
     return UserActionEvent(
       applicationIds: (json[r'applicationIds'] as List<Object?>?)
-              ?.map((i) => i as String? ?? '')
-              .toList() ??
-          [],
+          ?.map((i) => i as String? ?? '')
+          .toList(),
       action: json[r'action'] as String?,
       actionId: json[r'actionId'] as String?,
       actioneeUserId: json[r'actioneeUserId'] as String?,
@@ -36206,13 +36668,13 @@ class UserActionEvent {
       email: json[r'email'] != null
           ? Email.fromJson(json[r'email']! as Map<String, Object?>)
           : null,
-      emailedUser: json[r'emailedUser'] as bool? ?? false,
+      emailedUser: json[r'emailedUser'] as bool?,
       expiry: (json[r'expiry'] as num?)?.toInt() as ZonedDateTime?,
       localizedAction: json[r'localizedAction'] as String?,
       localizedDuration: json[r'localizedDuration'] as String?,
       localizedOption: json[r'localizedOption'] as String?,
       localizedReason: json[r'localizedReason'] as String?,
-      notifyUser: json[r'notifyUser'] as bool? ?? false,
+      notifyUser: json[r'notifyUser'] as bool?,
       option: json[r'option'] as String?,
       phase: json[r'phase'] != null
           ? UserActionPhase.fromValue(json[r'phase']! as String)
@@ -36258,7 +36720,9 @@ class UserActionEvent {
     var type = this.type;
 
     final json = <String, Object?>{};
-    json[r'applicationIds'] = applicationIds;
+    if (applicationIds != null) {
+      json[r'applicationIds'] = applicationIds;
+    }
     if (action != null) {
       json[r'action'] = action;
     }
@@ -36277,7 +36741,9 @@ class UserActionEvent {
     if (email != null) {
       json[r'email'] = email.toJson();
     }
-    json[r'emailedUser'] = emailedUser;
+    if (emailedUser != null) {
+      json[r'emailedUser'] = emailedUser;
+    }
     if (expiry != null) {
       json[r'expiry'] = expiry.toJson();
     }
@@ -36293,7 +36759,9 @@ class UserActionEvent {
     if (localizedReason != null) {
       json[r'localizedReason'] = localizedReason;
     }
-    json[r'notifyUser'] = notifyUser;
+    if (notifyUser != null) {
+      json[r'notifyUser'] = notifyUser;
+    }
     if (option != null) {
       json[r'option'] = option;
     }
@@ -36380,10 +36848,10 @@ class UserActionEvent {
 class UserActionLog {
   final String? actioneeUserId;
   final String? actionerUserId;
-  final List<String> applicationIds;
+  final List<String>? applicationIds;
   final String? comment;
-  final bool emailUserOnEnd;
-  final bool endEventSent;
+  final bool? emailUserOnEnd;
+  final bool? endEventSent;
   final ZonedDateTime? expiry;
   final LogHistory? history;
   final String? id;
@@ -36392,7 +36860,7 @@ class UserActionLog {
   final String? localizedOption;
   final String? localizedReason;
   final String? name;
-  final bool notifyUserOnEnd;
+  final bool? notifyUserOnEnd;
   final String? option;
   final String? reason;
   final String? reasonCode;
@@ -36401,10 +36869,10 @@ class UserActionLog {
   UserActionLog(
       {this.actioneeUserId,
       this.actionerUserId,
-      List<String>? applicationIds,
+      this.applicationIds,
       this.comment,
-      bool? emailUserOnEnd,
-      bool? endEventSent,
+      this.emailUserOnEnd,
+      this.endEventSent,
       this.expiry,
       this.history,
       this.id,
@@ -36413,27 +36881,22 @@ class UserActionLog {
       this.localizedOption,
       this.localizedReason,
       this.name,
-      bool? notifyUserOnEnd,
+      this.notifyUserOnEnd,
       this.option,
       this.reason,
       this.reasonCode,
-      this.userActionId})
-      : applicationIds = applicationIds ?? [],
-        emailUserOnEnd = emailUserOnEnd ?? false,
-        endEventSent = endEventSent ?? false,
-        notifyUserOnEnd = notifyUserOnEnd ?? false;
+      this.userActionId});
 
   factory UserActionLog.fromJson(Map<String, Object?> json) {
     return UserActionLog(
       actioneeUserId: json[r'actioneeUserId'] as String?,
       actionerUserId: json[r'actionerUserId'] as String?,
       applicationIds: (json[r'applicationIds'] as List<Object?>?)
-              ?.map((i) => i as String? ?? '')
-              .toList() ??
-          [],
+          ?.map((i) => i as String? ?? '')
+          .toList(),
       comment: json[r'comment'] as String?,
-      emailUserOnEnd: json[r'emailUserOnEnd'] as bool? ?? false,
-      endEventSent: json[r'endEventSent'] as bool? ?? false,
+      emailUserOnEnd: json[r'emailUserOnEnd'] as bool?,
+      endEventSent: json[r'endEventSent'] as bool?,
       expiry: (json[r'expiry'] as num?)?.toInt() as ZonedDateTime?,
       history: json[r'history'] != null
           ? LogHistory.fromJson(json[r'history']! as Map<String, Object?>)
@@ -36445,7 +36908,7 @@ class UserActionLog {
       localizedOption: json[r'localizedOption'] as String?,
       localizedReason: json[r'localizedReason'] as String?,
       name: json[r'name'] as String?,
-      notifyUserOnEnd: json[r'notifyUserOnEnd'] as bool? ?? false,
+      notifyUserOnEnd: json[r'notifyUserOnEnd'] as bool?,
       option: json[r'option'] as String?,
       reason: json[r'reason'] as String?,
       reasonCode: json[r'reasonCode'] as String?,
@@ -36481,12 +36944,18 @@ class UserActionLog {
     if (actionerUserId != null) {
       json[r'actionerUserId'] = actionerUserId;
     }
-    json[r'applicationIds'] = applicationIds;
+    if (applicationIds != null) {
+      json[r'applicationIds'] = applicationIds;
+    }
     if (comment != null) {
       json[r'comment'] = comment;
     }
-    json[r'emailUserOnEnd'] = emailUserOnEnd;
-    json[r'endEventSent'] = endEventSent;
+    if (emailUserOnEnd != null) {
+      json[r'emailUserOnEnd'] = emailUserOnEnd;
+    }
+    if (endEventSent != null) {
+      json[r'endEventSent'] = endEventSent;
+    }
     if (expiry != null) {
       json[r'expiry'] = expiry.toJson();
     }
@@ -36511,7 +36980,9 @@ class UserActionLog {
     if (name != null) {
       json[r'name'] = name;
     }
-    json[r'notifyUserOnEnd'] = notifyUserOnEnd;
+    if (notifyUserOnEnd != null) {
+      json[r'notifyUserOnEnd'] = notifyUserOnEnd;
+    }
     if (option != null) {
       json[r'option'] = option;
     }
@@ -36726,11 +37197,9 @@ class UserActionReasonRequest {
 /// User Action Reason API response object.
 class UserActionReasonResponse {
   final UserActionReason? userActionReason;
-  final List<UserActionReason> userActionReasons;
+  final List<UserActionReason>? userActionReasons;
 
-  UserActionReasonResponse(
-      {this.userActionReason, List<UserActionReason>? userActionReasons})
-      : userActionReasons = userActionReasons ?? [];
+  UserActionReasonResponse({this.userActionReason, this.userActionReasons});
 
   factory UserActionReasonResponse.fromJson(Map<String, Object?> json) {
     return UserActionReasonResponse(
@@ -36739,10 +37208,9 @@ class UserActionReasonResponse {
               json[r'userActionReason']! as Map<String, Object?>)
           : null,
       userActionReasons: (json[r'userActionReasons'] as List<Object?>?)
-              ?.map((i) => UserActionReason.fromJson(
-                  i as Map<String, Object?>? ?? const {}))
-              .toList() ??
-          [],
+          ?.map((i) =>
+              UserActionReason.fromJson(i as Map<String, Object?>? ?? const {}))
+          .toList(),
     );
   }
 
@@ -36754,8 +37222,10 @@ class UserActionReasonResponse {
     if (userActionReason != null) {
       json[r'userActionReason'] = userActionReason.toJson();
     }
-    json[r'userActionReasons'] =
-        userActionReasons.map((i) => i.toJson()).toList();
+    if (userActionReasons != null) {
+      json[r'userActionReasons'] =
+          userActionReasons.map((i) => i.toJson()).toList();
+    }
     return json;
   }
 
@@ -36803,10 +37273,9 @@ class UserActionRequest {
 /// User Action API response object.
 class UserActionResponse {
   final UserAction? userAction;
-  final List<UserAction> userActions;
+  final List<UserAction>? userActions;
 
-  UserActionResponse({this.userAction, List<UserAction>? userActions})
-      : userActions = userActions ?? [];
+  UserActionResponse({this.userAction, this.userActions});
 
   factory UserActionResponse.fromJson(Map<String, Object?> json) {
     return UserActionResponse(
@@ -36814,10 +37283,9 @@ class UserActionResponse {
           ? UserAction.fromJson(json[r'userAction']! as Map<String, Object?>)
           : null,
       userActions: (json[r'userActions'] as List<Object?>?)
-              ?.map((i) =>
-                  UserAction.fromJson(i as Map<String, Object?>? ?? const {}))
-              .toList() ??
-          [],
+          ?.map((i) =>
+              UserAction.fromJson(i as Map<String, Object?>? ?? const {}))
+          .toList(),
     );
   }
 
@@ -36829,7 +37297,9 @@ class UserActionResponse {
     if (userAction != null) {
       json[r'userAction'] = userAction.toJson();
     }
-    json[r'userActions'] = userActions.map((i) => i.toJson()).toList();
+    if (userActions != null) {
+      json[r'userActions'] = userActions.map((i) => i.toJson()).toList();
+    }
     return json;
   }
 
@@ -36844,7 +37314,7 @@ class UserActionResponse {
 
 /// Models the User Bulk Create Event.
 class UserBulkCreateEvent {
-  final List<User> users;
+  final List<User>? users;
   final ZonedDateTime? createInstant;
   final String? id;
   final EventInfo? info;
@@ -36852,21 +37322,18 @@ class UserBulkCreateEvent {
   final EventType? type;
 
   UserBulkCreateEvent(
-      {List<User>? users,
+      {this.users,
       this.createInstant,
       this.id,
       this.info,
       this.tenantId,
-      this.type})
-      : users = users ?? [];
+      this.type});
 
   factory UserBulkCreateEvent.fromJson(Map<String, Object?> json) {
     return UserBulkCreateEvent(
       users: (json[r'users'] as List<Object?>?)
-              ?.map(
-                  (i) => User.fromJson(i as Map<String, Object?>? ?? const {}))
-              .toList() ??
-          [],
+          ?.map((i) => User.fromJson(i as Map<String, Object?>? ?? const {}))
+          .toList(),
       createInstant:
           (json[r'createInstant'] as num?)?.toInt() as ZonedDateTime?,
       id: json[r'id'] as String?,
@@ -36889,7 +37356,9 @@ class UserBulkCreateEvent {
     var type = this.type;
 
     final json = <String, Object?>{};
-    json[r'users'] = users.map((i) => i.toJson()).toList();
+    if (users != null) {
+      json[r'users'] = users.map((i) => i.toJson()).toList();
+    }
     if (createInstant != null) {
       json[r'createInstant'] = createInstant.toJson();
     }
@@ -37027,10 +37496,9 @@ class UserCommentRequest {
 /// User Comment Response
 class UserCommentResponse {
   final UserComment? userComment;
-  final List<UserComment> userComments;
+  final List<UserComment>? userComments;
 
-  UserCommentResponse({this.userComment, List<UserComment>? userComments})
-      : userComments = userComments ?? [];
+  UserCommentResponse({this.userComment, this.userComments});
 
   factory UserCommentResponse.fromJson(Map<String, Object?> json) {
     return UserCommentResponse(
@@ -37038,10 +37506,9 @@ class UserCommentResponse {
           ? UserComment.fromJson(json[r'userComment']! as Map<String, Object?>)
           : null,
       userComments: (json[r'userComments'] as List<Object?>?)
-              ?.map((i) =>
-                  UserComment.fromJson(i as Map<String, Object?>? ?? const {}))
-              .toList() ??
-          [],
+          ?.map((i) =>
+              UserComment.fromJson(i as Map<String, Object?>? ?? const {}))
+          .toList(),
     );
   }
 
@@ -37053,7 +37520,9 @@ class UserCommentResponse {
     if (userComment != null) {
       json[r'userComment'] = userComment.toJson();
     }
-    json[r'userComments'] = userComments.map((i) => i.toJson()).toList();
+    if (userComments != null) {
+      json[r'userComments'] = userComments.map((i) => i.toJson()).toList();
+    }
     return json;
   }
 
@@ -37186,19 +37655,17 @@ class UserCommentSearchRequest {
 /// User comment search response
 class UserCommentSearchResponse {
   final int? total;
-  final List<UserComment> userComments;
+  final List<UserComment>? userComments;
 
-  UserCommentSearchResponse({this.total, List<UserComment>? userComments})
-      : userComments = userComments ?? [];
+  UserCommentSearchResponse({this.total, this.userComments});
 
   factory UserCommentSearchResponse.fromJson(Map<String, Object?> json) {
     return UserCommentSearchResponse(
       total: (json[r'total'] as num?)?.toInt(),
       userComments: (json[r'userComments'] as List<Object?>?)
-              ?.map((i) =>
-                  UserComment.fromJson(i as Map<String, Object?>? ?? const {}))
-              .toList() ??
-          [],
+          ?.map((i) =>
+              UserComment.fromJson(i as Map<String, Object?>? ?? const {}))
+          .toList(),
     );
   }
 
@@ -37210,7 +37677,9 @@ class UserCommentSearchResponse {
     if (total != null) {
       json[r'total'] = total;
     }
-    json[r'userComments'] = userComments.map((i) => i.toJson()).toList();
+    if (userComments != null) {
+      json[r'userComments'] = userComments.map((i) => i.toJson()).toList();
+    }
     return json;
   }
 
@@ -37234,7 +37703,7 @@ class UserConsent {
   final ZonedDateTime? lastUpdateInstant;
   final ConsentStatus? status;
   final String? userId;
-  final List<String> values;
+  final List<String>? values;
 
   UserConsent(
       {this.data,
@@ -37246,8 +37715,7 @@ class UserConsent {
       this.lastUpdateInstant,
       this.status,
       this.userId,
-      List<String>? values})
-      : values = values ?? [];
+      this.values});
 
   factory UserConsent.fromJson(Map<String, Object?> json) {
     return UserConsent(
@@ -37267,9 +37735,8 @@ class UserConsent {
           : null,
       userId: json[r'userId'] as String?,
       values: (json[r'values'] as List<Object?>?)
-              ?.map((i) => i as String? ?? '')
-              .toList() ??
-          [],
+          ?.map((i) => i as String? ?? '')
+          .toList(),
     );
   }
 
@@ -37313,7 +37780,9 @@ class UserConsent {
     if (userId != null) {
       json[r'userId'] = userId;
     }
-    json[r'values'] = values;
+    if (values != null) {
+      json[r'values'] = values;
+    }
     return json;
   }
 
@@ -37377,10 +37846,9 @@ class UserConsentRequest {
 /// API response for User consent.
 class UserConsentResponse {
   final UserConsent? userConsent;
-  final List<UserConsent> userConsents;
+  final List<UserConsent>? userConsents;
 
-  UserConsentResponse({this.userConsent, List<UserConsent>? userConsents})
-      : userConsents = userConsents ?? [];
+  UserConsentResponse({this.userConsent, this.userConsents});
 
   factory UserConsentResponse.fromJson(Map<String, Object?> json) {
     return UserConsentResponse(
@@ -37388,10 +37856,9 @@ class UserConsentResponse {
           ? UserConsent.fromJson(json[r'userConsent']! as Map<String, Object?>)
           : null,
       userConsents: (json[r'userConsents'] as List<Object?>?)
-              ?.map((i) =>
-                  UserConsent.fromJson(i as Map<String, Object?>? ?? const {}))
-              .toList() ??
-          [],
+          ?.map((i) =>
+              UserConsent.fromJson(i as Map<String, Object?>? ?? const {}))
+          .toList(),
     );
   }
 
@@ -37403,7 +37870,9 @@ class UserConsentResponse {
     if (userConsent != null) {
       json[r'userConsent'] = userConsent.toJson();
     }
-    json[r'userConsents'] = userConsents.map((i) => i.toJson()).toList();
+    if (userConsents != null) {
+      json[r'userConsents'] = userConsents.map((i) => i.toJson()).toList();
+    }
     return json;
   }
 
@@ -37579,37 +38048,33 @@ class UserDeleteEvent {
 
 /// User API delete request object.
 class UserDeleteRequest {
-  final bool dryRun;
-  final bool hardDelete;
+  final bool? dryRun;
+  final bool? hardDelete;
   final int? limit;
   final String? query;
   final String? queryString;
-  final List<String> userIds;
+  final List<String>? userIds;
   final EventInfo? eventInfo;
 
   UserDeleteRequest(
-      {bool? dryRun,
-      bool? hardDelete,
+      {this.dryRun,
+      this.hardDelete,
       this.limit,
       this.query,
       this.queryString,
-      List<String>? userIds,
-      this.eventInfo})
-      : dryRun = dryRun ?? false,
-        hardDelete = hardDelete ?? false,
-        userIds = userIds ?? [];
+      this.userIds,
+      this.eventInfo});
 
   factory UserDeleteRequest.fromJson(Map<String, Object?> json) {
     return UserDeleteRequest(
-      dryRun: json[r'dryRun'] as bool? ?? false,
-      hardDelete: json[r'hardDelete'] as bool? ?? false,
+      dryRun: json[r'dryRun'] as bool?,
+      hardDelete: json[r'hardDelete'] as bool?,
       limit: (json[r'limit'] as num?)?.toInt(),
       query: json[r'query'] as String?,
       queryString: json[r'queryString'] as String?,
       userIds: (json[r'userIds'] as List<Object?>?)
-              ?.map((i) => i as String? ?? '')
-              .toList() ??
-          [],
+          ?.map((i) => i as String? ?? '')
+          .toList(),
       eventInfo: json[r'eventInfo'] != null
           ? EventInfo.fromJson(json[r'eventInfo']! as Map<String, Object?>)
           : null,
@@ -37626,8 +38091,12 @@ class UserDeleteRequest {
     var eventInfo = this.eventInfo;
 
     final json = <String, Object?>{};
-    json[r'dryRun'] = dryRun;
-    json[r'hardDelete'] = hardDelete;
+    if (dryRun != null) {
+      json[r'dryRun'] = dryRun;
+    }
+    if (hardDelete != null) {
+      json[r'hardDelete'] = hardDelete;
+    }
     if (limit != null) {
       json[r'limit'] = limit;
     }
@@ -37637,7 +38106,9 @@ class UserDeleteRequest {
     if (queryString != null) {
       json[r'queryString'] = queryString;
     }
-    json[r'userIds'] = userIds;
+    if (userIds != null) {
+      json[r'userIds'] = userIds;
+    }
     if (eventInfo != null) {
       json[r'eventInfo'] = eventInfo.toJson();
     }
@@ -37666,26 +38137,21 @@ class UserDeleteRequest {
 
 /// User API bulk response object.
 class UserDeleteResponse {
-  final bool dryRun;
-  final bool hardDelete;
+  final bool? dryRun;
+  final bool? hardDelete;
   final int? total;
-  final List<String> userIds;
+  final List<String>? userIds;
 
-  UserDeleteResponse(
-      {bool? dryRun, bool? hardDelete, this.total, List<String>? userIds})
-      : dryRun = dryRun ?? false,
-        hardDelete = hardDelete ?? false,
-        userIds = userIds ?? [];
+  UserDeleteResponse({this.dryRun, this.hardDelete, this.total, this.userIds});
 
   factory UserDeleteResponse.fromJson(Map<String, Object?> json) {
     return UserDeleteResponse(
-      dryRun: json[r'dryRun'] as bool? ?? false,
-      hardDelete: json[r'hardDelete'] as bool? ?? false,
+      dryRun: json[r'dryRun'] as bool?,
+      hardDelete: json[r'hardDelete'] as bool?,
       total: (json[r'total'] as num?)?.toInt(),
       userIds: (json[r'userIds'] as List<Object?>?)
-              ?.map((i) => i as String? ?? '')
-              .toList() ??
-          [],
+          ?.map((i) => i as String? ?? '')
+          .toList(),
     );
   }
 
@@ -37696,12 +38162,18 @@ class UserDeleteResponse {
     var userIds = this.userIds;
 
     final json = <String, Object?>{};
-    json[r'dryRun'] = dryRun;
-    json[r'hardDelete'] = hardDelete;
+    if (dryRun != null) {
+      json[r'dryRun'] = dryRun;
+    }
+    if (hardDelete != null) {
+      json[r'hardDelete'] = hardDelete;
+    }
     if (total != null) {
       json[r'total'] = total;
     }
-    json[r'userIds'] = userIds;
+    if (userIds != null) {
+      json[r'userIds'] = userIds;
+    }
     return json;
   }
 
@@ -37718,15 +38190,14 @@ class UserDeleteResponse {
 
 /// User API delete request object for a single user.
 class UserDeleteSingleRequest {
-  final bool hardDelete;
+  final bool? hardDelete;
   final EventInfo? eventInfo;
 
-  UserDeleteSingleRequest({bool? hardDelete, this.eventInfo})
-      : hardDelete = hardDelete ?? false;
+  UserDeleteSingleRequest({this.hardDelete, this.eventInfo});
 
   factory UserDeleteSingleRequest.fromJson(Map<String, Object?> json) {
     return UserDeleteSingleRequest(
-      hardDelete: json[r'hardDelete'] as bool? ?? false,
+      hardDelete: json[r'hardDelete'] as bool?,
       eventInfo: json[r'eventInfo'] != null
           ? EventInfo.fromJson(json[r'eventInfo']! as Map<String, Object?>)
           : null,
@@ -37738,7 +38209,9 @@ class UserDeleteSingleRequest {
     var eventInfo = this.eventInfo;
 
     final json = <String, Object?>{};
-    json[r'hardDelete'] = hardDelete;
+    if (hardDelete != null) {
+      json[r'hardDelete'] = hardDelete;
+    }
     if (eventInfo != null) {
       json[r'eventInfo'] = eventInfo.toJson();
     }
@@ -38314,7 +38787,7 @@ class UserLoginSuccessEvent {
 
 /// Models the User Login event that is suspicious.
 class UserLoginSuspiciousEvent {
-  final List<dynamic> threatsDetected;
+  final List<dynamic>? threatsDetected;
   final String? applicationId;
   final String? authenticationType;
   final String? connectorId;
@@ -38323,21 +38796,18 @@ class UserLoginSuspiciousEvent {
   final String? ipAddress;
 
   UserLoginSuspiciousEvent(
-      {List<dynamic>? threatsDetected,
+      {this.threatsDetected,
       this.applicationId,
       this.authenticationType,
       this.connectorId,
       this.identityProviderId,
       this.identityProviderName,
-      this.ipAddress})
-      : threatsDetected = threatsDetected ?? [];
+      this.ipAddress});
 
   factory UserLoginSuspiciousEvent.fromJson(Map<String, Object?> json) {
     return UserLoginSuspiciousEvent(
-      threatsDetected: (json[r'threatsDetected'] as List<Object?>?)
-              ?.map((i) => i)
-              .toList() ??
-          [],
+      threatsDetected:
+          (json[r'threatsDetected'] as List<Object?>?)?.map((i) => i).toList(),
       applicationId: json[r'applicationId'] as String?,
       authenticationType: json[r'authenticationType'] as String?,
       connectorId: json[r'connectorId'] as String?,
@@ -38357,7 +38827,9 @@ class UserLoginSuspiciousEvent {
     var ipAddress = this.ipAddress;
 
     final json = <String, Object?>{};
-    json[r'threatsDetected'] = threatsDetected;
+    if (threatsDetected != null) {
+      json[r'threatsDetected'] = threatsDetected;
+    }
     if (applicationId != null) {
       json[r'applicationId'] = applicationId;
     }
@@ -38588,7 +39060,7 @@ class UserReactivateEvent {
 /// User registration information for a single application.
 class UserRegistration {
   final Map<String, dynamic>? data;
-  final List<Locale> preferredLanguages;
+  final List<Locale>? preferredLanguages;
   final Map<String, dynamic>? tokens;
   final String? applicationId;
   final String? authenticationToken;
@@ -38597,16 +39069,16 @@ class UserRegistration {
   final ZonedDateTime? insertInstant;
   final ZonedDateTime? lastLoginInstant;
   final ZonedDateTime? lastUpdateInstant;
-  final List<dynamic> roles;
+  final List<dynamic>? roles;
   final ZoneId? timezone;
   final String? username;
   final ContentStatus? usernameStatus;
-  final bool verified;
+  final bool? verified;
   final ZonedDateTime? verifiedInstant;
 
   UserRegistration(
       {this.data,
-      List<Locale>? preferredLanguages,
+      this.preferredLanguages,
       this.tokens,
       this.applicationId,
       this.authenticationToken,
@@ -38615,23 +39087,19 @@ class UserRegistration {
       this.insertInstant,
       this.lastLoginInstant,
       this.lastUpdateInstant,
-      List<dynamic>? roles,
+      this.roles,
       this.timezone,
       this.username,
       this.usernameStatus,
-      bool? verified,
-      this.verifiedInstant})
-      : preferredLanguages = preferredLanguages ?? [],
-        roles = roles ?? [],
-        verified = verified ?? false;
+      this.verified,
+      this.verifiedInstant});
 
   factory UserRegistration.fromJson(Map<String, Object?> json) {
     return UserRegistration(
       data: json[r'data'] as Map<String, Object?>?,
       preferredLanguages: (json[r'preferredLanguages'] as List<Object?>?)
-              ?.map((i) => Locale(i as String? ?? ''))
-              .toList() ??
-          [],
+          ?.map((i) => Locale(i as String? ?? ''))
+          .toList(),
       tokens: json[r'tokens'] as Map<String, Object?>?,
       applicationId: json[r'applicationId'] as String?,
       authenticationToken: json[r'authenticationToken'] as String?,
@@ -38643,13 +39111,13 @@ class UserRegistration {
           (json[r'lastLoginInstant'] as num?)?.toInt() as ZonedDateTime?,
       lastUpdateInstant:
           (json[r'lastUpdateInstant'] as num?)?.toInt() as ZonedDateTime?,
-      roles: (json[r'roles'] as List<Object?>?)?.map((i) => i).toList() ?? [],
+      roles: (json[r'roles'] as List<Object?>?)?.map((i) => i).toList(),
       timezone: json[r'timezone'] as ZoneId?,
       username: json[r'username'] as String?,
       usernameStatus: json[r'usernameStatus'] != null
           ? ContentStatus.fromValue(json[r'usernameStatus']! as String)
           : null,
-      verified: json[r'verified'] as bool? ?? false,
+      verified: json[r'verified'] as bool?,
       verifiedInstant:
           (json[r'verifiedInstant'] as num?)?.toInt() as ZonedDateTime?,
     );
@@ -38677,8 +39145,10 @@ class UserRegistration {
     if (data != null) {
       json[r'data'] = data;
     }
-    json[r'preferredLanguages'] =
-        preferredLanguages.map((i) => i.toJson()).toList();
+    if (preferredLanguages != null) {
+      json[r'preferredLanguages'] =
+          preferredLanguages.map((i) => i.toJson()).toList();
+    }
     if (tokens != null) {
       json[r'tokens'] = tokens;
     }
@@ -38703,7 +39173,9 @@ class UserRegistration {
     if (lastUpdateInstant != null) {
       json[r'lastUpdateInstant'] = lastUpdateInstant.toJson();
     }
-    json[r'roles'] = roles;
+    if (roles != null) {
+      json[r'roles'] = roles;
+    }
     if (timezone != null) {
       json[r'timezone'] = timezone.toJson();
     }
@@ -38713,7 +39185,9 @@ class UserRegistration {
     if (usernameStatus != null) {
       json[r'usernameStatus'] = usernameStatus.value;
     }
-    json[r'verified'] = verified;
+    if (verified != null) {
+      json[r'verified'] = verified;
+    }
     if (verifiedInstant != null) {
       json[r'verifiedInstant'] = verifiedInstant.toJson();
     }
@@ -39147,31 +39621,28 @@ class UserRegistrationVerifiedEvent {
 class UserRequest {
   final String? applicationId;
   final String? currentPassword;
-  final bool disableDomainBlock;
-  final bool sendSetPasswordEmail;
-  final bool skipVerification;
+  final bool? disableDomainBlock;
+  final bool? sendSetPasswordEmail;
+  final bool? skipVerification;
   final User? user;
   final EventInfo? eventInfo;
 
   UserRequest(
       {this.applicationId,
       this.currentPassword,
-      bool? disableDomainBlock,
-      bool? sendSetPasswordEmail,
-      bool? skipVerification,
+      this.disableDomainBlock,
+      this.sendSetPasswordEmail,
+      this.skipVerification,
       this.user,
-      this.eventInfo})
-      : disableDomainBlock = disableDomainBlock ?? false,
-        sendSetPasswordEmail = sendSetPasswordEmail ?? false,
-        skipVerification = skipVerification ?? false;
+      this.eventInfo});
 
   factory UserRequest.fromJson(Map<String, Object?> json) {
     return UserRequest(
       applicationId: json[r'applicationId'] as String?,
       currentPassword: json[r'currentPassword'] as String?,
-      disableDomainBlock: json[r'disableDomainBlock'] as bool? ?? false,
-      sendSetPasswordEmail: json[r'sendSetPasswordEmail'] as bool? ?? false,
-      skipVerification: json[r'skipVerification'] as bool? ?? false,
+      disableDomainBlock: json[r'disableDomainBlock'] as bool?,
+      sendSetPasswordEmail: json[r'sendSetPasswordEmail'] as bool?,
+      skipVerification: json[r'skipVerification'] as bool?,
       user: json[r'user'] != null
           ? User.fromJson(json[r'user']! as Map<String, Object?>)
           : null,
@@ -39197,9 +39668,15 @@ class UserRequest {
     if (currentPassword != null) {
       json[r'currentPassword'] = currentPassword;
     }
-    json[r'disableDomainBlock'] = disableDomainBlock;
-    json[r'sendSetPasswordEmail'] = sendSetPasswordEmail;
-    json[r'skipVerification'] = skipVerification;
+    if (disableDomainBlock != null) {
+      json[r'disableDomainBlock'] = disableDomainBlock;
+    }
+    if (sendSetPasswordEmail != null) {
+      json[r'sendSetPasswordEmail'] = sendSetPasswordEmail;
+    }
+    if (skipVerification != null) {
+      json[r'skipVerification'] = skipVerification;
+    }
     if (user != null) {
       json[r'user'] = user.toJson();
     }
@@ -39331,43 +39808,38 @@ class UserResponse {
 /// This class is the user query. It provides a build pattern as well as public
 /// fields for use on forms and in actions.
 class UserSearchCriteria {
-  final bool accurateTotal;
-  final List<String> ids;
+  final bool? accurateTotal;
+  final List<String>? ids;
   final String? nextResults;
   final String? query;
   final String? queryString;
-  final List<SortField> sortFields;
+  final List<SortField>? sortFields;
   final int? startRow;
   final int? numberOfResults;
 
   UserSearchCriteria(
-      {bool? accurateTotal,
-      List<String>? ids,
+      {this.accurateTotal,
+      this.ids,
       this.nextResults,
       this.query,
       this.queryString,
-      List<SortField>? sortFields,
+      this.sortFields,
       this.startRow,
-      this.numberOfResults})
-      : accurateTotal = accurateTotal ?? false,
-        ids = ids ?? [],
-        sortFields = sortFields ?? [];
+      this.numberOfResults});
 
   factory UserSearchCriteria.fromJson(Map<String, Object?> json) {
     return UserSearchCriteria(
-      accurateTotal: json[r'accurateTotal'] as bool? ?? false,
+      accurateTotal: json[r'accurateTotal'] as bool?,
       ids: (json[r'ids'] as List<Object?>?)
-              ?.map((i) => i as String? ?? '')
-              .toList() ??
-          [],
+          ?.map((i) => i as String? ?? '')
+          .toList(),
       nextResults: json[r'nextResults'] as String?,
       query: json[r'query'] as String?,
       queryString: json[r'queryString'] as String?,
       sortFields: (json[r'sortFields'] as List<Object?>?)
-              ?.map((i) =>
-                  SortField.fromJson(i as Map<String, Object?>? ?? const {}))
-              .toList() ??
-          [],
+          ?.map(
+              (i) => SortField.fromJson(i as Map<String, Object?>? ?? const {}))
+          .toList(),
       startRow: (json[r'startRow'] as num?)?.toInt(),
       numberOfResults: (json[r'numberOfResults'] as num?)?.toInt(),
     );
@@ -39384,8 +39856,12 @@ class UserSearchCriteria {
     var numberOfResults = this.numberOfResults;
 
     final json = <String, Object?>{};
-    json[r'accurateTotal'] = accurateTotal;
-    json[r'ids'] = ids;
+    if (accurateTotal != null) {
+      json[r'accurateTotal'] = accurateTotal;
+    }
+    if (ids != null) {
+      json[r'ids'] = ids;
+    }
     if (nextResults != null) {
       json[r'nextResults'] = nextResults;
     }
@@ -39395,7 +39871,9 @@ class UserSearchCriteria {
     if (queryString != null) {
       json[r'queryString'] = queryString;
     }
-    json[r'sortFields'] = sortFields.map((i) => i.toJson()).toList();
+    if (sortFields != null) {
+      json[r'sortFields'] = sortFields.map((i) => i.toJson()).toList();
+    }
     if (startRow != null) {
       json[r'startRow'] = startRow;
     }
@@ -39428,25 +39906,20 @@ class UserSearchCriteria {
 }
 
 class UserTwoFactorConfiguration {
-  final List<TwoFactorMethod> methods;
-  final List<String> recoveryCodes;
+  final List<TwoFactorMethod>? methods;
+  final List<String>? recoveryCodes;
 
-  UserTwoFactorConfiguration(
-      {List<TwoFactorMethod>? methods, List<String>? recoveryCodes})
-      : methods = methods ?? [],
-        recoveryCodes = recoveryCodes ?? [];
+  UserTwoFactorConfiguration({this.methods, this.recoveryCodes});
 
   factory UserTwoFactorConfiguration.fromJson(Map<String, Object?> json) {
     return UserTwoFactorConfiguration(
       methods: (json[r'methods'] as List<Object?>?)
-              ?.map((i) => TwoFactorMethod.fromJson(
-                  i as Map<String, Object?>? ?? const {}))
-              .toList() ??
-          [],
+          ?.map((i) =>
+              TwoFactorMethod.fromJson(i as Map<String, Object?>? ?? const {}))
+          .toList(),
       recoveryCodes: (json[r'recoveryCodes'] as List<Object?>?)
-              ?.map((i) => i as String? ?? '')
-              .toList() ??
-          [],
+          ?.map((i) => i as String? ?? '')
+          .toList(),
     );
   }
 
@@ -39455,8 +39928,12 @@ class UserTwoFactorConfiguration {
     var recoveryCodes = this.recoveryCodes;
 
     final json = <String, Object?>{};
-    json[r'methods'] = methods.map((i) => i.toJson()).toList();
-    json[r'recoveryCodes'] = recoveryCodes;
+    if (methods != null) {
+      json[r'methods'] = methods.map((i) => i.toJson()).toList();
+    }
+    if (recoveryCodes != null) {
+      json[r'recoveryCodes'] = recoveryCodes;
+    }
     return json;
   }
 
@@ -39646,15 +40123,14 @@ class UserinfoResponse {
 
 class UsernameModeration {
   final String? applicationId;
-  final bool enabled;
+  final bool? enabled;
 
-  UsernameModeration({this.applicationId, bool? enabled})
-      : enabled = enabled ?? false;
+  UsernameModeration({this.applicationId, this.enabled});
 
   factory UsernameModeration.fromJson(Map<String, Object?> json) {
     return UsernameModeration(
       applicationId: json[r'applicationId'] as String?,
-      enabled: json[r'enabled'] as bool? ?? false,
+      enabled: json[r'enabled'] as bool?,
     );
   }
 
@@ -39666,7 +40142,9 @@ class UsernameModeration {
     if (applicationId != null) {
       json[r'applicationId'] = applicationId;
     }
-    json[r'enabled'] = enabled;
+    if (enabled != null) {
+      json[r'enabled'] = enabled;
+    }
     return json;
   }
 
@@ -40046,10 +40524,10 @@ class WebAuthnAuthenticatorRegistrationResponse {
 class WebAuthnCredential {
   final CoseAlgorithmIdentifier? algorithm;
   final AttestationType? attestationType;
-  final bool authenticatorSupportsUserVerification;
+  final bool? authenticatorSupportsUserVerification;
   final String? credentialId;
   final Map<String, dynamic>? data;
-  final bool discoverable;
+  final bool? discoverable;
   final String? displayName;
   final String? id;
   final ZonedDateTime? insertInstant;
@@ -40059,17 +40537,17 @@ class WebAuthnCredential {
   final String? relyingPartyId;
   final int? signCount;
   final String? tenantId;
-  final List<String> transports;
+  final List<String>? transports;
   final String? userAgent;
   final String? userId;
 
   WebAuthnCredential(
       {this.algorithm,
       this.attestationType,
-      bool? authenticatorSupportsUserVerification,
+      this.authenticatorSupportsUserVerification,
       this.credentialId,
       this.data,
-      bool? discoverable,
+      this.discoverable,
       this.displayName,
       this.id,
       this.insertInstant,
@@ -40079,13 +40557,9 @@ class WebAuthnCredential {
       this.relyingPartyId,
       this.signCount,
       this.tenantId,
-      List<String>? transports,
+      this.transports,
       this.userAgent,
-      this.userId})
-      : authenticatorSupportsUserVerification =
-            authenticatorSupportsUserVerification ?? false,
-        discoverable = discoverable ?? false,
-        transports = transports ?? [];
+      this.userId});
 
   factory WebAuthnCredential.fromJson(Map<String, Object?> json) {
     return WebAuthnCredential(
@@ -40096,10 +40570,10 @@ class WebAuthnCredential {
           ? AttestationType.fromValue(json[r'attestationType']! as String)
           : null,
       authenticatorSupportsUserVerification:
-          json[r'authenticatorSupportsUserVerification'] as bool? ?? false,
+          json[r'authenticatorSupportsUserVerification'] as bool?,
       credentialId: json[r'credentialId'] as String?,
       data: json[r'data'] as Map<String, Object?>?,
-      discoverable: json[r'discoverable'] as bool? ?? false,
+      discoverable: json[r'discoverable'] as bool?,
       displayName: json[r'displayName'] as String?,
       id: json[r'id'] as String?,
       insertInstant:
@@ -40112,9 +40586,8 @@ class WebAuthnCredential {
       signCount: (json[r'signCount'] as num?)?.toInt(),
       tenantId: json[r'tenantId'] as String?,
       transports: (json[r'transports'] as List<Object?>?)
-              ?.map((i) => i as String? ?? '')
-              .toList() ??
-          [],
+          ?.map((i) => i as String? ?? '')
+          .toList(),
       userAgent: json[r'userAgent'] as String?,
       userId: json[r'userId'] as String?,
     );
@@ -40148,15 +40621,19 @@ class WebAuthnCredential {
     if (attestationType != null) {
       json[r'attestationType'] = attestationType.value;
     }
-    json[r'authenticatorSupportsUserVerification'] =
-        authenticatorSupportsUserVerification;
+    if (authenticatorSupportsUserVerification != null) {
+      json[r'authenticatorSupportsUserVerification'] =
+          authenticatorSupportsUserVerification;
+    }
     if (credentialId != null) {
       json[r'credentialId'] = credentialId;
     }
     if (data != null) {
       json[r'data'] = data;
     }
-    json[r'discoverable'] = discoverable;
+    if (discoverable != null) {
+      json[r'discoverable'] = discoverable;
+    }
     if (displayName != null) {
       json[r'displayName'] = displayName;
     }
@@ -40184,7 +40661,9 @@ class WebAuthnCredential {
     if (tenantId != null) {
       json[r'tenantId'] = tenantId;
     }
-    json[r'transports'] = transports;
+    if (transports != null) {
+      json[r'transports'] = transports;
+    }
     if (userAgent != null) {
       json[r'userAgent'] = userAgent;
     }
@@ -40240,22 +40719,19 @@ class WebAuthnCredential {
 
 /// API request to import an existing WebAuthn credential(s)
 class WebAuthnCredentialImportRequest {
-  final List<WebAuthnCredential> credentials;
-  final bool validateDbConstraints;
+  final List<WebAuthnCredential>? credentials;
+  final bool? validateDbConstraints;
 
   WebAuthnCredentialImportRequest(
-      {List<WebAuthnCredential>? credentials, bool? validateDbConstraints})
-      : credentials = credentials ?? [],
-        validateDbConstraints = validateDbConstraints ?? false;
+      {this.credentials, this.validateDbConstraints});
 
   factory WebAuthnCredentialImportRequest.fromJson(Map<String, Object?> json) {
     return WebAuthnCredentialImportRequest(
       credentials: (json[r'credentials'] as List<Object?>?)
-              ?.map((i) => WebAuthnCredential.fromJson(
-                  i as Map<String, Object?>? ?? const {}))
-              .toList() ??
-          [],
-      validateDbConstraints: json[r'validateDbConstraints'] as bool? ?? false,
+          ?.map((i) => WebAuthnCredential.fromJson(
+              i as Map<String, Object?>? ?? const {}))
+          .toList(),
+      validateDbConstraints: json[r'validateDbConstraints'] as bool?,
     );
   }
 
@@ -40264,8 +40740,12 @@ class WebAuthnCredentialImportRequest {
     var validateDbConstraints = this.validateDbConstraints;
 
     final json = <String, Object?>{};
-    json[r'credentials'] = credentials.map((i) => i.toJson()).toList();
-    json[r'validateDbConstraints'] = validateDbConstraints;
+    if (credentials != null) {
+      json[r'credentials'] = credentials.map((i) => i.toJson()).toList();
+    }
+    if (validateDbConstraints != null) {
+      json[r'validateDbConstraints'] = validateDbConstraints;
+    }
     return json;
   }
 
@@ -40282,11 +40762,9 @@ class WebAuthnCredentialImportRequest {
 /// WebAuthn Credential API response
 class WebAuthnCredentialResponse {
   final WebAuthnCredential? credential;
-  final List<WebAuthnCredential> credentials;
+  final List<WebAuthnCredential>? credentials;
 
-  WebAuthnCredentialResponse(
-      {this.credential, List<WebAuthnCredential>? credentials})
-      : credentials = credentials ?? [];
+  WebAuthnCredentialResponse({this.credential, this.credentials});
 
   factory WebAuthnCredentialResponse.fromJson(Map<String, Object?> json) {
     return WebAuthnCredentialResponse(
@@ -40295,10 +40773,9 @@ class WebAuthnCredentialResponse {
               json[r'credential']! as Map<String, Object?>)
           : null,
       credentials: (json[r'credentials'] as List<Object?>?)
-              ?.map((i) => WebAuthnCredential.fromJson(
-                  i as Map<String, Object?>? ?? const {}))
-              .toList() ??
-          [],
+          ?.map((i) => WebAuthnCredential.fromJson(
+              i as Map<String, Object?>? ?? const {}))
+          .toList(),
     );
   }
 
@@ -40310,7 +40787,9 @@ class WebAuthnCredentialResponse {
     if (credential != null) {
       json[r'credential'] = credential.toJson();
     }
-    json[r'credentials'] = credentials.map((i) => i.toJson()).toList();
+    if (credentials != null) {
+      json[r'credentials'] = credentials.map((i) => i.toJson()).toList();
+    }
     return json;
   }
 
@@ -40366,8 +40845,8 @@ class WebAuthnLoginRequest {
   final String? applicationId;
   final String? ipAddress;
   final MetaData? metaData;
-  final bool newDevice;
-  final bool noJwt;
+  final bool? newDevice;
+  final bool? noJwt;
 
   WebAuthnLoginRequest(
       {this.credential,
@@ -40377,10 +40856,8 @@ class WebAuthnLoginRequest {
       this.applicationId,
       this.ipAddress,
       this.metaData,
-      bool? newDevice,
-      bool? noJwt})
-      : newDevice = newDevice ?? false,
-        noJwt = noJwt ?? false;
+      this.newDevice,
+      this.noJwt});
 
   factory WebAuthnLoginRequest.fromJson(Map<String, Object?> json) {
     return WebAuthnLoginRequest(
@@ -40396,8 +40873,8 @@ class WebAuthnLoginRequest {
       metaData: json[r'metaData'] != null
           ? MetaData.fromJson(json[r'metaData']! as Map<String, Object?>)
           : null,
-      newDevice: json[r'newDevice'] as bool? ?? false,
-      noJwt: json[r'noJWT'] as bool? ?? false,
+      newDevice: json[r'newDevice'] as bool?,
+      noJwt: json[r'noJWT'] as bool?,
     );
   }
 
@@ -40434,8 +40911,12 @@ class WebAuthnLoginRequest {
     if (metaData != null) {
       json[r'metaData'] = metaData.toJson();
     }
-    json[r'newDevice'] = newDevice;
-    json[r'noJWT'] = noJwt;
+    if (newDevice != null) {
+      json[r'newDevice'] = newDevice;
+    }
+    if (noJwt != null) {
+      json[r'noJWT'] = noJwt;
+    }
     return json;
   }
 
@@ -40544,7 +41025,7 @@ class WebAuthnPublicKeyRegistrationRequest {
   final String? id;
   final String? rpId;
   final WebAuthnAuthenticatorRegistrationResponse? response;
-  final List<String> transports;
+  final List<String>? transports;
   final String? type;
 
   WebAuthnPublicKeyRegistrationRequest(
@@ -40552,9 +41033,8 @@ class WebAuthnPublicKeyRegistrationRequest {
       this.id,
       this.rpId,
       this.response,
-      List<String>? transports,
-      this.type})
-      : transports = transports ?? [];
+      this.transports,
+      this.type});
 
   factory WebAuthnPublicKeyRegistrationRequest.fromJson(
       Map<String, Object?> json) {
@@ -40570,9 +41050,8 @@ class WebAuthnPublicKeyRegistrationRequest {
               json[r'response']! as Map<String, Object?>)
           : null,
       transports: (json[r'transports'] as List<Object?>?)
-              ?.map((i) => i as String? ?? '')
-              .toList() ??
-          [],
+          ?.map((i) => i as String? ?? '')
+          .toList(),
       type: json[r'type'] as String?,
     );
   }
@@ -40598,7 +41077,9 @@ class WebAuthnPublicKeyRegistrationRequest {
     if (response != null) {
       json[r'response'] = response.toJson();
     }
-    json[r'transports'] = transports;
+    if (transports != null) {
+      json[r'transports'] = transports;
+    }
     if (type != null) {
       json[r'type'] = type;
     }
@@ -40819,15 +41300,14 @@ class WebAuthnRegisterStartResponse {
 
 /// Options to request extensions during credential registration
 class WebAuthnRegistrationExtensionOptions {
-  final bool credProps;
+  final bool? credProps;
 
-  WebAuthnRegistrationExtensionOptions({bool? credProps})
-      : credProps = credProps ?? false;
+  WebAuthnRegistrationExtensionOptions({this.credProps});
 
   factory WebAuthnRegistrationExtensionOptions.fromJson(
       Map<String, Object?> json) {
     return WebAuthnRegistrationExtensionOptions(
-      credProps: json[r'credProps'] as bool? ?? false,
+      credProps: json[r'credProps'] as bool?,
     );
   }
 
@@ -40835,7 +41315,9 @@ class WebAuthnRegistrationExtensionOptions {
     var credProps = this.credProps;
 
     final json = <String, Object?>{};
-    json[r'credProps'] = credProps;
+    if (credProps != null) {
+      json[r'credProps'] = credProps;
+    }
     return json;
   }
 
@@ -40963,7 +41445,7 @@ class Webhook {
   final Map<String, dynamic>? data;
   final String? description;
   final Map<String, dynamic>? eventsEnabled;
-  final bool global;
+  final bool? global;
   final HTTPHeaders? headers;
   final String? httpAuthenticationPassword;
   final String? httpAuthenticationUsername;
@@ -40974,7 +41456,7 @@ class Webhook {
   final WebhookSignatureConfiguration? signatureConfiguration;
   final String? sslCertificate;
   final String? sslCertificateKeyId;
-  final List<String> tenantIds;
+  final List<String>? tenantIds;
   final String? url;
 
   Webhook(
@@ -40982,7 +41464,7 @@ class Webhook {
       this.data,
       this.description,
       this.eventsEnabled,
-      bool? global,
+      this.global,
       this.headers,
       this.httpAuthenticationPassword,
       this.httpAuthenticationUsername,
@@ -40993,10 +41475,8 @@ class Webhook {
       this.signatureConfiguration,
       this.sslCertificate,
       this.sslCertificateKeyId,
-      List<String>? tenantIds,
-      this.url})
-      : global = global ?? false,
-        tenantIds = tenantIds ?? [];
+      this.tenantIds,
+      this.url});
 
   factory Webhook.fromJson(Map<String, Object?> json) {
     return Webhook(
@@ -41004,7 +41484,7 @@ class Webhook {
       data: json[r'data'] as Map<String, Object?>?,
       description: json[r'description'] as String?,
       eventsEnabled: json[r'eventsEnabled'] as Map<String, Object?>?,
-      global: json[r'global'] as bool? ?? false,
+      global: json[r'global'] as bool?,
       headers: json[r'headers'] != null
           ? HTTPHeaders.fromJson(json[r'headers']! as Map<String, Object?>)
           : null,
@@ -41025,9 +41505,8 @@ class Webhook {
       sslCertificate: json[r'sslCertificate'] as String?,
       sslCertificateKeyId: json[r'sslCertificateKeyId'] as String?,
       tenantIds: (json[r'tenantIds'] as List<Object?>?)
-              ?.map((i) => i as String? ?? '')
-              .toList() ??
-          [],
+          ?.map((i) => i as String? ?? '')
+          .toList(),
       url: json[r'url'] as String?,
     );
   }
@@ -41064,7 +41543,9 @@ class Webhook {
     if (eventsEnabled != null) {
       json[r'eventsEnabled'] = eventsEnabled;
     }
-    json[r'global'] = global;
+    if (global != null) {
+      json[r'global'] = global;
+    }
     if (headers != null) {
       json[r'headers'] = headers.toJson();
     }
@@ -41095,7 +41576,9 @@ class Webhook {
     if (sslCertificateKeyId != null) {
       json[r'sslCertificateKeyId'] = sslCertificateKeyId;
     }
-    json[r'tenantIds'] = tenantIds;
+    if (tenantIds != null) {
+      json[r'tenantIds'] = tenantIds;
+    }
     if (url != null) {
       json[r'url'] = url;
     }
@@ -41321,7 +41804,7 @@ class WebhookCallResponse {
 }
 
 class WebhookEventLog {
-  final List<WebhookAttemptLog> attempts;
+  final List<WebhookAttemptLog>? attempts;
   final Map<String, dynamic>? data;
   final EventRequest? event;
   final WebhookEventResult? eventResult;
@@ -41336,7 +41819,7 @@ class WebhookEventLog {
   final int? successfulAttempts;
 
   WebhookEventLog(
-      {List<WebhookAttemptLog>? attempts,
+      {this.attempts,
       this.data,
       this.event,
       this.eventResult,
@@ -41348,16 +41831,14 @@ class WebhookEventLog {
       this.linkedObjectId,
       this.sequence,
       this.failedAttempts,
-      this.successfulAttempts})
-      : attempts = attempts ?? [];
+      this.successfulAttempts});
 
   factory WebhookEventLog.fromJson(Map<String, Object?> json) {
     return WebhookEventLog(
       attempts: (json[r'attempts'] as List<Object?>?)
-              ?.map((i) => WebhookAttemptLog.fromJson(
-                  i as Map<String, Object?>? ?? const {}))
-              .toList() ??
-          [],
+          ?.map((i) => WebhookAttemptLog.fromJson(
+              i as Map<String, Object?>? ?? const {}))
+          .toList(),
       data: json[r'data'] as Map<String, Object?>?,
       event: json[r'event'] != null
           ? EventRequest.fromJson(json[r'event']! as Map<String, Object?>)
@@ -41398,7 +41879,9 @@ class WebhookEventLog {
     var successfulAttempts = this.successfulAttempts;
 
     final json = <String, Object?>{};
-    json[r'attempts'] = attempts.map((i) => i.toJson()).toList();
+    if (attempts != null) {
+      json[r'attempts'] = attempts.map((i) => i.toJson()).toList();
+    }
     if (data != null) {
       json[r'data'] = data;
     }
@@ -41668,20 +42151,17 @@ class WebhookEventLogSearchRequest {
 /// Webhook event log search response.
 class WebhookEventLogSearchResponse {
   final int? total;
-  final List<WebhookEventLog> webhookEventLogs;
+  final List<WebhookEventLog>? webhookEventLogs;
 
-  WebhookEventLogSearchResponse(
-      {this.total, List<WebhookEventLog>? webhookEventLogs})
-      : webhookEventLogs = webhookEventLogs ?? [];
+  WebhookEventLogSearchResponse({this.total, this.webhookEventLogs});
 
   factory WebhookEventLogSearchResponse.fromJson(Map<String, Object?> json) {
     return WebhookEventLogSearchResponse(
       total: (json[r'total'] as num?)?.toInt(),
       webhookEventLogs: (json[r'webhookEventLogs'] as List<Object?>?)
-              ?.map((i) => WebhookEventLog.fromJson(
-                  i as Map<String, Object?>? ?? const {}))
-              .toList() ??
-          [],
+          ?.map((i) =>
+              WebhookEventLog.fromJson(i as Map<String, Object?>? ?? const {}))
+          .toList(),
     );
   }
 
@@ -41693,8 +42173,10 @@ class WebhookEventLogSearchResponse {
     if (total != null) {
       json[r'total'] = total;
     }
-    json[r'webhookEventLogs'] =
-        webhookEventLogs.map((i) => i.toJson()).toList();
+    if (webhookEventLogs != null) {
+      json[r'webhookEventLogs'] =
+          webhookEventLogs.map((i) => i.toJson()).toList();
+    }
     return json;
   }
 
@@ -41741,10 +42223,9 @@ class WebhookRequest {
 /// Webhook API response object.
 class WebhookResponse {
   final Webhook? webhook;
-  final List<Webhook> webhooks;
+  final List<Webhook>? webhooks;
 
-  WebhookResponse({this.webhook, List<Webhook>? webhooks})
-      : webhooks = webhooks ?? [];
+  WebhookResponse({this.webhook, this.webhooks});
 
   factory WebhookResponse.fromJson(Map<String, Object?> json) {
     return WebhookResponse(
@@ -41752,10 +42233,8 @@ class WebhookResponse {
           ? Webhook.fromJson(json[r'webhook']! as Map<String, Object?>)
           : null,
       webhooks: (json[r'webhooks'] as List<Object?>?)
-              ?.map((i) =>
-                  Webhook.fromJson(i as Map<String, Object?>? ?? const {}))
-              .toList() ??
-          [],
+          ?.map((i) => Webhook.fromJson(i as Map<String, Object?>? ?? const {}))
+          .toList(),
     );
   }
 
@@ -41767,7 +42246,9 @@ class WebhookResponse {
     if (webhook != null) {
       json[r'webhook'] = webhook.toJson();
     }
-    json[r'webhooks'] = webhooks.map((i) => i.toJson()).toList();
+    if (webhooks != null) {
+      json[r'webhooks'] = webhooks.map((i) => i.toJson()).toList();
+    }
     return json;
   }
 
@@ -41890,19 +42371,16 @@ class WebhookSearchRequest {
 /// Webhook search response
 class WebhookSearchResponse {
   final int? total;
-  final List<Webhook> webhooks;
+  final List<Webhook>? webhooks;
 
-  WebhookSearchResponse({this.total, List<Webhook>? webhooks})
-      : webhooks = webhooks ?? [];
+  WebhookSearchResponse({this.total, this.webhooks});
 
   factory WebhookSearchResponse.fromJson(Map<String, Object?> json) {
     return WebhookSearchResponse(
       total: (json[r'total'] as num?)?.toInt(),
       webhooks: (json[r'webhooks'] as List<Object?>?)
-              ?.map((i) =>
-                  Webhook.fromJson(i as Map<String, Object?>? ?? const {}))
-              .toList() ??
-          [],
+          ?.map((i) => Webhook.fromJson(i as Map<String, Object?>? ?? const {}))
+          .toList(),
     );
   }
 
@@ -41914,7 +42392,9 @@ class WebhookSearchResponse {
     if (total != null) {
       json[r'total'] = total;
     }
-    json[r'webhooks'] = webhooks.map((i) => i.toJson()).toList();
+    if (webhooks != null) {
+      json[r'webhooks'] = webhooks.map((i) => i.toJson()).toList();
+    }
     return json;
   }
 
@@ -41929,15 +42409,14 @@ class WebhookSearchResponse {
 /// Configuration for signing webhooks.
 class WebhookSignatureConfiguration {
   final String? signingKeyId;
-  final bool enabled;
+  final bool? enabled;
 
-  WebhookSignatureConfiguration({this.signingKeyId, bool? enabled})
-      : enabled = enabled ?? false;
+  WebhookSignatureConfiguration({this.signingKeyId, this.enabled});
 
   factory WebhookSignatureConfiguration.fromJson(Map<String, Object?> json) {
     return WebhookSignatureConfiguration(
       signingKeyId: json[r'signingKeyId'] as String?,
-      enabled: json[r'enabled'] as bool? ?? false,
+      enabled: json[r'enabled'] as bool?,
     );
   }
 
@@ -41949,7 +42428,9 @@ class WebhookSignatureConfiguration {
     if (signingKeyId != null) {
       json[r'signingKeyId'] = signingKeyId;
     }
-    json[r'enabled'] = enabled;
+    if (enabled != null) {
+      json[r'enabled'] = enabled;
+    }
     return json;
   }
 
@@ -41968,7 +42449,7 @@ class XboxApplicationConfiguration {
   final String? clientSecret;
   final String? scope;
   final Map<String, dynamic>? data;
-  final bool createRegistration;
+  final bool? createRegistration;
 
   XboxApplicationConfiguration(
       {this.buttonText,
@@ -41976,8 +42457,7 @@ class XboxApplicationConfiguration {
       this.clientSecret,
       this.scope,
       this.data,
-      bool? createRegistration})
-      : createRegistration = createRegistration ?? false;
+      this.createRegistration});
 
   factory XboxApplicationConfiguration.fromJson(Map<String, Object?> json) {
     return XboxApplicationConfiguration(
@@ -41986,7 +42466,7 @@ class XboxApplicationConfiguration {
       clientSecret: json[r'client_secret'] as String?,
       scope: json[r'scope'] as String?,
       data: json[r'data'] as Map<String, Object?>?,
-      createRegistration: json[r'createRegistration'] as bool? ?? false,
+      createRegistration: json[r'createRegistration'] as bool?,
     );
   }
 
@@ -42014,7 +42494,9 @@ class XboxApplicationConfiguration {
     if (data != null) {
       json[r'data'] = data;
     }
-    json[r'createRegistration'] = createRegistration;
+    if (createRegistration != null) {
+      json[r'createRegistration'] = createRegistration;
+    }
     return json;
   }
 
@@ -42044,7 +42526,7 @@ class XboxIdentityProvider {
   final String? scope;
   final Map<String, dynamic>? data;
   final Map<String, dynamic>? applicationConfiguration;
-  final bool debug;
+  final bool? debug;
   final String? id;
   final ZonedDateTime? insertInstant;
   final ProviderLambdaConfiguration? lambdaConfiguration;
@@ -42061,7 +42543,7 @@ class XboxIdentityProvider {
       this.scope,
       this.data,
       this.applicationConfiguration,
-      bool? debug,
+      this.debug,
       this.id,
       this.insertInstant,
       this.lambdaConfiguration,
@@ -42069,8 +42551,7 @@ class XboxIdentityProvider {
       this.linkingStrategy,
       this.name,
       this.tenantConfiguration,
-      this.type})
-      : debug = debug ?? false;
+      this.type});
 
   factory XboxIdentityProvider.fromJson(Map<String, Object?> json) {
     return XboxIdentityProvider(
@@ -42081,7 +42562,7 @@ class XboxIdentityProvider {
       data: json[r'data'] as Map<String, Object?>?,
       applicationConfiguration:
           json[r'applicationConfiguration'] as Map<String, Object?>?,
-      debug: json[r'debug'] as bool? ?? false,
+      debug: json[r'debug'] as bool?,
       id: json[r'id'] as String?,
       insertInstant:
           (json[r'insertInstant'] as num?)?.toInt() as ZonedDateTime?,
@@ -42140,7 +42621,9 @@ class XboxIdentityProvider {
     if (applicationConfiguration != null) {
       json[r'applicationConfiguration'] = applicationConfiguration;
     }
-    json[r'debug'] = debug;
+    if (debug != null) {
+      json[r'debug'] = debug;
+    }
     if (id != null) {
       json[r'id'] = id;
     }

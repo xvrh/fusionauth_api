@@ -6,9 +6,10 @@ class HttpMethod {
   static const get = HttpMethod('get');
   static const post = HttpMethod('post');
   static const put = HttpMethod('put');
+  static const patch = HttpMethod('patch');
   static const delete = HttpMethod('delete');
 
-  static const all = [get, post, put, delete];
+  static const all = [get, post, put, patch, delete];
 
   final String name;
   const HttpMethod(this.name);

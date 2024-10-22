@@ -120,3 +120,32 @@ class ApiException implements Exception {
     throw ApiException.fromResponse(response);
   }
 }
+
+class KickstartClient {
+  final requests = <Map<String, dynamic>>[];
+
+  void record(
+    String method,
+    String pathTemplate, {
+    Map<String, String>? pathParameters,
+    Map<String, String>? queryParameters,
+    Map<String, String>? headers,
+    dynamic body,
+  }) async {
+    var tenantId = headers?['X-FusionAuth-TenantId'];
+    var path = pathTemplate;
+
+    if (pathParameters != null) {
+      for (var pathParameter in pathParameters.entries) {
+        path = path.replaceAll(
+            '{${pathParameter.key}}', Uri.encodeComponent(pathParameter.value));
+      }
+    }
+    requests.add({
+      'method': method.toUpperCase(),
+      'url': '/$path',
+      if (body != null) 'body': body,
+      if (tenantId != null) 'tenantId': tenantId,
+    });
+  }
+}
