@@ -31,7 +31,7 @@ void main() {
       ),
     );
     expect(tenants.tenants, hasLength(1));
-    expect(tenants.tenants[0].id, '00000000-0000-0000-0000-000000000001');
+    expect(tenants.tenants![0].id, '00000000-0000-0000-0000-000000000001');
   });
 
   test('Create user', () async {
@@ -58,9 +58,6 @@ void main() {
         ),
       );
     }
-
-    // Wait for the search engine to complete
-    await Future.delayed(const Duration(seconds: 3));
 
     var response = await api.searchUsersByQueryWithId(
       body: SearchRequest(

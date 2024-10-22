@@ -20,29 +20,7 @@ void main() {
     expect(requests, [
       {
         'method': 'POST',
-        'url': 'api/user',
-        'body': {
-          'disableDomainBlock': false,
-          'sendSetPasswordEmail': false,
-          'skipVerification': true,
-          'user': {
-            'preferredLanguages': [],
-            'active': false,
-            'email': 'user@email.com',
-            'memberships': [],
-            'registrations': [],
-            'password': 'Bonjour99',
-            'passwordChangeRequired': false,
-            'verified': false
-          }
-        }
-      }
-    ]);
-
-    expect(requests, [
-      {
-        'method': 'POST',
-        'url': 'api/user',
+        'url': '/api/user',
         'body': {
           'sendSetPasswordEmail': false,
           'skipVerification': true,

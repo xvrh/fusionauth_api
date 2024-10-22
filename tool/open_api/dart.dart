@@ -582,9 +582,7 @@ class ComplexType extends DartType {
   }
 
   bool _isPropertyRequired(Property property) {
-    return _definitionRequireProperty(property) ||
-        property.type is ListDartType ||
-        property.type.isBool;
+    return _definitionRequireProperty(property);
   }
 
   bool _definitionRequireProperty(Property property) {
