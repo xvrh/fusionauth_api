@@ -3,6 +3,7 @@ import '../utils/string.dart';
 import 'comment.dart';
 import 'dart_keywords.dart';
 import 'swagger_spec.dart' as sw;
+import 'swagger_spec.dart';
 
 class Api {
   final String name;
@@ -12,10 +13,12 @@ class Api {
   final _topLevelEnums = <String, EnumDartType>{};
   final TypeAliases typeAliases;
   late Service _service;
+  final bool isKickstart;
 
-  Api(this.name, this._spec, {Map<String, String>? typeAliases})
+  Api(this.name, this._spec,
+      {Map<String, String>? typeAliases, required this.isKickstart})
       : typeAliases = TypeAliases(typeAliases) {
-    _service = Service(_spec.info, name, null, this.typeAliases);
+    _service = Service(this, _spec.info, name, null, this.typeAliases);
 
     for (final pathEntry in _spec.paths.entries) {
       for (final methodEntry
@@ -49,6 +52,7 @@ class Api {
           service.operations.add(
               Operation(this, methodName, path, url, httpMethod: httpMethod));
         } else {
+          assert(false);
           // TODO(xha): some paths contains a "parameters" entry that contains
           // some header parameter definition to add or require (ie. Authorization).
         }
@@ -171,27 +175,35 @@ class Api {
     buffer.writeln('''
 // Generated code - Do not edit manually
 
-import 'api_utils.dart';
+import 'api_utils.dart';''');
+    if (isKickstart) {
+      buffer.writeln("import 'api_generated.dart' hide FusionauthClient;");
+    }
 
-// ignore_for_file: deprecated_member_use_from_same_package
-''');
+    buffer
+      ..writeln('')
+      ..writeln('// ignore_for_file: deprecated_member_use_from_same_package')
+      ..writeln('');
 
     buffer.writeln(_service.toCode());
     buffer.writeln();
 
-    for (var topLevelEnum
-        in _topLevelEnums.values.stableSortedBy((e) => e.name)) {
-      buffer.writeln(topLevelEnum.toCode());
-      buffer.writeln();
-    }
-    for (var complexType in _complexTypes.stableSortedBy((e) => e.className)) {
-      buffer.writeln(complexType.toCode());
-      buffer.writeln();
-    }
+    if (!isKickstart) {
+      for (var topLevelEnum
+          in _topLevelEnums.values.stableSortedBy((e) => e.name)) {
+        buffer.writeln(topLevelEnum.toCode());
+        buffer.writeln();
+      }
+      for (var complexType
+          in _complexTypes.stableSortedBy((e) => e.className)) {
+        buffer.writeln(complexType.toCode());
+        buffer.writeln();
+      }
 
-    for (var aliasType in _aliasTypes.stableSortedBy((e) => e.name)) {
-      buffer.writeln(aliasType.toCode());
-      buffer.writeln();
+      for (var aliasType in _aliasTypes.stableSortedBy((e) => e.name)) {
+        buffer.writeln(aliasType.toCode());
+        buffer.writeln();
+      }
     }
 
     return buffer.toString();
@@ -225,12 +237,14 @@ class TypeAliases {
 }
 
 class Service {
+  final Api api;
   final sw.Info info;
   final sw.Tag? tag;
   final List<Operation> operations = [];
   late final String _className;
 
-  Service(this.info, String serviceName, this.tag, TypeAliases aliases) {
+  Service(
+      this.api, this.info, String serviceName, this.tag, TypeAliases aliases) {
     var name = '${serviceName.words.toUpperCamel()}Client';
     _className = aliases[name] ?? name;
   }
@@ -243,21 +257,38 @@ class Service {
     if (info.description.isNotEmpty) {
       buffer.writeln('/// ${info.description}');
     }
-    buffer.writeln('''
 
+    if (api.isKickstart) {
+      buffer.writeln('''
+class FusionauthKickstart {
+  final  _client = KickstartClient();
+  
+  FusionauthKickstart();
+  
+  List<Map<String, dynamic>> get requests => _client.requests;
+''');
+      for (var operation in operations) {
+        if (const [HttpMethod.post, HttpMethod.put, HttpMethod.patch]
+            .contains(operation.httpMethod)) {
+          buffer.writeln(operation.toCode(isKickstart: true));
+          buffer.writeln();
+        }
+      }
+      buffer.writeln('}');
+    } else {
+      buffer.writeln('''
 class $_className {
   final ApiClient _client;
   
   $_className(Client httpClient, Uri baseUri, {required String? apiKey}):
     _client = ApiClient(baseUri, httpClient, authorization: apiKey);
 ''');
-
-    for (var operation in operations) {
-      buffer.writeln(operation.toCode());
-      buffer.writeln();
+      for (var operation in operations) {
+        buffer.writeln(operation.toCode());
+        buffer.writeln();
+      }
+      buffer.writeln('}');
     }
-
-    buffer.writeln('}');
 
     return buffer.toString();
   }
@@ -285,7 +316,7 @@ class Operation {
     return null;
   }
 
-  String toCode() {
+  String toCode({bool isKickstart = false}) {
     final buffer = StringBuffer();
 
     var body = _findBody();
@@ -367,7 +398,12 @@ class Operation {
     }
 
     buffer.writeln(documentationComment(path.description, indent: 2));
-    buffer.writeln('Future<$returnTypeName> $methodName($parameters) async {');
+    if (isKickstart) {
+      buffer.writeln('void $methodName($parameters) {');
+    } else {
+      buffer
+          .writeln('Future<$returnTypeName> $methodName($parameters) async {');
+    }
 
     var parametersCode = '';
 
@@ -404,19 +440,23 @@ class Operation {
       }
     }
 
-    var sendCode =
-        "await _client.send('${httpMethod.name}', '$url'$parametersCode,)";
-    if (returnDartType != null) {
-      var decodeCode = _fromJsonCodeForComplexType(
-          _api, returnDartType, sendCode,
-          accessorIsNullable: false, targetIsNullable: false);
-      buffer.write('return $decodeCode;');
-    } else if (returnTypeName != 'void') {
-      buffer.writeln('return $sendCode;');
+    if (isKickstart) {
+      buffer.writeln(
+          "_client.record('${httpMethod.name}', '$url'$parametersCode,);");
     } else {
-      buffer.writeln('$sendCode;');
+      var sendCode =
+          "await _client.send('${httpMethod.name}', '$url'$parametersCode,)";
+      if (returnDartType != null) {
+        var decodeCode = _fromJsonCodeForComplexType(
+            _api, returnDartType, sendCode,
+            accessorIsNullable: false, targetIsNullable: false);
+        buffer.write('return $decodeCode;');
+      } else if (returnTypeName != 'void') {
+        buffer.writeln('return $sendCode;');
+      } else {
+        buffer.writeln('$sendCode;');
+      }
     }
-
     buffer.writeln('}');
 
     return buffer.toString();

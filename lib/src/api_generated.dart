@@ -5,7 +5,6 @@ import 'api_utils.dart';
 // ignore_for_file: deprecated_member_use_from_same_package
 
 /// This is a FusionAuth server. Find out more at [https://fusionauth.io](https://fusionauth.io). You need to [set up an API key](https://fusionauth.io/docs/v1/tech/apis/authentication#managing-api-keys) in the FusionAuth instance you are using to test out the API calls.
-
 class FusionauthClient {
   final ApiClient _client;
 
@@ -181,6 +180,19 @@ class FusionauthClient {
     ));
   }
 
+  /// Updates, via PATCH, the connector with the given Id.
+  Future<ConnectorResponse> patchConnectorWithId(
+      {required String connectorId, required ConnectorRequest body}) async {
+    return ConnectorResponse.fromJson(await _client.send(
+      'patch',
+      'api/connector/{connectorId}',
+      pathParameters: {
+        'connectorId': connectorId,
+      },
+      body: body.toJson(),
+    ));
+  }
+
   /// Retrieves the connector with the given Id.
   Future<ConnectorResponse> retrieveConnectorWithId(String connectorId) async {
     return ConnectorResponse.fromJson(await _client.send(
@@ -242,6 +254,24 @@ class FusionauthClient {
       },
       queryParameters: {
         if (reactivate != null) 'reactivate': reactivate,
+      },
+      headers: {
+        if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
+      },
+      body: body.toJson(),
+    ));
+  }
+
+  /// Updates, via PATCH, the user action with the given Id.
+  Future<UserActionResponse> patchUserActionWithId(
+      {required String userActionId,
+      String? tenantIdScope,
+      required UserActionRequest body}) async {
+    return UserActionResponse.fromJson(await _client.send(
+      'patch',
+      'api/user-action/{userActionId}',
+      pathParameters: {
+        'userActionId': userActionId,
       },
       headers: {
         if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
@@ -513,6 +543,19 @@ class FusionauthClient {
     ));
   }
 
+  /// Updates, via PATCH, the lambda with the given Id.
+  Future<LambdaResponse> patchLambdaWithId(
+      {required String lambdaId, required LambdaRequest body}) async {
+    return LambdaResponse.fromJson(await _client.send(
+      'patch',
+      'api/lambda/{lambdaId}',
+      pathParameters: {
+        'lambdaId': lambdaId,
+      },
+      body: body.toJson(),
+    ));
+  }
+
   /// Retrieves the lambda for the given Id.
   Future<LambdaResponse> retrieveLambdaWithId(String lambdaId) async {
     return LambdaResponse.fromJson(await _client.send(
@@ -647,6 +690,27 @@ class FusionauthClient {
     ));
   }
 
+  /// Updates, via PATCH, the application role with the given Id for the
+  /// application.
+  Future<ApplicationResponse> patchApplicationRoleWithId(
+      {required String applicationId,
+      required String roleId,
+      String? tenantIdScope,
+      required ApplicationRequest body}) async {
+    return ApplicationResponse.fromJson(await _client.send(
+      'patch',
+      'api/application/{applicationId}/role/{roleId}',
+      pathParameters: {
+        'applicationId': applicationId,
+        'roleId': roleId,
+      },
+      headers: {
+        if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
+      },
+      body: body.toJson(),
+    ));
+  }
+
   /// Creates a new role for an application. You must specify the Id of the
   /// application you are creating the role for. You can optionally specify an
   /// Id for the role inside the ApplicationRole object itself, if not provided
@@ -683,6 +747,27 @@ class FusionauthClient {
       headers: {
         if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
       },
+    ));
+  }
+
+  /// Updates, via PATCH, the custom OAuth scope with the given Id for the
+  /// application.
+  Future<ApplicationOAuthScopeResponse> patchOAuthScopeWithId(
+      {required String applicationId,
+      required String scopeId,
+      String? tenantIdScope,
+      required ApplicationOAuthScopeRequest body}) async {
+    return ApplicationOAuthScopeResponse.fromJson(await _client.send(
+      'patch',
+      'api/application/{applicationId}/scope/{scopeId}',
+      pathParameters: {
+        'applicationId': applicationId,
+        'scopeId': scopeId,
+      },
+      headers: {
+        if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
+      },
+      body: body.toJson(),
     ));
   }
 
@@ -846,6 +931,19 @@ class FusionauthClient {
     ));
   }
 
+  /// Updates, via PATCH, the messenger with the given Id.
+  Future<MessengerResponse> patchMessengerWithId(
+      {required String messengerId, required MessengerRequest body}) async {
+    return MessengerResponse.fromJson(await _client.send(
+      'patch',
+      'api/messenger/{messengerId}',
+      pathParameters: {
+        'messengerId': messengerId,
+      },
+      body: body.toJson(),
+    ));
+  }
+
   /// Deletes the messenger for the given Id.
   Future<void> deleteMessengerWithId(String messengerId) async {
     await _client.send(
@@ -901,6 +999,19 @@ class FusionauthClient {
         'entityTypeId': entityTypeId,
       },
     );
+  }
+
+  /// Updates, via PATCH, the Entity Type with the given Id.
+  Future<EntityTypeResponse> patchEntityTypeWithId(
+      {required String entityTypeId, required EntityTypeRequest body}) async {
+    return EntityTypeResponse.fromJson(await _client.send(
+      'patch',
+      'api/entity/type/{entityTypeId}',
+      pathParameters: {
+        'entityTypeId': entityTypeId,
+      },
+      body: body.toJson(),
+    ));
   }
 
   /// Updates the Entity Type with the given Id.
@@ -989,6 +1100,24 @@ class FusionauthClient {
           'identityProviderUserId': identityProviderUserId,
         if (userId != null) 'userId': userId,
       },
+    ));
+  }
+
+  /// Updates, via PATCH, the consent with the given Id.
+  Future<ConsentResponse> patchConsentWithId(
+      {required String consentId,
+      String? tenantIdScope,
+      required ConsentRequest body}) async {
+    return ConsentResponse.fromJson(await _client.send(
+      'patch',
+      'api/consent/{consentId}',
+      pathParameters: {
+        'consentId': consentId,
+      },
+      headers: {
+        if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
+      },
+      body: body.toJson(),
     ));
   }
 
@@ -1381,6 +1510,24 @@ class FusionauthClient {
     ));
   }
 
+  /// Updates, via PATCH, the user with the given Id.
+  Future<UserResponse> patchUserWithId(
+      {required String userId,
+      String? tenantIdScope,
+      required UserRequest body}) async {
+    return UserResponse.fromJson(await _client.send(
+      'patch',
+      'api/user/{userId}',
+      pathParameters: {
+        'userId': userId,
+      },
+      headers: {
+        if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
+      },
+      body: body.toJson(),
+    ));
+  }
+
   /// Retrieves the user for the given Id.
   Future<UserResponse> retrieveUserWithId(
       {required String userId, String? tenantIdScope}) async {
@@ -1494,6 +1641,24 @@ class FusionauthClient {
         if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
       },
     );
+  }
+
+  /// Updates, via PATCH, the application with the given Id.
+  Future<ApplicationResponse> patchApplicationWithId(
+      {required String applicationId,
+      String? tenantIdScope,
+      required ApplicationRequest body}) async {
+    return ApplicationResponse.fromJson(await _client.send(
+      'patch',
+      'api/application/{applicationId}',
+      pathParameters: {
+        'applicationId': applicationId,
+      },
+      headers: {
+        if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
+      },
+      body: body.toJson(),
+    ));
   }
 
   /// Creates an application. You can optionally specify an Id for the
@@ -1659,6 +1824,19 @@ class FusionauthClient {
     ));
   }
 
+  /// Updates, via PATCH, the theme with the given Id.
+  Future<ThemeResponse> patchThemeWithId(
+      {required String themeId, required ThemeRequest body}) async {
+    return ThemeResponse.fromJson(await _client.send(
+      'patch',
+      'api/theme/{themeId}',
+      pathParameters: {
+        'themeId': themeId,
+      },
+      body: body.toJson(),
+    ));
+  }
+
   /// Deletes the theme for the given Id.
   Future<void> deleteThemeWithId(String themeId) async {
     await _client.send(
@@ -1676,6 +1854,20 @@ class FusionauthClient {
     return LoginRecordSearchResponse.fromJson(await _client.send(
       'post',
       'api/system/login-record/search',
+      body: body.toJson(),
+    ));
+  }
+
+  /// Updates, via PATCH, the user action reason with the given Id.
+  Future<UserActionReasonResponse> patchUserActionReasonWithId(
+      {required String userActionReasonId,
+      required UserActionReasonRequest body}) async {
+    return UserActionReasonResponse.fromJson(await _client.send(
+      'patch',
+      'api/user-action-reason/{userActionReasonId}',
+      pathParameters: {
+        'userActionReasonId': userActionReasonId,
+      },
       body: body.toJson(),
     ));
   }
@@ -1793,6 +1985,24 @@ class FusionauthClient {
     ));
   }
 
+  /// Updates, via PATCH, the email template with the given Id.
+  Future<EmailTemplateResponse> patchEmailTemplateWithId(
+      {required String emailTemplateId,
+      String? tenantIdScope,
+      required EmailTemplateRequest body}) async {
+    return EmailTemplateResponse.fromJson(await _client.send(
+      'patch',
+      'api/email/template/{emailTemplateId}',
+      pathParameters: {
+        'emailTemplateId': emailTemplateId,
+      },
+      headers: {
+        if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
+      },
+      body: body.toJson(),
+    ));
+  }
+
   /// Creates an email template. You can optionally specify an Id for the
   /// template, if not provided one will be generated.
   Future<EmailTemplateResponse> createEmailTemplateWithId(
@@ -1851,6 +2061,24 @@ class FusionauthClient {
       headers: {
         if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
       },
+    ));
+  }
+
+  /// Updates, via PATCH, the tenant with the given Id.
+  Future<TenantResponse> patchTenantWithId(
+      {required String tenantId,
+      String? tenantIdScope,
+      required TenantRequest body}) async {
+    return TenantResponse.fromJson(await _client.send(
+      'patch',
+      'api/tenant/{tenantId}',
+      pathParameters: {
+        'tenantId': tenantId,
+      },
+      headers: {
+        if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
+      },
+      body: body.toJson(),
     ));
   }
 
@@ -2042,6 +2270,19 @@ class FusionauthClient {
     ));
   }
 
+  /// Updates, via PATCH, a single User consent by Id.
+  Future<UserConsentResponse> patchUserConsentWithId(
+      {required String userConsentId, required UserConsentRequest body}) async {
+    return UserConsentResponse.fromJson(await _client.send(
+      'patch',
+      'api/user/consent/{userConsentId}',
+      pathParameters: {
+        'userConsentId': userConsentId,
+      },
+      body: body.toJson(),
+    ));
+  }
+
   /// Retrieves all the families that a user belongs to.
   Future<FamilyResponse> retrieveFamiliesWithId(
       {String? userId, String? tenantIdScope}) async {
@@ -2068,6 +2309,16 @@ class FusionauthClient {
       headers: {
         if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
       },
+      body: body.toJson(),
+    ));
+  }
+
+  /// Updates, via PATCH, the available integrations.
+  Future<IntegrationResponse> patchIntegrationsWithId(
+      {required IntegrationRequest body}) async {
+    return IntegrationResponse.fromJson(await _client.send(
+      'patch',
+      'api/integration',
       body: body.toJson(),
     ));
   }
@@ -2201,6 +2452,25 @@ class FusionauthClient {
     ));
   }
 
+  /// Updates, via PATCH, the registration for the user with the given Id and
+  /// the application defined in the request.
+  Future<RegistrationResponse> patchRegistrationWithId(
+      {required String userId,
+      String? tenantIdScope,
+      required RegistrationRequest body}) async {
+    return RegistrationResponse.fromJson(await _client.send(
+      'patch',
+      'api/user/registration/{userId}',
+      pathParameters: {
+        'userId': userId,
+      },
+      headers: {
+        if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
+      },
+      body: body.toJson(),
+    ));
+  }
+
   /// Exchanges an OAuth authorization code and code_verifier for an access
   /// token. Makes a request to the Token endpoint to exchange the authorization
   /// code returned from the Authorize endpoint and a code_verifier for an
@@ -2239,6 +2509,24 @@ class FusionauthClient {
     return WebAuthnStartResponse.fromJson(await _client.send(
       'post',
       'api/webauthn/start',
+      body: body.toJson(),
+    ));
+  }
+
+  /// Updates, via PATCH, the group with the given Id.
+  Future<GroupResponse> patchGroupWithId(
+      {required String groupId,
+      String? tenantIdScope,
+      required GroupRequest body}) async {
+    return GroupResponse.fromJson(await _client.send(
+      'patch',
+      'api/group/{groupId}',
+      pathParameters: {
+        'groupId': groupId,
+      },
+      headers: {
+        if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
+      },
       body: body.toJson(),
     ));
   }
@@ -2415,6 +2703,20 @@ class FusionauthClient {
     ));
   }
 
+  /// Updates, via PATCH, the message template with the given Id.
+  Future<MessageTemplateResponse> patchMessageTemplateWithId(
+      {required String messageTemplateId,
+      required MessageTemplateRequest body}) async {
+    return MessageTemplateResponse.fromJson(await _client.send(
+      'patch',
+      'api/message/template/{messageTemplateId}',
+      pathParameters: {
+        'messageTemplateId': messageTemplateId,
+      },
+      body: body.toJson(),
+    ));
+  }
+
   /// Updates the message template with the given Id.
   Future<MessageTemplateResponse> updateMessageTemplateWithId(
       {required String messageTemplateId,
@@ -2557,6 +2859,20 @@ class FusionauthClient {
     ));
   }
 
+  /// Updates, via PATCH, the identity provider with the given Id.
+  Future<IdentityProviderResponse> patchIdentityProviderWithId(
+      {required String identityProviderId,
+      required IdentityProviderRequest body}) async {
+    return IdentityProviderResponse.fromJson(await _client.send(
+      'patch',
+      'api/identity-provider/{identityProviderId}',
+      pathParameters: {
+        'identityProviderId': identityProviderId,
+      },
+      body: body.toJson(),
+    ));
+  }
+
   /// Retrieves the identity provider for the given Id or all the identity
   /// providers if the Id is null.
   Future<IdentityProviderResponse> retrieveIdentityProviderWithId(
@@ -2638,6 +2954,16 @@ class FusionauthClient {
       {required SystemConfigurationRequest body}) async {
     return SystemConfigurationResponse.fromJson(await _client.send(
       'put',
+      'api/system-configuration',
+      body: body.toJson(),
+    ));
+  }
+
+  /// Updates, via PATCH, the system configuration.
+  Future<SystemConfigurationResponse> patchSystemConfigurationWithId(
+      {required SystemConfigurationRequest body}) async {
+    return SystemConfigurationResponse.fromJson(await _client.send(
+      'patch',
       'api/system-configuration',
       body: body.toJson(),
     ));

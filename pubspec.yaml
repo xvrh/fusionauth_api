@@ -10,9 +10,11 @@ dependencies:
   path:
 
 dev_dependencies:
+  build_runner:
   collection:
   dart_style:
   json_annotation:
+  json_serializable:
   lints:
   test:
   yaml:

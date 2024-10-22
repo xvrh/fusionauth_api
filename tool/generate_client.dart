@@ -21,15 +21,20 @@ void main() {
 
   final spec = Spec.fromJson(jsonSpec);
 
-  var apiGenerator = dart.Api('Fusionauth', spec);
-  var code = apiGenerator.toCode();
-  try {
-    code = DartFormatter().format(code);
-  } catch (e) {
-    print('Code has syntax error');
-  }
+  for (var e in {
+    true: 'lib/src/api_kickstart_generated.dart',
+    false: 'lib/src/api_generated.dart'
+  }.entries) {
+    var apiGenerator = dart.Api('Fusionauth', spec, isKickstart: e.key);
+    var code = apiGenerator.toCode();
+    try {
+      code = DartFormatter().format(code);
+    } catch (e) {
+      print('Code has syntax error');
+    }
 
-  File('lib/src/api_generated.dart').writeAsStringSync(code);
+    File(e.value).writeAsStringSync(code);
+  }
 }
 
 void fixApi(Map<String, dynamic> spec) {
