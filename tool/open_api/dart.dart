@@ -20,7 +20,8 @@ class Api {
       {Map<String, String>? typeAliases,
       required this.isKickstart,
       Map<String, String>? customImplementations})
-      : typeAliases = TypeAliases(typeAliases), customImplementations = customImplementations ?? {} {
+      : typeAliases = TypeAliases(typeAliases),
+        customImplementations = customImplementations ?? {} {
     _service = Service(this, _spec.info, name, null, this.typeAliases);
 
     for (final pathEntry in _spec.paths.entries) {
