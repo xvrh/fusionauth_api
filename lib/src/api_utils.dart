@@ -17,6 +17,7 @@ class ApiClient {
     String pathTemplate, {
     Map<String, String>? pathParameters,
     Map<String, String>? queryParameters,
+    Map<String, Iterable<String>>? queryParametersAll,
     Map<String, String>? headers,
     dynamic body,
   }) async {
@@ -35,12 +36,11 @@ class ApiClient {
     }
 
     var uri = _baseUri.replace(path: p.url.join(_baseUri.path, path));
-    if (queryParameters != null) {
-      uri = uri.replace(queryParameters: {
-        ...uri.queryParameters,
-        ...queryParameters,
-      });
-    }
+    uri = uri.replace(queryParameters: {
+      ...uri.queryParameters,
+      ...?queryParameters,
+      ...?queryParametersAll,
+    });
 
     BaseRequest request;
     var bodyRequest = Request(method, uri);

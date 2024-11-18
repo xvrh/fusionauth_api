@@ -4,9 +4,6 @@ import 'package:test/test.dart';
 
 import 'utils.dart';
 
-const apiKey = 'abc123456789';
-final server = Uri.http('localhost:9011');
-
 void main() {
   late Client httpClient;
   late FusionauthClient api;

@@ -12,12 +12,15 @@ class Api {
   final _aliasTypes = <AliasType>[];
   final _topLevelEnums = <String, EnumDartType>{};
   final TypeAliases typeAliases;
+  final Map<String, String> customImplementations;
   late Service _service;
   final bool isKickstart;
 
   Api(this.name, this._spec,
-      {Map<String, String>? typeAliases, required this.isKickstart})
-      : typeAliases = TypeAliases(typeAliases) {
+      {Map<String, String>? typeAliases,
+      required this.isKickstart,
+      Map<String, String>? customImplementations})
+      : typeAliases = TypeAliases(typeAliases), customImplementations = customImplementations ?? {} {
     _service = Service(this, _spec.info, name, null, this.typeAliases);
 
     for (final pathEntry in _spec.paths.entries) {
@@ -174,6 +177,7 @@ class Api {
 
     buffer.writeln('''
 // Generated code - Do not edit manually
+library;
 
 import 'api_utils.dart';''');
     if (isKickstart) {
@@ -318,6 +322,11 @@ class Operation {
 
   String toCode({bool isKickstart = false}) {
     final buffer = StringBuffer();
+
+    var custom = _api.customImplementations[methodName];
+    if (custom != null) {
+      return custom;
+    }
 
     var body = _findBody();
 
