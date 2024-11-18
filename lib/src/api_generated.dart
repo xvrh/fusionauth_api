@@ -1,4 +1,5 @@
 // Generated code - Do not edit manually
+library;
 
 import 'api_utils.dart';
 
@@ -1406,14 +1407,12 @@ class FusionauthClient {
     ));
   }
 
-  /// Retrieves the users for the given ids. If any Id is invalid, it is
-  /// ignored.
-  Future<SearchResponse> searchUsersByIdsWithId({String? ids}) async {
+  Future<SearchResponse> searchUsersByIdsWithId(Iterable<String> ids) async {
     return SearchResponse.fromJson(await _client.send(
       'get',
       'api/user/search',
-      queryParameters: {
-        if (ids != null) 'ids': ids,
+      queryParametersAll: {
+        'ids': ids,
       },
     ));
   }

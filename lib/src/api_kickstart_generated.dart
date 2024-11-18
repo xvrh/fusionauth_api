@@ -1,4 +1,5 @@
 // Generated code - Do not edit manually
+library;
 
 import 'api_utils.dart';
 import 'api_generated.dart' hide FusionauthClient;

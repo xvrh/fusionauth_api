@@ -56,7 +56,7 @@ services:
       - mailcatcher_net
     restart: unless-stopped
     ports:
-      - 9011:9011
+      - "9011:9011"
     volumes:
       - fusionauth_config:/usr/local/fusionauth/config
       - ./kickstart:/usr/local/fusionauth/kickstart
