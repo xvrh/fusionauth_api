@@ -26,7 +26,9 @@ class ApiClient {
     if (pathParameters != null) {
       for (var pathParameter in pathParameters.entries) {
         path = path.replaceAll(
-            '{${pathParameter.key}}', Uri.encodeComponent(pathParameter.value));
+          '{${pathParameter.key}}',
+          Uri.encodeComponent(pathParameter.value),
+        );
       }
     }
     assert(!path.contains('{'));
@@ -36,11 +38,13 @@ class ApiClient {
     }
 
     var uri = _baseUri.replace(path: p.url.join(_baseUri.path, path));
-    uri = uri.replace(queryParameters: {
-      ...uri.queryParameters,
-      ...?queryParameters,
-      ...?queryParametersAll,
-    });
+    uri = uri.replace(
+      queryParameters: {
+        ...uri.queryParameters,
+        ...?queryParameters,
+        ...?queryParametersAll,
+      },
+    );
 
     BaseRequest request;
     var bodyRequest = Request(method, uri);
@@ -84,8 +88,14 @@ class ApiException implements Exception {
   final List<dynamic>? generalErrors;
   final String rawBody;
 
-  ApiException(this.url, this.statusCode, this.reasonPhrase,
-      {this.fieldErrors, this.generalErrors, required this.rawBody});
+  ApiException(
+    this.url,
+    this.statusCode,
+    this.reasonPhrase, {
+    this.fieldErrors,
+    this.generalErrors,
+    required this.rawBody,
+  });
 
   factory ApiException.fromResponse(Response response) {
     Map<String, dynamic>? fieldErrors;
@@ -105,14 +115,18 @@ class ApiException implements Exception {
       }
     }
     return ApiException(
-        response.request?.url, response.statusCode, response.reasonPhrase,
-        fieldErrors: fieldErrors,
-        generalErrors: generalErrors,
-        rawBody: rawBody);
+      response.request?.url,
+      response.statusCode,
+      response.reasonPhrase,
+      fieldErrors: fieldErrors,
+      generalErrors: generalErrors,
+      rawBody: rawBody,
+    );
   }
 
   @override
-  String toString() => 'ApiException($statusCode, $reasonPhrase, url: $url, '
+  String toString() =>
+      'ApiException($statusCode, $reasonPhrase, url: $url, '
       'body: $rawBody)';
 
   static void checkResponse(Response response) {
@@ -138,7 +152,9 @@ class KickstartClient {
     if (pathParameters != null) {
       for (var pathParameter in pathParameters.entries) {
         path = path.replaceAll(
-            '{${pathParameter.key}}', Uri.encodeComponent(pathParameter.value));
+          '{${pathParameter.key}}',
+          Uri.encodeComponent(pathParameter.value),
+        );
       }
     }
     requests.add({

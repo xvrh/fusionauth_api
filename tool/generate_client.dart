@@ -10,28 +10,41 @@ import 'package:yaml/yaml.dart';
 
 void main() {
   var yamlSpec = loadYaml(specFile.readAsStringSync());
-  var jsonSpec = jsonDecode(jsonEncode(yamlSpec, toEncodable: (e) {
-    if (e is YamlMap) {
-      return e.map((key, value) => MapEntry(key.toString(), value));
-    }
-    return e;
-  })) as Map<String, dynamic>;
+  var jsonSpec =
+      jsonDecode(
+            jsonEncode(
+              yamlSpec,
+              toEncodable: (e) {
+                if (e is YamlMap) {
+                  return e.map((key, value) => MapEntry(key.toString(), value));
+                }
+                return e;
+              },
+            ),
+          )
+          as Map<String, dynamic>;
 
   fixApi(jsonSpec);
 
   final spec = Spec.fromJson(jsonSpec);
 
-  for (var e in {
-    true: 'lib/src/api_kickstart_generated.dart',
-    false: 'lib/src/api_generated.dart'
-  }.entries) {
+  for (var e
+      in {
+        true: 'lib/src/api_kickstart_generated.dart',
+        false: 'lib/src/api_generated.dart',
+      }.entries) {
     var isKickstart = e.key;
-    var apiGenerator = dart.Api('Fusionauth', spec,
-        isKickstart: isKickstart,
-        customImplementations: !isKickstart ? _customImplementations : null);
+    var apiGenerator = dart.Api(
+      'Fusionauth',
+      spec,
+      isKickstart: isKickstart,
+      customImplementations: !isKickstart ? _customImplementations : null,
+    );
     var code = apiGenerator.toCode();
     try {
-      code = DartFormatter(languageVersion: DartFormatter.latestLanguageVersion).format(code);
+      code = DartFormatter(
+        languageVersion: DartFormatter.latestLanguageVersion,
+      ).format(code);
     } catch (e) {
       print('Code has syntax error');
     }
@@ -69,7 +82,7 @@ final _customImplementations = {
 
 String _customApiSearchImplementation =
 //language=dart
-    '''
+'''
   Future<SearchResponse> searchUsersByIdsWithId(Iterable<String> ids) async {
     return SearchResponse.fromJson(await _client.send(
       'get',

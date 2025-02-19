@@ -5,10 +5,16 @@ import 'string/split_words.dart';
 extension StringExtensions on String {
   List<String> get words => splitWords(this);
 
-  String replaceCharAt(int startIndex,
-          {int? endIndex, required String Function(String) transformer}) =>
-      case_string.replaceAt(this, startIndex,
-          endIndex: endIndex, transformer: transformer);
+  String replaceCharAt(
+    int startIndex, {
+    int? endIndex,
+    required String Function(String) transformer,
+  }) => case_string.replaceAt(
+    this,
+    startIndex,
+    endIndex: endIndex,
+    transformer: transformer,
+  );
 
   String toCapitalized() => case_string.capitalize(this);
 }

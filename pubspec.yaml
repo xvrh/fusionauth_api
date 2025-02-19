@@ -3,7 +3,7 @@ description: A Fusionauth Dart client library generated from the OpenApi Specifi
 version: 1.0.0
 
 environment:
-  sdk: ^3.5.0
+  sdk: ^3.7.0
 
 dependencies:
   http:

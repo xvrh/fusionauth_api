@@ -10,11 +10,7 @@ void main() {
 
   setUp(() {
     httpClient = Client();
-    api = FusionauthClient(
-      httpClient,
-      server,
-      apiKey: apiKey,
-    );
+    api = FusionauthClient(httpClient, server, apiKey: apiKey);
   });
 
   tearDown(() {
@@ -23,9 +19,7 @@ void main() {
 
   test('List tenants', () async {
     var tenants = await api.searchTenantsWithId(
-      body: TenantSearchRequest(
-        search: TenantSearchCriteria(),
-      ),
+      body: TenantSearchRequest(search: TenantSearchCriteria()),
     );
     expect(tenants.tenants, hasLength(1));
     expect(tenants.tenants![0].id, '00000000-0000-0000-0000-000000000001');

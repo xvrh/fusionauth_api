@@ -24,11 +24,12 @@ void main() async {
   );
 
   var result = await api.loginWithId(
-      body: LoginRequest(
-    loginId: 'test@test.com',
-    password: 'AbCd€',
-    applicationId: 'a-b-c-d-e',
-  ));
+    body: LoginRequest(
+      loginId: 'test@test.com',
+      password: 'AbCd€',
+      applicationId: 'a-b-c-d-e',
+    ),
+  );
   print(jsonEncode(result));
 
   httpClient.close();
