@@ -31,7 +31,7 @@ void main() {
         customImplementations: !isKickstart ? _customImplementations : null);
     var code = apiGenerator.toCode();
     try {
-      code = DartFormatter().format(code);
+      code = DartFormatter(languageVersion: DartFormatter.latestLanguageVersion).format(code);
     } catch (e) {
       print('Code has syntax error');
     }

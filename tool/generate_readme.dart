@@ -6,7 +6,9 @@ import 'package:path/path.dart' as p;
 final RegExp _importRegex = RegExp(r"import '([^']+)';\r?\n");
 
 final DartFormatter _dartFormatter =
-    DartFormatter(lineEnding: Platform.isWindows ? '\r\n' : '\n');
+    DartFormatter(
+        languageVersion: DartFormatter.latestLanguageVersion,
+        lineEnding: Platform.isWindows ? '\r\n' : '\n');
 
 void main() {
   File('README.md')
