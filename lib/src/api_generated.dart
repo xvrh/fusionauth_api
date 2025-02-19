@@ -8501,17 +8501,11 @@ class ApplicationEmailConfiguration {
 }
 
 /// Events that are bound to applications.
-class ApplicationEvent {
-  ApplicationEvent();
-
-  factory ApplicationEvent.fromJson(Map<String, Object?> json) {
-    return ApplicationEvent();
-  }
-
-  Map<String, Object?> toJson() {
-    final json = <String, Object?>{};
-    return json;
-  }
+extension type ApplicationEvent(Map<String, dynamic> map)
+    implements Map<String, dynamic> {
+  static ApplicationEvent fromJson(Map<String, dynamic> json) =>
+      ApplicationEvent(json);
+  Map<String, dynamic> toJson() => map;
 }
 
 class ApplicationExternalIdentifierConfiguration {
@@ -12534,17 +12528,11 @@ class DisplayableRawLogin {
 }
 
 /// Interface for all identity providers that can be domain based.
-class DomainBasedIdentityProvider {
-  DomainBasedIdentityProvider();
-
-  factory DomainBasedIdentityProvider.fromJson(Map<String, Object?> json) {
-    return DomainBasedIdentityProvider();
-  }
-
-  Map<String, Object?> toJson() {
-    final json = <String, Object?>{};
-    return json;
-  }
+extension type DomainBasedIdentityProvider(Map<String, dynamic> map)
+    implements Map<String, dynamic> {
+  static DomainBasedIdentityProvider fromJson(Map<String, dynamic> json) =>
+      DomainBasedIdentityProvider(json);
+  Map<String, dynamic> toJson() => map;
 }
 
 /// This class is an abstraction of a simple email message.
@@ -19724,17 +19712,10 @@ class GroupUpdateEvent {
 }
 
 /// Type for webhook headers.
-class HTTPHeaders {
-  HTTPHeaders();
-
-  factory HTTPHeaders.fromJson(Map<String, Object?> json) {
-    return HTTPHeaders();
-  }
-
-  Map<String, Object?> toJson() {
-    final json = <String, Object?>{};
-    return json;
-  }
+extension type HTTPHeaders(Map<String, dynamic> map)
+    implements Map<String, dynamic> {
+  static HTTPHeaders fromJson(Map<String, dynamic> json) => HTTPHeaders(json);
+  Map<String, dynamic> toJson() => map;
 }
 
 class HYPRApplicationConfiguration {
@@ -20471,17 +20452,11 @@ class IdentityProviderDetails {
   }
 }
 
-class IdentityProviderField {
-  IdentityProviderField();
-
-  factory IdentityProviderField.fromJson(Map<String, Object?> json) {
-    return IdentityProviderField();
-  }
-
-  Map<String, Object?> toJson() {
-    final json = <String, Object?>{};
-    return json;
-  }
+extension type IdentityProviderField(Map<String, dynamic> map)
+    implements Map<String, dynamic> {
+  static IdentityProviderField fromJson(Map<String, dynamic> json) =>
+      IdentityProviderField(json);
+  Map<String, dynamic> toJson() => map;
 }
 
 class IdentityProviderLimitUserLinkingPolicy {
@@ -21590,17 +21565,11 @@ class ImportRequest {
 
 /// A marker interface indicating this event is not scoped to a tenant and will
 /// be sent to all webhooks.
-class InstanceEvent {
-  InstanceEvent();
-
-  factory InstanceEvent.fromJson(Map<String, Object?> json) {
-    return InstanceEvent();
-  }
-
-  Map<String, Object?> toJson() {
-    final json = <String, Object?>{};
-    return json;
-  }
+extension type InstanceEvent(Map<String, dynamic> map)
+    implements Map<String, dynamic> {
+  static InstanceEvent fromJson(Map<String, dynamic> json) =>
+      InstanceEvent(json);
+  Map<String, dynamic> toJson() => map;
 }
 
 /// The Integration Request
@@ -21716,17 +21685,11 @@ class Integrations {
   }
 }
 
-class IntrospectResponse {
-  IntrospectResponse();
-
-  factory IntrospectResponse.fromJson(Map<String, Object?> json) {
-    return IntrospectResponse();
-  }
-
-  Map<String, Object?> toJson() {
-    final json = <String, Object?>{};
-    return json;
-  }
+extension type IntrospectResponse(Map<String, dynamic> map)
+    implements Map<String, dynamic> {
+  static IntrospectResponse fromJson(Map<String, dynamic> json) =>
+      IntrospectResponse(json);
+  Map<String, dynamic> toJson() => map;
 }
 
 class IssueResponse {
@@ -21972,17 +21935,11 @@ class JSONWebKey {
 }
 
 /// Interface for any object that can provide JSON Web key Information.
-class JSONWebKeyInfoProvider {
-  JSONWebKeyInfoProvider();
-
-  factory JSONWebKeyInfoProvider.fromJson(Map<String, Object?> json) {
-    return JSONWebKeyInfoProvider();
-  }
-
-  Map<String, Object?> toJson() {
-    final json = <String, Object?>{};
-    return json;
-  }
+extension type JSONWebKeyInfoProvider(Map<String, dynamic> map)
+    implements Map<String, dynamic> {
+  static JSONWebKeyInfoProvider fromJson(Map<String, dynamic> json) =>
+      JSONWebKeyInfoProvider(json);
+  Map<String, dynamic> toJson() => map;
 }
 
 class JWKSResponse {
@@ -24260,31 +24217,19 @@ class LinkedInIdentityProvider {
 }
 
 /// Models a set of localized Integers that can be stored as JSON.
-class LocalizedIntegers {
-  LocalizedIntegers();
-
-  factory LocalizedIntegers.fromJson(Map<String, Object?> json) {
-    return LocalizedIntegers();
-  }
-
-  Map<String, Object?> toJson() {
-    final json = <String, Object?>{};
-    return json;
-  }
+extension type LocalizedIntegers(Map<String, dynamic> map)
+    implements Map<String, dynamic> {
+  static LocalizedIntegers fromJson(Map<String, dynamic> json) =>
+      LocalizedIntegers(json);
+  Map<String, dynamic> toJson() => map;
 }
 
 /// Models a set of localized Strings that can be stored as JSON.
-class LocalizedStrings {
-  LocalizedStrings();
-
-  factory LocalizedStrings.fromJson(Map<String, Object?> json) {
-    return LocalizedStrings();
-  }
-
-  Map<String, Object?> toJson() {
-    final json = <String, Object?>{};
-    return json;
-  }
+extension type LocalizedStrings(Map<String, dynamic> map)
+    implements Map<String, dynamic> {
+  static LocalizedStrings fromJson(Map<String, dynamic> json) =>
+      LocalizedStrings(json);
+  Map<String, dynamic> toJson() => map;
 }
 
 /// Location information. Useful for IP addresses and other displayable data
@@ -25408,17 +25353,11 @@ class LookupResponse {
 /// in SQL in order to bootstrap the system. These need to stay in sync.  Any
 /// changes to these fields needs to also be reflected in mysql.sql and
 /// postgresql.sql
-class ManagedFields {
-  ManagedFields();
-
-  factory ManagedFields.fromJson(Map<String, Object?> json) {
-    return ManagedFields();
-  }
-
-  Map<String, Object?> toJson() {
-    final json = <String, Object?>{};
-    return json;
-  }
+extension type ManagedFields(Map<String, dynamic> map)
+    implements Map<String, dynamic> {
+  static ManagedFields fromJson(Map<String, dynamic> json) =>
+      ManagedFields(json);
+  Map<String, dynamic> toJson() => map;
 }
 
 class MaximumPasswordAge {
@@ -25569,17 +25508,10 @@ class MemberResponse {
   }
 }
 
-class Message {
-  Message();
-
-  factory Message.fromJson(Map<String, Object?> json) {
-    return Message();
-  }
-
-  Map<String, Object?> toJson() {
-    final json = <String, Object?>{};
-    return json;
-  }
+extension type Message(Map<String, dynamic> map)
+    implements Map<String, dynamic> {
+  static Message fromJson(Map<String, dynamic> json) => Message(json);
+  Map<String, dynamic> toJson() => map;
 }
 
 /// Stores an message template used to distribute messages;
@@ -25831,17 +25763,11 @@ class MessengerResponse {
   }
 }
 
-class MessengerTransport {
-  MessengerTransport();
-
-  factory MessengerTransport.fromJson(Map<String, Object?> json) {
-    return MessengerTransport();
-  }
-
-  Map<String, Object?> toJson() {
-    final json = <String, Object?>{};
-    return json;
-  }
+extension type MessengerTransport(Map<String, dynamic> map)
+    implements Map<String, dynamic> {
+  static MessengerTransport fromJson(Map<String, dynamic> json) =>
+      MessengerTransport(json);
+  Map<String, dynamic> toJson() => map;
 }
 
 class MetaData {
@@ -26473,17 +26399,11 @@ class NintendoIdentityProvider {
 }
 
 /// A marker interface indicating this event cannot be made transactional.
-class NonTransactionalEvent {
-  NonTransactionalEvent();
-
-  factory NonTransactionalEvent.fromJson(Map<String, Object?> json) {
-    return NonTransactionalEvent();
-  }
-
-  Map<String, Object?> toJson() {
-    final json = <String, Object?>{};
-    return json;
-  }
+extension type NonTransactionalEvent(Map<String, dynamic> map)
+    implements Map<String, dynamic> {
+  static NonTransactionalEvent fromJson(Map<String, dynamic> json) =>
+      NonTransactionalEvent(json);
+  Map<String, dynamic> toJson() => map;
 }
 
 class OAuth2Configuration {
@@ -26904,32 +26824,20 @@ class OAuthError {
   }
 }
 
-class OAuthResponse {
-  OAuthResponse();
-
-  factory OAuthResponse.fromJson(Map<String, Object?> json) {
-    return OAuthResponse();
-  }
-
-  Map<String, Object?> toJson() {
-    final json = <String, Object?>{};
-    return json;
-  }
+extension type OAuthResponse(Map<String, dynamic> map)
+    implements Map<String, dynamic> {
+  static OAuthResponse fromJson(Map<String, dynamic> json) =>
+      OAuthResponse(json);
+  Map<String, dynamic> toJson() => map;
 }
 
 /// A marker interface indicating this event is an event that can supply a
 /// linked object Id.
-class ObjectIdentifiable {
-  ObjectIdentifiable();
-
-  factory ObjectIdentifiable.fromJson(Map<String, Object?> json) {
-    return ObjectIdentifiable();
-  }
-
-  Map<String, Object?> toJson() {
-    final json = <String, Object?>{};
-    return json;
-  }
+extension type ObjectIdentifiable(Map<String, dynamic> map)
+    implements Map<String, dynamic> {
+  static ObjectIdentifiable fromJson(Map<String, dynamic> json) =>
+      ObjectIdentifiable(json);
+  Map<String, dynamic> toJson() => map;
 }
 
 /// OpenID Connect Configuration as described by the <a
@@ -27723,17 +27631,11 @@ class PasswordlessConfiguration {
 
 /// Interface for all identity providers that are passwordless and do not accept
 /// a password.
-class PasswordlessIdentityProvider {
-  PasswordlessIdentityProvider();
-
-  factory PasswordlessIdentityProvider.fromJson(Map<String, Object?> json) {
-    return PasswordlessIdentityProvider();
-  }
-
-  Map<String, Object?> toJson() {
-    final json = <String, Object?>{};
-    return json;
-  }
+extension type PasswordlessIdentityProvider(Map<String, dynamic> map)
+    implements Map<String, dynamic> {
+  static PasswordlessIdentityProvider fromJson(Map<String, dynamic> json) =>
+      PasswordlessIdentityProvider(json);
+  Map<String, dynamic> toJson() => map;
 }
 
 class PasswordlessLoginRequest {
@@ -29493,17 +29395,11 @@ class RefreshRequest {
   }
 }
 
-class RefreshResponse {
-  RefreshResponse();
-
-  factory RefreshResponse.fromJson(Map<String, Object?> json) {
-    return RefreshResponse();
-  }
-
-  Map<String, Object?> toJson() {
-    final json = <String, Object?>{};
-    return json;
-  }
+extension type RefreshResponse(Map<String, dynamic> map)
+    implements Map<String, dynamic> {
+  static RefreshResponse fromJson(Map<String, dynamic> json) =>
+      RefreshResponse(json);
+  Map<String, dynamic> toJson() => map;
 }
 
 /// Models a JWT Refresh Token.
@@ -30518,17 +30414,11 @@ class Requirable {
 }
 
 /// Interface describing the need for CORS configuration.
-class RequiresCORSConfiguration {
-  RequiresCORSConfiguration();
-
-  factory RequiresCORSConfiguration.fromJson(Map<String, Object?> json) {
-    return RequiresCORSConfiguration();
-  }
-
-  Map<String, Object?> toJson() {
-    final json = <String, Object?>{};
-    return json;
-  }
+extension type RequiresCORSConfiguration(Map<String, dynamic> map)
+    implements Map<String, dynamic> {
+  static RequiresCORSConfiguration fromJson(Map<String, dynamic> json) =>
+      RequiresCORSConfiguration(json);
+  Map<String, dynamic> toJson() => map;
 }
 
 class SAMLv2ApplicationConfiguration {
@@ -32954,17 +32844,11 @@ class SortField {
 }
 
 /// The public Status API response
-class StatusResponse {
-  StatusResponse();
-
-  factory StatusResponse.fromJson(Map<String, Object?> json) {
-    return StatusResponse();
-  }
-
-  Map<String, Object?> toJson() {
-    final json = <String, Object?>{};
-    return json;
-  }
+extension type StatusResponse(Map<String, dynamic> map)
+    implements Map<String, dynamic> {
+  static StatusResponse fromJson(Map<String, dynamic> json) =>
+      StatusResponse(json);
+  Map<String, dynamic> toJson() => map;
 }
 
 class SteamApplicationConfiguration {
@@ -33247,17 +33131,11 @@ class SteamIdentityProvider {
 
 /// Helper interface that indicates an identity provider can be federated to
 /// using the HTTP POST method.
-class SupportsPostBindings {
-  SupportsPostBindings();
-
-  factory SupportsPostBindings.fromJson(Map<String, Object?> json) {
-    return SupportsPostBindings();
-  }
-
-  Map<String, Object?> toJson() {
-    final json = <String, Object?>{};
-    return json;
-  }
+extension type SupportsPostBindings(Map<String, dynamic> map)
+    implements Map<String, dynamic> {
+  static SupportsPostBindings fromJson(Map<String, dynamic> json) =>
+      SupportsPostBindings(json);
+  Map<String, dynamic> toJson() => map;
 }
 
 class SystemConfiguration {
@@ -35760,17 +35638,10 @@ class TenantWebAuthnWorkflowConfiguration {
   }
 }
 
-class Tenantable {
-  Tenantable();
-
-  factory Tenantable.fromJson(Map<String, Object?> json) {
-    return Tenantable();
-  }
-
-  Map<String, Object?> toJson() {
-    final json = <String, Object?>{};
-    return json;
-  }
+extension type Tenantable(Map<String, dynamic> map)
+    implements Map<String, dynamic> {
+  static Tenantable fromJson(Map<String, dynamic> json) => Tenantable(json);
+  Map<String, dynamic> toJson() => map;
 }
 
 class TestEvent {
@@ -40578,17 +40449,11 @@ class UserLoginFailedReason {
 }
 
 /// User login failed reason codes.
-class UserLoginFailedReasonCode {
-  UserLoginFailedReasonCode();
-
-  factory UserLoginFailedReasonCode.fromJson(Map<String, Object?> json) {
-    return UserLoginFailedReasonCode();
-  }
-
-  Map<String, Object?> toJson() {
-    final json = <String, Object?>{};
-    return json;
-  }
+extension type UserLoginFailedReasonCode(Map<String, dynamic> map)
+    implements Map<String, dynamic> {
+  static UserLoginFailedReasonCode fromJson(Map<String, dynamic> json) =>
+      UserLoginFailedReasonCode(json);
+  Map<String, dynamic> toJson() => map;
 }
 
 /// Models an event where a user is being created with an "in-use" login Id
@@ -42310,17 +42175,11 @@ class UserUpdateEvent {
   }
 }
 
-class UserinfoResponse {
-  UserinfoResponse();
-
-  factory UserinfoResponse.fromJson(Map<String, Object?> json) {
-    return UserinfoResponse();
-  }
-
-  Map<String, Object?> toJson() {
-    final json = <String, Object?>{};
-    return json;
-  }
+extension type UserinfoResponse(Map<String, dynamic> map)
+    implements Map<String, dynamic> {
+  static UserinfoResponse fromJson(Map<String, dynamic> json) =>
+      UserinfoResponse(json);
+  Map<String, dynamic> toJson() => map;
 }
 
 class UsernameModeration {

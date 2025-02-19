@@ -608,6 +608,15 @@ class ComplexType extends DartType {
         buffer.writeln('@deprecated');
       }
     }
+
+    if (_properties.isEmpty) {
+      buffer.writeln('extension type $className(Map<String, dynamic> map) implements Map<String, dynamic> {');
+      buffer.writeln('  static $className fromJson(Map<String, dynamic> json) => $className(json);');
+      buffer.writeln('  Map<String, dynamic> toJson() => map;');
+      buffer.writeln('}');
+      return buffer.toString();
+    }
+
     buffer.writeln('class $className {');
     for (final property in _properties) {
       var typeName = property.type.toDeclarationString({});
