@@ -12,16 +12,68 @@ class FusionauthClient {
   FusionauthClient(Client httpClient, Uri baseUri, {required String? apiKey})
     : _client = ApiClient(baseUri, httpClient, authorization: apiKey);
 
-  /// Retrieves all the members of a family by the unique Family Id.
-  Future<FamilyResponse> retrieveFamilyMembersByFamilyIdWithId({
-    required String familyId,
-    String? tenantIdScope,
+  /// Updates the key with the given Id.
+  Future<KeyResponse> updateKeyWithId({
+    required String keyId,
+    required KeyRequest body,
   }) async {
-    return FamilyResponse.fromJson(
+    return KeyResponse.fromJson(
+      await _client.send(
+        'put',
+        'api/key/{keyId}',
+        pathParameters: {'keyId': keyId},
+        body: body.toJson(),
+      ),
+    );
+  }
+
+  /// Retrieves the key for the given Id.
+  Future<KeyResponse> retrieveKeyWithId(String keyId) async {
+    return KeyResponse.fromJson(
       await _client.send(
         'get',
-        'api/user/family/{familyId}',
-        pathParameters: {'familyId': familyId},
+        'api/key/{keyId}',
+        pathParameters: {'keyId': keyId},
+      ),
+    );
+  }
+
+  /// Deletes the key for the given Id.
+  Future<void> deleteKeyWithId(String keyId) async {
+    await _client.send(
+      'delete',
+      'api/key/{keyId}',
+      pathParameters: {'keyId': keyId},
+    );
+  }
+
+  /// Exchange a Refresh Token for an Access Token. If you will be using the
+  /// Refresh Token Grant, you will make a request to the Token endpoint to
+  /// exchange the user’s refresh token for an access token. OR Exchange User
+  /// Credentials for a Token. If you will be using the Resource Owner Password
+  /// Credential Grant, you will make a request to the Token endpoint to
+  /// exchange the user’s email and password for an access token. OR Exchanges
+  /// an OAuth authorization code and code_verifier for an access token. Makes a
+  /// request to the Token endpoint to exchange the authorization code returned
+  /// from the Authorize endpoint and a code_verifier for an access token. OR
+  /// Exchanges an OAuth authorization code for an access token. Makes a request
+  /// to the Token endpoint to exchange the authorization code returned from the
+  /// Authorize endpoint for an access token. OR Make a Client Credentials grant
+  /// request to obtain an access token.
+  Future<AccessToken> createToken() async {
+    return AccessToken.fromJson(await _client.send('post', 'oauth2/token'));
+  }
+
+  /// Retrieves the user for the given Id.
+  Future<UserResponse> retrieveUserWithId({
+    required String userId,
+    String? tenantIdScope,
+  }) async {
+    return UserResponse.fromJson(
+      await _client.send(
+        'get',
+        'api/user/{userId}',
+        pathParameters: {'userId': userId},
         headers: {
           if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
         },
@@ -29,17 +81,20 @@ class FusionauthClient {
     );
   }
 
-  /// Adds a user to an existing family. The family Id must be specified.
-  Future<FamilyResponse> addUserToFamilyWithId({
-    required String familyId,
+  /// Updates the user with the given Id. OR Reactivates the user with the given
+  /// Id.
+  Future<UserResponse> updateUserWithId({
+    required String userId,
     String? tenantIdScope,
-    required FamilyRequest body,
+    String? reactivate,
+    required UserRequest body,
   }) async {
-    return FamilyResponse.fromJson(
+    return UserResponse.fromJson(
       await _client.send(
         'put',
-        'api/user/family/{familyId}',
-        pathParameters: {'familyId': familyId},
+        'api/user/{userId}',
+        pathParameters: {'userId': userId},
+        queryParameters: {if (reactivate != null) 'reactivate': reactivate},
         headers: {
           if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
         },
@@ -48,19 +103,60 @@ class FusionauthClient {
     );
   }
 
-  /// Creates a family with the user Id in the request as the owner and sole
-  /// member of the family. You can optionally specify an Id for the family, if
-  /// not provided one will be generated.
-  Future<FamilyResponse> createFamilyWithId({
-    required String familyId,
+  /// Deactivates the user with the given Id. OR Deletes the user for the given
+  /// Id. This permanently deletes all information, metrics, reports and data
+  /// associated with the user. OR Deletes the user based on the given request
+  /// (sent to the API as JSON). This permanently deletes all information,
+  /// metrics, reports and data associated with the user.
+  Future<void> deleteUserWithId({
+    required String userId,
     String? tenantIdScope,
-    required FamilyRequest body,
+    String? hardDelete,
+    required UserDeleteSingleRequest body,
   }) async {
-    return FamilyResponse.fromJson(
+    await _client.send(
+      'delete',
+      'api/user/{userId}',
+      pathParameters: {'userId': userId},
+      queryParameters: {if (hardDelete != null) 'hardDelete': hardDelete},
+      headers: {
+        if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
+      },
+      body: body.toJson(),
+    );
+  }
+
+  /// Updates, via PATCH, the user with the given Id.
+  Future<UserResponse> patchUserWithId({
+    required String userId,
+    String? tenantIdScope,
+    required UserRequest body,
+  }) async {
+    return UserResponse.fromJson(
+      await _client.send(
+        'patch',
+        'api/user/{userId}',
+        pathParameters: {'userId': userId},
+        headers: {
+          if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
+        },
+        body: body.toJson(),
+      ),
+    );
+  }
+
+  /// Creates a user. You can optionally specify an Id for the user, if not
+  /// provided one will be generated.
+  Future<UserResponse> createUserWithId({
+    required String userId,
+    String? tenantIdScope,
+    required UserRequest body,
+  }) async {
+    return UserResponse.fromJson(
       await _client.send(
         'post',
-        'api/user/family/{familyId}',
-        pathParameters: {'familyId': familyId},
+        'api/user/{userId}',
+        pathParameters: {'userId': userId},
         headers: {
           if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
         },
@@ -69,26 +165,89 @@ class FusionauthClient {
     );
   }
 
-  /// Re-sends the verification email to the user. OR Re-sends the verification
-  /// email to the user. If the Application has configured a specific email
-  /// template this will be used instead of the tenant configuration. OR
-  /// Generate a new Email Verification Id to be used with the Verify Email API.
-  /// This API will not attempt to send an email to the User. This API may be
-  /// used to collect the verificationId for use with a third party system.
-  Future<VerifyEmailResponse> updateUserVerifyEmail({
-    String? email,
-    String? applicationId,
-    String? sendVerifyEmail,
+  /// Import an existing RSA or EC key pair or an HMAC secret.
+  Future<KeyResponse> importKeyWithId({
+    required String keyId,
+    required KeyRequest body,
   }) async {
-    return VerifyEmailResponse.fromJson(
+    return KeyResponse.fromJson(
+      await _client.send(
+        'post',
+        'api/key/import/{keyId}',
+        pathParameters: {'keyId': keyId},
+        body: body.toJson(),
+      ),
+    );
+  }
+
+  /// Import an existing RSA or EC key pair or an HMAC secret.
+  Future<KeyResponse> importKey({required KeyRequest body}) async {
+    return KeyResponse.fromJson(
+      await _client.send('post', 'api/key/import', body: body.toJson()),
+    );
+  }
+
+  /// Updates the registration for the user with the given Id and the
+  /// application defined in the request.
+  Future<RegistrationResponse> updateRegistrationWithId({
+    required String userId,
+    String? tenantIdScope,
+    required RegistrationRequest body,
+  }) async {
+    return RegistrationResponse.fromJson(
       await _client.send(
         'put',
-        'api/user/verify-email',
-        queryParameters: {
-          if (email != null) 'email': email,
-          if (applicationId != null) 'applicationId': applicationId,
-          if (sendVerifyEmail != null) 'sendVerifyEmail': sendVerifyEmail,
+        'api/user/registration/{userId}',
+        pathParameters: {'userId': userId},
+        headers: {
+          if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
         },
+        body: body.toJson(),
+      ),
+    );
+  }
+
+  /// Registers a user for an application. If you provide the User and the
+  /// UserRegistration object on this request, it will create the user as well
+  /// as register them for the application. This is called a Full Registration.
+  /// However, if you only provide the UserRegistration object, then the user
+  /// must already exist and they will be registered for the application. The
+  /// user Id can also be provided and it will either be used to look up an
+  /// existing user or it will be used for the newly created User.
+  Future<RegistrationResponse> registerWithId({
+    required String userId,
+    String? tenantIdScope,
+    required RegistrationRequest body,
+  }) async {
+    return RegistrationResponse.fromJson(
+      await _client.send(
+        'post',
+        'api/user/registration/{userId}',
+        pathParameters: {'userId': userId},
+        headers: {
+          if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
+        },
+        body: body.toJson(),
+      ),
+    );
+  }
+
+  /// Updates, via PATCH, the registration for the user with the given Id and
+  /// the application defined in the request.
+  Future<RegistrationResponse> patchRegistrationWithId({
+    required String userId,
+    String? tenantIdScope,
+    required RegistrationRequest body,
+  }) async {
+    return RegistrationResponse.fromJson(
+      await _client.send(
+        'patch',
+        'api/user/registration/{userId}',
+        pathParameters: {'userId': userId},
+        headers: {
+          if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
+        },
+        body: body.toJson(),
       ),
     );
   }
@@ -109,165 +268,462 @@ class FusionauthClient {
     await _client.send('post', 'api/user/verify-email', body: body.toJson());
   }
 
-  /// Handles login via third-parties including Social login, external OAuth and
-  /// OpenID Connect, and other login systems.
-  Future<LoginResponse> identityProviderLoginWithId({
-    String? tenantIdScope,
-    required IdentityProviderLoginRequest body,
-  }) async {
-    return LoginResponse.fromJson(
-      await _client.send(
-        'post',
-        'api/identity-provider/login',
-        headers: {
-          if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
-        },
-        body: body.toJson(),
-      ),
-    );
-  }
-
-  /// Confirms a user's registration.   The request body will contain the
-  /// verificationId. You may also be required to send a one-time use code based
-  /// upon your configuration. When  the application is configured to gate a
-  /// user until their registration is verified, this procedures requires two
-  /// values instead of one.  The verificationId is a high entropy value and the
-  /// one-time use code is a low entropy value that is easily entered in a user
-  /// interactive form. The  two values together are able to confirm a user's
-  /// registration and mark the user's registration as verified.
-  Future<void> verifyUserRegistrationWithId({
-    required VerifyRegistrationRequest body,
-  }) async {
-    await _client.send(
-      'post',
-      'api/user/verify-registration',
-      body: body.toJson(),
-    );
-  }
-
-  /// Generate a new Application Registration Verification Id to be used with
-  /// the Verify Registration API. This API will not attempt to send an email to
-  /// the User. This API may be used to collect the verificationId for use with
-  /// a third party system. OR Re-sends the application registration
-  /// verification email to the user.
-  Future<VerifyRegistrationResponse> updateUserVerifyRegistration({
+  /// Generate a new Email Verification Id to be used with the Verify Email API.
+  /// This API will not attempt to send an email to the User. This API may be
+  /// used to collect the verificationId for use with a third party system. OR
+  /// Re-sends the verification email to the user. If the Application has
+  /// configured a specific email template this will be used instead of the
+  /// tenant configuration. OR Re-sends the verification email to the user.
+  Future<VerifyEmailResponse> updateUserVerifyEmail({
     String? email,
-    String? sendVerifyPasswordEmail,
+    String? sendVerifyEmail,
     String? applicationId,
   }) async {
-    return VerifyRegistrationResponse.fromJson(
+    return VerifyEmailResponse.fromJson(
       await _client.send(
         'put',
-        'api/user/verify-registration',
+        'api/user/verify-email',
         queryParameters: {
           if (email != null) 'email': email,
-          if (sendVerifyPasswordEmail != null)
-            'sendVerifyPasswordEmail': sendVerifyPasswordEmail,
+          if (sendVerifyEmail != null) 'sendVerifyEmail': sendVerifyEmail,
           if (applicationId != null) 'applicationId': applicationId,
         },
       ),
     );
   }
 
-  /// Send a passwordless authentication code in an email to complete login.
-  Future<void> sendPasswordlessCodeWithId({
-    required PasswordlessSendRequest body,
+  /// Retrieves the group for the given Id.
+  Future<GroupResponse> retrieveGroupWithId({
+    required String groupId,
+    String? tenantIdScope,
   }) async {
-    await _client.send('post', 'api/passwordless/send', body: body.toJson());
-  }
-
-  /// Creates a connector.  You can optionally specify an Id for the connector,
-  /// if not provided one will be generated.
-  Future<ConnectorResponse> createConnectorWithId({
-    required String connectorId,
-    required ConnectorRequest body,
-  }) async {
-    return ConnectorResponse.fromJson(
-      await _client.send(
-        'post',
-        'api/connector/{connectorId}',
-        pathParameters: {'connectorId': connectorId},
-        body: body.toJson(),
-      ),
-    );
-  }
-
-  /// Updates, via PATCH, the connector with the given Id.
-  Future<ConnectorResponse> patchConnectorWithId({
-    required String connectorId,
-    required ConnectorRequest body,
-  }) async {
-    return ConnectorResponse.fromJson(
-      await _client.send(
-        'patch',
-        'api/connector/{connectorId}',
-        pathParameters: {'connectorId': connectorId},
-        body: body.toJson(),
-      ),
-    );
-  }
-
-  /// Retrieves the connector with the given Id.
-  Future<ConnectorResponse> retrieveConnectorWithId(String connectorId) async {
-    return ConnectorResponse.fromJson(
+    return GroupResponse.fromJson(
       await _client.send(
         'get',
-        'api/connector/{connectorId}',
-        pathParameters: {'connectorId': connectorId},
+        'api/group/{groupId}',
+        pathParameters: {'groupId': groupId},
+        headers: {
+          if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
+        },
       ),
     );
   }
 
-  /// Deletes the connector for the given Id.
-  Future<void> deleteConnectorWithId(String connectorId) async {
-    await _client.send(
-      'delete',
-      'api/connector/{connectorId}',
-      pathParameters: {'connectorId': connectorId},
-    );
-  }
-
-  /// Updates the connector with the given Id.
-  Future<ConnectorResponse> updateConnectorWithId({
-    required String connectorId,
-    required ConnectorRequest body,
+  /// Updates, via PATCH, the group with the given Id.
+  Future<GroupResponse> patchGroupWithId({
+    required String groupId,
+    String? tenantIdScope,
+    required GroupRequest body,
   }) async {
-    return ConnectorResponse.fromJson(
+    return GroupResponse.fromJson(
       await _client.send(
-        'put',
-        'api/connector/{connectorId}',
-        pathParameters: {'connectorId': connectorId},
+        'patch',
+        'api/group/{groupId}',
+        pathParameters: {'groupId': groupId},
+        headers: {
+          if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
+        },
         body: body.toJson(),
       ),
     );
   }
 
-  /// Creates a connector.  You can optionally specify an Id for the connector,
-  /// if not provided one will be generated.
-  Future<ConnectorResponse> createConnector({
-    required ConnectorRequest body,
+  /// Deletes the group for the given Id.
+  Future<void> deleteGroupWithId({
+    required String groupId,
+    String? tenantIdScope,
   }) async {
-    return ConnectorResponse.fromJson(
-      await _client.send('post', 'api/connector', body: body.toJson()),
+    await _client.send(
+      'delete',
+      'api/group/{groupId}',
+      pathParameters: {'groupId': groupId},
+      headers: {
+        if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
+      },
     );
   }
 
-  /// Reactivates the user action with the given Id. OR Updates the user action
-  /// with the given Id.
-  Future<UserActionResponse> updateUserActionWithId({
-    String? reactivate,
-    required String userActionId,
+  /// Updates the group with the given Id.
+  Future<GroupResponse> updateGroupWithId({
+    required String groupId,
     String? tenantIdScope,
-    required UserActionRequest body,
+    required GroupRequest body,
   }) async {
-    return UserActionResponse.fromJson(
+    return GroupResponse.fromJson(
       await _client.send(
         'put',
-        'api/user-action/{userActionId}',
-        pathParameters: {'userActionId': userActionId},
-        queryParameters: {if (reactivate != null) 'reactivate': reactivate},
+        'api/group/{groupId}',
+        pathParameters: {'groupId': groupId},
         headers: {
           if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
+        },
+        body: body.toJson(),
+      ),
+    );
+  }
+
+  /// Creates a group. You can optionally specify an Id for the group, if not
+  /// provided one will be generated.
+  Future<GroupResponse> createGroupWithId({
+    required String groupId,
+    String? tenantIdScope,
+    required GroupRequest body,
+  }) async {
+    return GroupResponse.fromJson(
+      await _client.send(
+        'post',
+        'api/group/{groupId}',
+        pathParameters: {'groupId': groupId},
+        headers: {
+          if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
+        },
+        body: body.toJson(),
+      ),
+    );
+  }
+
+  /// Updates the email template with the given Id.
+  Future<EmailTemplateResponse> updateEmailTemplateWithId({
+    required String emailTemplateId,
+    String? tenantIdScope,
+    required EmailTemplateRequest body,
+  }) async {
+    return EmailTemplateResponse.fromJson(
+      await _client.send(
+        'put',
+        'api/email/template/{emailTemplateId}',
+        pathParameters: {'emailTemplateId': emailTemplateId},
+        headers: {
+          if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
+        },
+        body: body.toJson(),
+      ),
+    );
+  }
+
+  /// Deletes the email template for the given Id.
+  Future<void> deleteEmailTemplateWithId({
+    required String emailTemplateId,
+    String? tenantIdScope,
+  }) async {
+    await _client.send(
+      'delete',
+      'api/email/template/{emailTemplateId}',
+      pathParameters: {'emailTemplateId': emailTemplateId},
+      headers: {
+        if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
+      },
+    );
+  }
+
+  /// Retrieves the email template for the given Id. If you don't specify the
+  /// id, this will return all the email templates.
+  Future<EmailTemplateResponse> retrieveEmailTemplateWithId({
+    required String emailTemplateId,
+    String? tenantIdScope,
+  }) async {
+    return EmailTemplateResponse.fromJson(
+      await _client.send(
+        'get',
+        'api/email/template/{emailTemplateId}',
+        pathParameters: {'emailTemplateId': emailTemplateId},
+        headers: {
+          if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
+        },
+      ),
+    );
+  }
+
+  /// Creates an email template. You can optionally specify an Id for the
+  /// template, if not provided one will be generated.
+  Future<EmailTemplateResponse> createEmailTemplateWithId({
+    required String emailTemplateId,
+    String? tenantIdScope,
+    required EmailTemplateRequest body,
+  }) async {
+    return EmailTemplateResponse.fromJson(
+      await _client.send(
+        'post',
+        'api/email/template/{emailTemplateId}',
+        pathParameters: {'emailTemplateId': emailTemplateId},
+        headers: {
+          if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
+        },
+        body: body.toJson(),
+      ),
+    );
+  }
+
+  /// Updates, via PATCH, the email template with the given Id.
+  Future<EmailTemplateResponse> patchEmailTemplateWithId({
+    required String emailTemplateId,
+    String? tenantIdScope,
+    required EmailTemplateRequest body,
+  }) async {
+    return EmailTemplateResponse.fromJson(
+      await _client.send(
+        'patch',
+        'api/email/template/{emailTemplateId}',
+        pathParameters: {'emailTemplateId': emailTemplateId},
+        headers: {
+          if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
+        },
+        body: body.toJson(),
+      ),
+    );
+  }
+
+  /// Retrieves the lambda for the given Id.
+  Future<LambdaResponse> retrieveLambdaWithId(String lambdaId) async {
+    return LambdaResponse.fromJson(
+      await _client.send(
+        'get',
+        'api/lambda/{lambdaId}',
+        pathParameters: {'lambdaId': lambdaId},
+      ),
+    );
+  }
+
+  /// Updates, via PATCH, the lambda with the given Id.
+  Future<LambdaResponse> patchLambdaWithId({
+    required String lambdaId,
+    required LambdaRequest body,
+  }) async {
+    return LambdaResponse.fromJson(
+      await _client.send(
+        'patch',
+        'api/lambda/{lambdaId}',
+        pathParameters: {'lambdaId': lambdaId},
+        body: body.toJson(),
+      ),
+    );
+  }
+
+  /// Deletes the lambda for the given Id.
+  Future<void> deleteLambdaWithId(String lambdaId) async {
+    await _client.send(
+      'delete',
+      'api/lambda/{lambdaId}',
+      pathParameters: {'lambdaId': lambdaId},
+    );
+  }
+
+  /// Creates a Lambda. You can optionally specify an Id for the lambda, if not
+  /// provided one will be generated.
+  Future<LambdaResponse> createLambdaWithId({
+    required String lambdaId,
+    required LambdaRequest body,
+  }) async {
+    return LambdaResponse.fromJson(
+      await _client.send(
+        'post',
+        'api/lambda/{lambdaId}',
+        pathParameters: {'lambdaId': lambdaId},
+        body: body.toJson(),
+      ),
+    );
+  }
+
+  /// Updates the lambda with the given Id.
+  Future<LambdaResponse> updateLambdaWithId({
+    required String lambdaId,
+    required LambdaRequest body,
+  }) async {
+    return LambdaResponse.fromJson(
+      await _client.send(
+        'put',
+        'api/lambda/{lambdaId}',
+        pathParameters: {'lambdaId': lambdaId},
+        body: body.toJson(),
+      ),
+    );
+  }
+
+  /// Updates the tenant with the given Id.
+  Future<TenantResponse> updateTenantWithId({
+    required String tenantId,
+    String? tenantIdScope,
+    required TenantRequest body,
+  }) async {
+    return TenantResponse.fromJson(
+      await _client.send(
+        'put',
+        'api/tenant/{tenantId}',
+        pathParameters: {'tenantId': tenantId},
+        headers: {
+          if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
+        },
+        body: body.toJson(),
+      ),
+    );
+  }
+
+  /// Creates a tenant. You can optionally specify an Id for the tenant, if not
+  /// provided one will be generated.
+  Future<TenantResponse> createTenantWithId({
+    required String tenantId,
+    String? tenantIdScope,
+    required TenantRequest body,
+  }) async {
+    return TenantResponse.fromJson(
+      await _client.send(
+        'post',
+        'api/tenant/{tenantId}',
+        pathParameters: {'tenantId': tenantId},
+        headers: {
+          if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
+        },
+        body: body.toJson(),
+      ),
+    );
+  }
+
+  /// Deletes the tenant for the given Id asynchronously. This method is helpful
+  /// if you do not want to wait for the delete operation to complete. OR
+  /// Deletes the tenant based on the given request (sent to the API as JSON).
+  /// This permanently deletes all information, metrics, reports and data
+  /// associated with the tenant and everything under the tenant (applications,
+  /// users, etc). OR Deletes the tenant based on the given Id on the URL. This
+  /// permanently deletes all information, metrics, reports and data associated
+  /// with the tenant and everything under the tenant (applications, users,
+  /// etc).
+  Future<void> deleteTenantWithId({
+    String? async$,
+    required String tenantId,
+    String? tenantIdScope,
+    required TenantDeleteRequest body,
+  }) async {
+    await _client.send(
+      'delete',
+      'api/tenant/{tenantId}',
+      pathParameters: {'tenantId': tenantId},
+      queryParameters: {if (async$ != null) 'async': async$},
+      headers: {
+        if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
+      },
+      body: body.toJson(),
+    );
+  }
+
+  /// Updates, via PATCH, the tenant with the given Id.
+  Future<TenantResponse> patchTenantWithId({
+    required String tenantId,
+    String? tenantIdScope,
+    required TenantRequest body,
+  }) async {
+    return TenantResponse.fromJson(
+      await _client.send(
+        'patch',
+        'api/tenant/{tenantId}',
+        pathParameters: {'tenantId': tenantId},
+        headers: {
+          if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
+        },
+        body: body.toJson(),
+      ),
+    );
+  }
+
+  /// Retrieves the tenant for the given Id.
+  Future<TenantResponse> retrieveTenantWithId({
+    required String tenantId,
+    String? tenantIdScope,
+  }) async {
+    return TenantResponse.fromJson(
+      await _client.send(
+        'get',
+        'api/tenant/{tenantId}',
+        pathParameters: {'tenantId': tenantId},
+        headers: {
+          if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
+        },
+      ),
+    );
+  }
+
+  /// Searches groups with the specified criteria and pagination.
+  Future<GroupSearchResponse> searchGroupsWithId({
+    required GroupSearchRequest body,
+  }) async {
+    return GroupSearchResponse.fromJson(
+      await _client.send('post', 'api/group/search', body: body.toJson()),
+    );
+  }
+
+  /// Retrieves the password validation rules for a specific tenant.  This API
+  /// does not require an API key.
+  Future<PasswordValidationRulesResponse>
+  retrievePasswordValidationRulesWithTenantIdWithId(String tenantId) async {
+    return PasswordValidationRulesResponse.fromJson(
+      await _client.send(
+        'get',
+        'api/tenant/password-validation-rules/{tenantId}',
+        pathParameters: {'tenantId': tenantId},
+      ),
+    );
+  }
+
+  /// Sends a ping to FusionAuth indicating that the user was automatically
+  /// logged into an application. When using FusionAuth's SSO or your own, you
+  /// should call this if the user is already logged in centrally, but accesses
+  /// an application where they no longer have a session. This helps correctly
+  /// track login counts, times and helps with reporting.
+  Future<LoginResponse> loginPingWithId({
+    String? callerIpAddress,
+    required String userId,
+    required String applicationId,
+    String? tenantIdScope,
+  }) async {
+    return LoginResponse.fromJson(
+      await _client.send(
+        'put',
+        'api/login/{userId}/{applicationId}',
+        pathParameters: {'userId': userId, 'applicationId': applicationId},
+        queryParameters: {
+          if (callerIpAddress != null) 'callerIPAddress': callerIpAddress,
+        },
+        headers: {
+          if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
+        },
+      ),
+    );
+  }
+
+  /// Searches group members with the specified criteria and pagination.
+  Future<GroupMemberSearchResponse> searchGroupMembersWithId({
+    required GroupMemberSearchRequest body,
+  }) async {
+    return GroupMemberSearchResponse.fromJson(
+      await _client.send(
+        'post',
+        'api/group/member/search',
+        body: body.toJson(),
+      ),
+    );
+  }
+
+  /// Deactivates the users with the given ids. OR Deletes the users with the
+  /// given ids, or users matching the provided JSON query or queryString. The
+  /// order of preference is ids, query and then queryString, it is recommended
+  /// to only provide one of the three for the request.  This method can be used
+  /// to deactivate or permanently delete (hard-delete) users based upon the
+  /// hardDelete boolean in the request body. Using the dryRun parameter you may
+  /// also request the result of the action without actually deleting or
+  /// deactivating any users.
+  Future<UserDeleteResponse> deleteUserBulk({
+    String? userIds,
+    String? dryRun,
+    String? hardDelete,
+    required UserDeleteRequest body,
+  }) async {
+    return UserDeleteResponse.fromJson(
+      await _client.send(
+        'delete',
+        'api/user/bulk',
+        queryParameters: {
+          if (userIds != null) 'userIds': userIds,
+          if (dryRun != null) 'dryRun': dryRun,
+          if (hardDelete != null) 'hardDelete': hardDelete,
         },
         body: body.toJson(),
       ),
@@ -312,6 +768,28 @@ class FusionauthClient {
     );
   }
 
+  /// Reactivates the user action with the given Id. OR Updates the user action
+  /// with the given Id.
+  Future<UserActionResponse> updateUserActionWithId({
+    String? reactivate,
+    required String userActionId,
+    String? tenantIdScope,
+    required UserActionRequest body,
+  }) async {
+    return UserActionResponse.fromJson(
+      await _client.send(
+        'put',
+        'api/user-action/{userActionId}',
+        pathParameters: {'userActionId': userActionId},
+        queryParameters: {if (reactivate != null) 'reactivate': reactivate},
+        headers: {
+          if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
+        },
+        body: body.toJson(),
+      ),
+    );
+  }
+
   /// Retrieves the user action for the given Id. If you pass in null for the
   /// id, this will return all the user actions.
   Future<UserActionResponse> retrieveUserActionWithId({
@@ -351,499 +829,50 @@ class FusionauthClient {
     );
   }
 
-  /// Retrieve a user_code that is part of an in-progress Device Authorization
-  /// Grant.  This API is useful if you want to build your own login workflow to
-  /// complete a device grant.  This request will require an API key. OR
-  /// Retrieve a user_code that is part of an in-progress Device Authorization
-  /// Grant.  This API is useful if you want to build your own login workflow to
-  /// complete a device grant.
-  Future<void> retrieveDeviceUserCode() async {
-    await _client.send('get', 'oauth2/device/user-code');
-  }
-
-  /// Creates an IP Access Control List. You can optionally specify an Id on
-  /// this create request, if one is not provided one will be generated.
-  Future<IPAccessControlListResponse> createIPAccessControlListWithId({
-    required String accessControlListId,
-    required IPAccessControlListRequest body,
+  /// Searches the webhook event logs with the specified criteria and
+  /// pagination.
+  Future<WebhookEventLogSearchResponse> searchWebhookEventLogsWithId({
+    required WebhookEventLogSearchRequest body,
   }) async {
-    return IPAccessControlListResponse.fromJson(
+    return WebhookEventLogSearchResponse.fromJson(
       await _client.send(
         'post',
-        'api/ip-acl/{accessControlListId}',
-        pathParameters: {'accessControlListId': accessControlListId},
+        'api/system/webhook-event-log/search',
         body: body.toJson(),
       ),
     );
   }
 
-  /// Updates the IP Access Control List with the given Id.
-  Future<IPAccessControlListResponse> updateIPAccessControlListWithId({
-    required String accessControlListId,
-    required IPAccessControlListRequest body,
-  }) async {
-    return IPAccessControlListResponse.fromJson(
-      await _client.send(
-        'put',
-        'api/ip-acl/{accessControlListId}',
-        pathParameters: {'accessControlListId': accessControlListId},
-        body: body.toJson(),
-      ),
-    );
-  }
-
-  /// Creates an IP Access Control List. You can optionally specify an Id on
-  /// this create request, if one is not provided one will be generated.
-  Future<IPAccessControlListResponse> createIPAccessControlList({
-    required IPAccessControlListRequest body,
-  }) async {
-    return IPAccessControlListResponse.fromJson(
-      await _client.send('post', 'api/ip-acl', body: body.toJson()),
-    );
-  }
-
-  /// Sends out an email to a parent that they need to register and create a
-  /// family or need to log in and add a child to their existing family.
-  Future<void> sendFamilyRequestEmailWithId({
-    required FamilyEmailRequest body,
-  }) async {
-    await _client.send('post', 'api/user/family/request', body: body.toJson());
-  }
-
-  /// Retrieves all the actions for the user with the given Id that are
-  /// currently preventing the User from logging in. OR Retrieves all the
-  /// actions for the user with the given Id. This will return all time based
-  /// actions that are active, and inactive as well as non-time based actions.
-  /// OR Retrieves all the actions for the user with the given Id that are
-  /// currently active. An active action means one that is time based and has
-  /// not been canceled, and has not ended. OR Retrieves all the actions for the
-  /// user with the given Id that are currently inactive. An inactive action
-  /// means one that is time based and has been canceled or has expired, or is
-  /// not time based.
-  Future<ActionResponse> retrieveUserActioning({
-    String? userId,
-    String? preventingLogin,
-    String? active,
-  }) async {
-    return ActionResponse.fromJson(
-      await _client.send(
-        'get',
-        'api/user/action',
-        queryParameters: {
-          if (userId != null) 'userId': userId,
-          if (preventingLogin != null) 'preventingLogin': preventingLogin,
-          if (active != null) 'active': active,
-        },
-      ),
-    );
-  }
-
-  /// Takes an action on a user. The user being actioned is called the
-  /// "actionee" and the user taking the action is called the "actioner". Both
-  /// user ids are required in the request object.
-  Future<ActionResponse> actionUserWithId({required ActionRequest body}) async {
-    return ActionResponse.fromJson(
-      await _client.send('post', 'api/user/action', body: body.toJson()),
-    );
-  }
-
-  /// Creates a webhook. You can optionally specify an Id for the webhook, if
-  /// not provided one will be generated.
-  Future<WebhookResponse> createWebhookWithId({
-    required String webhookId,
-    required WebhookRequest body,
-  }) async {
-    return WebhookResponse.fromJson(
-      await _client.send(
-        'post',
-        'api/webhook/{webhookId}',
-        pathParameters: {'webhookId': webhookId},
-        body: body.toJson(),
-      ),
-    );
-  }
-
-  /// Deletes the webhook for the given Id.
-  Future<void> deleteWebhookWithId(String webhookId) async {
-    await _client.send(
-      'delete',
-      'api/webhook/{webhookId}',
-      pathParameters: {'webhookId': webhookId},
-    );
-  }
-
-  /// Updates the webhook with the given Id.
-  Future<WebhookResponse> updateWebhookWithId({
-    required String webhookId,
-    required WebhookRequest body,
-  }) async {
-    return WebhookResponse.fromJson(
-      await _client.send(
-        'put',
-        'api/webhook/{webhookId}',
-        pathParameters: {'webhookId': webhookId},
-        body: body.toJson(),
-      ),
-    );
-  }
-
-  /// Retrieves the webhook for the given Id. If you pass in null for the id,
-  /// this will return all the webhooks.
-  Future<WebhookResponse> retrieveWebhookWithId(String webhookId) async {
-    return WebhookResponse.fromJson(
-      await _client.send(
-        'get',
-        'api/webhook/{webhookId}',
-        pathParameters: {'webhookId': webhookId},
-      ),
-    );
-  }
-
-  /// Creates a webhook. You can optionally specify an Id for the webhook, if
-  /// not provided one will be generated.
-  Future<WebhookResponse> createWebhook({required WebhookRequest body}) async {
-    return WebhookResponse.fromJson(
-      await _client.send('post', 'api/webhook', body: body.toJson()),
-    );
-  }
-
-  /// Retrieves the webhook for the given Id. If you pass in null for the id,
-  /// this will return all the webhooks.
-  Future<WebhookResponse> retrieveWebhook() async {
-    return WebhookResponse.fromJson(await _client.send('get', 'api/webhook'));
-  }
-
-  /// Deletes the lambda for the given Id.
-  Future<void> deleteLambdaWithId(String lambdaId) async {
-    await _client.send(
-      'delete',
-      'api/lambda/{lambdaId}',
-      pathParameters: {'lambdaId': lambdaId},
-    );
-  }
-
-  /// Creates a Lambda. You can optionally specify an Id for the lambda, if not
-  /// provided one will be generated.
-  Future<LambdaResponse> createLambdaWithId({
-    required String lambdaId,
-    required LambdaRequest body,
-  }) async {
-    return LambdaResponse.fromJson(
-      await _client.send(
-        'post',
-        'api/lambda/{lambdaId}',
-        pathParameters: {'lambdaId': lambdaId},
-        body: body.toJson(),
-      ),
-    );
-  }
-
-  /// Updates the lambda with the given Id.
-  Future<LambdaResponse> updateLambdaWithId({
-    required String lambdaId,
-    required LambdaRequest body,
-  }) async {
-    return LambdaResponse.fromJson(
-      await _client.send(
-        'put',
-        'api/lambda/{lambdaId}',
-        pathParameters: {'lambdaId': lambdaId},
-        body: body.toJson(),
-      ),
-    );
-  }
-
-  /// Updates, via PATCH, the lambda with the given Id.
-  Future<LambdaResponse> patchLambdaWithId({
-    required String lambdaId,
-    required LambdaRequest body,
-  }) async {
-    return LambdaResponse.fromJson(
-      await _client.send(
-        'patch',
-        'api/lambda/{lambdaId}',
-        pathParameters: {'lambdaId': lambdaId},
-        body: body.toJson(),
-      ),
-    );
-  }
-
-  /// Retrieves the lambda for the given Id.
-  Future<LambdaResponse> retrieveLambdaWithId(String lambdaId) async {
-    return LambdaResponse.fromJson(
-      await _client.send(
-        'get',
-        'api/lambda/{lambdaId}',
-        pathParameters: {'lambdaId': lambdaId},
-      ),
-    );
-  }
-
-  /// Retrieves the user for the given username. OR Retrieves the user by a
-  /// verificationId. The intended use of this API is to retrieve a user after
-  /// the forgot password workflow has been initiated and you may not know the
-  /// user's email or username. OR Retrieves the user by a change password Id.
-  /// The intended use of this API is to retrieve a user after the forgot
-  /// password workflow has been initiated and you may not know the user's email
-  /// or username. OR Retrieves the user for the given Id. This method does not
-  /// use an API key, instead it uses a JSON Web Token (JWT) for authentication.
-  /// OR Retrieves the user for the given email. OR Retrieves the user for the
-  /// loginId. The loginId can be either the username or the email.
-  Future<UserResponse> retrieveUser({
-    String? username,
-    String? tenantIdScope,
-    String? verificationId,
-    String? changePasswordId,
-    String? email,
-    String? loginId,
-  }) async {
-    return UserResponse.fromJson(
-      await _client.send(
-        'get',
-        'api/user',
-        queryParameters: {
-          if (username != null) 'username': username,
-          if (verificationId != null) 'verificationId': verificationId,
-          if (changePasswordId != null) 'changePasswordId': changePasswordId,
-          if (email != null) 'email': email,
-          if (loginId != null) 'loginId': loginId,
-        },
-        headers: {
-          if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
-        },
-      ),
-    );
-  }
-
-  /// Creates a user. You can optionally specify an Id for the user, if not
-  /// provided one will be generated.
-  Future<UserResponse> createUser({
-    String? tenantIdScope,
-    required UserRequest body,
-  }) async {
-    return UserResponse.fromJson(
-      await _client.send(
-        'post',
-        'api/user',
-        headers: {
-          if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
-        },
-        body: body.toJson(),
-      ),
-    );
-  }
-
-  /// Start a passwordless login request by generating a passwordless code. This
-  /// code can be sent to the User using the Send Passwordless Code API or using
-  /// a mechanism outside of FusionAuth. The passwordless login is completed by
-  /// using the Passwordless Login API with this code.
-  Future<PasswordlessStartResponse> startPasswordlessLoginWithId({
-    required PasswordlessStartRequest body,
-  }) async {
-    return PasswordlessStartResponse.fromJson(
-      await _client.send('post', 'api/passwordless/start', body: body.toJson()),
-    );
-  }
-
-  /// Creates a new role for an application. You must specify the Id of the
-  /// application you are creating the role for. You can optionally specify an
-  /// Id for the role inside the ApplicationRole object itself, if not provided
-  /// one will be generated.
-  Future<ApplicationResponse> createApplicationRoleWithId({
-    required String applicationId,
-    required String roleId,
-    String? tenantIdScope,
-    required ApplicationRequest body,
-  }) async {
-    return ApplicationResponse.fromJson(
-      await _client.send(
-        'post',
-        'api/application/{applicationId}/role/{roleId}',
-        pathParameters: {'applicationId': applicationId, 'roleId': roleId},
-        headers: {
-          if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
-        },
-        body: body.toJson(),
-      ),
-    );
-  }
-
-  /// Hard deletes an application role. This is a dangerous operation and should
-  /// not be used in most circumstances. This permanently removes the given role
-  /// from all users that had it.
-  Future<void> deleteApplicationRoleWithId({
-    required String applicationId,
-    required String roleId,
-    String? tenantIdScope,
+  /// Disable two-factor authentication for a user using a JSON body rather than
+  /// URL parameters. OR Disable two-factor authentication for a user.
+  Future<void> deleteUserTwoFactorWithId({
+    required String userId,
+    String? methodId,
+    String? code,
+    required TwoFactorDisableRequest body,
   }) async {
     await _client.send(
       'delete',
-      'api/application/{applicationId}/role/{roleId}',
-      pathParameters: {'applicationId': applicationId, 'roleId': roleId},
-      headers: {
-        if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
+      'api/user/two-factor/{userId}',
+      pathParameters: {'userId': userId},
+      queryParameters: {
+        if (methodId != null) 'methodId': methodId,
+        if (code != null) 'code': code,
       },
+      body: body.toJson(),
     );
   }
 
-  /// Updates the application role with the given Id for the application.
-  Future<ApplicationResponse> updateApplicationRoleWithId({
-    required String applicationId,
-    required String roleId,
-    String? tenantIdScope,
-    required ApplicationRequest body,
+  /// Enable two-factor authentication for a user.
+  Future<TwoFactorResponse> enableTwoFactorWithId({
+    required String userId,
+    required TwoFactorRequest body,
   }) async {
-    return ApplicationResponse.fromJson(
-      await _client.send(
-        'put',
-        'api/application/{applicationId}/role/{roleId}',
-        pathParameters: {'applicationId': applicationId, 'roleId': roleId},
-        headers: {
-          if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
-        },
-        body: body.toJson(),
-      ),
-    );
-  }
-
-  /// Updates, via PATCH, the application role with the given Id for the
-  /// application.
-  Future<ApplicationResponse> patchApplicationRoleWithId({
-    required String applicationId,
-    required String roleId,
-    String? tenantIdScope,
-    required ApplicationRequest body,
-  }) async {
-    return ApplicationResponse.fromJson(
-      await _client.send(
-        'patch',
-        'api/application/{applicationId}/role/{roleId}',
-        pathParameters: {'applicationId': applicationId, 'roleId': roleId},
-        headers: {
-          if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
-        },
-        body: body.toJson(),
-      ),
-    );
-  }
-
-  /// Creates a new role for an application. You must specify the Id of the
-  /// application you are creating the role for. You can optionally specify an
-  /// Id for the role inside the ApplicationRole object itself, if not provided
-  /// one will be generated.
-  Future<ApplicationResponse> createApplicationRole({
-    required String applicationId,
-    String? tenantIdScope,
-    required ApplicationRequest body,
-  }) async {
-    return ApplicationResponse.fromJson(
+    return TwoFactorResponse.fromJson(
       await _client.send(
         'post',
-        'api/application/{applicationId}/role',
-        pathParameters: {'applicationId': applicationId},
-        headers: {
-          if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
-        },
-        body: body.toJson(),
-      ),
-    );
-  }
-
-  /// Retrieves a custom OAuth scope.
-  Future<ApplicationOAuthScopeResponse> retrieveOAuthScopeWithId({
-    required String applicationId,
-    required String scopeId,
-    String? tenantIdScope,
-  }) async {
-    return ApplicationOAuthScopeResponse.fromJson(
-      await _client.send(
-        'get',
-        'api/application/{applicationId}/scope/{scopeId}',
-        pathParameters: {'applicationId': applicationId, 'scopeId': scopeId},
-        headers: {
-          if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
-        },
-      ),
-    );
-  }
-
-  /// Updates, via PATCH, the custom OAuth scope with the given Id for the
-  /// application.
-  Future<ApplicationOAuthScopeResponse> patchOAuthScopeWithId({
-    required String applicationId,
-    required String scopeId,
-    String? tenantIdScope,
-    required ApplicationOAuthScopeRequest body,
-  }) async {
-    return ApplicationOAuthScopeResponse.fromJson(
-      await _client.send(
-        'patch',
-        'api/application/{applicationId}/scope/{scopeId}',
-        pathParameters: {'applicationId': applicationId, 'scopeId': scopeId},
-        headers: {
-          if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
-        },
-        body: body.toJson(),
-      ),
-    );
-  }
-
-  /// Hard deletes a custom OAuth scope. OAuth workflows that are still
-  /// requesting the deleted OAuth scope may fail depending on the application's
-  /// unknown scope policy.
-  Future<void> deleteOAuthScopeWithId({
-    required String applicationId,
-    required String scopeId,
-    String? tenantIdScope,
-  }) async {
-    await _client.send(
-      'delete',
-      'api/application/{applicationId}/scope/{scopeId}',
-      pathParameters: {'applicationId': applicationId, 'scopeId': scopeId},
-      headers: {
-        if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
-      },
-    );
-  }
-
-  /// Updates the OAuth scope with the given Id for the application.
-  Future<ApplicationOAuthScopeResponse> updateOAuthScopeWithId({
-    required String applicationId,
-    required String scopeId,
-    String? tenantIdScope,
-    required ApplicationOAuthScopeRequest body,
-  }) async {
-    return ApplicationOAuthScopeResponse.fromJson(
-      await _client.send(
-        'put',
-        'api/application/{applicationId}/scope/{scopeId}',
-        pathParameters: {'applicationId': applicationId, 'scopeId': scopeId},
-        headers: {
-          if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
-        },
-        body: body.toJson(),
-      ),
-    );
-  }
-
-  /// Creates a new custom OAuth scope for an application. You must specify the
-  /// Id of the application you are creating the scope for. You can optionally
-  /// specify an Id for the OAuth scope on the URL, if not provided one will be
-  /// generated.
-  Future<ApplicationOAuthScopeResponse> createOAuthScopeWithId({
-    required String applicationId,
-    required String scopeId,
-    String? tenantIdScope,
-    required ApplicationOAuthScopeRequest body,
-  }) async {
-    return ApplicationOAuthScopeResponse.fromJson(
-      await _client.send(
-        'post',
-        'api/application/{applicationId}/scope/{scopeId}',
-        pathParameters: {'applicationId': applicationId, 'scopeId': scopeId},
-        headers: {
-          if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
-        },
+        'api/user/two-factor/{userId}',
+        pathParameters: {'userId': userId},
         body: body.toJson(),
       ),
     );
@@ -872,138 +901,54 @@ class FusionauthClient {
     );
   }
 
-  /// Creates an API key. You can optionally specify a unique Id for the key, if
-  /// not provided one will be generated. an API key can only be created with
-  /// equal or lesser authority. An API key cannot create another API key unless
-  /// it is granted  to that API key.  If an API key is locked to a tenant, it
-  /// can only create API Keys for that same tenant. OR Updates an
-  /// authentication API key by given id
-  Future<APIKeyResponse> createApiKeyWithId({
-    required String keyId,
-    required APIKeyRequest body,
-  }) async {
-    return APIKeyResponse.fromJson(
-      await _client.send(
-        'post',
-        'api/api-key/{keyId}',
-        pathParameters: {'keyId': keyId},
-        body: body.toJson(),
-      ),
-    );
-  }
-
-  /// Deletes the API key for the given Id.
-  Future<void> deleteAPIKeyWithId(String keyId) async {
+  /// Deletes the form field for the given Id.
+  Future<void> deleteFormFieldWithId(String fieldId) async {
     await _client.send(
       'delete',
-      'api/api-key/{keyId}',
-      pathParameters: {'keyId': keyId},
+      'api/form/field/{fieldId}',
+      pathParameters: {'fieldId': fieldId},
     );
   }
 
-  /// Retrieves an authentication API key for the given id
-  Future<APIKeyResponse> retrieveAPIKeyWithId(String keyId) async {
-    return APIKeyResponse.fromJson(
+  /// Retrieves the form field with the given Id.
+  Future<FormFieldResponse> retrieveFormFieldWithId(String fieldId) async {
+    return FormFieldResponse.fromJson(
       await _client.send(
         'get',
-        'api/api-key/{keyId}',
-        pathParameters: {'keyId': keyId},
+        'api/form/field/{fieldId}',
+        pathParameters: {'fieldId': fieldId},
       ),
     );
   }
 
-  /// Creates a Lambda. You can optionally specify an Id for the lambda, if not
-  /// provided one will be generated.
-  Future<LambdaResponse> createLambda({required LambdaRequest body}) async {
-    return LambdaResponse.fromJson(
-      await _client.send('post', 'api/lambda', body: body.toJson()),
-    );
-  }
-
-  /// Retrieves all the lambdas for the provided type.
-  Future<LambdaResponse> retrieveLambdasByTypeWithId({String? type}) async {
-    return LambdaResponse.fromJson(
-      await _client.send(
-        'get',
-        'api/lambda',
-        queryParameters: {if (type != null) 'type': type},
-      ),
-    );
-  }
-
-  /// Creates a messenger.  You can optionally specify an Id for the messenger,
-  /// if not provided one will be generated.
-  Future<MessengerResponse> createMessengerWithId({
-    required String messengerId,
-    required MessengerRequest body,
+  /// Creates a form field.  You can optionally specify an Id for the form, if
+  /// not provided one will be generated.
+  Future<FormFieldResponse> createFormFieldWithId({
+    required String fieldId,
+    required FormFieldRequest body,
   }) async {
-    return MessengerResponse.fromJson(
+    return FormFieldResponse.fromJson(
       await _client.send(
         'post',
-        'api/messenger/{messengerId}',
-        pathParameters: {'messengerId': messengerId},
+        'api/form/field/{fieldId}',
+        pathParameters: {'fieldId': fieldId},
         body: body.toJson(),
       ),
     );
   }
 
-  /// Updates, via PATCH, the messenger with the given Id.
-  Future<MessengerResponse> patchMessengerWithId({
-    required String messengerId,
-    required MessengerRequest body,
+  /// Updates the form field with the given Id.
+  Future<FormFieldResponse> updateFormFieldWithId({
+    required String fieldId,
+    required FormFieldRequest body,
   }) async {
-    return MessengerResponse.fromJson(
-      await _client.send(
-        'patch',
-        'api/messenger/{messengerId}',
-        pathParameters: {'messengerId': messengerId},
-        body: body.toJson(),
-      ),
-    );
-  }
-
-  /// Deletes the messenger for the given Id.
-  Future<void> deleteMessengerWithId(String messengerId) async {
-    await _client.send(
-      'delete',
-      'api/messenger/{messengerId}',
-      pathParameters: {'messengerId': messengerId},
-    );
-  }
-
-  /// Retrieves the messenger with the given Id.
-  Future<MessengerResponse> retrieveMessengerWithId(String messengerId) async {
-    return MessengerResponse.fromJson(
-      await _client.send(
-        'get',
-        'api/messenger/{messengerId}',
-        pathParameters: {'messengerId': messengerId},
-      ),
-    );
-  }
-
-  /// Updates the messenger with the given Id.
-  Future<MessengerResponse> updateMessengerWithId({
-    required String messengerId,
-    required MessengerRequest body,
-  }) async {
-    return MessengerResponse.fromJson(
+    return FormFieldResponse.fromJson(
       await _client.send(
         'put',
-        'api/messenger/{messengerId}',
-        pathParameters: {'messengerId': messengerId},
+        'api/form/field/{fieldId}',
+        pathParameters: {'fieldId': fieldId},
         body: body.toJson(),
       ),
-    );
-  }
-
-  /// Creates a messenger.  You can optionally specify an Id for the messenger,
-  /// if not provided one will be generated.
-  Future<MessengerResponse> createMessenger({
-    required MessengerRequest body,
-  }) async {
-    return MessengerResponse.fromJson(
-      await _client.send('post', 'api/messenger', body: body.toJson()),
     );
   }
 
@@ -1075,712 +1020,82 @@ class FusionauthClient {
     );
   }
 
-  /// Link an external user from a 3rd party identity provider to a FusionAuth
-  /// user.
-  Future<IdentityProviderLinkResponse> createUserLinkWithId({
-    required IdentityProviderLinkRequest body,
+  /// Complete a login request using a passwordless code
+  Future<LoginResponse> passwordlessLoginWithId({
+    required PasswordlessLoginRequest body,
   }) async {
-    return IdentityProviderLinkResponse.fromJson(
-      await _client.send(
-        'post',
-        'api/identity-provider/link',
-        body: body.toJson(),
-      ),
+    return LoginResponse.fromJson(
+      await _client.send('post', 'api/passwordless/login', body: body.toJson()),
     );
   }
 
-  /// Remove an existing link that has been made from a 3rd party identity
-  /// provider to a FusionAuth user.
-  Future<IdentityProviderLinkResponse> deleteUserLinkWithId({
-    String? identityProviderId,
-    String? identityProviderUserId,
-    String? userId,
+  /// Updates, via PATCH, the user action reason with the given Id.
+  Future<UserActionReasonResponse> patchUserActionReasonWithId({
+    required String userActionReasonId,
+    required UserActionReasonRequest body,
   }) async {
-    return IdentityProviderLinkResponse.fromJson(
-      await _client.send(
-        'delete',
-        'api/identity-provider/link',
-        queryParameters: {
-          if (identityProviderId != null)
-            'identityProviderId': identityProviderId,
-          if (identityProviderUserId != null)
-            'identityProviderUserId': identityProviderUserId,
-          if (userId != null) 'userId': userId,
-        },
-      ),
-    );
-  }
-
-  /// Retrieve a single Identity Provider user (link). OR Retrieve all Identity
-  /// Provider users (links) for the user. Specify the optional
-  /// identityProviderId to retrieve links for a particular IdP.
-  Future<IdentityProviderLinkResponse> retrieveIdentityProviderLink({
-    String? identityProviderId,
-    String? identityProviderUserId,
-    String? userId,
-  }) async {
-    return IdentityProviderLinkResponse.fromJson(
-      await _client.send(
-        'get',
-        'api/identity-provider/link',
-        queryParameters: {
-          if (identityProviderId != null)
-            'identityProviderId': identityProviderId,
-          if (identityProviderUserId != null)
-            'identityProviderUserId': identityProviderUserId,
-          if (userId != null) 'userId': userId,
-        },
-      ),
-    );
-  }
-
-  /// Updates, via PATCH, the consent with the given Id.
-  Future<ConsentResponse> patchConsentWithId({
-    required String consentId,
-    String? tenantIdScope,
-    required ConsentRequest body,
-  }) async {
-    return ConsentResponse.fromJson(
+    return UserActionReasonResponse.fromJson(
       await _client.send(
         'patch',
-        'api/consent/{consentId}',
-        pathParameters: {'consentId': consentId},
-        headers: {
-          if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
-        },
+        'api/user-action-reason/{userActionReasonId}',
+        pathParameters: {'userActionReasonId': userActionReasonId},
         body: body.toJson(),
       ),
     );
   }
 
-  /// Creates a user consent type. You can optionally specify an Id for the
-  /// consent type, if not provided one will be generated.
-  Future<ConsentResponse> createConsentWithId({
-    required String consentId,
-    String? tenantIdScope,
-    required ConsentRequest body,
+  /// Updates the user action reason with the given Id.
+  Future<UserActionReasonResponse> updateUserActionReasonWithId({
+    required String userActionReasonId,
+    required UserActionReasonRequest body,
   }) async {
-    return ConsentResponse.fromJson(
-      await _client.send(
-        'post',
-        'api/consent/{consentId}',
-        pathParameters: {'consentId': consentId},
-        headers: {
-          if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
-        },
-        body: body.toJson(),
-      ),
-    );
-  }
-
-  /// Deletes the consent for the given Id.
-  Future<void> deleteConsentWithId({
-    required String consentId,
-    String? tenantIdScope,
-  }) async {
-    await _client.send(
-      'delete',
-      'api/consent/{consentId}',
-      pathParameters: {'consentId': consentId},
-      headers: {
-        if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
-      },
-    );
-  }
-
-  /// Updates the consent with the given Id.
-  Future<ConsentResponse> updateConsentWithId({
-    required String consentId,
-    String? tenantIdScope,
-    required ConsentRequest body,
-  }) async {
-    return ConsentResponse.fromJson(
+    return UserActionReasonResponse.fromJson(
       await _client.send(
         'put',
-        'api/consent/{consentId}',
-        pathParameters: {'consentId': consentId},
-        headers: {
-          if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
-        },
+        'api/user-action-reason/{userActionReasonId}',
+        pathParameters: {'userActionReasonId': userActionReasonId},
         body: body.toJson(),
       ),
     );
   }
 
-  /// Retrieves the Consent for the given Id.
-  Future<ConsentResponse> retrieveConsentWithId({
-    required String consentId,
-    String? tenantIdScope,
+  /// Creates a user reason. This user action reason cannot be used when
+  /// actioning a user until this call completes successfully. Anytime after
+  /// that the user action reason can be used.
+  Future<UserActionReasonResponse> createUserActionReasonWithId({
+    required String userActionReasonId,
+    required UserActionReasonRequest body,
   }) async {
-    return ConsentResponse.fromJson(
-      await _client.send(
-        'get',
-        'api/consent/{consentId}',
-        pathParameters: {'consentId': consentId},
-        headers: {
-          if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
-        },
-      ),
-    );
-  }
-
-  /// Creates a form.  You can optionally specify an Id for the form, if not
-  /// provided one will be generated.
-  Future<FormResponse> createFormWithId({
-    required String formId,
-    required FormRequest body,
-  }) async {
-    return FormResponse.fromJson(
+    return UserActionReasonResponse.fromJson(
       await _client.send(
         'post',
-        'api/form/{formId}',
-        pathParameters: {'formId': formId},
+        'api/user-action-reason/{userActionReasonId}',
+        pathParameters: {'userActionReasonId': userActionReasonId},
         body: body.toJson(),
       ),
     );
   }
 
-  /// Deletes the form for the given Id.
-  Future<void> deleteFormWithId(String formId) async {
-    await _client.send(
-      'delete',
-      'api/form/{formId}',
-      pathParameters: {'formId': formId},
-    );
-  }
-
-  /// Updates the form with the given Id.
-  Future<FormResponse> updateFormWithId({
-    required String formId,
-    required FormRequest body,
-  }) async {
-    return FormResponse.fromJson(
-      await _client.send(
-        'put',
-        'api/form/{formId}',
-        pathParameters: {'formId': formId},
-        body: body.toJson(),
-      ),
-    );
-  }
-
-  /// Retrieves the form with the given Id.
-  Future<FormResponse> retrieveFormWithId(String formId) async {
-    return FormResponse.fromJson(
-      await _client.send(
-        'get',
-        'api/form/{formId}',
-        pathParameters: {'formId': formId},
-      ),
-    );
-  }
-
-  /// Creates a form.  You can optionally specify an Id for the form, if not
-  /// provided one will be generated.
-  Future<FormResponse> createForm({required FormRequest body}) async {
-    return FormResponse.fromJson(
-      await _client.send('post', 'api/form', body: body.toJson()),
-    );
-  }
-
-  /// Cancels the user action.
-  Future<ActionResponse> cancelActionWithId({
-    required String actionId,
-    required ActionRequest body,
-  }) async {
-    return ActionResponse.fromJson(
-      await _client.send(
-        'delete',
-        'api/user/action/{actionId}',
-        pathParameters: {'actionId': actionId},
-        body: body.toJson(),
-      ),
-    );
-  }
-
-  /// Retrieves a single action log (the log of a user action that was taken on
-  /// a user previously) for the given Id.
-  Future<ActionResponse> retrieveActionWithId(String actionId) async {
-    return ActionResponse.fromJson(
-      await _client.send(
-        'get',
-        'api/user/action/{actionId}',
-        pathParameters: {'actionId': actionId},
-      ),
-    );
-  }
-
-  /// Modifies a temporal user action by changing the expiration of the action
-  /// and optionally adding a comment to the action.
-  Future<ActionResponse> modifyActionWithId({
-    required String actionId,
-    required ActionRequest body,
-  }) async {
-    return ActionResponse.fromJson(
-      await _client.send(
-        'put',
-        'api/user/action/{actionId}',
-        pathParameters: {'actionId': actionId},
-        body: body.toJson(),
-      ),
-    );
-  }
-
-  /// Retrieves all WebAuthn credentials for the given user.
-  Future<WebAuthnCredentialResponse> retrieveWebAuthnCredentialsForUserWithId({
-    String? userId,
-  }) async {
-    return WebAuthnCredentialResponse.fromJson(
-      await _client.send(
-        'get',
-        'api/webauthn',
-        queryParameters: {if (userId != null) 'userId': userId},
-      ),
-    );
-  }
-
-  /// Revoke all refresh tokens that belong to a user by user Id. OR Revoke all
-  /// refresh tokens that belong to a user by user Id for a specific application
-  /// by applicationId. OR Revoke all refresh tokens that belong to an
-  /// application by applicationId. OR Revokes refresh tokens using the
-  /// information in the JSON body. The handling for this method is the same as
-  /// the revokeRefreshToken method and is based on the information you provide
-  /// in the RefreshDeleteRequest object. See that method for additional
-  /// information. OR Revokes a single refresh token by using the actual refresh
-  /// token value. This refresh token value is sensitive, so  be careful with
-  /// this API request. OR Revokes refresh tokens.  Usage examples:   - Delete a
-  /// single refresh token, pass in only the token.
-  /// revokeRefreshToken(token)    - Delete all refresh tokens for a user, pass
-  /// in only the userId.       revokeRefreshToken(null, userId)    - Delete all
-  /// refresh tokens for a user for a specific application, pass in both the
-  /// userId and the applicationId.       revokeRefreshToken(null, userId,
-  /// applicationId)    - Delete all refresh tokens for an application
-  /// revokeRefreshToken(null, null, applicationId)  Note: `null` may be handled
-  /// differently depending upon the programming language.  See also: (method
-  /// names may vary by language... but you'll figure it out)   -
-  /// revokeRefreshTokenById  - revokeRefreshTokenByToken  -
-  /// revokeRefreshTokensByUserId  - revokeRefreshTokensByApplicationId  -
-  /// revokeRefreshTokensByUserIdForApplication
-  Future<void> deleteJwtRefresh({
-    String? userId,
-    String? applicationId,
-    String? token,
-    required RefreshTokenRevokeRequest body,
-  }) async {
-    await _client.send(
-      'delete',
-      'api/jwt/refresh',
-      queryParameters: {
-        if (userId != null) 'userId': userId,
-        if (applicationId != null) 'applicationId': applicationId,
-        if (token != null) 'token': token,
-      },
-      body: body.toJson(),
-    );
-  }
-
-  /// Exchange a refresh token for a new JWT.
-  Future<JWTRefreshResponse> exchangeRefreshTokenForJWTWithId({
-    required RefreshRequest body,
-  }) async {
-    return JWTRefreshResponse.fromJson(
-      await _client.send('post', 'api/jwt/refresh', body: body.toJson()),
-    );
-  }
-
-  /// Retrieves the refresh tokens that belong to the user with the given Id.
-  Future<RefreshTokenResponse> retrieveRefreshTokensWithId({
-    String? userId,
-  }) async {
-    return RefreshTokenResponse.fromJson(
-      await _client.send(
-        'get',
-        'api/jwt/refresh',
-        queryParameters: {if (userId != null) 'userId': userId},
-      ),
-    );
-  }
-
-  /// Searches group members with the specified criteria and pagination.
-  Future<GroupMemberSearchResponse> searchGroupMembersWithId({
-    required GroupMemberSearchRequest body,
-  }) async {
-    return GroupMemberSearchResponse.fromJson(
-      await _client.send(
-        'post',
-        'api/group/member/search',
-        body: body.toJson(),
-      ),
-    );
-  }
-
-  /// Retrieves the monthly active user report between the two instants. If you
-  /// specify an application id, it will only return the monthly active counts
-  /// for that application.
-  Future<MonthlyActiveUserReportResponse> retrieveMonthlyActiveReportWithId({
-    String? applicationId,
-    String? start,
-    String? end,
-  }) async {
-    return MonthlyActiveUserReportResponse.fromJson(
-      await _client.send(
-        'get',
-        'api/report/monthly-active-user',
-        queryParameters: {
-          if (applicationId != null) 'applicationId': applicationId,
-          if (start != null) 'start': start,
-          if (end != null) 'end': end,
-        },
-      ),
-    );
-  }
-
-  /// Inspect an access token issued as the result of the User based grant such
-  /// as the Authorization Code Grant, Implicit Grant, the User Credentials
-  /// Grant or the Refresh Grant. OR Inspect an access token issued as the
-  /// result of the Client Credentials Grant.
-  Future<IntrospectResponse> createIntrospect() async {
-    return IntrospectResponse.fromJson(
-      await _client.send('post', 'oauth2/introspect'),
-    );
-  }
-
-  /// Retrieves the users for the given search criteria and pagination.
-  Future<SearchResponse> searchUsersByQueryWithId({
-    required SearchRequest body,
-  }) async {
-    return SearchResponse.fromJson(
-      await _client.send('post', 'api/user/search', body: body.toJson()),
-    );
-  }
-
-  Future<SearchResponse> searchUsersByIdsWithId(Iterable<String> ids) async {
-    return SearchResponse.fromJson(
-      await _client.send(
-        'get',
-        'api/user/search',
-        queryParametersAll: {'ids': ids},
-      ),
-    );
-  }
-
-  /// Retrieves the IP Access Control List with the given Id.
-  Future<IPAccessControlListResponse> retrieveIPAccessControlListWithId(
-    String ipAccessControlListId,
+  /// Retrieves the user action reason for the given Id. If you pass in null for
+  /// the id, this will return all the user action reasons.
+  Future<UserActionReasonResponse> retrieveUserActionReasonWithId(
+    String userActionReasonId,
   ) async {
-    return IPAccessControlListResponse.fromJson(
+    return UserActionReasonResponse.fromJson(
       await _client.send(
         'get',
-        'api/ip-acl/{ipAccessControlListId}',
-        pathParameters: {'ipAccessControlListId': ipAccessControlListId},
+        'api/user-action-reason/{userActionReasonId}',
+        pathParameters: {'userActionReasonId': userActionReasonId},
       ),
     );
   }
 
-  /// Deletes the IP Access Control List for the given Id.
-  Future<void> deleteIPAccessControlListWithId(
-    String ipAccessControlListId,
-  ) async {
+  /// Deletes the user action reason for the given Id.
+  Future<void> deleteUserActionReasonWithId(String userActionReasonId) async {
     await _client.send(
       'delete',
-      'api/ip-acl/{ipAccessControlListId}',
-      pathParameters: {'ipAccessControlListId': ipAccessControlListId},
-    );
-  }
-
-  /// Reactivates the user with the given Id. OR Updates the user with the given
-  /// Id.
-  Future<UserResponse> updateUserWithId({
-    String? reactivate,
-    required String userId,
-    String? tenantIdScope,
-    required UserRequest body,
-  }) async {
-    return UserResponse.fromJson(
-      await _client.send(
-        'put',
-        'api/user/{userId}',
-        pathParameters: {'userId': userId},
-        queryParameters: {if (reactivate != null) 'reactivate': reactivate},
-        headers: {
-          if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
-        },
-        body: body.toJson(),
-      ),
-    );
-  }
-
-  /// Deletes the user based on the given request (sent to the API as JSON).
-  /// This permanently deletes all information, metrics, reports and data
-  /// associated with the user. OR Deletes the user for the given Id. This
-  /// permanently deletes all information, metrics, reports and data associated
-  /// with the user. OR Deactivates the user with the given Id.
-  Future<void> deleteUserWithId({
-    required String userId,
-    String? tenantIdScope,
-    String? hardDelete,
-    required UserDeleteSingleRequest body,
-  }) async {
-    await _client.send(
-      'delete',
-      'api/user/{userId}',
-      pathParameters: {'userId': userId},
-      queryParameters: {if (hardDelete != null) 'hardDelete': hardDelete},
-      headers: {
-        if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
-      },
-      body: body.toJson(),
-    );
-  }
-
-  /// Creates a user. You can optionally specify an Id for the user, if not
-  /// provided one will be generated.
-  Future<UserResponse> createUserWithId({
-    required String userId,
-    String? tenantIdScope,
-    required UserRequest body,
-  }) async {
-    return UserResponse.fromJson(
-      await _client.send(
-        'post',
-        'api/user/{userId}',
-        pathParameters: {'userId': userId},
-        headers: {
-          if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
-        },
-        body: body.toJson(),
-      ),
-    );
-  }
-
-  /// Updates, via PATCH, the user with the given Id.
-  Future<UserResponse> patchUserWithId({
-    required String userId,
-    String? tenantIdScope,
-    required UserRequest body,
-  }) async {
-    return UserResponse.fromJson(
-      await _client.send(
-        'patch',
-        'api/user/{userId}',
-        pathParameters: {'userId': userId},
-        headers: {
-          if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
-        },
-        body: body.toJson(),
-      ),
-    );
-  }
-
-  /// Retrieves the user for the given Id.
-  Future<UserResponse> retrieveUserWithId({
-    required String userId,
-    String? tenantIdScope,
-  }) async {
-    return UserResponse.fromJson(
-      await _client.send(
-        'get',
-        'api/user/{userId}',
-        pathParameters: {'userId': userId},
-        headers: {
-          if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
-        },
-      ),
-    );
-  }
-
-  /// Validates the end-user provided user_code from the user-interaction of the
-  /// Device Authorization Grant. If you build your own activation form you
-  /// should validate the user provided code prior to beginning the
-  /// Authorization grant.
-  Future<void> validateDeviceWithId({
-    String? userCode,
-    String? clientId,
-  }) async {
-    await _client.send(
-      'get',
-      'oauth2/device/validate',
-      queryParameters: {
-        if (userCode != null) 'user_code': userCode,
-        if (clientId != null) 'client_id': clientId,
-      },
-    );
-  }
-
-  /// Enable two-factor authentication for a user.
-  Future<TwoFactorResponse> enableTwoFactorWithId({
-    required String userId,
-    required TwoFactorRequest body,
-  }) async {
-    return TwoFactorResponse.fromJson(
-      await _client.send(
-        'post',
-        'api/user/two-factor/{userId}',
-        pathParameters: {'userId': userId},
-        body: body.toJson(),
-      ),
-    );
-  }
-
-  /// Disable two-factor authentication for a user using a JSON body rather than
-  /// URL parameters. OR Disable two-factor authentication for a user.
-  Future<void> deleteUserTwoFactorWithId({
-    required String userId,
-    String? methodId,
-    String? code,
-    required TwoFactorDisableRequest body,
-  }) async {
-    await _client.send(
-      'delete',
-      'api/user/two-factor/{userId}',
-      pathParameters: {'userId': userId},
-      queryParameters: {
-        if (methodId != null) 'methodId': methodId,
-        if (code != null) 'code': code,
-      },
-      body: body.toJson(),
-    );
-  }
-
-  /// Send a Two Factor authentication code to allow the completion of Two
-  /// Factor authentication.
-  Future<void> sendTwoFactorCodeForLoginUsingMethodWithId({
-    required String twoFactorId,
-    required TwoFactorSendRequest body,
-  }) async {
-    await _client.send(
-      'post',
-      'api/two-factor/send/{twoFactorId}',
-      pathParameters: {'twoFactorId': twoFactorId},
-      body: body.toJson(),
-    );
-  }
-
-  /// Searches applications with the specified criteria and pagination.
-  Future<ApplicationSearchResponse> searchApplicationsWithId({
-    required ApplicationSearchRequest body,
-  }) async {
-    return ApplicationSearchResponse.fromJson(
-      await _client.send('post', 'api/application/search', body: body.toJson()),
-    );
-  }
-
-  /// Hard deletes an application. This is a dangerous operation and should not
-  /// be used in most circumstances. This will delete the application, any
-  /// registrations for that application, metrics and reports for the
-  /// application, all the roles for the application, and any other data
-  /// associated with the application. This operation could take a very long
-  /// time, depending on the amount of data in your database. OR Deactivates the
-  /// application with the given Id.
-  Future<void> deleteApplicationWithId({
-    String? hardDelete,
-    required String applicationId,
-    String? tenantIdScope,
-  }) async {
-    await _client.send(
-      'delete',
-      'api/application/{applicationId}',
-      pathParameters: {'applicationId': applicationId},
-      queryParameters: {if (hardDelete != null) 'hardDelete': hardDelete},
-      headers: {
-        if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
-      },
-    );
-  }
-
-  /// Updates, via PATCH, the application with the given Id.
-  Future<ApplicationResponse> patchApplicationWithId({
-    required String applicationId,
-    String? tenantIdScope,
-    required ApplicationRequest body,
-  }) async {
-    return ApplicationResponse.fromJson(
-      await _client.send(
-        'patch',
-        'api/application/{applicationId}',
-        pathParameters: {'applicationId': applicationId},
-        headers: {
-          if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
-        },
-        body: body.toJson(),
-      ),
-    );
-  }
-
-  /// Creates an application. You can optionally specify an Id for the
-  /// application, if not provided one will be generated.
-  Future<ApplicationResponse> createApplicationWithId({
-    required String applicationId,
-    String? tenantIdScope,
-    required ApplicationRequest body,
-  }) async {
-    return ApplicationResponse.fromJson(
-      await _client.send(
-        'post',
-        'api/application/{applicationId}',
-        pathParameters: {'applicationId': applicationId},
-        headers: {
-          if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
-        },
-        body: body.toJson(),
-      ),
-    );
-  }
-
-  /// Updates the application with the given Id. OR Reactivates the application
-  /// with the given Id.
-  Future<ApplicationResponse> updateApplicationWithId({
-    required String applicationId,
-    String? tenantIdScope,
-    String? reactivate,
-    required ApplicationRequest body,
-  }) async {
-    return ApplicationResponse.fromJson(
-      await _client.send(
-        'put',
-        'api/application/{applicationId}',
-        pathParameters: {'applicationId': applicationId},
-        queryParameters: {if (reactivate != null) 'reactivate': reactivate},
-        headers: {
-          if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
-        },
-        body: body.toJson(),
-      ),
-    );
-  }
-
-  /// Retrieves the application for the given Id or all the applications if the
-  /// Id is null.
-  Future<ApplicationResponse> retrieveApplicationWithId({
-    required String applicationId,
-    String? tenantIdScope,
-  }) async {
-    return ApplicationResponse.fromJson(
-      await _client.send(
-        'get',
-        'api/application/{applicationId}',
-        pathParameters: {'applicationId': applicationId},
-        headers: {
-          if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
-        },
-      ),
-    );
-  }
-
-  /// Retrieves the Entity for the given Id.
-  Future<EntityResponse> retrieveEntityWithId({
-    required String entityId,
-    String? tenantIdScope,
-  }) async {
-    return EntityResponse.fromJson(
-      await _client.send(
-        'get',
-        'api/entity/{entityId}',
-        pathParameters: {'entityId': entityId},
-        headers: {
-          if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
-        },
-      ),
+      'api/user-action-reason/{userActionReasonId}',
+      pathParameters: {'userActionReasonId': userActionReasonId},
     );
   }
 
@@ -1838,17 +1153,59 @@ class FusionauthClient {
     );
   }
 
-  /// Updates the theme with the given Id.
-  Future<ThemeResponse> updateThemeWithId({
-    required String themeId,
-    required ThemeRequest body,
+  /// Retrieves the Entity for the given Id.
+  Future<EntityResponse> retrieveEntityWithId({
+    required String entityId,
+    String? tenantIdScope,
   }) async {
-    return ThemeResponse.fromJson(
+    return EntityResponse.fromJson(
       await _client.send(
-        'put',
-        'api/theme/{themeId}',
-        pathParameters: {'themeId': themeId},
+        'get',
+        'api/entity/{entityId}',
+        pathParameters: {'entityId': entityId},
+        headers: {
+          if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
+        },
+      ),
+    );
+  }
+
+  /// Creates an API key. You can optionally specify a unique Id for the key, if
+  /// not provided one will be generated. an API key can only be created with
+  /// equal or lesser authority. An API key cannot create another API key unless
+  /// it is granted  to that API key.  If an API key is locked to a tenant, it
+  /// can only create API Keys for that same tenant. OR Updates an
+  /// authentication API key by given id
+  Future<APIKeyResponse> createApiKeyWithId({
+    required String keyId,
+    required APIKeyRequest body,
+  }) async {
+    return APIKeyResponse.fromJson(
+      await _client.send(
+        'post',
+        'api/api-key/{keyId}',
+        pathParameters: {'keyId': keyId},
         body: body.toJson(),
+      ),
+    );
+  }
+
+  /// Deletes the API key for the given Id.
+  Future<void> deleteAPIKeyWithId(String keyId) async {
+    await _client.send(
+      'delete',
+      'api/api-key/{keyId}',
+      pathParameters: {'keyId': keyId},
+    );
+  }
+
+  /// Retrieves an authentication API key for the given id
+  Future<APIKeyResponse> retrieveAPIKeyWithId(String keyId) async {
+    return APIKeyResponse.fromJson(
+      await _client.send(
+        'get',
+        'api/api-key/{keyId}',
+        pathParameters: {'keyId': keyId},
       ),
     );
   }
@@ -1869,13 +1226,17 @@ class FusionauthClient {
     );
   }
 
-  /// Retrieves the theme for the given Id.
-  Future<ThemeResponse> retrieveThemeWithId(String themeId) async {
+  /// Updates the theme with the given Id.
+  Future<ThemeResponse> updateThemeWithId({
+    required String themeId,
+    required ThemeRequest body,
+  }) async {
     return ThemeResponse.fromJson(
       await _client.send(
-        'get',
+        'put',
         'api/theme/{themeId}',
         pathParameters: {'themeId': themeId},
+        body: body.toJson(),
       ),
     );
   }
@@ -1895,6 +1256,17 @@ class FusionauthClient {
     );
   }
 
+  /// Retrieves the theme for the given Id.
+  Future<ThemeResponse> retrieveThemeWithId(String themeId) async {
+    return ThemeResponse.fromJson(
+      await _client.send(
+        'get',
+        'api/theme/{themeId}',
+        pathParameters: {'themeId': themeId},
+      ),
+    );
+  }
+
   /// Deletes the theme for the given Id.
   Future<void> deleteThemeWithId(String themeId) async {
     await _client.send(
@@ -1902,6 +1274,691 @@ class FusionauthClient {
       'api/theme/{themeId}',
       pathParameters: {'themeId': themeId},
     );
+  }
+
+  /// Creates a Theme. You can optionally specify an Id for the theme, if not
+  /// provided one will be generated.
+  Future<ThemeResponse> createTheme({required ThemeRequest body}) async {
+    return ThemeResponse.fromJson(
+      await _client.send('post', 'api/theme', body: body.toJson()),
+    );
+  }
+
+  /// Revokes refresh tokens using the information in the JSON body. The
+  /// handling for this method is the same as the revokeRefreshToken method and
+  /// is based on the information you provide in the RefreshDeleteRequest
+  /// object. See that method for additional information. OR Revoke all refresh
+  /// tokens that belong to an application by applicationId. OR Revoke all
+  /// refresh tokens that belong to a user by user Id. OR Revokes a single
+  /// refresh token by using the actual refresh token value. This refresh token
+  /// value is sensitive, so  be careful with this API request. OR Revoke all
+  /// refresh tokens that belong to a user by user Id for a specific application
+  /// by applicationId. OR Revokes refresh tokens.  Usage examples:   - Delete a
+  /// single refresh token, pass in only the token.
+  /// revokeRefreshToken(token)    - Delete all refresh tokens for a user, pass
+  /// in only the userId.       revokeRefreshToken(null, userId)    - Delete all
+  /// refresh tokens for a user for a specific application, pass in both the
+  /// userId and the applicationId.       revokeRefreshToken(null, userId,
+  /// applicationId)    - Delete all refresh tokens for an application
+  /// revokeRefreshToken(null, null, applicationId)  Note: `null` may be handled
+  /// differently depending upon the programming language.  See also: (method
+  /// names may vary by language... but you'll figure it out)   -
+  /// revokeRefreshTokenById  - revokeRefreshTokenByToken  -
+  /// revokeRefreshTokensByUserId  - revokeRefreshTokensByApplicationId  -
+  /// revokeRefreshTokensByUserIdForApplication
+  Future<void> deleteJwtRefresh({
+    String? applicationId,
+    String? userId,
+    String? token,
+    required RefreshTokenRevokeRequest body,
+  }) async {
+    await _client.send(
+      'delete',
+      'api/jwt/refresh',
+      queryParameters: {
+        if (applicationId != null) 'applicationId': applicationId,
+        if (userId != null) 'userId': userId,
+        if (token != null) 'token': token,
+      },
+      body: body.toJson(),
+    );
+  }
+
+  /// Exchange a refresh token for a new JWT.
+  Future<JWTRefreshResponse> exchangeRefreshTokenForJWTWithId({
+    required RefreshRequest body,
+  }) async {
+    return JWTRefreshResponse.fromJson(
+      await _client.send('post', 'api/jwt/refresh', body: body.toJson()),
+    );
+  }
+
+  /// Retrieves the refresh tokens that belong to the user with the given Id.
+  Future<RefreshTokenResponse> retrieveRefreshTokensWithId({
+    String? userId,
+  }) async {
+    return RefreshTokenResponse.fromJson(
+      await _client.send(
+        'get',
+        'api/jwt/refresh',
+        queryParameters: {if (userId != null) 'userId': userId},
+      ),
+    );
+  }
+
+  /// Retrieves a custom OAuth scope.
+  Future<ApplicationOAuthScopeResponse> retrieveOAuthScopeWithId({
+    required String applicationId,
+    required String scopeId,
+    String? tenantIdScope,
+  }) async {
+    return ApplicationOAuthScopeResponse.fromJson(
+      await _client.send(
+        'get',
+        'api/application/{applicationId}/scope/{scopeId}',
+        pathParameters: {'applicationId': applicationId, 'scopeId': scopeId},
+        headers: {
+          if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
+        },
+      ),
+    );
+  }
+
+  /// Hard deletes a custom OAuth scope. OAuth workflows that are still
+  /// requesting the deleted OAuth scope may fail depending on the application's
+  /// unknown scope policy.
+  Future<void> deleteOAuthScopeWithId({
+    required String applicationId,
+    required String scopeId,
+    String? tenantIdScope,
+  }) async {
+    await _client.send(
+      'delete',
+      'api/application/{applicationId}/scope/{scopeId}',
+      pathParameters: {'applicationId': applicationId, 'scopeId': scopeId},
+      headers: {
+        if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
+      },
+    );
+  }
+
+  /// Updates, via PATCH, the custom OAuth scope with the given Id for the
+  /// application.
+  Future<ApplicationOAuthScopeResponse> patchOAuthScopeWithId({
+    required String applicationId,
+    required String scopeId,
+    String? tenantIdScope,
+    required ApplicationOAuthScopeRequest body,
+  }) async {
+    return ApplicationOAuthScopeResponse.fromJson(
+      await _client.send(
+        'patch',
+        'api/application/{applicationId}/scope/{scopeId}',
+        pathParameters: {'applicationId': applicationId, 'scopeId': scopeId},
+        headers: {
+          if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
+        },
+        body: body.toJson(),
+      ),
+    );
+  }
+
+  /// Updates the OAuth scope with the given Id for the application.
+  Future<ApplicationOAuthScopeResponse> updateOAuthScopeWithId({
+    required String applicationId,
+    required String scopeId,
+    String? tenantIdScope,
+    required ApplicationOAuthScopeRequest body,
+  }) async {
+    return ApplicationOAuthScopeResponse.fromJson(
+      await _client.send(
+        'put',
+        'api/application/{applicationId}/scope/{scopeId}',
+        pathParameters: {'applicationId': applicationId, 'scopeId': scopeId},
+        headers: {
+          if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
+        },
+        body: body.toJson(),
+      ),
+    );
+  }
+
+  /// Creates a new custom OAuth scope for an application. You must specify the
+  /// Id of the application you are creating the scope for. You can optionally
+  /// specify an Id for the OAuth scope on the URL, if not provided one will be
+  /// generated.
+  Future<ApplicationOAuthScopeResponse> createOAuthScopeWithId({
+    required String applicationId,
+    required String scopeId,
+    String? tenantIdScope,
+    required ApplicationOAuthScopeRequest body,
+  }) async {
+    return ApplicationOAuthScopeResponse.fromJson(
+      await _client.send(
+        'post',
+        'api/application/{applicationId}/scope/{scopeId}',
+        pathParameters: {'applicationId': applicationId, 'scopeId': scopeId},
+        headers: {
+          if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
+        },
+        body: body.toJson(),
+      ),
+    );
+  }
+
+  /// Searches tenants with the specified criteria and pagination.
+  Future<TenantSearchResponse> searchTenantsWithId({
+    required TenantSearchRequest body,
+  }) async {
+    return TenantSearchResponse.fromJson(
+      await _client.send('post', 'api/tenant/search', body: body.toJson()),
+    );
+  }
+
+  /// Retrieves the registration report between the two instants. If you specify
+  /// an application id, it will only return the registration counts for that
+  /// application.
+  Future<RegistrationReportResponse> retrieveRegistrationReportWithId({
+    String? applicationId,
+    String? start,
+    String? end,
+  }) async {
+    return RegistrationReportResponse.fromJson(
+      await _client.send(
+        'get',
+        'api/report/registration',
+        queryParameters: {
+          if (applicationId != null) 'applicationId': applicationId,
+          if (start != null) 'start': start,
+          if (end != null) 'end': end,
+        },
+      ),
+    );
+  }
+
+  /// Searches email templates with the specified criteria and pagination.
+  Future<EmailTemplateSearchResponse> searchEmailTemplatesWithId({
+    required EmailTemplateSearchRequest body,
+  }) async {
+    return EmailTemplateSearchResponse.fromJson(
+      await _client.send(
+        'post',
+        'api/email/template/search',
+        body: body.toJson(),
+      ),
+    );
+  }
+
+  /// Revokes a single refresh token by the unique Id. The unique Id is not
+  /// sensitive as it cannot be used to obtain another JWT.
+  Future<void> revokeRefreshTokenByIdWithId(String tokenId) async {
+    await _client.send(
+      'delete',
+      'api/jwt/refresh/{tokenId}',
+      pathParameters: {'tokenId': tokenId},
+    );
+  }
+
+  /// Retrieves a single refresh token by unique Id. This is not the same thing
+  /// as the string value of the refresh token. If you have that, you already
+  /// have what you need.
+  Future<RefreshTokenResponse> retrieveRefreshTokenByIdWithId(
+    String tokenId,
+  ) async {
+    return RefreshTokenResponse.fromJson(
+      await _client.send(
+        'get',
+        'api/jwt/refresh/{tokenId}',
+        pathParameters: {'tokenId': tokenId},
+      ),
+    );
+  }
+
+  /// Searches consents with the specified criteria and pagination.
+  Future<ConsentSearchResponse> searchConsentsWithId({
+    required ConsentSearchRequest body,
+  }) async {
+    return ConsentSearchResponse.fromJson(
+      await _client.send('post', 'api/consent/search', body: body.toJson()),
+    );
+  }
+
+  /// Creates an Entity. You can optionally specify an Id for the Entity. If not
+  /// provided one will be generated.
+  Future<EntityResponse> createEntity({
+    String? tenantIdScope,
+    required EntityRequest body,
+  }) async {
+    return EntityResponse.fromJson(
+      await _client.send(
+        'post',
+        'api/entity',
+        headers: {
+          if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
+        },
+        body: body.toJson(),
+      ),
+    );
+  }
+
+  /// Start a Two-Factor login request by generating a two-factor identifier.
+  /// This code can then be sent to the Two Factor Send  API
+  /// (/api/two-factor/send)in order to send a one-time use code to a user. You
+  /// can also use one-time use code returned  to send the code out-of-band. The
+  /// Two-Factor login is completed by making a request to the Two-Factor Login
+  /// API (/api/two-factor/login). with the two-factor identifier and the
+  /// one-time use code.  This API is intended to allow you to begin a
+  /// Two-Factor login outside a normal login that originated from the Login API
+  /// (/api/login).
+  Future<TwoFactorStartResponse> startTwoFactorLoginWithId({
+    required TwoFactorStartRequest body,
+  }) async {
+    return TwoFactorStartResponse.fromJson(
+      await _client.send('post', 'api/two-factor/start', body: body.toJson()),
+    );
+  }
+
+  /// Complete a WebAuthn registration ceremony by validating the client request
+  /// and saving the new credential
+  Future<WebAuthnRegisterCompleteResponse> completeWebAuthnRegistrationWithId({
+    required WebAuthnRegisterCompleteRequest body,
+  }) async {
+    return WebAuthnRegisterCompleteResponse.fromJson(
+      await _client.send(
+        'post',
+        'api/webauthn/register/complete',
+        body: body.toJson(),
+      ),
+    );
+  }
+
+  /// Updates, via PATCH, the application role with the given Id for the
+  /// application.
+  Future<ApplicationResponse> patchApplicationRoleWithId({
+    required String applicationId,
+    required String roleId,
+    String? tenantIdScope,
+    required ApplicationRequest body,
+  }) async {
+    return ApplicationResponse.fromJson(
+      await _client.send(
+        'patch',
+        'api/application/{applicationId}/role/{roleId}',
+        pathParameters: {'applicationId': applicationId, 'roleId': roleId},
+        headers: {
+          if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
+        },
+        body: body.toJson(),
+      ),
+    );
+  }
+
+  /// Updates the application role with the given Id for the application.
+  Future<ApplicationResponse> updateApplicationRoleWithId({
+    required String applicationId,
+    required String roleId,
+    String? tenantIdScope,
+    required ApplicationRequest body,
+  }) async {
+    return ApplicationResponse.fromJson(
+      await _client.send(
+        'put',
+        'api/application/{applicationId}/role/{roleId}',
+        pathParameters: {'applicationId': applicationId, 'roleId': roleId},
+        headers: {
+          if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
+        },
+        body: body.toJson(),
+      ),
+    );
+  }
+
+  /// Hard deletes an application role. This is a dangerous operation and should
+  /// not be used in most circumstances. This permanently removes the given role
+  /// from all users that had it.
+  Future<void> deleteApplicationRoleWithId({
+    required String applicationId,
+    required String roleId,
+    String? tenantIdScope,
+  }) async {
+    await _client.send(
+      'delete',
+      'api/application/{applicationId}/role/{roleId}',
+      pathParameters: {'applicationId': applicationId, 'roleId': roleId},
+      headers: {
+        if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
+      },
+    );
+  }
+
+  /// Creates a new role for an application. You must specify the Id of the
+  /// application you are creating the role for. You can optionally specify an
+  /// Id for the role inside the ApplicationRole object itself, if not provided
+  /// one will be generated.
+  Future<ApplicationResponse> createApplicationRoleWithId({
+    required String applicationId,
+    required String roleId,
+    String? tenantIdScope,
+    required ApplicationRequest body,
+  }) async {
+    return ApplicationResponse.fromJson(
+      await _client.send(
+        'post',
+        'api/application/{applicationId}/role/{roleId}',
+        pathParameters: {'applicationId': applicationId, 'roleId': roleId},
+        headers: {
+          if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
+        },
+        body: body.toJson(),
+      ),
+    );
+  }
+
+  /// Retrieves the user for the given Id. This method does not use an API key,
+  /// instead it uses a JSON Web Token (JWT) for authentication. OR Retrieves
+  /// the user by a change password Id. The intended use of this API is to
+  /// retrieve a user after the forgot password workflow has been initiated and
+  /// you may not know the user's email or username. OR Retrieves the user by a
+  /// verificationId. The intended use of this API is to retrieve a user after
+  /// the forgot password workflow has been initiated and you may not know the
+  /// user's email or username. OR Retrieves the user for the given username. OR
+  /// Retrieves the user for the given email. OR Retrieves the user for the
+  /// loginId. The loginId can be either the username or the email.
+  Future<UserResponse> retrieveUser({
+    String? tenantIdScope,
+    String? changePasswordId,
+    String? verificationId,
+    String? username,
+    String? email,
+    String? loginId,
+  }) async {
+    return UserResponse.fromJson(
+      await _client.send(
+        'get',
+        'api/user',
+        queryParameters: {
+          if (changePasswordId != null) 'changePasswordId': changePasswordId,
+          if (verificationId != null) 'verificationId': verificationId,
+          if (username != null) 'username': username,
+          if (email != null) 'email': email,
+          if (loginId != null) 'loginId': loginId,
+        },
+        headers: {
+          if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
+        },
+      ),
+    );
+  }
+
+  /// Creates a user. You can optionally specify an Id for the user, if not
+  /// provided one will be generated.
+  Future<UserResponse> createUser({
+    String? tenantIdScope,
+    required UserRequest body,
+  }) async {
+    return UserResponse.fromJson(
+      await _client.send(
+        'post',
+        'api/user',
+        headers: {
+          if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
+        },
+        body: body.toJson(),
+      ),
+    );
+  }
+
+  /// Retrieves the webhook for the given Id. If you pass in null for the id,
+  /// this will return all the webhooks.
+  Future<WebhookResponse> retrieveWebhookWithId(String webhookId) async {
+    return WebhookResponse.fromJson(
+      await _client.send(
+        'get',
+        'api/webhook/{webhookId}',
+        pathParameters: {'webhookId': webhookId},
+      ),
+    );
+  }
+
+  /// Updates the webhook with the given Id.
+  Future<WebhookResponse> updateWebhookWithId({
+    required String webhookId,
+    required WebhookRequest body,
+  }) async {
+    return WebhookResponse.fromJson(
+      await _client.send(
+        'put',
+        'api/webhook/{webhookId}',
+        pathParameters: {'webhookId': webhookId},
+        body: body.toJson(),
+      ),
+    );
+  }
+
+  /// Deletes the webhook for the given Id.
+  Future<void> deleteWebhookWithId(String webhookId) async {
+    await _client.send(
+      'delete',
+      'api/webhook/{webhookId}',
+      pathParameters: {'webhookId': webhookId},
+    );
+  }
+
+  /// Creates a webhook. You can optionally specify an Id for the webhook, if
+  /// not provided one will be generated.
+  Future<WebhookResponse> createWebhookWithId({
+    required String webhookId,
+    required WebhookRequest body,
+  }) async {
+    return WebhookResponse.fromJson(
+      await _client.send(
+        'post',
+        'api/webhook/{webhookId}',
+        pathParameters: {'webhookId': webhookId},
+        body: body.toJson(),
+      ),
+    );
+  }
+
+  /// Retrieves the webhook for the given Id. If you pass in null for the id,
+  /// this will return all the webhooks.
+  Future<WebhookResponse> retrieveWebhook() async {
+    return WebhookResponse.fromJson(await _client.send('get', 'api/webhook'));
+  }
+
+  /// Creates a webhook. You can optionally specify an Id for the webhook, if
+  /// not provided one will be generated.
+  Future<WebhookResponse> createWebhook({required WebhookRequest body}) async {
+    return WebhookResponse.fromJson(
+      await _client.send('post', 'api/webhook', body: body.toJson()),
+    );
+  }
+
+  /// Retrieves all the actions for the user with the given Id. This will return
+  /// all time based actions that are active, and inactive as well as non-time
+  /// based actions. OR Retrieves all the actions for the user with the given Id
+  /// that are currently inactive. An inactive action means one that is time
+  /// based and has been canceled or has expired, or is not time based. OR
+  /// Retrieves all the actions for the user with the given Id that are
+  /// currently active. An active action means one that is time based and has
+  /// not been canceled, and has not ended. OR Retrieves all the actions for the
+  /// user with the given Id that are currently preventing the User from logging
+  /// in.
+  Future<ActionResponse> retrieveUserActioning({
+    String? userId,
+    String? active,
+    String? preventingLogin,
+  }) async {
+    return ActionResponse.fromJson(
+      await _client.send(
+        'get',
+        'api/user/action',
+        queryParameters: {
+          if (userId != null) 'userId': userId,
+          if (active != null) 'active': active,
+          if (preventingLogin != null) 'preventingLogin': preventingLogin,
+        },
+      ),
+    );
+  }
+
+  /// Takes an action on a user. The user being actioned is called the
+  /// "actionee" and the user taking the action is called the "actioner". Both
+  /// user ids are required in the request object.
+  Future<ActionResponse> actionUserWithId({required ActionRequest body}) async {
+    return ActionResponse.fromJson(
+      await _client.send('post', 'api/user/action', body: body.toJson()),
+    );
+  }
+
+  Future<SearchResponse> searchUsersByIdsWithId(Iterable<String> ids) async {
+    return SearchResponse.fromJson(
+      await _client.send(
+        'get',
+        'api/user/search',
+        queryParametersAll: {'ids': ids},
+      ),
+    );
+  }
+
+  /// Retrieves the users for the given search criteria and pagination.
+  Future<SearchResponse> searchUsersByQueryWithId({
+    required SearchRequest body,
+  }) async {
+    return SearchResponse.fromJson(
+      await _client.send('post', 'api/user/search', body: body.toJson()),
+    );
+  }
+
+  /// Modifies a temporal user action by changing the expiration of the action
+  /// and optionally adding a comment to the action.
+  Future<ActionResponse> modifyActionWithId({
+    required String actionId,
+    required ActionRequest body,
+  }) async {
+    return ActionResponse.fromJson(
+      await _client.send(
+        'put',
+        'api/user/action/{actionId}',
+        pathParameters: {'actionId': actionId},
+        body: body.toJson(),
+      ),
+    );
+  }
+
+  /// Cancels the user action.
+  Future<ActionResponse> cancelActionWithId({
+    required String actionId,
+    required ActionRequest body,
+  }) async {
+    return ActionResponse.fromJson(
+      await _client.send(
+        'delete',
+        'api/user/action/{actionId}',
+        pathParameters: {'actionId': actionId},
+        body: body.toJson(),
+      ),
+    );
+  }
+
+  /// Retrieves a single action log (the log of a user action that was taken on
+  /// a user previously) for the given Id.
+  Future<ActionResponse> retrieveActionWithId(String actionId) async {
+    return ActionResponse.fromJson(
+      await _client.send(
+        'get',
+        'api/user/action/{actionId}',
+        pathParameters: {'actionId': actionId},
+      ),
+    );
+  }
+
+  /// Issue a new access token (JWT) for the requested Application after
+  /// ensuring the provided JWT is valid. A valid access token is properly
+  /// signed and not expired. <p> This API may be used in an SSO configuration
+  /// to issue new tokens for another application after the user has obtained a
+  /// valid token from authentication.
+  Future<IssueResponse> issueJWTWithId({
+    String? applicationId,
+    String? refreshToken,
+  }) async {
+    return IssueResponse.fromJson(
+      await _client.send(
+        'get',
+        'api/jwt/issue',
+        queryParameters: {
+          if (applicationId != null) 'applicationId': applicationId,
+          if (refreshToken != null) 'refreshToken': refreshToken,
+        },
+      ),
+    );
+  }
+
+  /// Searches lambdas with the specified criteria and pagination.
+  Future<LambdaSearchResponse> searchLambdasWithId({
+    required LambdaSearchRequest body,
+  }) async {
+    return LambdaSearchResponse.fromJson(
+      await _client.send('post', 'api/lambda/search', body: body.toJson()),
+    );
+  }
+
+  /// Retrieves the WebAuthn credential for the given Id.
+  Future<WebAuthnCredentialResponse> retrieveWebAuthnCredentialWithId(
+    String id,
+  ) async {
+    return WebAuthnCredentialResponse.fromJson(
+      await _client.send(
+        'get',
+        'api/webauthn/{id}',
+        pathParameters: {'id': id},
+      ),
+    );
+  }
+
+  /// Deletes the WebAuthn credential for the given Id.
+  Future<void> deleteWebAuthnCredentialWithId(String id) async {
+    await _client.send(
+      'delete',
+      'api/webauthn/{id}',
+      pathParameters: {'id': id},
+    );
+  }
+
+  /// Inspect an access token issued as the result of the Client Credentials
+  /// Grant. OR Inspect an access token issued as the result of the User based
+  /// grant such as the Authorization Code Grant, Implicit Grant, the User
+  /// Credentials Grant or the Refresh Grant.
+  Future<IntrospectResponse> createIntrospect() async {
+    return IntrospectResponse.fromJson(
+      await _client.send('post', 'oauth2/introspect'),
+    );
+  }
+
+  /// Creates a tenant. You can optionally specify an Id for the tenant, if not
+  /// provided one will be generated.
+  Future<TenantResponse> createTenant({
+    String? tenantIdScope,
+    required TenantRequest body,
+  }) async {
+    return TenantResponse.fromJson(
+      await _client.send(
+        'post',
+        'api/tenant',
+        headers: {
+          if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
+        },
+        body: body.toJson(),
+      ),
+    );
+  }
+
+  /// Sends out an email to a parent that they need to register and create a
+  /// family or need to log in and add a child to their existing family.
+  Future<void> sendFamilyRequestEmailWithId({
+    required FamilyEmailRequest body,
+  }) async {
+    await _client.send('post', 'api/user/family/request', body: body.toJson());
   }
 
   /// Searches the login records with the specified criteria and pagination.
@@ -1917,374 +1974,13 @@ class FusionauthClient {
     );
   }
 
-  /// Updates, via PATCH, the user action reason with the given Id.
-  Future<UserActionReasonResponse> patchUserActionReasonWithId({
-    required String userActionReasonId,
-    required UserActionReasonRequest body,
+  /// Start a WebAuthn authentication ceremony by generating a new challenge for
+  /// the user
+  Future<WebAuthnStartResponse> startWebAuthnLoginWithId({
+    required WebAuthnStartRequest body,
   }) async {
-    return UserActionReasonResponse.fromJson(
-      await _client.send(
-        'patch',
-        'api/user-action-reason/{userActionReasonId}',
-        pathParameters: {'userActionReasonId': userActionReasonId},
-        body: body.toJson(),
-      ),
-    );
-  }
-
-  /// Updates the user action reason with the given Id.
-  Future<UserActionReasonResponse> updateUserActionReasonWithId({
-    required String userActionReasonId,
-    required UserActionReasonRequest body,
-  }) async {
-    return UserActionReasonResponse.fromJson(
-      await _client.send(
-        'put',
-        'api/user-action-reason/{userActionReasonId}',
-        pathParameters: {'userActionReasonId': userActionReasonId},
-        body: body.toJson(),
-      ),
-    );
-  }
-
-  /// Creates a user reason. This user action reason cannot be used when
-  /// actioning a user until this call completes successfully. Anytime after
-  /// that the user action reason can be used.
-  Future<UserActionReasonResponse> createUserActionReasonWithId({
-    required String userActionReasonId,
-    required UserActionReasonRequest body,
-  }) async {
-    return UserActionReasonResponse.fromJson(
-      await _client.send(
-        'post',
-        'api/user-action-reason/{userActionReasonId}',
-        pathParameters: {'userActionReasonId': userActionReasonId},
-        body: body.toJson(),
-      ),
-    );
-  }
-
-  /// Deletes the user action reason for the given Id.
-  Future<void> deleteUserActionReasonWithId(String userActionReasonId) async {
-    await _client.send(
-      'delete',
-      'api/user-action-reason/{userActionReasonId}',
-      pathParameters: {'userActionReasonId': userActionReasonId},
-    );
-  }
-
-  /// Retrieves the user action reason for the given Id. If you pass in null for
-  /// the id, this will return all the user action reasons.
-  Future<UserActionReasonResponse> retrieveUserActionReasonWithId(
-    String userActionReasonId,
-  ) async {
-    return UserActionReasonResponse.fromJson(
-      await _client.send(
-        'get',
-        'api/user-action-reason/{userActionReasonId}',
-        pathParameters: {'userActionReasonId': userActionReasonId},
-      ),
-    );
-  }
-
-  /// Import a WebAuthn credential
-  Future<void> importWebAuthnCredentialWithId({
-    required WebAuthnCredentialImportRequest body,
-  }) async {
-    await _client.send('post', 'api/webauthn/import', body: body.toJson());
-  }
-
-  /// Retrieves the email template for the given Id. If you don't specify the
-  /// id, this will return all the email templates.
-  Future<EmailTemplateResponse> retrieveEmailTemplateWithId({
-    required String emailTemplateId,
-    String? tenantIdScope,
-  }) async {
-    return EmailTemplateResponse.fromJson(
-      await _client.send(
-        'get',
-        'api/email/template/{emailTemplateId}',
-        pathParameters: {'emailTemplateId': emailTemplateId},
-        headers: {
-          if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
-        },
-      ),
-    );
-  }
-
-  /// Deletes the email template for the given Id.
-  Future<void> deleteEmailTemplateWithId({
-    required String emailTemplateId,
-    String? tenantIdScope,
-  }) async {
-    await _client.send(
-      'delete',
-      'api/email/template/{emailTemplateId}',
-      pathParameters: {'emailTemplateId': emailTemplateId},
-      headers: {
-        if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
-      },
-    );
-  }
-
-  /// Updates the email template with the given Id.
-  Future<EmailTemplateResponse> updateEmailTemplateWithId({
-    required String emailTemplateId,
-    String? tenantIdScope,
-    required EmailTemplateRequest body,
-  }) async {
-    return EmailTemplateResponse.fromJson(
-      await _client.send(
-        'put',
-        'api/email/template/{emailTemplateId}',
-        pathParameters: {'emailTemplateId': emailTemplateId},
-        headers: {
-          if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
-        },
-        body: body.toJson(),
-      ),
-    );
-  }
-
-  /// Updates, via PATCH, the email template with the given Id.
-  Future<EmailTemplateResponse> patchEmailTemplateWithId({
-    required String emailTemplateId,
-    String? tenantIdScope,
-    required EmailTemplateRequest body,
-  }) async {
-    return EmailTemplateResponse.fromJson(
-      await _client.send(
-        'patch',
-        'api/email/template/{emailTemplateId}',
-        pathParameters: {'emailTemplateId': emailTemplateId},
-        headers: {
-          if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
-        },
-        body: body.toJson(),
-      ),
-    );
-  }
-
-  /// Creates an email template. You can optionally specify an Id for the
-  /// template, if not provided one will be generated.
-  Future<EmailTemplateResponse> createEmailTemplateWithId({
-    required String emailTemplateId,
-    String? tenantIdScope,
-    required EmailTemplateRequest body,
-  }) async {
-    return EmailTemplateResponse.fromJson(
-      await _client.send(
-        'post',
-        'api/email/template/{emailTemplateId}',
-        pathParameters: {'emailTemplateId': emailTemplateId},
-        headers: {
-          if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
-        },
-        body: body.toJson(),
-      ),
-    );
-  }
-
-  /// Retrieves the email template for the given Id. If you don't specify the
-  /// id, this will return all the email templates.
-  Future<EmailTemplateResponse> retrieveEmailTemplate({
-    String? tenantIdScope,
-  }) async {
-    return EmailTemplateResponse.fromJson(
-      await _client.send(
-        'get',
-        'api/email/template',
-        headers: {
-          if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
-        },
-      ),
-    );
-  }
-
-  /// Creates an email template. You can optionally specify an Id for the
-  /// template, if not provided one will be generated.
-  Future<EmailTemplateResponse> createEmailTemplate({
-    String? tenantIdScope,
-    required EmailTemplateRequest body,
-  }) async {
-    return EmailTemplateResponse.fromJson(
-      await _client.send(
-        'post',
-        'api/email/template',
-        headers: {
-          if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
-        },
-        body: body.toJson(),
-      ),
-    );
-  }
-
-  /// Retrieves the tenant for the given Id.
-  Future<TenantResponse> retrieveTenantWithId({
-    required String tenantId,
-    String? tenantIdScope,
-  }) async {
-    return TenantResponse.fromJson(
-      await _client.send(
-        'get',
-        'api/tenant/{tenantId}',
-        pathParameters: {'tenantId': tenantId},
-        headers: {
-          if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
-        },
-      ),
-    );
-  }
-
-  /// Updates, via PATCH, the tenant with the given Id.
-  Future<TenantResponse> patchTenantWithId({
-    required String tenantId,
-    String? tenantIdScope,
-    required TenantRequest body,
-  }) async {
-    return TenantResponse.fromJson(
-      await _client.send(
-        'patch',
-        'api/tenant/{tenantId}',
-        pathParameters: {'tenantId': tenantId},
-        headers: {
-          if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
-        },
-        body: body.toJson(),
-      ),
-    );
-  }
-
-  /// Deletes the tenant based on the given Id on the URL. This permanently
-  /// deletes all information, metrics, reports and data associated with the
-  /// tenant and everything under the tenant (applications, users, etc). OR
-  /// Deletes the tenant for the given Id asynchronously. This method is helpful
-  /// if you do not want to wait for the delete operation to complete. OR
-  /// Deletes the tenant based on the given request (sent to the API as JSON).
-  /// This permanently deletes all information, metrics, reports and data
-  /// associated with the tenant and everything under the tenant (applications,
-  /// users, etc).
-  Future<void> deleteTenantWithId({
-    required String tenantId,
-    String? tenantIdScope,
-    String? async$,
-    required TenantDeleteRequest body,
-  }) async {
-    await _client.send(
-      'delete',
-      'api/tenant/{tenantId}',
-      pathParameters: {'tenantId': tenantId},
-      queryParameters: {if (async$ != null) 'async': async$},
-      headers: {
-        if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
-      },
-      body: body.toJson(),
-    );
-  }
-
-  /// Updates the tenant with the given Id.
-  Future<TenantResponse> updateTenantWithId({
-    required String tenantId,
-    String? tenantIdScope,
-    required TenantRequest body,
-  }) async {
-    return TenantResponse.fromJson(
-      await _client.send(
-        'put',
-        'api/tenant/{tenantId}',
-        pathParameters: {'tenantId': tenantId},
-        headers: {
-          if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
-        },
-        body: body.toJson(),
-      ),
-    );
-  }
-
-  /// Creates a tenant. You can optionally specify an Id for the tenant, if not
-  /// provided one will be generated.
-  Future<TenantResponse> createTenantWithId({
-    required String tenantId,
-    String? tenantIdScope,
-    required TenantRequest body,
-  }) async {
-    return TenantResponse.fromJson(
-      await _client.send(
-        'post',
-        'api/tenant/{tenantId}',
-        pathParameters: {'tenantId': tenantId},
-        headers: {
-          if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
-        },
-        body: body.toJson(),
-      ),
-    );
-  }
-
-  /// Check to see if the user must obtain a Trust Request Id in order to
-  /// complete a change password request. When a user has enabled Two-Factor
-  /// authentication, before you are allowed to use the Change Password API to
-  /// change your password, you must obtain a Trust Request Id by completing a
-  /// Two-Factor Step-Up authentication.  An HTTP status code of 400 with a
-  /// general error code of [TrustTokenRequired] indicates that a Trust Token is
-  /// required to make a POST request to this API. OR Check to see if the user
-  /// must obtain a Trust Token Id in order to complete a change password
-  /// request. When a user has enabled Two-Factor authentication, before you are
-  /// allowed to use the Change Password API to change your password, you must
-  /// obtain a Trust Token by completing a Two-Factor Step-Up authentication.
-  /// An HTTP status code of 400 with a general error code of
-  /// [TrustTokenRequired] indicates that a Trust Token is required to make a
-  /// POST request to this API.
-  Future<void> retrieveUserChangePassword({String? loginId}) async {
-    await _client.send(
-      'get',
-      'api/user/change-password',
-      queryParameters: {if (loginId != null) 'loginId': loginId},
-    );
-  }
-
-  /// Changes a user's password using their identity (loginId and password).
-  /// Using a loginId instead of the changePasswordId bypasses the email
-  /// verification and allows a password to be changed directly without first
-  /// calling the #forgotPassword method.
-  Future<void> changePasswordByIdentityWithId({
-    required ChangePasswordRequest body,
-  }) async {
-    await _client.send('post', 'api/user/change-password', body: body.toJson());
-  }
-
-  /// Deletes the key for the given Id.
-  Future<void> deleteKeyWithId(String keyId) async {
-    await _client.send(
-      'delete',
-      'api/key/{keyId}',
-      pathParameters: {'keyId': keyId},
-    );
-  }
-
-  /// Retrieves the key for the given Id.
-  Future<KeyResponse> retrieveKeyWithId(String keyId) async {
-    return KeyResponse.fromJson(
-      await _client.send(
-        'get',
-        'api/key/{keyId}',
-        pathParameters: {'keyId': keyId},
-      ),
-    );
-  }
-
-  /// Updates the key with the given Id.
-  Future<KeyResponse> updateKeyWithId({
-    required String keyId,
-    required KeyRequest body,
-  }) async {
-    return KeyResponse.fromJson(
-      await _client.send(
-        'put',
-        'api/key/{keyId}',
-        pathParameters: {'keyId': keyId},
-        body: body.toJson(),
-      ),
+    return WebAuthnStartResponse.fromJson(
+      await _client.send('post', 'api/webauthn/start', body: body.toJson()),
     );
   }
 
@@ -2355,57 +2051,91 @@ class FusionauthClient {
     );
   }
 
-  /// Retrieves all the families that a user belongs to.
-  Future<FamilyResponse> retrieveFamiliesWithId({
-    String? userId,
-    String? tenantIdScope,
-  }) async {
-    return FamilyResponse.fromJson(
+  /// Retrieves a single event log for the given Id.
+  Future<EventLogResponse> retrieveEventLogWithId(String eventLogId) async {
+    return EventLogResponse.fromJson(
       await _client.send(
         'get',
-        'api/user/family',
-        queryParameters: {if (userId != null) 'userId': userId},
-        headers: {
-          if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
-        },
+        'api/system/event-log/{eventLogId}',
+        pathParameters: {'eventLogId': eventLogId},
       ),
     );
   }
 
-  /// Creates a family with the user Id in the request as the owner and sole
-  /// member of the family. You can optionally specify an Id for the family, if
-  /// not provided one will be generated.
-  Future<FamilyResponse> createFamily({
-    String? tenantIdScope,
-    required FamilyRequest body,
+  /// Start a WebAuthn registration ceremony by generating a new challenge for
+  /// the user
+  Future<WebAuthnRegisterStartResponse> startWebAuthnRegistrationWithId({
+    required WebAuthnRegisterStartRequest body,
   }) async {
-    return FamilyResponse.fromJson(
+    return WebAuthnRegisterStartResponse.fromJson(
       await _client.send(
         'post',
-        'api/user/family',
-        headers: {
-          if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
-        },
+        'api/webauthn/register/start',
         body: body.toJson(),
       ),
     );
   }
 
-  /// Updates, via PATCH, the available integrations.
-  Future<IntegrationResponse> patchIntegrationsWithId({
-    required IntegrationRequest body,
+  /// Changes a user's password using their identity (loginId and password).
+  /// Using a loginId instead of the changePasswordId bypasses the email
+  /// verification and allows a password to be changed directly without first
+  /// calling the #forgotPassword method.
+  Future<void> changePasswordByIdentityWithId({
+    required ChangePasswordRequest body,
   }) async {
-    return IntegrationResponse.fromJson(
-      await _client.send('patch', 'api/integration', body: body.toJson()),
+    await _client.send('post', 'api/user/change-password', body: body.toJson());
+  }
+
+  /// Check to see if the user must obtain a Trust Token Id in order to complete
+  /// a change password request. When a user has enabled Two-Factor
+  /// authentication, before you are allowed to use the Change Password API to
+  /// change your password, you must obtain a Trust Token by completing a
+  /// Two-Factor Step-Up authentication.  An HTTP status code of 400 with a
+  /// general error code of [TrustTokenRequired] indicates that a Trust Token is
+  /// required to make a POST request to this API. OR Check to see if the user
+  /// must obtain a Trust Request Id in order to complete a change password
+  /// request. When a user has enabled Two-Factor authentication, before you are
+  /// allowed to use the Change Password API to change your password, you must
+  /// obtain a Trust Request Id by completing a Two-Factor Step-Up
+  /// authentication.  An HTTP status code of 400 with a general error code of
+  /// [TrustTokenRequired] indicates that a Trust Token is required to make a
+  /// POST request to this API.
+  Future<void> retrieveUserChangePassword({String? loginId}) async {
+    await _client.send(
+      'get',
+      'api/user/change-password',
+      queryParameters: {if (loginId != null) 'loginId': loginId},
     );
   }
 
-  /// Updates the available integrations.
-  Future<IntegrationResponse> updateIntegrationsWithId({
-    required IntegrationRequest body,
+  /// Updates the IP Access Control List with the given Id.
+  Future<IPAccessControlListResponse> updateIPAccessControlListWithId({
+    required String accessControlListId,
+    required IPAccessControlListRequest body,
   }) async {
-    return IntegrationResponse.fromJson(
-      await _client.send('put', 'api/integration', body: body.toJson()),
+    return IPAccessControlListResponse.fromJson(
+      await _client.send(
+        'put',
+        'api/ip-acl/{accessControlListId}',
+        pathParameters: {'accessControlListId': accessControlListId},
+        body: body.toJson(),
+      ),
+    );
+  }
+
+  /// Creates an IP Access Control List. You can optionally specify an Id on
+  /// this create request, if one is not provided one will be generated.
+  Future<IPAccessControlListResponse> createIPAccessControlListWithId({
+    required String accessControlListId,
+    required IPAccessControlListRequest body,
+  }) async {
+    return IPAccessControlListResponse.fromJson(
+      await _client.send(
+        'post',
+        'api/ip-acl/{accessControlListId}',
+        pathParameters: {'accessControlListId': accessControlListId},
+        body: body.toJson(),
+      ),
     );
   }
 
@@ -2431,35 +2161,485 @@ class FusionauthClient {
     );
   }
 
-  /// Removes a user from the family with the given id.
-  Future<void> removeUserFromFamilyWithId({
-    required String familyId,
-    required String userId,
+  /// Retrieves the entities for the given ids. If any Id is invalid, it is
+  /// ignored.
+  Future<EntitySearchResponse> searchEntitiesByIdsWithId({String? ids}) async {
+    return EntitySearchResponse.fromJson(
+      await _client.send(
+        'get',
+        'api/entity/search',
+        queryParameters: {if (ids != null) 'ids': ids},
+      ),
+    );
+  }
+
+  /// Searches entities with the specified criteria and pagination.
+  Future<EntitySearchResponse> searchEntitiesWithId({
+    required EntitySearchRequest body,
+  }) async {
+    return EntitySearchResponse.fromJson(
+      await _client.send('post', 'api/entity/search', body: body.toJson()),
+    );
+  }
+
+  /// Retrieves the Oauth2 configuration for the application for the given
+  /// Application Id.
+  Future<OAuthConfigurationResponse> retrieveOauthConfigurationWithId({
+    required String applicationId,
+    String? tenantIdScope,
+  }) async {
+    return OAuthConfigurationResponse.fromJson(
+      await _client.send(
+        'get',
+        'api/application/{applicationId}/oauth-configuration',
+        pathParameters: {'applicationId': applicationId},
+        headers: {
+          if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
+        },
+      ),
+    );
+  }
+
+  /// Updates the connector with the given Id.
+  Future<ConnectorResponse> updateConnectorWithId({
+    required String connectorId,
+    required ConnectorRequest body,
+  }) async {
+    return ConnectorResponse.fromJson(
+      await _client.send(
+        'put',
+        'api/connector/{connectorId}',
+        pathParameters: {'connectorId': connectorId},
+        body: body.toJson(),
+      ),
+    );
+  }
+
+  /// Updates, via PATCH, the connector with the given Id.
+  Future<ConnectorResponse> patchConnectorWithId({
+    required String connectorId,
+    required ConnectorRequest body,
+  }) async {
+    return ConnectorResponse.fromJson(
+      await _client.send(
+        'patch',
+        'api/connector/{connectorId}',
+        pathParameters: {'connectorId': connectorId},
+        body: body.toJson(),
+      ),
+    );
+  }
+
+  /// Creates a connector.  You can optionally specify an Id for the connector,
+  /// if not provided one will be generated.
+  Future<ConnectorResponse> createConnectorWithId({
+    required String connectorId,
+    required ConnectorRequest body,
+  }) async {
+    return ConnectorResponse.fromJson(
+      await _client.send(
+        'post',
+        'api/connector/{connectorId}',
+        pathParameters: {'connectorId': connectorId},
+        body: body.toJson(),
+      ),
+    );
+  }
+
+  /// Deletes the connector for the given Id.
+  Future<void> deleteConnectorWithId(String connectorId) async {
+    await _client.send(
+      'delete',
+      'api/connector/{connectorId}',
+      pathParameters: {'connectorId': connectorId},
+    );
+  }
+
+  /// Retrieves the connector with the given Id.
+  Future<ConnectorResponse> retrieveConnectorWithId(String connectorId) async {
+    return ConnectorResponse.fromJson(
+      await _client.send(
+        'get',
+        'api/connector/{connectorId}',
+        pathParameters: {'connectorId': connectorId},
+      ),
+    );
+  }
+
+  /// Send a passwordless authentication code in an email to complete login.
+  Future<void> sendPasswordlessCodeWithId({
+    required PasswordlessSendRequest body,
+  }) async {
+    await _client.send('post', 'api/passwordless/send', body: body.toJson());
+  }
+
+  /// Updates, via PATCH, the identity provider with the given Id.
+  Future<IdentityProviderResponse> patchIdentityProviderWithId({
+    required String identityProviderId,
+    required IdentityProviderRequest body,
+  }) async {
+    return IdentityProviderResponse.fromJson(
+      await _client.send(
+        'patch',
+        'api/identity-provider/{identityProviderId}',
+        pathParameters: {'identityProviderId': identityProviderId},
+        body: body.toJson(),
+      ),
+    );
+  }
+
+  /// Retrieves the identity provider for the given Id or all the identity
+  /// providers if the Id is null.
+  Future<IdentityProviderResponse> retrieveIdentityProviderWithId(
+    String identityProviderId,
+  ) async {
+    return IdentityProviderResponse.fromJson(
+      await _client.send(
+        'get',
+        'api/identity-provider/{identityProviderId}',
+        pathParameters: {'identityProviderId': identityProviderId},
+      ),
+    );
+  }
+
+  /// Deletes the identity provider for the given Id.
+  Future<void> deleteIdentityProviderWithId(String identityProviderId) async {
+    await _client.send(
+      'delete',
+      'api/identity-provider/{identityProviderId}',
+      pathParameters: {'identityProviderId': identityProviderId},
+    );
+  }
+
+  /// Updates the identity provider with the given Id.
+  Future<IdentityProviderResponse> updateIdentityProviderWithId({
+    required String identityProviderId,
+    required IdentityProviderRequest body,
+  }) async {
+    return IdentityProviderResponse.fromJson(
+      await _client.send(
+        'put',
+        'api/identity-provider/{identityProviderId}',
+        pathParameters: {'identityProviderId': identityProviderId},
+        body: body.toJson(),
+      ),
+    );
+  }
+
+  /// Creates an identity provider. You can optionally specify an Id for the
+  /// identity provider, if not provided one will be generated.
+  Future<IdentityProviderResponse> createIdentityProviderWithId({
+    required String identityProviderId,
+    required IdentityProviderRequest body,
+  }) async {
+    return IdentityProviderResponse.fromJson(
+      await _client.send(
+        'post',
+        'api/identity-provider/{identityProviderId}',
+        pathParameters: {'identityProviderId': identityProviderId},
+        body: body.toJson(),
+      ),
+    );
+  }
+
+  /// Begins a login request for a 3rd party login that requires user
+  /// interaction such as HYPR.
+  Future<IdentityProviderStartLoginResponse> startIdentityProviderLoginWithId({
+    required IdentityProviderStartLoginRequest body,
+  }) async {
+    return IdentityProviderStartLoginResponse.fromJson(
+      await _client.send(
+        'post',
+        'api/identity-provider/start',
+        body: body.toJson(),
+      ),
+    );
+  }
+
+  /// Removes users as members of a group.
+  Future<void> deleteGroupMembersWithId({
+    required MemberDeleteRequest body,
+  }) async {
+    await _client.send('delete', 'api/group/member', body: body.toJson());
+  }
+
+  /// Creates a member in a group.
+  Future<MemberResponse> createGroupMembersWithId({
+    required MemberRequest body,
+  }) async {
+    return MemberResponse.fromJson(
+      await _client.send('post', 'api/group/member', body: body.toJson()),
+    );
+  }
+
+  /// Creates a member in a group.
+  Future<MemberResponse> updateGroupMembersWithId({
+    required MemberRequest body,
+  }) async {
+    return MemberResponse.fromJson(
+      await _client.send('put', 'api/group/member', body: body.toJson()),
+    );
+  }
+
+  /// Retrieve two-factor recovery codes for a user.
+  Future<TwoFactorRecoveryCodeResponse> retrieveTwoFactorRecoveryCodesWithId(
+    String userId,
+  ) async {
+    return TwoFactorRecoveryCodeResponse.fromJson(
+      await _client.send(
+        'get',
+        'api/user/two-factor/recovery-code/{userId}',
+        pathParameters: {'userId': userId},
+      ),
+    );
+  }
+
+  /// Generate two-factor recovery codes for a user. Generating two-factor
+  /// recovery codes will invalidate any existing recovery codes.
+  Future<TwoFactorRecoveryCodeResponse> generateTwoFactorRecoveryCodesWithId(
+    String userId,
+  ) async {
+    return TwoFactorRecoveryCodeResponse.fromJson(
+      await _client.send(
+        'post',
+        'api/user/two-factor/recovery-code/{userId}',
+        pathParameters: {'userId': userId},
+      ),
+    );
+  }
+
+  /// Retrieves all the user actions that are currently inactive. OR Retrieves
+  /// the user action for the given Id. If you pass in null for the id, this
+  /// will return all the user actions.
+  Future<UserActionResponse> retrieveUserAction({
+    String? inactive,
+    String? tenantIdScope,
+  }) async {
+    return UserActionResponse.fromJson(
+      await _client.send(
+        'get',
+        'api/user-action',
+        queryParameters: {if (inactive != null) 'inactive': inactive},
+        headers: {
+          if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
+        },
+      ),
+    );
+  }
+
+  /// Creates a user action. This action cannot be taken on a user until this
+  /// call successfully returns. Anytime after that the user action can be
+  /// applied to any user.
+  Future<UserActionResponse> createUserAction({
+    String? tenantIdScope,
+    required UserActionRequest body,
+  }) async {
+    return UserActionResponse.fromJson(
+      await _client.send(
+        'post',
+        'api/user-action',
+        headers: {
+          if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
+        },
+        body: body.toJson(),
+      ),
+    );
+  }
+
+  /// Updates the messenger with the given Id.
+  Future<MessengerResponse> updateMessengerWithId({
+    required String messengerId,
+    required MessengerRequest body,
+  }) async {
+    return MessengerResponse.fromJson(
+      await _client.send(
+        'put',
+        'api/messenger/{messengerId}',
+        pathParameters: {'messengerId': messengerId},
+        body: body.toJson(),
+      ),
+    );
+  }
+
+  /// Updates, via PATCH, the messenger with the given Id.
+  Future<MessengerResponse> patchMessengerWithId({
+    required String messengerId,
+    required MessengerRequest body,
+  }) async {
+    return MessengerResponse.fromJson(
+      await _client.send(
+        'patch',
+        'api/messenger/{messengerId}',
+        pathParameters: {'messengerId': messengerId},
+        body: body.toJson(),
+      ),
+    );
+  }
+
+  /// Creates a messenger.  You can optionally specify an Id for the messenger,
+  /// if not provided one will be generated.
+  Future<MessengerResponse> createMessengerWithId({
+    required String messengerId,
+    required MessengerRequest body,
+  }) async {
+    return MessengerResponse.fromJson(
+      await _client.send(
+        'post',
+        'api/messenger/{messengerId}',
+        pathParameters: {'messengerId': messengerId},
+        body: body.toJson(),
+      ),
+    );
+  }
+
+  /// Retrieves the messenger with the given Id.
+  Future<MessengerResponse> retrieveMessengerWithId(String messengerId) async {
+    return MessengerResponse.fromJson(
+      await _client.send(
+        'get',
+        'api/messenger/{messengerId}',
+        pathParameters: {'messengerId': messengerId},
+      ),
+    );
+  }
+
+  /// Deletes the messenger for the given Id.
+  Future<void> deleteMessengerWithId(String messengerId) async {
+    await _client.send(
+      'delete',
+      'api/messenger/{messengerId}',
+      pathParameters: {'messengerId': messengerId},
+    );
+  }
+
+  /// Creates an IP Access Control List. You can optionally specify an Id on
+  /// this create request, if one is not provided one will be generated.
+  Future<IPAccessControlListResponse> createIPAccessControlList({
+    required IPAccessControlListRequest body,
+  }) async {
+    return IPAccessControlListResponse.fromJson(
+      await _client.send('post', 'api/ip-acl', body: body.toJson()),
+    );
+  }
+
+  /// Updates an API key by given id
+  Future<APIKeyResponse> updateAPIKeyWithId({
+    required String apiKeyId,
+    required APIKeyRequest body,
+  }) async {
+    return APIKeyResponse.fromJson(
+      await _client.send(
+        'put',
+        'api/api-key/{apiKeyId}',
+        pathParameters: {'apiKeyId': apiKeyId},
+        body: body.toJson(),
+      ),
+    );
+  }
+
+  /// Updates, via PATCH, the consent with the given Id.
+  Future<ConsentResponse> patchConsentWithId({
+    required String consentId,
+    String? tenantIdScope,
+    required ConsentRequest body,
+  }) async {
+    return ConsentResponse.fromJson(
+      await _client.send(
+        'patch',
+        'api/consent/{consentId}',
+        pathParameters: {'consentId': consentId},
+        headers: {
+          if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
+        },
+        body: body.toJson(),
+      ),
+    );
+  }
+
+  /// Retrieves the Consent for the given Id.
+  Future<ConsentResponse> retrieveConsentWithId({
+    required String consentId,
+    String? tenantIdScope,
+  }) async {
+    return ConsentResponse.fromJson(
+      await _client.send(
+        'get',
+        'api/consent/{consentId}',
+        pathParameters: {'consentId': consentId},
+        headers: {
+          if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
+        },
+      ),
+    );
+  }
+
+  /// Updates the consent with the given Id.
+  Future<ConsentResponse> updateConsentWithId({
+    required String consentId,
+    String? tenantIdScope,
+    required ConsentRequest body,
+  }) async {
+    return ConsentResponse.fromJson(
+      await _client.send(
+        'put',
+        'api/consent/{consentId}',
+        pathParameters: {'consentId': consentId},
+        headers: {
+          if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
+        },
+        body: body.toJson(),
+      ),
+    );
+  }
+
+  /// Deletes the consent for the given Id.
+  Future<void> deleteConsentWithId({
+    required String consentId,
     String? tenantIdScope,
   }) async {
     await _client.send(
       'delete',
-      'api/user/family/{familyId}/{userId}',
-      pathParameters: {'familyId': familyId, 'userId': userId},
+      'api/consent/{consentId}',
+      pathParameters: {'consentId': consentId},
       headers: {
         if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
       },
     );
   }
 
-  /// Retrieves the login report between the two instants. If you specify an
-  /// application id, it will only return the login counts for that application.
-  /// OR Retrieves the login report between the two instants for a particular
-  /// user by Id. If you specify an application id, it will only return the
+  /// Creates a user consent type. You can optionally specify an Id for the
+  /// consent type, if not provided one will be generated.
+  Future<ConsentResponse> createConsentWithId({
+    required String consentId,
+    String? tenantIdScope,
+    required ConsentRequest body,
+  }) async {
+    return ConsentResponse.fromJson(
+      await _client.send(
+        'post',
+        'api/consent/{consentId}',
+        pathParameters: {'consentId': consentId},
+        headers: {
+          if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
+        },
+        body: body.toJson(),
+      ),
+    );
+  }
+
+  /// Retrieves the login report between the two instants for a particular user
+  /// by login Id. If you specify an application id, it will only return the
   /// login counts for that application. OR Retrieves the login report between
-  /// the two instants for a particular user by login Id. If you specify an
+  /// the two instants for a particular user by Id. If you specify an
+  /// application id, it will only return the login counts for that application.
+  /// OR Retrieves the login report between the two instants. If you specify an
   /// application id, it will only return the login counts for that application.
   Future<LoginReportResponse> retrieveReportLogin({
     String? applicationId,
+    String? loginId,
     String? start,
     String? end,
     String? userId,
-    String? loginId,
   }) async {
     return LoginReportResponse.fromJson(
       await _client.send(
@@ -2467,208 +2647,202 @@ class FusionauthClient {
         'api/report/login',
         queryParameters: {
           if (applicationId != null) 'applicationId': applicationId,
+          if (loginId != null) 'loginId': loginId,
           if (start != null) 'start': start,
           if (end != null) 'end': end,
           if (userId != null) 'userId': userId,
-          if (loginId != null) 'loginId': loginId,
         },
       ),
     );
   }
 
-  /// Searches tenants with the specified criteria and pagination.
-  Future<TenantSearchResponse> searchTenantsWithId({
-    required TenantSearchRequest body,
+  /// Creates a new permission for an entity type. You must specify the Id of
+  /// the entity type you are creating the permission for. You can optionally
+  /// specify an Id for the permission inside the EntityTypePermission object
+  /// itself, if not provided one will be generated.
+  Future<EntityTypeResponse> createEntityTypePermissionWithId({
+    required String entityTypeId,
+    required String permissionId,
+    required EntityTypeRequest body,
   }) async {
-    return TenantSearchResponse.fromJson(
-      await _client.send('post', 'api/tenant/search', body: body.toJson()),
-    );
-  }
-
-  /// Updates the registration for the user with the given Id and the
-  /// application defined in the request.
-  Future<RegistrationResponse> updateRegistrationWithId({
-    required String userId,
-    String? tenantIdScope,
-    required RegistrationRequest body,
-  }) async {
-    return RegistrationResponse.fromJson(
-      await _client.send(
-        'put',
-        'api/user/registration/{userId}',
-        pathParameters: {'userId': userId},
-        headers: {
-          if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
-        },
-        body: body.toJson(),
-      ),
-    );
-  }
-
-  /// Registers a user for an application. If you provide the User and the
-  /// UserRegistration object on this request, it will create the user as well
-  /// as register them for the application. This is called a Full Registration.
-  /// However, if you only provide the UserRegistration object, then the user
-  /// must already exist and they will be registered for the application. The
-  /// user Id can also be provided and it will either be used to look up an
-  /// existing user or it will be used for the newly created User.
-  Future<RegistrationResponse> registerWithId({
-    required String userId,
-    String? tenantIdScope,
-    required RegistrationRequest body,
-  }) async {
-    return RegistrationResponse.fromJson(
+    return EntityTypeResponse.fromJson(
       await _client.send(
         'post',
-        'api/user/registration/{userId}',
-        pathParameters: {'userId': userId},
-        headers: {
-          if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
+        'api/entity/type/{entityTypeId}/permission/{permissionId}',
+        pathParameters: {
+          'entityTypeId': entityTypeId,
+          'permissionId': permissionId,
         },
         body: body.toJson(),
       ),
     );
   }
 
-  /// Updates, via PATCH, the registration for the user with the given Id and
-  /// the application defined in the request.
-  Future<RegistrationResponse> patchRegistrationWithId({
-    required String userId,
-    String? tenantIdScope,
-    required RegistrationRequest body,
+  /// Hard deletes a permission. This is a dangerous operation and should not be
+  /// used in most circumstances. This permanently removes the given permission
+  /// from all grants that had it.
+  Future<void> deleteEntityTypePermissionWithId({
+    required String entityTypeId,
+    required String permissionId,
   }) async {
-    return RegistrationResponse.fromJson(
+    await _client.send(
+      'delete',
+      'api/entity/type/{entityTypeId}/permission/{permissionId}',
+      pathParameters: {
+        'entityTypeId': entityTypeId,
+        'permissionId': permissionId,
+      },
+    );
+  }
+
+  /// Updates the permission with the given Id for the entity type.
+  Future<EntityTypeResponse> updateEntityTypePermissionWithId({
+    required String entityTypeId,
+    required String permissionId,
+    required EntityTypeRequest body,
+  }) async {
+    return EntityTypeResponse.fromJson(
       await _client.send(
-        'patch',
-        'api/user/registration/{userId}',
-        pathParameters: {'userId': userId},
-        headers: {
-          if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
+        'put',
+        'api/entity/type/{entityTypeId}/permission/{permissionId}',
+        pathParameters: {
+          'entityTypeId': entityTypeId,
+          'permissionId': permissionId,
         },
         body: body.toJson(),
       ),
     );
   }
 
-  /// Exchanges an OAuth authorization code and code_verifier for an access
-  /// token. Makes a request to the Token endpoint to exchange the authorization
-  /// code returned from the Authorize endpoint and a code_verifier for an
-  /// access token. OR Make a Client Credentials grant request to obtain an
-  /// access token. OR Exchange a Refresh Token for an Access Token. If you will
-  /// be using the Refresh Token Grant, you will make a request to the Token
-  /// endpoint to exchange the user’s refresh token for an access token. OR
-  /// Exchange User Credentials for a Token. If you will be using the Resource
-  /// Owner Password Credential Grant, you will make a request to the Token
-  /// endpoint to exchange the user’s email and password for an access token. OR
-  /// Exchanges an OAuth authorization code for an access token. Makes a request
-  /// to the Token endpoint to exchange the authorization code returned from the
-  /// Authorize endpoint for an access token.
-  Future<AccessToken> createToken() async {
-    return AccessToken.fromJson(await _client.send('post', 'oauth2/token'));
-  }
-
-  /// Searches the IP Access Control Lists with the specified criteria and
-  /// pagination.
-  Future<IPAccessControlListSearchResponse> searchIPAccessControlListsWithId({
-    required IPAccessControlListSearchRequest body,
+  /// Creates a new permission for an entity type. You must specify the Id of
+  /// the entity type you are creating the permission for. You can optionally
+  /// specify an Id for the permission inside the EntityTypePermission object
+  /// itself, if not provided one will be generated.
+  Future<EntityTypeResponse> createEntityTypePermission({
+    required String entityTypeId,
+    required EntityTypeRequest body,
   }) async {
-    return IPAccessControlListSearchResponse.fromJson(
-      await _client.send('post', 'api/ip-acl/search', body: body.toJson()),
-    );
-  }
-
-  /// Start a WebAuthn authentication ceremony by generating a new challenge for
-  /// the user
-  Future<WebAuthnStartResponse> startWebAuthnLoginWithId({
-    required WebAuthnStartRequest body,
-  }) async {
-    return WebAuthnStartResponse.fromJson(
-      await _client.send('post', 'api/webauthn/start', body: body.toJson()),
-    );
-  }
-
-  /// Updates, via PATCH, the group with the given Id.
-  Future<GroupResponse> patchGroupWithId({
-    required String groupId,
-    String? tenantIdScope,
-    required GroupRequest body,
-  }) async {
-    return GroupResponse.fromJson(
+    return EntityTypeResponse.fromJson(
       await _client.send(
-        'patch',
-        'api/group/{groupId}',
-        pathParameters: {'groupId': groupId},
-        headers: {
-          if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
-        },
+        'post',
+        'api/entity/type/{entityTypeId}/permission',
+        pathParameters: {'entityTypeId': entityTypeId},
         body: body.toJson(),
       ),
     );
   }
 
-  /// Retrieves the group for the given Id.
-  Future<GroupResponse> retrieveGroupWithId({
-    required String groupId,
-    String? tenantIdScope,
-  }) async {
-    return GroupResponse.fromJson(
+  /// Retrieves the IP Access Control List with the given Id.
+  Future<IPAccessControlListResponse> retrieveIPAccessControlListWithId(
+    String ipAccessControlListId,
+  ) async {
+    return IPAccessControlListResponse.fromJson(
       await _client.send(
         'get',
-        'api/group/{groupId}',
-        pathParameters: {'groupId': groupId},
-        headers: {
-          if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
-        },
+        'api/ip-acl/{ipAccessControlListId}',
+        pathParameters: {'ipAccessControlListId': ipAccessControlListId},
       ),
     );
   }
 
-  /// Deletes the group for the given Id.
-  Future<void> deleteGroupWithId({
-    required String groupId,
-    String? tenantIdScope,
-  }) async {
+  /// Deletes the IP Access Control List for the given Id.
+  Future<void> deleteIPAccessControlListWithId(
+    String ipAccessControlListId,
+  ) async {
     await _client.send(
       'delete',
-      'api/group/{groupId}',
-      pathParameters: {'groupId': groupId},
-      headers: {
-        if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
-      },
+      'api/ip-acl/{ipAccessControlListId}',
+      pathParameters: {'ipAccessControlListId': ipAccessControlListId},
     );
   }
 
-  /// Creates a group. You can optionally specify an Id for the group, if not
-  /// provided one will be generated.
-  Future<GroupResponse> createGroupWithId({
-    required String groupId,
-    String? tenantIdScope,
-    required GroupRequest body,
+  /// Link an external user from a 3rd party identity provider to a FusionAuth
+  /// user.
+  Future<IdentityProviderLinkResponse> createUserLinkWithId({
+    required IdentityProviderLinkRequest body,
   }) async {
-    return GroupResponse.fromJson(
+    return IdentityProviderLinkResponse.fromJson(
       await _client.send(
         'post',
-        'api/group/{groupId}',
-        pathParameters: {'groupId': groupId},
-        headers: {
-          if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
-        },
+        'api/identity-provider/link',
         body: body.toJson(),
       ),
     );
   }
 
-  /// Updates the group with the given Id.
-  Future<GroupResponse> updateGroupWithId({
-    required String groupId,
-    String? tenantIdScope,
-    required GroupRequest body,
+  /// Retrieve all Identity Provider users (links) for the user. Specify the
+  /// optional identityProviderId to retrieve links for a particular IdP. OR
+  /// Retrieve a single Identity Provider user (link).
+  Future<IdentityProviderLinkResponse> retrieveIdentityProviderLink({
+    String? identityProviderId,
+    String? userId,
+    String? identityProviderUserId,
   }) async {
-    return GroupResponse.fromJson(
+    return IdentityProviderLinkResponse.fromJson(
+      await _client.send(
+        'get',
+        'api/identity-provider/link',
+        queryParameters: {
+          if (identityProviderId != null)
+            'identityProviderId': identityProviderId,
+          if (userId != null) 'userId': userId,
+          if (identityProviderUserId != null)
+            'identityProviderUserId': identityProviderUserId,
+        },
+      ),
+    );
+  }
+
+  /// Remove an existing link that has been made from a 3rd party identity
+  /// provider to a FusionAuth user.
+  Future<IdentityProviderLinkResponse> deleteUserLinkWithId({
+    String? identityProviderId,
+    String? identityProviderUserId,
+    String? userId,
+  }) async {
+    return IdentityProviderLinkResponse.fromJson(
+      await _client.send(
+        'delete',
+        'api/identity-provider/link',
+        queryParameters: {
+          if (identityProviderId != null)
+            'identityProviderId': identityProviderId,
+          if (identityProviderUserId != null)
+            'identityProviderUserId': identityProviderUserId,
+          if (userId != null) 'userId': userId,
+        },
+      ),
+    );
+  }
+
+  /// Retrieves all the members of a family by the unique Family Id.
+  Future<FamilyResponse> retrieveFamilyMembersByFamilyIdWithId({
+    required String familyId,
+    String? tenantIdScope,
+  }) async {
+    return FamilyResponse.fromJson(
+      await _client.send(
+        'get',
+        'api/user/family/{familyId}',
+        pathParameters: {'familyId': familyId},
+        headers: {
+          if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
+        },
+      ),
+    );
+  }
+
+  /// Adds a user to an existing family. The family Id must be specified.
+  Future<FamilyResponse> addUserToFamilyWithId({
+    required String familyId,
+    String? tenantIdScope,
+    required FamilyRequest body,
+  }) async {
+    return FamilyResponse.fromJson(
       await _client.send(
         'put',
-        'api/group/{groupId}',
-        pathParameters: {'groupId': groupId},
+        'api/user/family/{familyId}',
+        pathParameters: {'familyId': familyId},
         headers: {
           if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
         },
@@ -2677,101 +2851,295 @@ class FusionauthClient {
     );
   }
 
-  /// Begins the forgot password sequence, which kicks off an email to the user
-  /// so that they can reset their password.
-  Future<ForgotPasswordResponse> forgotPasswordWithId({
-    required ForgotPasswordRequest body,
+  /// Creates a family with the user Id in the request as the owner and sole
+  /// member of the family. You can optionally specify an Id for the family, if
+  /// not provided one will be generated.
+  Future<FamilyResponse> createFamilyWithId({
+    required String familyId,
+    String? tenantIdScope,
+    required FamilyRequest body,
   }) async {
-    return ForgotPasswordResponse.fromJson(
+    return FamilyResponse.fromJson(
       await _client.send(
         'post',
-        'api/user/forgot-password',
+        'api/user/family/{familyId}',
+        pathParameters: {'familyId': familyId},
+        headers: {
+          if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
+        },
         body: body.toJson(),
       ),
     );
   }
 
-  /// Deletes the user registration for the given user and application. OR
-  /// Deletes the user registration for the given user and application along
-  /// with the given JSON body that contains the event information.
-  Future<void> deleteUserRegistrationWithId({
-    required String userId,
+  /// Retrieves the email template for the given Id. If you don't specify the
+  /// id, this will return all the email templates.
+  Future<EmailTemplateResponse> retrieveEmailTemplate({
+    String? tenantIdScope,
+  }) async {
+    return EmailTemplateResponse.fromJson(
+      await _client.send(
+        'get',
+        'api/email/template',
+        headers: {
+          if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
+        },
+      ),
+    );
+  }
+
+  /// Creates an email template. You can optionally specify an Id for the
+  /// template, if not provided one will be generated.
+  Future<EmailTemplateResponse> createEmailTemplate({
+    String? tenantIdScope,
+    required EmailTemplateRequest body,
+  }) async {
+    return EmailTemplateResponse.fromJson(
+      await _client.send(
+        'post',
+        'api/email/template',
+        headers: {
+          if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
+        },
+        body: body.toJson(),
+      ),
+    );
+  }
+
+  /// Retrieve a user_code that is part of an in-progress Device Authorization
+  /// Grant.  This API is useful if you want to build your own login workflow to
+  /// complete a device grant.  This request will require an API key. OR
+  /// Retrieve a user_code that is part of an in-progress Device Authorization
+  /// Grant.  This API is useful if you want to build your own login workflow to
+  /// complete a device grant.
+  Future<void> retrieveDeviceUserCode() async {
+    await _client.send('get', 'oauth2/device/user-code');
+  }
+
+  /// Searches Entity Grants with the specified criteria and pagination.
+  Future<EntityGrantSearchResponse> searchEntityGrantsWithId({
+    required EntityGrantSearchRequest body,
+  }) async {
+    return EntityGrantSearchResponse.fromJson(
+      await _client.send(
+        'post',
+        'api/entity/grant/search',
+        body: body.toJson(),
+      ),
+    );
+  }
+
+  /// Updates, via PATCH, the available integrations.
+  Future<IntegrationResponse> patchIntegrationsWithId({
+    required IntegrationRequest body,
+  }) async {
+    return IntegrationResponse.fromJson(
+      await _client.send('patch', 'api/integration', body: body.toJson()),
+    );
+  }
+
+  /// Updates the available integrations.
+  Future<IntegrationResponse> updateIntegrationsWithId({
+    required IntegrationRequest body,
+  }) async {
+    return IntegrationResponse.fromJson(
+      await _client.send('put', 'api/integration', body: body.toJson()),
+    );
+  }
+
+  /// Reconcile a User to FusionAuth using JWT issued from another Identity
+  /// Provider.
+  Future<LoginResponse> reconcileJWTWithId({
+    required IdentityProviderLoginRequest body,
+  }) async {
+    return LoginResponse.fromJson(
+      await _client.send('post', 'api/jwt/reconcile', body: body.toJson()),
+    );
+  }
+
+  /// Approve a device grant.
+  Future<DeviceApprovalResponse> approveDeviceWithId() async {
+    return DeviceApprovalResponse.fromJson(
+      await _client.send('post', 'oauth2/device/approve'),
+    );
+  }
+
+  /// Searches applications with the specified criteria and pagination.
+  Future<ApplicationSearchResponse> searchApplicationsWithId({
+    required ApplicationSearchRequest body,
+  }) async {
+    return ApplicationSearchResponse.fromJson(
+      await _client.send('post', 'api/application/search', body: body.toJson()),
+    );
+  }
+
+  /// Updates, via PATCH, the application with the given Id.
+  Future<ApplicationResponse> patchApplicationWithId({
     required String applicationId,
     String? tenantIdScope,
-    required RegistrationDeleteRequest body,
+    required ApplicationRequest body,
+  }) async {
+    return ApplicationResponse.fromJson(
+      await _client.send(
+        'patch',
+        'api/application/{applicationId}',
+        pathParameters: {'applicationId': applicationId},
+        headers: {
+          if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
+        },
+        body: body.toJson(),
+      ),
+    );
+  }
+
+  /// Hard deletes an application. This is a dangerous operation and should not
+  /// be used in most circumstances. This will delete the application, any
+  /// registrations for that application, metrics and reports for the
+  /// application, all the roles for the application, and any other data
+  /// associated with the application. This operation could take a very long
+  /// time, depending on the amount of data in your database. OR Deactivates the
+  /// application with the given Id.
+  Future<void> deleteApplicationWithId({
+    String? hardDelete,
+    required String applicationId,
+    String? tenantIdScope,
   }) async {
     await _client.send(
       'delete',
-      'api/user/registration/{userId}/{applicationId}',
-      pathParameters: {'userId': userId, 'applicationId': applicationId},
+      'api/application/{applicationId}',
+      pathParameters: {'applicationId': applicationId},
+      queryParameters: {if (hardDelete != null) 'hardDelete': hardDelete},
       headers: {
         if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
       },
+    );
+  }
+
+  /// Reactivates the application with the given Id. OR Updates the application
+  /// with the given Id.
+  Future<ApplicationResponse> updateApplicationWithId({
+    String? reactivate,
+    required String applicationId,
+    String? tenantIdScope,
+    required ApplicationRequest body,
+  }) async {
+    return ApplicationResponse.fromJson(
+      await _client.send(
+        'put',
+        'api/application/{applicationId}',
+        pathParameters: {'applicationId': applicationId},
+        queryParameters: {if (reactivate != null) 'reactivate': reactivate},
+        headers: {
+          if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
+        },
+        body: body.toJson(),
+      ),
+    );
+  }
+
+  /// Retrieves the application for the given Id or all the applications if the
+  /// Id is null.
+  Future<ApplicationResponse> retrieveApplicationWithId({
+    required String applicationId,
+    String? tenantIdScope,
+  }) async {
+    return ApplicationResponse.fromJson(
+      await _client.send(
+        'get',
+        'api/application/{applicationId}',
+        pathParameters: {'applicationId': applicationId},
+        headers: {
+          if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
+        },
+      ),
+    );
+  }
+
+  /// Creates an application. You can optionally specify an Id for the
+  /// application, if not provided one will be generated.
+  Future<ApplicationResponse> createApplicationWithId({
+    required String applicationId,
+    String? tenantIdScope,
+    required ApplicationRequest body,
+  }) async {
+    return ApplicationResponse.fromJson(
+      await _client.send(
+        'post',
+        'api/application/{applicationId}',
+        pathParameters: {'applicationId': applicationId},
+        headers: {
+          if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
+        },
+        body: body.toJson(),
+      ),
+    );
+  }
+
+  /// Searches themes with the specified criteria and pagination.
+  Future<ThemeSearchResponse> searchThemesWithId({
+    required ThemeSearchRequest body,
+  }) async {
+    return ThemeSearchResponse.fromJson(
+      await _client.send('post', 'api/theme/search', body: body.toJson()),
+    );
+  }
+
+  /// Generate a new Application Registration Verification Id to be used with
+  /// the Verify Registration API. This API will not attempt to send an email to
+  /// the User. This API may be used to collect the verificationId for use with
+  /// a third party system. OR Re-sends the application registration
+  /// verification email to the user.
+  Future<VerifyRegistrationResponse> updateUserVerifyRegistration({
+    String? email,
+    String? sendVerifyPasswordEmail,
+    String? applicationId,
+  }) async {
+    return VerifyRegistrationResponse.fromJson(
+      await _client.send(
+        'put',
+        'api/user/verify-registration',
+        queryParameters: {
+          if (email != null) 'email': email,
+          if (sendVerifyPasswordEmail != null)
+            'sendVerifyPasswordEmail': sendVerifyPasswordEmail,
+          if (applicationId != null) 'applicationId': applicationId,
+        },
+      ),
+    );
+  }
+
+  /// Confirms a user's registration.   The request body will contain the
+  /// verificationId. You may also be required to send a one-time use code based
+  /// upon your configuration. When  the application is configured to gate a
+  /// user until their registration is verified, this procedures requires two
+  /// values instead of one.  The verificationId is a high entropy value and the
+  /// one-time use code is a low entropy value that is easily entered in a user
+  /// interactive form. The  two values together are able to confirm a user's
+  /// registration and mark the user's registration as verified.
+  Future<void> verifyUserRegistrationWithId({
+    required VerifyRegistrationRequest body,
+  }) async {
+    await _client.send(
+      'post',
+      'api/user/verify-registration',
       body: body.toJson(),
     );
   }
 
-  /// Retrieves the user registration for the user with the given Id and the
-  /// given application id.
-  Future<RegistrationResponse> retrieveRegistrationWithId({
-    required String userId,
-    required String applicationId,
-    String? tenantIdScope,
+  /// Retrieves the Public Key configured for verifying JSON Web Tokens (JWT) by
+  /// the key Id (kid). OR Retrieves the Public Key configured for verifying the
+  /// JSON Web Tokens (JWT) issued by the Login API by the Application Id.
+  Future<PublicKeyResponse> retrieveJwtPublicKey({
+    String? keyId,
+    String? applicationId,
   }) async {
-    return RegistrationResponse.fromJson(
+    return PublicKeyResponse.fromJson(
       await _client.send(
         'get',
-        'api/user/registration/{userId}/{applicationId}',
-        pathParameters: {'userId': userId, 'applicationId': applicationId},
-        headers: {
-          if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
-        },
-      ),
-    );
-  }
-
-  /// Creates an audit log with the message and user name (usually an email).
-  /// Audit logs should be written anytime you make changes to the FusionAuth
-  /// database. When using the FusionAuth App web interface, any changes are
-  /// automatically written to the audit log. However, if you are accessing the
-  /// API, you must write the audit logs yourself.
-  Future<AuditLogResponse> createAuditLogWithId({
-    required AuditLogRequest body,
-  }) async {
-    return AuditLogResponse.fromJson(
-      await _client.send('post', 'api/system/audit-log', body: body.toJson()),
-    );
-  }
-
-  /// Creates a preview of the message template provided in the request,
-  /// normalized to a given locale.
-  Future<PreviewMessageTemplateResponse> retrieveMessageTemplatePreviewWithId({
-    required PreviewMessageTemplateRequest body,
-  }) async {
-    return PreviewMessageTemplateResponse.fromJson(
-      await _client.send(
-        'post',
-        'api/message/template/preview',
-        body: body.toJson(),
-      ),
-    );
-  }
-
-  /// Retrieves the last number of login records. OR Retrieves the last number
-  /// of login records for a user.
-  Future<RecentLoginResponse> retrieveUserRecentLogin({
-    String? offset,
-    String? limit,
-    String? userId,
-  }) async {
-    return RecentLoginResponse.fromJson(
-      await _client.send(
-        'get',
-        'api/user/recent-login',
+        'api/jwt/public-key',
         queryParameters: {
-          if (offset != null) 'offset': offset,
-          if (limit != null) 'limit': limit,
-          if (userId != null) 'userId': userId,
+          if (keyId != null) 'keyId': keyId,
+          if (applicationId != null) 'applicationId': applicationId,
         },
       ),
     );
@@ -2821,15 +3189,6 @@ class FusionauthClient {
     );
   }
 
-  /// Deletes the message template for the given Id.
-  Future<void> deleteMessageTemplateWithId(String messageTemplateId) async {
-    await _client.send(
-      'delete',
-      'api/message/template/{messageTemplateId}',
-      pathParameters: {'messageTemplateId': messageTemplateId},
-    );
-  }
-
   /// Creates an message template. You can optionally specify an Id for the
   /// template, if not provided one will be generated.
   Future<MessageTemplateResponse> createMessageTemplateWithId({
@@ -2843,6 +3202,15 @@ class FusionauthClient {
         pathParameters: {'messageTemplateId': messageTemplateId},
         body: body.toJson(),
       ),
+    );
+  }
+
+  /// Deletes the message template for the given Id.
+  Future<void> deleteMessageTemplateWithId(String messageTemplateId) async {
+    await _client.send(
+      'delete',
+      'api/message/template/{messageTemplateId}',
+      pathParameters: {'messageTemplateId': messageTemplateId},
     );
   }
 
@@ -2864,36 +3232,183 @@ class FusionauthClient {
     );
   }
 
-  /// Creates a Theme. You can optionally specify an Id for the theme, if not
+  /// Creates a form field.  You can optionally specify an Id for the form, if
+  /// not provided one will be generated.
+  Future<FormFieldResponse> createFormField({
+    required FormFieldRequest body,
+  }) async {
+    return FormFieldResponse.fromJson(
+      await _client.send('post', 'api/form/field', body: body.toJson()),
+    );
+  }
+
+  /// Creates a new role for an application. You must specify the Id of the
+  /// application you are creating the role for. You can optionally specify an
+  /// Id for the role inside the ApplicationRole object itself, if not provided
+  /// one will be generated.
+  Future<ApplicationResponse> createApplicationRole({
+    required String applicationId,
+    String? tenantIdScope,
+    required ApplicationRequest body,
+  }) async {
+    return ApplicationResponse.fromJson(
+      await _client.send(
+        'post',
+        'api/application/{applicationId}/role',
+        pathParameters: {'applicationId': applicationId},
+        headers: {
+          if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
+        },
+        body: body.toJson(),
+      ),
+    );
+  }
+
+  /// Retrieves the last number of login records. OR Retrieves the last number
+  /// of login records for a user.
+  Future<RecentLoginResponse> retrieveUserRecentLogin({
+    String? offset,
+    String? limit,
+    String? userId,
+  }) async {
+    return RecentLoginResponse.fromJson(
+      await _client.send(
+        'get',
+        'api/user/recent-login',
+        queryParameters: {
+          if (offset != null) 'offset': offset,
+          if (limit != null) 'limit': limit,
+          if (userId != null) 'userId': userId,
+        },
+      ),
+    );
+  }
+
+  /// Creates an API key. You can optionally specify a unique Id for the key, if
+  /// not provided one will be generated. an API key can only be created with
+  /// equal or lesser authority. An API key cannot create another API key unless
+  /// it is granted  to that API key.  If an API key is locked to a tenant, it
+  /// can only create API Keys for that same tenant.
+  Future<APIKeyResponse> createAPIKey({required APIKeyRequest body}) async {
+    return APIKeyResponse.fromJson(
+      await _client.send('post', 'api/api-key', body: body.toJson()),
+    );
+  }
+
+  /// Import a WebAuthn credential
+  Future<void> importWebAuthnCredentialWithId({
+    required WebAuthnCredentialImportRequest body,
+  }) async {
+    await _client.send('post', 'api/webauthn/import', body: body.toJson());
+  }
+
+  /// Changes a user's password using the change password Id. This usually
+  /// occurs after an email has been sent to the user and they clicked on a link
+  /// to reset their password.  As of version 1.32.2, prefer sending the
+  /// changePasswordId in the request body. To do this, omit the first
+  /// parameter, and set the value in the request body.
+  Future<ChangePasswordResponse> changePasswordWithId({
+    required String changePasswordId,
+    required ChangePasswordRequest body,
+  }) async {
+    return ChangePasswordResponse.fromJson(
+      await _client.send(
+        'post',
+        'api/user/change-password/{changePasswordId}',
+        pathParameters: {'changePasswordId': changePasswordId},
+        body: body.toJson(),
+      ),
+    );
+  }
+
+  /// Check to see if the user must obtain a Trust Token Id in order to complete
+  /// a change password request. When a user has enabled Two-Factor
+  /// authentication, before you are allowed to use the Change Password API to
+  /// change your password, you must obtain a Trust Token by completing a
+  /// Two-Factor Step-Up authentication.  An HTTP status code of 400 with a
+  /// general error code of [TrustTokenRequired] indicates that a Trust Token is
+  /// required to make a POST request to this API.
+  Future<void> checkChangePasswordUsingIdWithId(String changePasswordId) async {
+    await _client.send(
+      'get',
+      'api/user/change-password/{changePasswordId}',
+      pathParameters: {'changePasswordId': changePasswordId},
+    );
+  }
+
+  /// Retrieves a single audit log for the given Id.
+  Future<AuditLogResponse> retrieveAuditLogWithId(String auditLogId) async {
+    return AuditLogResponse.fromJson(
+      await _client.send(
+        'get',
+        'api/system/audit-log/{auditLogId}',
+        pathParameters: {'auditLogId': auditLogId},
+      ),
+    );
+  }
+
+  /// Retrieves the form with the given Id.
+  Future<FormResponse> retrieveFormWithId(String formId) async {
+    return FormResponse.fromJson(
+      await _client.send(
+        'get',
+        'api/form/{formId}',
+        pathParameters: {'formId': formId},
+      ),
+    );
+  }
+
+  /// Updates the form with the given Id.
+  Future<FormResponse> updateFormWithId({
+    required String formId,
+    required FormRequest body,
+  }) async {
+    return FormResponse.fromJson(
+      await _client.send(
+        'put',
+        'api/form/{formId}',
+        pathParameters: {'formId': formId},
+        body: body.toJson(),
+      ),
+    );
+  }
+
+  /// Deletes the form for the given Id.
+  Future<void> deleteFormWithId(String formId) async {
+    await _client.send(
+      'delete',
+      'api/form/{formId}',
+      pathParameters: {'formId': formId},
+    );
+  }
+
+  /// Creates a form.  You can optionally specify an Id for the form, if not
   /// provided one will be generated.
-  Future<ThemeResponse> createTheme({required ThemeRequest body}) async {
-    return ThemeResponse.fromJson(
-      await _client.send('post', 'api/theme', body: body.toJson()),
+  Future<FormResponse> createFormWithId({
+    required String formId,
+    required FormRequest body,
+  }) async {
+    return FormResponse.fromJson(
+      await _client.send(
+        'post',
+        'api/form/{formId}',
+        pathParameters: {'formId': formId},
+        body: body.toJson(),
+      ),
     );
   }
 
-  /// Removes users as members of a group.
-  Future<void> deleteGroupMembersWithId({
-    required MemberDeleteRequest body,
+  /// Send a Two Factor authentication code to allow the completion of Two
+  /// Factor authentication.
+  Future<void> sendTwoFactorCodeForLoginUsingMethodWithId({
+    required String twoFactorId,
+    required TwoFactorSendRequest body,
   }) async {
-    await _client.send('delete', 'api/group/member', body: body.toJson());
-  }
-
-  /// Creates a member in a group.
-  Future<MemberResponse> createGroupMembersWithId({
-    required MemberRequest body,
-  }) async {
-    return MemberResponse.fromJson(
-      await _client.send('post', 'api/group/member', body: body.toJson()),
-    );
-  }
-
-  /// Creates a member in a group.
-  Future<MemberResponse> updateGroupMembersWithId({
-    required MemberRequest body,
-  }) async {
-    return MemberResponse.fromJson(
-      await _client.send('put', 'api/group/member', body: body.toJson()),
+    await _client.send(
+      'post',
+      'api/two-factor/send/{twoFactorId}',
+      pathParameters: {'twoFactorId': twoFactorId},
+      body: body.toJson(),
     );
   }
 
@@ -2904,6 +3419,174 @@ class FusionauthClient {
   Future<SecretResponse> generateTwoFactorSecretUsingJWTWithId() async {
     return SecretResponse.fromJson(
       await _client.send('get', 'api/two-factor/secret'),
+    );
+  }
+
+  /// Searches keys with the specified criteria and pagination.
+  Future<KeySearchResponse> searchKeysWithId({
+    required KeySearchRequest body,
+  }) async {
+    return KeySearchResponse.fromJson(
+      await _client.send('post', 'api/key/search', body: body.toJson()),
+    );
+  }
+
+  /// Handles login via third-parties including Social login, external OAuth and
+  /// OpenID Connect, and other login systems.
+  Future<LoginResponse> identityProviderLoginWithId({
+    String? tenantIdScope,
+    required IdentityProviderLoginRequest body,
+  }) async {
+    return LoginResponse.fromJson(
+      await _client.send(
+        'post',
+        'api/identity-provider/login',
+        headers: {
+          if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
+        },
+        body: body.toJson(),
+      ),
+    );
+  }
+
+  /// Complete a WebAuthn authentication ceremony by validating the signature
+  /// against the previously generated challenge and then login the user in
+  Future<LoginResponse> completeWebAuthnLoginWithId({
+    required WebAuthnLoginRequest body,
+  }) async {
+    return LoginResponse.fromJson(
+      await _client.send('post', 'api/webauthn/login', body: body.toJson()),
+    );
+  }
+
+  /// Creates a family with the user Id in the request as the owner and sole
+  /// member of the family. You can optionally specify an Id for the family, if
+  /// not provided one will be generated.
+  Future<FamilyResponse> createFamily({
+    String? tenantIdScope,
+    required FamilyRequest body,
+  }) async {
+    return FamilyResponse.fromJson(
+      await _client.send(
+        'post',
+        'api/user/family',
+        headers: {
+          if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
+        },
+        body: body.toJson(),
+      ),
+    );
+  }
+
+  /// Retrieves all the families that a user belongs to.
+  Future<FamilyResponse> retrieveFamiliesWithId({
+    String? userId,
+    String? tenantIdScope,
+  }) async {
+    return FamilyResponse.fromJson(
+      await _client.send(
+        'get',
+        'api/user/family',
+        queryParameters: {if (userId != null) 'userId': userId},
+        headers: {
+          if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
+        },
+      ),
+    );
+  }
+
+  /// Deletes the user registration for the given user and application along
+  /// with the given JSON body that contains the event information. OR Deletes
+  /// the user registration for the given user and application.
+  Future<void> deleteUserRegistrationWithId({
+    required String userId,
+    required String applicationId,
+    String? tenantIdScope,
+    required RegistrationDeleteRequest body,
+  }) async {
+    await _client.send(
+      'delete',
+      'api/user/registration/{userId}/{applicationId}',
+      pathParameters: {'userId': userId, 'applicationId': applicationId},
+      headers: {
+        if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
+      },
+      body: body.toJson(),
+    );
+  }
+
+  /// Retrieves the user registration for the user with the given Id and the
+  /// given application id.
+  Future<RegistrationResponse> retrieveRegistrationWithId({
+    required String userId,
+    required String applicationId,
+    String? tenantIdScope,
+  }) async {
+    return RegistrationResponse.fromJson(
+      await _client.send(
+        'get',
+        'api/user/registration/{userId}/{applicationId}',
+        pathParameters: {'userId': userId, 'applicationId': applicationId},
+        headers: {
+          if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
+        },
+      ),
+    );
+  }
+
+  /// Retrieves all the comments for the user with the given Id.
+  Future<UserCommentResponse> retrieveUserCommentsWithId({
+    required String userId,
+    String? tenantIdScope,
+  }) async {
+    return UserCommentResponse.fromJson(
+      await _client.send(
+        'get',
+        'api/user/comment/{userId}',
+        pathParameters: {'userId': userId},
+        headers: {
+          if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
+        },
+      ),
+    );
+  }
+
+  /// Retrieves the daily active user report between the two instants. If you
+  /// specify an application id, it will only return the daily active counts for
+  /// that application.
+  Future<DailyActiveUserReportResponse> retrieveDailyActiveReportWithId({
+    String? applicationId,
+    String? start,
+    String? end,
+  }) async {
+    return DailyActiveUserReportResponse.fromJson(
+      await _client.send(
+        'get',
+        'api/report/daily-active-user',
+        queryParameters: {
+          if (applicationId != null) 'applicationId': applicationId,
+          if (start != null) 'start': start,
+          if (end != null) 'end': end,
+        },
+      ),
+    );
+  }
+
+  /// Authenticates a user to FusionAuth.   This API optionally requires an API
+  /// key. See `Application.loginConfiguration.requireAuthentication`.
+  Future<LoginResponse> loginWithId({
+    String? tenantIdScope,
+    required LoginRequest body,
+  }) async {
+    return LoginResponse.fromJson(
+      await _client.send(
+        'post',
+        'api/login',
+        headers: {
+          if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
+        },
+        body: body.toJson(),
+      ),
     );
   }
 
@@ -2928,438 +3611,14 @@ class FusionauthClient {
     );
   }
 
-  /// Authenticates a user to FusionAuth.   This API optionally requires an API
-  /// key. See `Application.loginConfiguration.requireAuthentication`.
-  Future<LoginResponse> loginWithId({
-    String? tenantIdScope,
-    required LoginRequest body,
+  /// Searches the audit logs with the specified criteria and pagination.
+  Future<AuditLogSearchResponse> searchAuditLogsWithId({
+    required AuditLogSearchRequest body,
   }) async {
-    return LoginResponse.fromJson(
+    return AuditLogSearchResponse.fromJson(
       await _client.send(
         'post',
-        'api/login',
-        headers: {
-          if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
-        },
-        body: body.toJson(),
-      ),
-    );
-  }
-
-  /// Updates, via PATCH, the identity provider with the given Id.
-  Future<IdentityProviderResponse> patchIdentityProviderWithId({
-    required String identityProviderId,
-    required IdentityProviderRequest body,
-  }) async {
-    return IdentityProviderResponse.fromJson(
-      await _client.send(
-        'patch',
-        'api/identity-provider/{identityProviderId}',
-        pathParameters: {'identityProviderId': identityProviderId},
-        body: body.toJson(),
-      ),
-    );
-  }
-
-  /// Retrieves the identity provider for the given Id or all the identity
-  /// providers if the Id is null.
-  Future<IdentityProviderResponse> retrieveIdentityProviderWithId(
-    String identityProviderId,
-  ) async {
-    return IdentityProviderResponse.fromJson(
-      await _client.send(
-        'get',
-        'api/identity-provider/{identityProviderId}',
-        pathParameters: {'identityProviderId': identityProviderId},
-      ),
-    );
-  }
-
-  /// Deletes the identity provider for the given Id.
-  Future<void> deleteIdentityProviderWithId(String identityProviderId) async {
-    await _client.send(
-      'delete',
-      'api/identity-provider/{identityProviderId}',
-      pathParameters: {'identityProviderId': identityProviderId},
-    );
-  }
-
-  /// Creates an identity provider. You can optionally specify an Id for the
-  /// identity provider, if not provided one will be generated.
-  Future<IdentityProviderResponse> createIdentityProviderWithId({
-    required String identityProviderId,
-    required IdentityProviderRequest body,
-  }) async {
-    return IdentityProviderResponse.fromJson(
-      await _client.send(
-        'post',
-        'api/identity-provider/{identityProviderId}',
-        pathParameters: {'identityProviderId': identityProviderId},
-        body: body.toJson(),
-      ),
-    );
-  }
-
-  /// Updates the identity provider with the given Id.
-  Future<IdentityProviderResponse> updateIdentityProviderWithId({
-    required String identityProviderId,
-    required IdentityProviderRequest body,
-  }) async {
-    return IdentityProviderResponse.fromJson(
-      await _client.send(
-        'put',
-        'api/identity-provider/{identityProviderId}',
-        pathParameters: {'identityProviderId': identityProviderId},
-        body: body.toJson(),
-      ),
-    );
-  }
-
-  /// Complete a login request using a passwordless code
-  Future<LoginResponse> passwordlessLoginWithId({
-    required PasswordlessLoginRequest body,
-  }) async {
-    return LoginResponse.fromJson(
-      await _client.send('post', 'api/passwordless/login', body: body.toJson()),
-    );
-  }
-
-  /// Updates an API key by given id
-  Future<APIKeyResponse> updateAPIKeyWithId({
-    required String apiKeyId,
-    required APIKeyRequest body,
-  }) async {
-    return APIKeyResponse.fromJson(
-      await _client.send(
-        'put',
-        'api/api-key/{apiKeyId}',
-        pathParameters: {'apiKeyId': apiKeyId},
-        body: body.toJson(),
-      ),
-    );
-  }
-
-  /// Updates the system configuration.
-  Future<SystemConfigurationResponse> updateSystemConfigurationWithId({
-    required SystemConfigurationRequest body,
-  }) async {
-    return SystemConfigurationResponse.fromJson(
-      await _client.send(
-        'put',
-        'api/system-configuration',
-        body: body.toJson(),
-      ),
-    );
-  }
-
-  /// Updates, via PATCH, the system configuration.
-  Future<SystemConfigurationResponse> patchSystemConfigurationWithId({
-    required SystemConfigurationRequest body,
-  }) async {
-    return SystemConfigurationResponse.fromJson(
-      await _client.send(
-        'patch',
-        'api/system-configuration',
-        body: body.toJson(),
-      ),
-    );
-  }
-
-  /// Retrieve a pending identity provider link. This is useful to validate a
-  /// pending link and retrieve meta-data about the identity provider link.
-  Future<IdentityProviderPendingLinkResponse> retrievePendingLinkWithId({
-    String? userId,
-    required String pendingLinkId,
-  }) async {
-    return IdentityProviderPendingLinkResponse.fromJson(
-      await _client.send(
-        'get',
-        'api/identity-provider/link/pending/{pendingLinkId}',
-        pathParameters: {'pendingLinkId': pendingLinkId},
-        queryParameters: {if (userId != null) 'userId': userId},
-      ),
-    );
-  }
-
-  /// Check to see if the user must obtain a Trust Token Id in order to complete
-  /// a change password request. When a user has enabled Two-Factor
-  /// authentication, before you are allowed to use the Change Password API to
-  /// change your password, you must obtain a Trust Token by completing a
-  /// Two-Factor Step-Up authentication.  An HTTP status code of 400 with a
-  /// general error code of [TrustTokenRequired] indicates that a Trust Token is
-  /// required to make a POST request to this API.
-  Future<void> checkChangePasswordUsingIdWithId(String changePasswordId) async {
-    await _client.send(
-      'get',
-      'api/user/change-password/{changePasswordId}',
-      pathParameters: {'changePasswordId': changePasswordId},
-    );
-  }
-
-  /// Changes a user's password using the change password Id. This usually
-  /// occurs after an email has been sent to the user and they clicked on a link
-  /// to reset their password.  As of version 1.32.2, prefer sending the
-  /// changePasswordId in the request body. To do this, omit the first
-  /// parameter, and set the value in the request body.
-  Future<ChangePasswordResponse> changePasswordWithId({
-    required String changePasswordId,
-    required ChangePasswordRequest body,
-  }) async {
-    return ChangePasswordResponse.fromJson(
-      await _client.send(
-        'post',
-        'api/user/change-password/{changePasswordId}',
-        pathParameters: {'changePasswordId': changePasswordId},
-        body: body.toJson(),
-      ),
-    );
-  }
-
-  /// Deactivates the users with the given ids. OR Deletes the users with the
-  /// given ids, or users matching the provided JSON query or queryString. The
-  /// order of preference is ids, query and then queryString, it is recommended
-  /// to only provide one of the three for the request.  This method can be used
-  /// to deactivate or permanently delete (hard-delete) users based upon the
-  /// hardDelete boolean in the request body. Using the dryRun parameter you may
-  /// also request the result of the action without actually deleting or
-  /// deactivating any users.
-  Future<UserDeleteResponse> deleteUserBulk({
-    String? userIds,
-    String? dryRun,
-    String? hardDelete,
-    required UserDeleteRequest body,
-  }) async {
-    return UserDeleteResponse.fromJson(
-      await _client.send(
-        'delete',
-        'api/user/bulk',
-        queryParameters: {
-          if (userIds != null) 'userIds': userIds,
-          if (dryRun != null) 'dryRun': dryRun,
-          if (hardDelete != null) 'hardDelete': hardDelete,
-        },
-        body: body.toJson(),
-      ),
-    );
-  }
-
-  /// Retrieves the Public Key configured for verifying JSON Web Tokens (JWT) by
-  /// the key Id (kid). OR Retrieves the Public Key configured for verifying the
-  /// JSON Web Tokens (JWT) issued by the Login API by the Application Id.
-  Future<PublicKeyResponse> retrieveJwtPublicKey({
-    String? keyId,
-    String? applicationId,
-  }) async {
-    return PublicKeyResponse.fromJson(
-      await _client.send(
-        'get',
-        'api/jwt/public-key',
-        queryParameters: {
-          if (keyId != null) 'keyId': keyId,
-          if (applicationId != null) 'applicationId': applicationId,
-        },
-      ),
-    );
-  }
-
-  /// Creates an API key. You can optionally specify a unique Id for the key, if
-  /// not provided one will be generated. an API key can only be created with
-  /// equal or lesser authority. An API key cannot create another API key unless
-  /// it is granted  to that API key.  If an API key is locked to a tenant, it
-  /// can only create API Keys for that same tenant.
-  Future<APIKeyResponse> createAPIKey({required APIKeyRequest body}) async {
-    return APIKeyResponse.fromJson(
-      await _client.send('post', 'api/api-key', body: body.toJson()),
-    );
-  }
-
-  /// Retrieves the application for the given Id or all the applications if the
-  /// Id is null. OR Retrieves all the applications that are currently inactive.
-  Future<ApplicationResponse> retrieveApplication({
-    String? tenantIdScope,
-    String? inactive,
-  }) async {
-    return ApplicationResponse.fromJson(
-      await _client.send(
-        'get',
-        'api/application',
-        queryParameters: {if (inactive != null) 'inactive': inactive},
-        headers: {
-          if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
-        },
-      ),
-    );
-  }
-
-  /// Creates an application. You can optionally specify an Id for the
-  /// application, if not provided one will be generated.
-  Future<ApplicationResponse> createApplication({
-    String? tenantIdScope,
-    required ApplicationRequest body,
-  }) async {
-    return ApplicationResponse.fromJson(
-      await _client.send(
-        'post',
-        'api/application',
-        headers: {
-          if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
-        },
-        body: body.toJson(),
-      ),
-    );
-  }
-
-  /// Searches email templates with the specified criteria and pagination.
-  Future<EmailTemplateSearchResponse> searchEmailTemplatesWithId({
-    required EmailTemplateSearchRequest body,
-  }) async {
-    return EmailTemplateSearchResponse.fromJson(
-      await _client.send(
-        'post',
-        'api/email/template/search',
-        body: body.toJson(),
-      ),
-    );
-  }
-
-  /// Searches webhooks with the specified criteria and pagination.
-  Future<WebhookSearchResponse> searchWebhooksWithId({
-    required WebhookSearchRequest body,
-  }) async {
-    return WebhookSearchResponse.fromJson(
-      await _client.send('post', 'api/webhook/search', body: body.toJson()),
-    );
-  }
-
-  /// Complete a WebAuthn authentication ceremony by validating the signature
-  /// against the previously generated challenge without logging the user in
-  Future<WebAuthnAssertResponse> completeWebAuthnAssertionWithId({
-    required WebAuthnLoginRequest body,
-  }) async {
-    return WebAuthnAssertResponse.fromJson(
-      await _client.send('post', 'api/webauthn/assert', body: body.toJson()),
-    );
-  }
-
-  /// Validates the provided JWT (encoded JWT string) to ensure the token is
-  /// valid. A valid access token is properly signed and not expired. <p> This
-  /// API may be used to verify the JWT as well as decode the encoded JWT into
-  /// human readable identity claims.
-  Future<ValidateResponse> validateJWTWithId() async {
-    return ValidateResponse.fromJson(
-      await _client.send('get', 'api/jwt/validate'),
-    );
-  }
-
-  /// Complete a WebAuthn registration ceremony by validating the client request
-  /// and saving the new credential
-  Future<WebAuthnRegisterCompleteResponse> completeWebAuthnRegistrationWithId({
-    required WebAuthnRegisterCompleteRequest body,
-  }) async {
-    return WebAuthnRegisterCompleteResponse.fromJson(
-      await _client.send(
-        'post',
-        'api/webauthn/register/complete',
-        body: body.toJson(),
-      ),
-    );
-  }
-
-  /// Searches lambdas with the specified criteria and pagination.
-  Future<LambdaSearchResponse> searchLambdasWithId({
-    required LambdaSearchRequest body,
-  }) async {
-    return LambdaSearchResponse.fromJson(
-      await _client.send('post', 'api/lambda/search', body: body.toJson()),
-    );
-  }
-
-  /// Retrieves all the user actions that are currently inactive. OR Retrieves
-  /// the user action for the given Id. If you pass in null for the id, this
-  /// will return all the user actions.
-  Future<UserActionResponse> retrieveUserAction({
-    String? inactive,
-    String? tenantIdScope,
-  }) async {
-    return UserActionResponse.fromJson(
-      await _client.send(
-        'get',
-        'api/user-action',
-        queryParameters: {if (inactive != null) 'inactive': inactive},
-        headers: {
-          if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
-        },
-      ),
-    );
-  }
-
-  /// Creates a user action. This action cannot be taken on a user until this
-  /// call successfully returns. Anytime after that the user action can be
-  /// applied to any user.
-  Future<UserActionResponse> createUserAction({
-    String? tenantIdScope,
-    required UserActionRequest body,
-  }) async {
-    return UserActionResponse.fromJson(
-      await _client.send(
-        'post',
-        'api/user-action',
-        headers: {
-          if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
-        },
-        body: body.toJson(),
-      ),
-    );
-  }
-
-  /// Retrieves all the comments for the user with the given Id.
-  Future<UserCommentResponse> retrieveUserCommentsWithId({
-    required String userId,
-    String? tenantIdScope,
-  }) async {
-    return UserCommentResponse.fromJson(
-      await _client.send(
-        'get',
-        'api/user/comment/{userId}',
-        pathParameters: {'userId': userId},
-        headers: {
-          if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
-        },
-      ),
-    );
-  }
-
-  /// Retrieves the WebAuthn credential for the given Id.
-  Future<WebAuthnCredentialResponse> retrieveWebAuthnCredentialWithId(
-    String id,
-  ) async {
-    return WebAuthnCredentialResponse.fromJson(
-      await _client.send(
-        'get',
-        'api/webauthn/{id}',
-        pathParameters: {'id': id},
-      ),
-    );
-  }
-
-  /// Deletes the WebAuthn credential for the given Id.
-  Future<void> deleteWebAuthnCredentialWithId(String id) async {
-    await _client.send(
-      'delete',
-      'api/webauthn/{id}',
-      pathParameters: {'id': id},
-    );
-  }
-
-  /// Start a WebAuthn registration ceremony by generating a new challenge for
-  /// the user
-  Future<WebAuthnRegisterStartResponse> startWebAuthnRegistrationWithId({
-    required WebAuthnRegisterStartRequest body,
-  }) async {
-    return WebAuthnRegisterStartResponse.fromJson(
-      await _client.send(
-        'post',
-        'api/webauthn/register/start',
+        'api/system/audit-log/search',
         body: body.toJson(),
       ),
     );
@@ -3378,268 +3637,35 @@ class FusionauthClient {
     );
   }
 
-  /// It's a JWT vending machine!  Issue a new access token (JWT) with the
-  /// provided claims in the request. This JWT is not scoped to a tenant or
-  /// user, it is a free form  token that will contain what claims you provide.
-  /// <p> The iat, exp and jti claims will be added by FusionAuth, all other
-  /// claims must be provided by the caller.  If a TTL is not provided in the
-  /// request, the TTL will be retrieved from the default Tenant or the Tenant
-  /// specified on the request either  by way of the X-FusionAuth-TenantId
-  /// request header, or a tenant scoped API key.
-  Future<JWTVendResponse> vendJWTWithId({required JWTVendRequest body}) async {
-    return JWTVendResponse.fromJson(
-      await _client.send('post', 'api/jwt/vend', body: body.toJson()),
-    );
-  }
-
-  /// Searches keys with the specified criteria and pagination.
-  Future<KeySearchResponse> searchKeysWithId({
-    required KeySearchRequest body,
+  /// Creates a user reason. This user action reason cannot be used when
+  /// actioning a user until this call completes successfully. Anytime after
+  /// that the user action reason can be used.
+  Future<UserActionReasonResponse> createUserActionReason({
+    required UserActionReasonRequest body,
   }) async {
-    return KeySearchResponse.fromJson(
-      await _client.send('post', 'api/key/search', body: body.toJson()),
+    return UserActionReasonResponse.fromJson(
+      await _client.send('post', 'api/user-action-reason', body: body.toJson()),
     );
   }
 
-  /// Updates the form field with the given Id.
-  Future<FormFieldResponse> updateFormFieldWithId({
-    required String fieldId,
-    required FormFieldRequest body,
+  /// Retrieves the user action reason for the given Id. If you pass in null for
+  /// the id, this will return all the user action reasons.
+  Future<UserActionReasonResponse> retrieveUserActionReason() async {
+    return UserActionReasonResponse.fromJson(
+      await _client.send('get', 'api/user-action-reason'),
+    );
+  }
+
+  /// Creates an audit log with the message and user name (usually an email).
+  /// Audit logs should be written anytime you make changes to the FusionAuth
+  /// database. When using the FusionAuth App web interface, any changes are
+  /// automatically written to the audit log. However, if you are accessing the
+  /// API, you must write the audit logs yourself.
+  Future<AuditLogResponse> createAuditLogWithId({
+    required AuditLogRequest body,
   }) async {
-    return FormFieldResponse.fromJson(
-      await _client.send(
-        'put',
-        'api/form/field/{fieldId}',
-        pathParameters: {'fieldId': fieldId},
-        body: body.toJson(),
-      ),
-    );
-  }
-
-  /// Creates a form field.  You can optionally specify an Id for the form, if
-  /// not provided one will be generated.
-  Future<FormFieldResponse> createFormFieldWithId({
-    required String fieldId,
-    required FormFieldRequest body,
-  }) async {
-    return FormFieldResponse.fromJson(
-      await _client.send(
-        'post',
-        'api/form/field/{fieldId}',
-        pathParameters: {'fieldId': fieldId},
-        body: body.toJson(),
-      ),
-    );
-  }
-
-  /// Deletes the form field for the given Id.
-  Future<void> deleteFormFieldWithId(String fieldId) async {
-    await _client.send(
-      'delete',
-      'api/form/field/{fieldId}',
-      pathParameters: {'fieldId': fieldId},
-    );
-  }
-
-  /// Retrieves the form field with the given Id.
-  Future<FormFieldResponse> retrieveFormFieldWithId(String fieldId) async {
-    return FormFieldResponse.fromJson(
-      await _client.send(
-        'get',
-        'api/form/field/{fieldId}',
-        pathParameters: {'fieldId': fieldId},
-      ),
-    );
-  }
-
-  /// Import an existing RSA or EC key pair or an HMAC secret.
-  Future<KeyResponse> importKeyWithId({
-    required String keyId,
-    required KeyRequest body,
-  }) async {
-    return KeyResponse.fromJson(
-      await _client.send(
-        'post',
-        'api/key/import/{keyId}',
-        pathParameters: {'keyId': keyId},
-        body: body.toJson(),
-      ),
-    );
-  }
-
-  /// Import an existing RSA or EC key pair or an HMAC secret.
-  Future<KeyResponse> importKey({required KeyRequest body}) async {
-    return KeyResponse.fromJson(
-      await _client.send('post', 'api/key/import', body: body.toJson()),
-    );
-  }
-
-  /// Retrieves one or more identity provider for the given type. For types such
-  /// as Google, Facebook, Twitter and LinkedIn, only a single  identity
-  /// provider can exist. For types such as OpenID Connect and SAMLv2 more than
-  /// one identity provider can be configured so this request  may return
-  /// multiple identity providers.
-  Future<IdentityProviderResponse> retrieveIdentityProviderByTypeWithId({
-    String? type,
-  }) async {
-    return IdentityProviderResponse.fromJson(
-      await _client.send(
-        'get',
-        'api/identity-provider',
-        queryParameters: {if (type != null) 'type': type},
-      ),
-    );
-  }
-
-  /// Creates an identity provider. You can optionally specify an Id for the
-  /// identity provider, if not provided one will be generated.
-  Future<IdentityProviderResponse> createIdentityProvider({
-    required IdentityProviderRequest body,
-  }) async {
-    return IdentityProviderResponse.fromJson(
-      await _client.send('post', 'api/identity-provider', body: body.toJson()),
-    );
-  }
-
-  /// Searches consents with the specified criteria and pagination.
-  Future<ConsentSearchResponse> searchConsentsWithId({
-    required ConsentSearchRequest body,
-  }) async {
-    return ConsentSearchResponse.fromJson(
-      await _client.send('post', 'api/consent/search', body: body.toJson()),
-    );
-  }
-
-  /// Begins a login request for a 3rd party login that requires user
-  /// interaction such as HYPR.
-  Future<IdentityProviderStartLoginResponse> startIdentityProviderLoginWithId({
-    required IdentityProviderStartLoginRequest body,
-  }) async {
-    return IdentityProviderStartLoginResponse.fromJson(
-      await _client.send(
-        'post',
-        'api/identity-provider/start',
-        body: body.toJson(),
-      ),
-    );
-  }
-
-  /// Updates the permission with the given Id for the entity type.
-  Future<EntityTypeResponse> updateEntityTypePermissionWithId({
-    required String entityTypeId,
-    required String permissionId,
-    required EntityTypeRequest body,
-  }) async {
-    return EntityTypeResponse.fromJson(
-      await _client.send(
-        'put',
-        'api/entity/type/{entityTypeId}/permission/{permissionId}',
-        pathParameters: {
-          'entityTypeId': entityTypeId,
-          'permissionId': permissionId,
-        },
-        body: body.toJson(),
-      ),
-    );
-  }
-
-  /// Hard deletes a permission. This is a dangerous operation and should not be
-  /// used in most circumstances. This permanently removes the given permission
-  /// from all grants that had it.
-  Future<void> deleteEntityTypePermissionWithId({
-    required String entityTypeId,
-    required String permissionId,
-  }) async {
-    await _client.send(
-      'delete',
-      'api/entity/type/{entityTypeId}/permission/{permissionId}',
-      pathParameters: {
-        'entityTypeId': entityTypeId,
-        'permissionId': permissionId,
-      },
-    );
-  }
-
-  /// Creates a new permission for an entity type. You must specify the Id of
-  /// the entity type you are creating the permission for. You can optionally
-  /// specify an Id for the permission inside the EntityTypePermission object
-  /// itself, if not provided one will be generated.
-  Future<EntityTypeResponse> createEntityTypePermissionWithId({
-    required String entityTypeId,
-    required String permissionId,
-    required EntityTypeRequest body,
-  }) async {
-    return EntityTypeResponse.fromJson(
-      await _client.send(
-        'post',
-        'api/entity/type/{entityTypeId}/permission/{permissionId}',
-        pathParameters: {
-          'entityTypeId': entityTypeId,
-          'permissionId': permissionId,
-        },
-        body: body.toJson(),
-      ),
-    );
-  }
-
-  /// Generate two-factor recovery codes for a user. Generating two-factor
-  /// recovery codes will invalidate any existing recovery codes.
-  Future<TwoFactorRecoveryCodeResponse> generateTwoFactorRecoveryCodesWithId(
-    String userId,
-  ) async {
-    return TwoFactorRecoveryCodeResponse.fromJson(
-      await _client.send(
-        'post',
-        'api/user/two-factor/recovery-code/{userId}',
-        pathParameters: {'userId': userId},
-      ),
-    );
-  }
-
-  /// Retrieve two-factor recovery codes for a user.
-  Future<TwoFactorRecoveryCodeResponse> retrieveTwoFactorRecoveryCodesWithId(
-    String userId,
-  ) async {
-    return TwoFactorRecoveryCodeResponse.fromJson(
-      await _client.send(
-        'get',
-        'api/user/two-factor/recovery-code/{userId}',
-        pathParameters: {'userId': userId},
-      ),
-    );
-  }
-
-  /// Retrieves a single webhook attempt log for the given Id.
-  Future<WebhookAttemptLogResponse> retrieveWebhookAttemptLogWithId(
-    String webhookAttemptLogId,
-  ) async {
-    return WebhookAttemptLogResponse.fromJson(
-      await _client.send(
-        'get',
-        'api/system/webhook-attempt-log/{webhookAttemptLogId}',
-        pathParameters: {'webhookAttemptLogId': webhookAttemptLogId},
-      ),
-    );
-  }
-
-  /// Send a Two Factor authentication code to assist in setting up Two Factor
-  /// authentication or disabling.
-  Future<void> sendTwoFactorCodeForEnableDisableWithId({
-    required TwoFactorSendRequest body,
-  }) async {
-    await _client.send('post', 'api/two-factor/send', body: body.toJson());
-  }
-
-  /// Retrieves the password validation rules for a specific tenant.  This API
-  /// does not require an API key.
-  Future<PasswordValidationRulesResponse>
-  retrievePasswordValidationRulesWithTenantIdWithId(String tenantId) async {
-    return PasswordValidationRulesResponse.fromJson(
-      await _client.send(
-        'get',
-        'api/tenant/password-validation-rules/{tenantId}',
-        pathParameters: {'tenantId': tenantId},
-      ),
+    return AuditLogResponse.fromJson(
+      await _client.send('post', 'api/system/audit-log', body: body.toJson()),
     );
   }
 
@@ -3666,14 +3692,119 @@ class FusionauthClient {
     );
   }
 
-  /// Creates a form field.  You can optionally specify an Id for the form, if
-  /// not provided one will be generated.
-  Future<FormFieldResponse> createFormField({
-    required FormFieldRequest body,
+  /// Updates, via PATCH, the system configuration.
+  Future<SystemConfigurationResponse> patchSystemConfigurationWithId({
+    required SystemConfigurationRequest body,
   }) async {
-    return FormFieldResponse.fromJson(
-      await _client.send('post', 'api/form/field', body: body.toJson()),
+    return SystemConfigurationResponse.fromJson(
+      await _client.send(
+        'patch',
+        'api/system-configuration',
+        body: body.toJson(),
+      ),
     );
+  }
+
+  /// Updates the system configuration.
+  Future<SystemConfigurationResponse> updateSystemConfigurationWithId({
+    required SystemConfigurationRequest body,
+  }) async {
+    return SystemConfigurationResponse.fromJson(
+      await _client.send(
+        'put',
+        'api/system-configuration',
+        body: body.toJson(),
+      ),
+    );
+  }
+
+  /// Activates the FusionAuth Reactor using a license Id and optionally a
+  /// license text (for air-gapped deployments)
+  Future<void> activateReactorWithId({required ReactorRequest body}) async {
+    await _client.send('post', 'api/reactor', body: body.toJson());
+  }
+
+  /// Creates a connector.  You can optionally specify an Id for the connector,
+  /// if not provided one will be generated.
+  Future<ConnectorResponse> createConnector({
+    required ConnectorRequest body,
+  }) async {
+    return ConnectorResponse.fromJson(
+      await _client.send('post', 'api/connector', body: body.toJson()),
+    );
+  }
+
+  /// Retrieves all the lambdas for the provided type.
+  Future<LambdaResponse> retrieveLambdasByTypeWithId({String? type}) async {
+    return LambdaResponse.fromJson(
+      await _client.send(
+        'get',
+        'api/lambda',
+        queryParameters: {if (type != null) 'type': type},
+      ),
+    );
+  }
+
+  /// Creates a Lambda. You can optionally specify an Id for the lambda, if not
+  /// provided one will be generated.
+  Future<LambdaResponse> createLambda({required LambdaRequest body}) async {
+    return LambdaResponse.fromJson(
+      await _client.send('post', 'api/lambda', body: body.toJson()),
+    );
+  }
+
+  /// Start a passwordless login request by generating a passwordless code. This
+  /// code can be sent to the User using the Send Passwordless Code API or using
+  /// a mechanism outside of FusionAuth. The passwordless login is completed by
+  /// using the Passwordless Login API with this code.
+  Future<PasswordlessStartResponse> startPasswordlessLoginWithId({
+    required PasswordlessStartRequest body,
+  }) async {
+    return PasswordlessStartResponse.fromJson(
+      await _client.send('post', 'api/passwordless/start', body: body.toJson()),
+    );
+  }
+
+  /// Send a Two Factor authentication code to assist in setting up Two Factor
+  /// authentication or disabling.
+  Future<void> sendTwoFactorCodeForEnableDisableWithId({
+    required TwoFactorSendRequest body,
+  }) async {
+    await _client.send('post', 'api/two-factor/send', body: body.toJson());
+  }
+
+  /// Searches the IP Access Control Lists with the specified criteria and
+  /// pagination.
+  Future<IPAccessControlListSearchResponse> searchIPAccessControlListsWithId({
+    required IPAccessControlListSearchRequest body,
+  }) async {
+    return IPAccessControlListSearchResponse.fromJson(
+      await _client.send('post', 'api/ip-acl/search', body: body.toJson()),
+    );
+  }
+
+  /// Creates a messenger.  You can optionally specify an Id for the messenger,
+  /// if not provided one will be generated.
+  Future<MessengerResponse> createMessenger({
+    required MessengerRequest body,
+  }) async {
+    return MessengerResponse.fromJson(
+      await _client.send('post', 'api/messenger', body: body.toJson()),
+    );
+  }
+
+  /// Bulk imports users. This request performs minimal validation and runs
+  /// batch inserts of users with the expectation that each user does not yet
+  /// exist and each registration corresponds to an existing FusionAuth
+  /// Application. This is done to increases the insert performance.  Therefore,
+  /// if you encounter an error due to a database key violation, the response
+  /// will likely offer a generic explanation. If you encounter an error, you
+  /// may optionally enable additional validation to receive a JSON response
+  /// body with specific validation errors. This will slow the request down but
+  /// will allow you to identify the cause of the failure. See the
+  /// validateDbConstraints request parameter.
+  Future<void> importUsersWithId({required ImportRequest body}) async {
+    await _client.send('post', 'api/user/import', body: body.toJson());
   }
 
   /// Searches the entity types with the specified criteria and pagination.
@@ -3685,53 +3816,61 @@ class FusionauthClient {
     );
   }
 
-  /// Retrieves a single audit log for the given Id.
-  Future<AuditLogResponse> retrieveAuditLogWithId(String auditLogId) async {
-    return AuditLogResponse.fromJson(
+  /// Send an email using an email template id. You can optionally provide
+  /// `requestData` to access key value pairs in the email template.
+  Future<SendResponse> sendEmailWithId({
+    required String emailTemplateId,
+    required SendRequest body,
+  }) async {
+    return SendResponse.fromJson(
+      await _client.send(
+        'post',
+        'api/email/send/{emailTemplateId}',
+        pathParameters: {'emailTemplateId': emailTemplateId},
+        body: body.toJson(),
+      ),
+    );
+  }
+
+  /// Generate a new RSA or EC key pair or an HMAC secret.
+  Future<KeyResponse> generateKeyWithId({
+    required String keyId,
+    required KeyRequest body,
+  }) async {
+    return KeyResponse.fromJson(
+      await _client.send(
+        'post',
+        'api/key/generate/{keyId}',
+        pathParameters: {'keyId': keyId},
+        body: body.toJson(),
+      ),
+    );
+  }
+
+  /// Generate a new RSA or EC key pair or an HMAC secret.
+  Future<KeyResponse> generateKey({required KeyRequest body}) async {
+    return KeyResponse.fromJson(
+      await _client.send('post', 'api/key/generate', body: body.toJson()),
+    );
+  }
+
+  /// Retrieves the monthly active user report between the two instants. If you
+  /// specify an application id, it will only return the monthly active counts
+  /// for that application.
+  Future<MonthlyActiveUserReportResponse> retrieveMonthlyActiveReportWithId({
+    String? applicationId,
+    String? start,
+    String? end,
+  }) async {
+    return MonthlyActiveUserReportResponse.fromJson(
       await _client.send(
         'get',
-        'api/system/audit-log/{auditLogId}',
-        pathParameters: {'auditLogId': auditLogId},
-      ),
-    );
-  }
-
-  /// Creates a new permission for an entity type. You must specify the Id of
-  /// the entity type you are creating the permission for. You can optionally
-  /// specify an Id for the permission inside the EntityTypePermission object
-  /// itself, if not provided one will be generated.
-  Future<EntityTypeResponse> createEntityTypePermission({
-    required String entityTypeId,
-    required EntityTypeRequest body,
-  }) async {
-    return EntityTypeResponse.fromJson(
-      await _client.send(
-        'post',
-        'api/entity/type/{entityTypeId}/permission',
-        pathParameters: {'entityTypeId': entityTypeId},
-        body: body.toJson(),
-      ),
-    );
-  }
-
-  /// Creates a new custom OAuth scope for an application. You must specify the
-  /// Id of the application you are creating the scope for. You can optionally
-  /// specify an Id for the OAuth scope on the URL, if not provided one will be
-  /// generated.
-  Future<ApplicationOAuthScopeResponse> createOAuthScope({
-    required String applicationId,
-    String? tenantIdScope,
-    required ApplicationOAuthScopeRequest body,
-  }) async {
-    return ApplicationOAuthScopeResponse.fromJson(
-      await _client.send(
-        'post',
-        'api/application/{applicationId}/scope',
-        pathParameters: {'applicationId': applicationId},
-        headers: {
-          if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
+        'api/report/monthly-active-user',
+        queryParameters: {
+          if (applicationId != null) 'applicationId': applicationId,
+          if (start != null) 'start': start,
+          if (end != null) 'end': end,
         },
-        body: body.toJson(),
       ),
     );
   }
@@ -3798,148 +3937,57 @@ class FusionauthClient {
     );
   }
 
-  /// Retrieves a single webhook event log for the given Id.
-  Future<WebhookEventLogResponse> retrieveWebhookEventLogWithId(
-    String webhookEventLogId,
-  ) async {
-    return WebhookEventLogResponse.fromJson(
-      await _client.send(
-        'get',
-        'api/system/webhook-event-log/{webhookEventLogId}',
-        pathParameters: {'webhookEventLogId': webhookEventLogId},
-      ),
-    );
-  }
-
-  /// Creates a user consent type. You can optionally specify an Id for the
-  /// consent type, if not provided one will be generated.
-  Future<ConsentResponse> createConsent({
-    String? tenantIdScope,
-    required ConsentRequest body,
-  }) async {
-    return ConsentResponse.fromJson(
-      await _client.send(
-        'post',
-        'api/consent',
-        headers: {
-          if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
-        },
-        body: body.toJson(),
-      ),
-    );
-  }
-
-  /// Retrieves the Oauth2 configuration for the application for the given
-  /// Application Id.
-  Future<OAuthConfigurationResponse> retrieveOauthConfigurationWithId({
+  /// Creates a new custom OAuth scope for an application. You must specify the
+  /// Id of the application you are creating the scope for. You can optionally
+  /// specify an Id for the OAuth scope on the URL, if not provided one will be
+  /// generated.
+  Future<ApplicationOAuthScopeResponse> createOAuthScope({
     required String applicationId,
     String? tenantIdScope,
+    required ApplicationOAuthScopeRequest body,
   }) async {
-    return OAuthConfigurationResponse.fromJson(
+    return ApplicationOAuthScopeResponse.fromJson(
       await _client.send(
-        'get',
-        'api/application/{applicationId}/oauth-configuration',
+        'post',
+        'api/application/{applicationId}/scope',
         pathParameters: {'applicationId': applicationId},
         headers: {
           if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
         },
-      ),
-    );
-  }
-
-  /// Searches identity providers with the specified criteria and pagination.
-  Future<IdentityProviderSearchResponse> searchIdentityProvidersWithId({
-    required IdentityProviderSearchRequest body,
-  }) async {
-    return IdentityProviderSearchResponse.fromJson(
-      await _client.send(
-        'post',
-        'api/identity-provider/search',
         body: body.toJson(),
       ),
     );
   }
 
-  /// Creates a user reason. This user action reason cannot be used when
-  /// actioning a user until this call completes successfully. Anytime after
-  /// that the user action reason can be used.
-  Future<UserActionReasonResponse> createUserActionReason({
-    required UserActionReasonRequest body,
+  /// Retrieves all the applications that are currently inactive. OR Retrieves
+  /// the application for the given Id or all the applications if the Id is
+  /// null.
+  Future<ApplicationResponse> retrieveApplication({
+    String? inactive,
+    String? tenantIdScope,
   }) async {
-    return UserActionReasonResponse.fromJson(
-      await _client.send('post', 'api/user-action-reason', body: body.toJson()),
-    );
-  }
-
-  /// Retrieves the user action reason for the given Id. If you pass in null for
-  /// the id, this will return all the user action reasons.
-  Future<UserActionReasonResponse> retrieveUserActionReason() async {
-    return UserActionReasonResponse.fromJson(
-      await _client.send('get', 'api/user-action-reason'),
-    );
-  }
-
-  /// Searches the event logs with the specified criteria and pagination.
-  Future<EventLogSearchResponse> searchEventLogsWithId({
-    required EventLogSearchRequest body,
-  }) async {
-    return EventLogSearchResponse.fromJson(
-      await _client.send(
-        'post',
-        'api/system/event-log/search',
-        body: body.toJson(),
-      ),
-    );
-  }
-
-  /// Searches themes with the specified criteria and pagination.
-  Future<ThemeSearchResponse> searchThemesWithId({
-    required ThemeSearchRequest body,
-  }) async {
-    return ThemeSearchResponse.fromJson(
-      await _client.send('post', 'api/theme/search', body: body.toJson()),
-    );
-  }
-
-  /// Call the UserInfo endpoint to retrieve User Claims from the access token
-  /// issued by FusionAuth.
-  Future<UserinfoResponse> retrieveUserInfoFromAccessTokenWithId() async {
-    return UserinfoResponse.fromJson(
-      await _client.send('get', 'oauth2/userinfo'),
-    );
-  }
-
-  /// Issue a new access token (JWT) for the requested Application after
-  /// ensuring the provided JWT is valid. A valid access token is properly
-  /// signed and not expired. <p> This API may be used in an SSO configuration
-  /// to issue new tokens for another application after the user has obtained a
-  /// valid token from authentication.
-  Future<IssueResponse> issueJWTWithId({
-    String? applicationId,
-    String? refreshToken,
-  }) async {
-    return IssueResponse.fromJson(
+    return ApplicationResponse.fromJson(
       await _client.send(
         'get',
-        'api/jwt/issue',
-        queryParameters: {
-          if (applicationId != null) 'applicationId': applicationId,
-          if (refreshToken != null) 'refreshToken': refreshToken,
+        'api/application',
+        queryParameters: {if (inactive != null) 'inactive': inactive},
+        headers: {
+          if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
         },
       ),
     );
   }
 
-  /// Creates a group. You can optionally specify an Id for the group, if not
-  /// provided one will be generated.
-  Future<GroupResponse> createGroup({
+  /// Creates an application. You can optionally specify an Id for the
+  /// application, if not provided one will be generated.
+  Future<ApplicationResponse> createApplication({
     String? tenantIdScope,
-    required GroupRequest body,
+    required ApplicationRequest body,
   }) async {
-    return GroupResponse.fromJson(
+    return ApplicationResponse.fromJson(
       await _client.send(
         'post',
-        'api/group',
+        'api/application',
         headers: {
           if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
         },
@@ -3948,136 +3996,30 @@ class FusionauthClient {
     );
   }
 
-  /// Approve a device grant.
-  Future<DeviceApprovalResponse> approveDeviceWithId() async {
-    return DeviceApprovalResponse.fromJson(
-      await _client.send('post', 'oauth2/device/approve'),
-    );
-  }
-
-  /// Searches entities with the specified criteria and pagination.
-  Future<EntitySearchResponse> searchEntitiesWithId({
-    required EntitySearchRequest body,
+  /// Creates an identity provider. You can optionally specify an Id for the
+  /// identity provider, if not provided one will be generated.
+  Future<IdentityProviderResponse> createIdentityProvider({
+    required IdentityProviderRequest body,
   }) async {
-    return EntitySearchResponse.fromJson(
-      await _client.send('post', 'api/entity/search', body: body.toJson()),
+    return IdentityProviderResponse.fromJson(
+      await _client.send('post', 'api/identity-provider', body: body.toJson()),
     );
   }
 
-  /// Retrieves the entities for the given ids. If any Id is invalid, it is
-  /// ignored.
-  Future<EntitySearchResponse> searchEntitiesByIdsWithId({String? ids}) async {
-    return EntitySearchResponse.fromJson(
+  /// Retrieves one or more identity provider for the given type. For types such
+  /// as Google, Facebook, Twitter and LinkedIn, only a single  identity
+  /// provider can exist. For types such as OpenID Connect and SAMLv2 more than
+  /// one identity provider can be configured so this request  may return
+  /// multiple identity providers.
+  Future<IdentityProviderResponse> retrieveIdentityProviderByTypeWithId({
+    String? type,
+  }) async {
+    return IdentityProviderResponse.fromJson(
       await _client.send(
         'get',
-        'api/entity/search',
-        queryParameters: {if (ids != null) 'ids': ids},
+        'api/identity-provider',
+        queryParameters: {if (type != null) 'type': type},
       ),
-    );
-  }
-
-  /// Activates the FusionAuth Reactor using a license Id and optionally a
-  /// license text (for air-gapped deployments)
-  Future<void> activateReactorWithId({required ReactorRequest body}) async {
-    await _client.send('post', 'api/reactor', body: body.toJson());
-  }
-
-  /// Generate a new RSA or EC key pair or an HMAC secret.
-  Future<KeyResponse> generateKeyWithId({
-    required String keyId,
-    required KeyRequest body,
-  }) async {
-    return KeyResponse.fromJson(
-      await _client.send(
-        'post',
-        'api/key/generate/{keyId}',
-        pathParameters: {'keyId': keyId},
-        body: body.toJson(),
-      ),
-    );
-  }
-
-  /// Generate a new RSA or EC key pair or an HMAC secret.
-  Future<KeyResponse> generateKey({required KeyRequest body}) async {
-    return KeyResponse.fromJson(
-      await _client.send('post', 'api/key/generate', body: body.toJson()),
-    );
-  }
-
-  /// Retrieves a single refresh token by unique Id. This is not the same thing
-  /// as the string value of the refresh token. If you have that, you already
-  /// have what you need.
-  Future<RefreshTokenResponse> retrieveRefreshTokenByIdWithId(
-    String tokenId,
-  ) async {
-    return RefreshTokenResponse.fromJson(
-      await _client.send(
-        'get',
-        'api/jwt/refresh/{tokenId}',
-        pathParameters: {'tokenId': tokenId},
-      ),
-    );
-  }
-
-  /// Revokes a single refresh token by the unique Id. The unique Id is not
-  /// sensitive as it cannot be used to obtain another JWT.
-  Future<void> revokeRefreshTokenByIdWithId(String tokenId) async {
-    await _client.send(
-      'delete',
-      'api/jwt/refresh/{tokenId}',
-      pathParameters: {'tokenId': tokenId},
-    );
-  }
-
-  /// Searches the audit logs with the specified criteria and pagination.
-  Future<AuditLogSearchResponse> searchAuditLogsWithId({
-    required AuditLogSearchRequest body,
-  }) async {
-    return AuditLogSearchResponse.fromJson(
-      await _client.send(
-        'post',
-        'api/system/audit-log/search',
-        body: body.toJson(),
-      ),
-    );
-  }
-
-  /// Retrieves the identity provider for the given domain. A 200 response code
-  /// indicates the domain is managed by a registered identity provider. A 404
-  /// indicates the domain is not managed.
-  Future<LookupResponse> lookupIdentityProviderWithId({String? domain}) async {
-    return LookupResponse.fromJson(
-      await _client.send(
-        'get',
-        'api/identity-provider/lookup',
-        queryParameters: {if (domain != null) 'domain': domain},
-      ),
-    );
-  }
-
-  /// Start a Two-Factor login request by generating a two-factor identifier.
-  /// This code can then be sent to the Two Factor Send  API
-  /// (/api/two-factor/send)in order to send a one-time use code to a user. You
-  /// can also use one-time use code returned  to send the code out-of-band. The
-  /// Two-Factor login is completed by making a request to the Two-Factor Login
-  /// API (/api/two-factor/login). with the two-factor identifier and the
-  /// one-time use code.  This API is intended to allow you to begin a
-  /// Two-Factor login outside a normal login that originated from the Login API
-  /// (/api/login).
-  Future<TwoFactorStartResponse> startTwoFactorLoginWithId({
-    required TwoFactorStartRequest body,
-  }) async {
-    return TwoFactorStartResponse.fromJson(
-      await _client.send('post', 'api/two-factor/start', body: body.toJson()),
-    );
-  }
-
-  /// Searches groups with the specified criteria and pagination.
-  Future<GroupSearchResponse> searchGroupsWithId({
-    required GroupSearchRequest body,
-  }) async {
-    return GroupSearchResponse.fromJson(
-      await _client.send('post', 'api/group/search', body: body.toJson()),
     );
   }
 
@@ -4103,51 +4045,6 @@ class FusionauthClient {
     );
   }
 
-  /// Creates a preview of the email template provided in the request. This
-  /// allows you to preview an email template that hasn't been saved to the
-  /// database yet. The entire email template does not need to be provided on
-  /// the request. This will create the preview based on whatever is given.
-  Future<PreviewResponse> retrieveEmailTemplatePreviewWithId({
-    required PreviewRequest body,
-  }) async {
-    return PreviewResponse.fromJson(
-      await _client.send(
-        'post',
-        'api/email/template/preview',
-        body: body.toJson(),
-      ),
-    );
-  }
-
-  /// Retrieves a single event log for the given Id.
-  Future<EventLogResponse> retrieveEventLogWithId(String eventLogId) async {
-    return EventLogResponse.fromJson(
-      await _client.send(
-        'get',
-        'api/system/event-log/{eventLogId}',
-        pathParameters: {'eventLogId': eventLogId},
-      ),
-    );
-  }
-
-  /// Creates a tenant. You can optionally specify an Id for the tenant, if not
-  /// provided one will be generated.
-  Future<TenantResponse> createTenant({
-    String? tenantIdScope,
-    required TenantRequest body,
-  }) async {
-    return TenantResponse.fromJson(
-      await _client.send(
-        'post',
-        'api/tenant',
-        headers: {
-          if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
-        },
-        body: body.toJson(),
-      ),
-    );
-  }
-
   /// Adds a comment to the user's account.
   Future<UserCommentResponse> commentOnUserWithId({
     String? tenantIdScope,
@@ -4165,48 +4062,36 @@ class FusionauthClient {
     );
   }
 
-  /// Searches the webhook event logs with the specified criteria and
-  /// pagination.
-  Future<WebhookEventLogSearchResponse> searchWebhookEventLogsWithId({
-    required WebhookEventLogSearchRequest body,
+  /// Searches webhooks with the specified criteria and pagination.
+  Future<WebhookSearchResponse> searchWebhooksWithId({
+    required WebhookSearchRequest body,
   }) async {
-    return WebhookEventLogSearchResponse.fromJson(
+    return WebhookSearchResponse.fromJson(
+      await _client.send('post', 'api/webhook/search', body: body.toJson()),
+    );
+  }
+
+  /// Complete a WebAuthn authentication ceremony by validating the signature
+  /// against the previously generated challenge without logging the user in
+  Future<WebAuthnAssertResponse> completeWebAuthnAssertionWithId({
+    required WebAuthnLoginRequest body,
+  }) async {
+    return WebAuthnAssertResponse.fromJson(
+      await _client.send('post', 'api/webauthn/assert', body: body.toJson()),
+    );
+  }
+
+  /// Retrieves the identity provider for the given domain. A 200 response code
+  /// indicates the domain is managed by a registered identity provider. A 404
+  /// indicates the domain is not managed.
+  Future<LookupResponse> lookupIdentityProviderWithId({String? domain}) async {
+    return LookupResponse.fromJson(
       await _client.send(
-        'post',
-        'api/system/webhook-event-log/search',
-        body: body.toJson(),
+        'get',
+        'api/identity-provider/lookup',
+        queryParameters: {if (domain != null) 'domain': domain},
       ),
     );
-  }
-
-  /// Reconcile a User to FusionAuth using JWT issued from another Identity
-  /// Provider.
-  Future<LoginResponse> reconcileJWTWithId({
-    required IdentityProviderLoginRequest body,
-  }) async {
-    return LoginResponse.fromJson(
-      await _client.send('post', 'api/jwt/reconcile', body: body.toJson()),
-    );
-  }
-
-  /// Complete login using a 2FA challenge
-  Future<LoginResponse> twoFactorLoginWithId({
-    required TwoFactorLoginRequest body,
-  }) async {
-    return LoginResponse.fromJson(
-      await _client.send('post', 'api/two-factor/login', body: body.toJson()),
-    );
-  }
-
-  /// Requests Elasticsearch to delete and rebuild the index for FusionAuth
-  /// users or entities. Be very careful when running this request as it will
-  /// increase the CPU and I/O load on your database until the operation
-  /// completes. Generally speaking you do not ever need to run this operation
-  /// unless  instructed by FusionAuth support, or if you are migrating a
-  /// database another system and you are not brining along the Elasticsearch
-  /// index.   You have been warned.
-  Future<void> reindexWithId({required ReindexRequest body}) async {
-    await _client.send('post', 'api/system/reindex', body: body.toJson());
   }
 
   /// Retrieves all the children for the given parent email address.
@@ -4222,76 +4107,106 @@ class FusionauthClient {
     );
   }
 
-  /// Retrieves the daily active user report between the two instants. If you
-  /// specify an application id, it will only return the daily active counts for
-  /// that application.
-  Future<DailyActiveUserReportResponse> retrieveDailyActiveReportWithId({
-    String? applicationId,
-    String? start,
-    String? end,
+  /// Creates a preview of the email template provided in the request. This
+  /// allows you to preview an email template that hasn't been saved to the
+  /// database yet. The entire email template does not need to be provided on
+  /// the request. This will create the preview based on whatever is given.
+  Future<PreviewResponse> retrieveEmailTemplatePreviewWithId({
+    required PreviewRequest body,
   }) async {
-    return DailyActiveUserReportResponse.fromJson(
-      await _client.send(
-        'get',
-        'api/report/daily-active-user',
-        queryParameters: {
-          if (applicationId != null) 'applicationId': applicationId,
-          if (start != null) 'start': start,
-          if (end != null) 'end': end,
-        },
-      ),
-    );
-  }
-
-  /// Sends a ping to FusionAuth indicating that the user was automatically
-  /// logged into an application. When using FusionAuth's SSO or your own, you
-  /// should call this if the user is already logged in centrally, but accesses
-  /// an application where they no longer have a session. This helps correctly
-  /// track login counts, times and helps with reporting.
-  Future<LoginResponse> loginPingWithId({
-    String? callerIpAddress,
-    required String userId,
-    required String applicationId,
-    String? tenantIdScope,
-  }) async {
-    return LoginResponse.fromJson(
-      await _client.send(
-        'put',
-        'api/login/{userId}/{applicationId}',
-        pathParameters: {'userId': userId, 'applicationId': applicationId},
-        queryParameters: {
-          if (callerIpAddress != null) 'callerIPAddress': callerIpAddress,
-        },
-        headers: {
-          if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
-        },
-      ),
-    );
-  }
-
-  /// Creates a Entity Type. You can optionally specify an Id for the Entity
-  /// Type, if not provided one will be generated.
-  Future<EntityTypeResponse> createEntityType({
-    required EntityTypeRequest body,
-  }) async {
-    return EntityTypeResponse.fromJson(
-      await _client.send('post', 'api/entity/type', body: body.toJson()),
-    );
-  }
-
-  /// Creates an Entity. You can optionally specify an Id for the Entity. If not
-  /// provided one will be generated.
-  Future<EntityResponse> createEntity({
-    String? tenantIdScope,
-    required EntityRequest body,
-  }) async {
-    return EntityResponse.fromJson(
+    return PreviewResponse.fromJson(
       await _client.send(
         'post',
-        'api/entity',
-        headers: {
-          if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
-        },
+        'api/email/template/preview',
+        body: body.toJson(),
+      ),
+    );
+  }
+
+  /// Retrieves all WebAuthn credentials for the given user.
+  Future<WebAuthnCredentialResponse> retrieveWebAuthnCredentialsForUserWithId({
+    String? userId,
+  }) async {
+    return WebAuthnCredentialResponse.fromJson(
+      await _client.send(
+        'get',
+        'api/webauthn',
+        queryParameters: {if (userId != null) 'userId': userId},
+      ),
+    );
+  }
+
+  /// Creates a preview of the message template provided in the request,
+  /// normalized to a given locale.
+  Future<PreviewMessageTemplateResponse> retrieveMessageTemplatePreviewWithId({
+    required PreviewMessageTemplateRequest body,
+  }) async {
+    return PreviewMessageTemplateResponse.fromJson(
+      await _client.send(
+        'post',
+        'api/message/template/preview',
+        body: body.toJson(),
+      ),
+    );
+  }
+
+  /// Validates the provided JWT (encoded JWT string) to ensure the token is
+  /// valid. A valid access token is properly signed and not expired. <p> This
+  /// API may be used to verify the JWT as well as decode the encoded JWT into
+  /// human readable identity claims.
+  Future<ValidateResponse> validateJWTWithId() async {
+    return ValidateResponse.fromJson(
+      await _client.send('get', 'api/jwt/validate'),
+    );
+  }
+
+  /// Complete login using a 2FA challenge
+  Future<LoginResponse> twoFactorLoginWithId({
+    required TwoFactorLoginRequest body,
+  }) async {
+    return LoginResponse.fromJson(
+      await _client.send('post', 'api/two-factor/login', body: body.toJson()),
+    );
+  }
+
+  /// Begins the forgot password sequence, which kicks off an email to the user
+  /// so that they can reset their password.
+  Future<ForgotPasswordResponse> forgotPasswordWithId({
+    required ForgotPasswordRequest body,
+  }) async {
+    return ForgotPasswordResponse.fromJson(
+      await _client.send(
+        'post',
+        'api/user/forgot-password',
+        body: body.toJson(),
+      ),
+    );
+  }
+
+  /// Creates a form.  You can optionally specify an Id for the form, if not
+  /// provided one will be generated.
+  Future<FormResponse> createForm({required FormRequest body}) async {
+    return FormResponse.fromJson(
+      await _client.send('post', 'api/form', body: body.toJson()),
+    );
+  }
+
+  /// Call the UserInfo endpoint to retrieve User Claims from the access token
+  /// issued by FusionAuth.
+  Future<UserinfoResponse> retrieveUserInfoFromAccessTokenWithId() async {
+    return UserinfoResponse.fromJson(
+      await _client.send('get', 'oauth2/userinfo'),
+    );
+  }
+
+  /// Searches the event logs with the specified criteria and pagination.
+  Future<EventLogSearchResponse> searchEventLogsWithId({
+    required EventLogSearchRequest body,
+  }) async {
+    return EventLogSearchResponse.fromJson(
+      await _client.send(
+        'post',
+        'api/system/event-log/search',
         body: body.toJson(),
       ),
     );
@@ -4317,85 +4232,176 @@ class FusionauthClient {
     );
   }
 
-  /// Searches Entity Grants with the specified criteria and pagination.
-  Future<EntityGrantSearchResponse> searchEntityGrantsWithId({
-    required EntityGrantSearchRequest body,
-  }) async {
-    return EntityGrantSearchResponse.fromJson(
-      await _client.send(
-        'post',
-        'api/entity/grant/search',
-        body: body.toJson(),
-      ),
-    );
-  }
-
-  /// Bulk imports users. This request performs minimal validation and runs
-  /// batch inserts of users with the expectation that each user does not yet
-  /// exist and each registration corresponds to an existing FusionAuth
-  /// Application. This is done to increases the insert performance.  Therefore,
-  /// if you encounter an error due to a database key violation, the response
-  /// will likely offer a generic explanation. If you encounter an error, you
-  /// may optionally enable additional validation to receive a JSON response
-  /// body with specific validation errors. This will slow the request down but
-  /// will allow you to identify the cause of the failure. See the
-  /// validateDbConstraints request parameter.
-  Future<void> importUsersWithId({required ImportRequest body}) async {
-    await _client.send('post', 'api/user/import', body: body.toJson());
-  }
-
-  /// Complete a WebAuthn authentication ceremony by validating the signature
-  /// against the previously generated challenge and then login the user in
-  Future<LoginResponse> completeWebAuthnLoginWithId({
-    required WebAuthnLoginRequest body,
-  }) async {
-    return LoginResponse.fromJson(
-      await _client.send('post', 'api/webauthn/login', body: body.toJson()),
-    );
-  }
-
-  /// Retrieves the registration report between the two instants. If you specify
-  /// an application id, it will only return the registration counts for that
-  /// application.
-  Future<RegistrationReportResponse> retrieveRegistrationReportWithId({
-    String? applicationId,
-    String? start,
-    String? end,
-  }) async {
-    return RegistrationReportResponse.fromJson(
+  /// Retrieves a single webhook attempt log for the given Id.
+  Future<WebhookAttemptLogResponse> retrieveWebhookAttemptLogWithId(
+    String webhookAttemptLogId,
+  ) async {
+    return WebhookAttemptLogResponse.fromJson(
       await _client.send(
         'get',
-        'api/report/registration',
-        queryParameters: {
-          if (applicationId != null) 'applicationId': applicationId,
-          if (start != null) 'start': start,
-          if (end != null) 'end': end,
-        },
+        'api/system/webhook-attempt-log/{webhookAttemptLogId}',
+        pathParameters: {'webhookAttemptLogId': webhookAttemptLogId},
       ),
     );
   }
 
-  /// Send an email using an email template id. You can optionally provide
-  /// `requestData` to access key value pairs in the email template.
-  Future<SendResponse> sendEmailWithId({
-    required String emailTemplateId,
-    required SendRequest body,
+  /// Requests Elasticsearch to delete and rebuild the index for FusionAuth
+  /// users or entities. Be very careful when running this request as it will
+  /// increase the CPU and I/O load on your database until the operation
+  /// completes. Generally speaking you do not ever need to run this operation
+  /// unless  instructed by FusionAuth support, or if you are migrating a
+  /// database another system and you are not brining along the Elasticsearch
+  /// index.   You have been warned.
+  Future<void> reindexWithId({required ReindexRequest body}) async {
+    await _client.send('post', 'api/system/reindex', body: body.toJson());
+  }
+
+  /// It's a JWT vending machine!  Issue a new access token (JWT) with the
+  /// provided claims in the request. This JWT is not scoped to a tenant or
+  /// user, it is a free form  token that will contain what claims you provide.
+  /// <p> The iat, exp and jti claims will be added by FusionAuth, all other
+  /// claims must be provided by the caller.  If a TTL is not provided in the
+  /// request, the TTL will be retrieved from the default Tenant or the Tenant
+  /// specified on the request either  by way of the X-FusionAuth-TenantId
+  /// request header, or a tenant scoped API key.
+  Future<JWTVendResponse> vendJWTWithId({required JWTVendRequest body}) async {
+    return JWTVendResponse.fromJson(
+      await _client.send('post', 'api/jwt/vend', body: body.toJson()),
+    );
+  }
+
+  /// Creates a user consent type. You can optionally specify an Id for the
+  /// consent type, if not provided one will be generated.
+  Future<ConsentResponse> createConsent({
+    String? tenantIdScope,
+    required ConsentRequest body,
   }) async {
-    return SendResponse.fromJson(
+    return ConsentResponse.fromJson(
       await _client.send(
         'post',
-        'api/email/send/{emailTemplateId}',
-        pathParameters: {'emailTemplateId': emailTemplateId},
+        'api/consent',
+        headers: {
+          if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
+        },
         body: body.toJson(),
       ),
     );
   }
 
-  /// Returns the well known OpenID Configuration JSON document
-  Future<OpenIdConfiguration> retrieveOpenIdConfigurationWithId() async {
-    return OpenIdConfiguration.fromJson(
-      await _client.send('get', '.well-known/openid-configuration'),
+  /// Searches identity providers with the specified criteria and pagination.
+  Future<IdentityProviderSearchResponse> searchIdentityProvidersWithId({
+    required IdentityProviderSearchRequest body,
+  }) async {
+    return IdentityProviderSearchResponse.fromJson(
+      await _client.send(
+        'post',
+        'api/identity-provider/search',
+        body: body.toJson(),
+      ),
     );
+  }
+
+  /// Retrieves a single webhook event log for the given Id.
+  Future<WebhookEventLogResponse> retrieveWebhookEventLogWithId(
+    String webhookEventLogId,
+  ) async {
+    return WebhookEventLogResponse.fromJson(
+      await _client.send(
+        'get',
+        'api/system/webhook-event-log/{webhookEventLogId}',
+        pathParameters: {'webhookEventLogId': webhookEventLogId},
+      ),
+    );
+  }
+
+  /// Creates a Entity Type. You can optionally specify an Id for the Entity
+  /// Type, if not provided one will be generated.
+  Future<EntityTypeResponse> createEntityType({
+    required EntityTypeRequest body,
+  }) async {
+    return EntityTypeResponse.fromJson(
+      await _client.send('post', 'api/entity/type', body: body.toJson()),
+    );
+  }
+
+  /// Creates a group. You can optionally specify an Id for the group, if not
+  /// provided one will be generated.
+  Future<GroupResponse> createGroup({
+    String? tenantIdScope,
+    required GroupRequest body,
+  }) async {
+    return GroupResponse.fromJson(
+      await _client.send(
+        'post',
+        'api/group',
+        headers: {
+          if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
+        },
+        body: body.toJson(),
+      ),
+    );
+  }
+
+  /// Retrieve a pending identity provider link. This is useful to validate a
+  /// pending link and retrieve meta-data about the identity provider link.
+  Future<IdentityProviderPendingLinkResponse> retrievePendingLinkWithId({
+    String? userId,
+    required String pendingLinkId,
+  }) async {
+    return IdentityProviderPendingLinkResponse.fromJson(
+      await _client.send(
+        'get',
+        'api/identity-provider/link/pending/{pendingLinkId}',
+        pathParameters: {'pendingLinkId': pendingLinkId},
+        queryParameters: {if (userId != null) 'userId': userId},
+      ),
+    );
+  }
+
+  /// Validates the end-user provided user_code from the user-interaction of the
+  /// Device Authorization Grant. If you build your own activation form you
+  /// should validate the user provided code prior to beginning the
+  /// Authorization grant.
+  Future<void> validateDeviceWithId({
+    String? userCode,
+    String? clientId,
+  }) async {
+    await _client.send(
+      'get',
+      'oauth2/device/validate',
+      queryParameters: {
+        if (userCode != null) 'user_code': userCode,
+        if (clientId != null) 'client_id': clientId,
+      },
+    );
+  }
+
+  /// Removes a user from the family with the given id.
+  Future<void> removeUserFromFamilyWithId({
+    required String familyId,
+    required String userId,
+    String? tenantIdScope,
+  }) async {
+    await _client.send(
+      'delete',
+      'api/user/family/{familyId}/{userId}',
+      pathParameters: {'familyId': familyId, 'userId': userId},
+      headers: {
+        if (tenantIdScope != null) 'X-FusionAuth-TenantId': tenantIdScope,
+      },
+    );
+  }
+
+  /// Retrieves the FusionAuth version string.
+  Future<VersionResponse> retrieveVersionWithId() async {
+    return VersionResponse.fromJson(
+      await _client.send('get', 'api/system/version'),
+    );
+  }
+
+  /// Retrieves all the keys.
+  Future<KeyResponse> retrieveKeysWithId() async {
+    return KeyResponse.fromJson(await _client.send('get', 'api/key'));
   }
 
   /// Retrieves the FusionAuth system status. This request is anonymous and does
@@ -4408,23 +4414,18 @@ class FusionauthClient {
     return StatusResponse.fromJson(await _client.send('get', 'api/status'));
   }
 
-  /// Retrieves the FusionAuth system health. This API will return 200 if the
-  /// system is healthy, and 500 if the system is un-healthy.
-  Future<void> retrieveSystemHealthWithId() async {
-    await _client.send('get', 'api/health');
-  }
-
-  /// Retrieves the FusionAuth Reactor metrics.
-  Future<ReactorMetricsResponse> retrieveReactorMetricsWithId() async {
-    return ReactorMetricsResponse.fromJson(
-      await _client.send('get', 'api/reactor/metrics'),
+  /// Retrieves the totals report. This contains all the total counts for each
+  /// application and the global registration count.
+  Future<TotalsReportResponse> retrieveTotalReportWithId() async {
+    return TotalsReportResponse.fromJson(
+      await _client.send('get', 'api/report/totals'),
     );
   }
 
-  /// Retrieves the FusionAuth version string.
-  Future<VersionResponse> retrieveVersionWithId() async {
-    return VersionResponse.fromJson(
-      await _client.send('get', 'api/system/version'),
+  /// Returns the well known OpenID Configuration JSON document
+  Future<OpenIdConfiguration> retrieveOpenIdConfigurationWithId() async {
+    return OpenIdConfiguration.fromJson(
+      await _client.send('get', '.well-known/openid-configuration'),
     );
   }
 
@@ -4436,12 +4437,10 @@ class FusionauthClient {
     );
   }
 
-  /// Retrieves the totals report. This contains all the total counts for each
-  /// application and the global registration count.
-  Future<TotalsReportResponse> retrieveTotalReportWithId() async {
-    return TotalsReportResponse.fromJson(
-      await _client.send('get', 'api/report/totals'),
-    );
+  /// Retrieves the FusionAuth system health. This API will return 200 if the
+  /// system is healthy, and 500 if the system is un-healthy.
+  Future<void> retrieveSystemHealthWithId() async {
+    await _client.send('get', 'api/health');
   }
 
   /// Retrieves the password validation rules for a specific tenant. This method
@@ -4455,9 +4454,11 @@ class FusionauthClient {
     );
   }
 
-  /// Retrieves all the keys.
-  Future<KeyResponse> retrieveKeysWithId() async {
-    return KeyResponse.fromJson(await _client.send('get', 'api/key'));
+  /// Retrieves the FusionAuth Reactor metrics.
+  Future<ReactorMetricsResponse> retrieveReactorMetricsWithId() async {
+    return ReactorMetricsResponse.fromJson(
+      await _client.send('get', 'api/reactor/metrics'),
+    );
   }
 }
 
@@ -6989,6 +6990,7 @@ class XMLSignatureLocation {
 
 /// domain POJO to represent AuthenticationKey
 class APIKey {
+  final ZonedDateTime? expirationInstant;
   final String? id;
   final ZonedDateTime? insertInstant;
   final String? ipAccessControlListId;
@@ -7000,6 +7002,7 @@ class APIKey {
   final String? tenantId;
 
   APIKey({
+    this.expirationInstant,
     this.id,
     this.insertInstant,
     this.ipAccessControlListId,
@@ -7013,6 +7016,8 @@ class APIKey {
 
   factory APIKey.fromJson(Map<String, Object?> json) {
     return APIKey(
+      expirationInstant:
+          (json[r'expirationInstant'] as num?)?.toInt() as ZonedDateTime?,
       id: json[r'id'] as String?,
       insertInstant:
           (json[r'insertInstant'] as num?)?.toInt() as ZonedDateTime?,
@@ -7038,6 +7043,7 @@ class APIKey {
   }
 
   Map<String, Object?> toJson() {
+    var expirationInstant = this.expirationInstant;
     var id = this.id;
     var insertInstant = this.insertInstant;
     var ipAccessControlListId = this.ipAccessControlListId;
@@ -7049,6 +7055,9 @@ class APIKey {
     var tenantId = this.tenantId;
 
     final json = <String, Object?>{};
+    if (expirationInstant != null) {
+      json[r'expirationInstant'] = expirationInstant.toJson();
+    }
     if (id != null) {
       json[r'id'] = id;
     }
@@ -7080,6 +7089,7 @@ class APIKey {
   }
 
   APIKey copyWith({
+    ZonedDateTime? expirationInstant,
     String? id,
     ZonedDateTime? insertInstant,
     String? ipAccessControlListId,
@@ -7091,6 +7101,7 @@ class APIKey {
     String? tenantId,
   }) {
     return APIKey(
+      expirationInstant: expirationInstant ?? this.expirationInstant,
       id: id ?? this.id,
       insertInstant: insertInstant ?? this.insertInstant,
       ipAccessControlListId:
@@ -12437,8 +12448,20 @@ class DisplayableRawLogin {
   final String? applicationName;
   final Location? location;
   final String? loginId;
+  final String? applicationId;
+  final ZonedDateTime? instant;
+  final String? ipAddress;
+  final String? userId;
 
-  DisplayableRawLogin({this.applicationName, this.location, this.loginId});
+  DisplayableRawLogin({
+    this.applicationName,
+    this.location,
+    this.loginId,
+    this.applicationId,
+    this.instant,
+    this.ipAddress,
+    this.userId,
+  });
 
   factory DisplayableRawLogin.fromJson(Map<String, Object?> json) {
     return DisplayableRawLogin(
@@ -12448,6 +12471,10 @@ class DisplayableRawLogin {
               ? Location.fromJson(json[r'location']! as Map<String, Object?>)
               : null,
       loginId: json[r'loginId'] as String?,
+      applicationId: json[r'applicationId'] as String?,
+      instant: (json[r'instant'] as num?)?.toInt() as ZonedDateTime?,
+      ipAddress: json[r'ipAddress'] as String?,
+      userId: json[r'userId'] as String?,
     );
   }
 
@@ -12455,6 +12482,10 @@ class DisplayableRawLogin {
     var applicationName = this.applicationName;
     var location = this.location;
     var loginId = this.loginId;
+    var applicationId = this.applicationId;
+    var instant = this.instant;
+    var ipAddress = this.ipAddress;
+    var userId = this.userId;
 
     final json = <String, Object?>{};
     if (applicationName != null) {
@@ -12466,6 +12497,18 @@ class DisplayableRawLogin {
     if (loginId != null) {
       json[r'loginId'] = loginId;
     }
+    if (applicationId != null) {
+      json[r'applicationId'] = applicationId;
+    }
+    if (instant != null) {
+      json[r'instant'] = instant.toJson();
+    }
+    if (ipAddress != null) {
+      json[r'ipAddress'] = ipAddress;
+    }
+    if (userId != null) {
+      json[r'userId'] = userId;
+    }
     return json;
   }
 
@@ -12473,11 +12516,19 @@ class DisplayableRawLogin {
     String? applicationName,
     Location? location,
     String? loginId,
+    String? applicationId,
+    ZonedDateTime? instant,
+    String? ipAddress,
+    String? userId,
   }) {
     return DisplayableRawLogin(
       applicationName: applicationName ?? this.applicationName,
       location: location ?? this.location,
       loginId: loginId ?? this.loginId,
+      applicationId: applicationId ?? this.applicationId,
+      instant: instant ?? this.instant,
+      ipAddress: ipAddress ?? this.ipAddress,
+      userId: userId ?? this.userId,
     );
   }
 }
@@ -22072,6 +22123,8 @@ class JWTConfiguration {
   final String? accessTokenKeyId;
   final String? idTokenKeyId;
   final RefreshTokenExpirationPolicy? refreshTokenExpirationPolicy;
+  final RefreshTokenOneTimeUseConfiguration?
+  refreshTokenOneTimeUseConfiguration;
   final RefreshTokenRevocationPolicy? refreshTokenRevocationPolicy;
   final RefreshTokenSlidingWindowConfiguration?
   refreshTokenSlidingWindowConfiguration;
@@ -22084,6 +22137,7 @@ class JWTConfiguration {
     this.accessTokenKeyId,
     this.idTokenKeyId,
     this.refreshTokenExpirationPolicy,
+    this.refreshTokenOneTimeUseConfiguration,
     this.refreshTokenRevocationPolicy,
     this.refreshTokenSlidingWindowConfiguration,
     this.refreshTokenTimeToLiveInMinutes,
@@ -22100,6 +22154,13 @@ class JWTConfiguration {
           json[r'refreshTokenExpirationPolicy'] != null
               ? RefreshTokenExpirationPolicy.fromValue(
                 json[r'refreshTokenExpirationPolicy']! as String,
+              )
+              : null,
+      refreshTokenOneTimeUseConfiguration:
+          json[r'refreshTokenOneTimeUseConfiguration'] != null
+              ? RefreshTokenOneTimeUseConfiguration.fromJson(
+                json[r'refreshTokenOneTimeUseConfiguration']!
+                    as Map<String, Object?>,
               )
               : null,
       refreshTokenRevocationPolicy:
@@ -22132,6 +22193,8 @@ class JWTConfiguration {
     var accessTokenKeyId = this.accessTokenKeyId;
     var idTokenKeyId = this.idTokenKeyId;
     var refreshTokenExpirationPolicy = this.refreshTokenExpirationPolicy;
+    var refreshTokenOneTimeUseConfiguration =
+        this.refreshTokenOneTimeUseConfiguration;
     var refreshTokenRevocationPolicy = this.refreshTokenRevocationPolicy;
     var refreshTokenSlidingWindowConfiguration =
         this.refreshTokenSlidingWindowConfiguration;
@@ -22150,6 +22213,10 @@ class JWTConfiguration {
     if (refreshTokenExpirationPolicy != null) {
       json[r'refreshTokenExpirationPolicy'] =
           refreshTokenExpirationPolicy.value;
+    }
+    if (refreshTokenOneTimeUseConfiguration != null) {
+      json[r'refreshTokenOneTimeUseConfiguration'] =
+          refreshTokenOneTimeUseConfiguration.toJson();
     }
     if (refreshTokenRevocationPolicy != null) {
       json[r'refreshTokenRevocationPolicy'] =
@@ -22179,6 +22246,7 @@ class JWTConfiguration {
     String? accessTokenKeyId,
     String? idTokenKeyId,
     RefreshTokenExpirationPolicy? refreshTokenExpirationPolicy,
+    RefreshTokenOneTimeUseConfiguration? refreshTokenOneTimeUseConfiguration,
     RefreshTokenRevocationPolicy? refreshTokenRevocationPolicy,
     RefreshTokenSlidingWindowConfiguration?
     refreshTokenSlidingWindowConfiguration,
@@ -22192,6 +22260,9 @@ class JWTConfiguration {
       idTokenKeyId: idTokenKeyId ?? this.idTokenKeyId,
       refreshTokenExpirationPolicy:
           refreshTokenExpirationPolicy ?? this.refreshTokenExpirationPolicy,
+      refreshTokenOneTimeUseConfiguration:
+          refreshTokenOneTimeUseConfiguration ??
+          this.refreshTokenOneTimeUseConfiguration,
       refreshTokenRevocationPolicy:
           refreshTokenRevocationPolicy ?? this.refreshTokenRevocationPolicy,
       refreshTokenSlidingWindowConfiguration:
@@ -29591,6 +29662,38 @@ class RefreshTokenImportRequest {
   }
 }
 
+/// Refresh token one-time use configuration. This configuration is utilized
+/// when the usage policy is  configured for one-time use.
+class RefreshTokenOneTimeUseConfiguration {
+  final int? gracePeriodInSeconds;
+
+  RefreshTokenOneTimeUseConfiguration({this.gracePeriodInSeconds});
+
+  factory RefreshTokenOneTimeUseConfiguration.fromJson(
+    Map<String, Object?> json,
+  ) {
+    return RefreshTokenOneTimeUseConfiguration(
+      gracePeriodInSeconds: (json[r'gracePeriodInSeconds'] as num?)?.toInt(),
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var gracePeriodInSeconds = this.gracePeriodInSeconds;
+
+    final json = <String, Object?>{};
+    if (gracePeriodInSeconds != null) {
+      json[r'gracePeriodInSeconds'] = gracePeriodInSeconds;
+    }
+    return json;
+  }
+
+  RefreshTokenOneTimeUseConfiguration copyWith({int? gracePeriodInSeconds}) {
+    return RefreshTokenOneTimeUseConfiguration(
+      gracePeriodInSeconds: gracePeriodInSeconds ?? this.gracePeriodInSeconds,
+    );
+  }
+}
+
 /// API response for retrieving Refresh Tokens
 class RefreshTokenResponse {
   final RefreshToken? refreshToken;
@@ -29645,11 +29748,13 @@ class RefreshTokenResponse {
 class RefreshTokenRevocationPolicy {
   final bool? onLoginPrevented;
   final bool? onMultiFactorEnable;
+  final bool? onOneTimeTokenReuse;
   final bool? onPasswordChanged;
 
   RefreshTokenRevocationPolicy({
     this.onLoginPrevented,
     this.onMultiFactorEnable,
+    this.onOneTimeTokenReuse,
     this.onPasswordChanged,
   });
 
@@ -29657,6 +29762,7 @@ class RefreshTokenRevocationPolicy {
     return RefreshTokenRevocationPolicy(
       onLoginPrevented: json[r'onLoginPrevented'] as bool?,
       onMultiFactorEnable: json[r'onMultiFactorEnable'] as bool?,
+      onOneTimeTokenReuse: json[r'onOneTimeTokenReuse'] as bool?,
       onPasswordChanged: json[r'onPasswordChanged'] as bool?,
     );
   }
@@ -29664,6 +29770,7 @@ class RefreshTokenRevocationPolicy {
   Map<String, Object?> toJson() {
     var onLoginPrevented = this.onLoginPrevented;
     var onMultiFactorEnable = this.onMultiFactorEnable;
+    var onOneTimeTokenReuse = this.onOneTimeTokenReuse;
     var onPasswordChanged = this.onPasswordChanged;
 
     final json = <String, Object?>{};
@@ -29672,6 +29779,9 @@ class RefreshTokenRevocationPolicy {
     }
     if (onMultiFactorEnable != null) {
       json[r'onMultiFactorEnable'] = onMultiFactorEnable;
+    }
+    if (onOneTimeTokenReuse != null) {
+      json[r'onOneTimeTokenReuse'] = onOneTimeTokenReuse;
     }
     if (onPasswordChanged != null) {
       json[r'onPasswordChanged'] = onPasswordChanged;
@@ -29682,11 +29792,13 @@ class RefreshTokenRevocationPolicy {
   RefreshTokenRevocationPolicy copyWith({
     bool? onLoginPrevented,
     bool? onMultiFactorEnable,
+    bool? onOneTimeTokenReuse,
     bool? onPasswordChanged,
   }) {
     return RefreshTokenRevocationPolicy(
       onLoginPrevented: onLoginPrevented ?? this.onLoginPrevented,
       onMultiFactorEnable: onMultiFactorEnable ?? this.onMultiFactorEnable,
+      onOneTimeTokenReuse: onOneTimeTokenReuse ?? this.onOneTimeTokenReuse,
       onPasswordChanged: onPasswordChanged ?? this.onPasswordChanged,
     );
   }
@@ -30139,6 +30251,7 @@ class RegistrationRequest {
 /// Registration API request object.
 class RegistrationResponse {
   final String? refreshToken;
+  final String? refreshTokenId;
   final UserRegistration? registration;
   final String? registrationVerificationId;
   final String? registrationVerificationOneTimeCode;
@@ -30148,6 +30261,7 @@ class RegistrationResponse {
 
   RegistrationResponse({
     this.refreshToken,
+    this.refreshTokenId,
     this.registration,
     this.registrationVerificationId,
     this.registrationVerificationOneTimeCode,
@@ -30159,6 +30273,7 @@ class RegistrationResponse {
   factory RegistrationResponse.fromJson(Map<String, Object?> json) {
     return RegistrationResponse(
       refreshToken: json[r'refreshToken'] as String?,
+      refreshTokenId: json[r'refreshTokenId'] as String?,
       registration:
           json[r'registration'] != null
               ? UserRegistration.fromJson(
@@ -30181,6 +30296,7 @@ class RegistrationResponse {
 
   Map<String, Object?> toJson() {
     var refreshToken = this.refreshToken;
+    var refreshTokenId = this.refreshTokenId;
     var registration = this.registration;
     var registrationVerificationId = this.registrationVerificationId;
     var registrationVerificationOneTimeCode =
@@ -30192,6 +30308,9 @@ class RegistrationResponse {
     final json = <String, Object?>{};
     if (refreshToken != null) {
       json[r'refreshToken'] = refreshToken;
+    }
+    if (refreshTokenId != null) {
+      json[r'refreshTokenId'] = refreshTokenId;
     }
     if (registration != null) {
       json[r'registration'] = registration.toJson();
@@ -30217,6 +30336,7 @@ class RegistrationResponse {
 
   RegistrationResponse copyWith({
     String? refreshToken,
+    String? refreshTokenId,
     UserRegistration? registration,
     String? registrationVerificationId,
     String? registrationVerificationOneTimeCode,
@@ -30226,6 +30346,7 @@ class RegistrationResponse {
   }) {
     return RegistrationResponse(
       refreshToken: refreshToken ?? this.refreshToken,
+      refreshTokenId: refreshTokenId ?? this.refreshTokenId,
       registration: registration ?? this.registration,
       registrationVerificationId:
           registrationVerificationId ?? this.registrationVerificationId,
@@ -30500,6 +30621,52 @@ class SAMLv2AssertionConfiguration {
   }) {
     return SAMLv2AssertionConfiguration(
       destination: destination ?? this.destination,
+    );
+  }
+}
+
+/// Configuration for encrypted assertions when acting as SAML Service Provider
+class SAMLv2AssertionDecryptionConfiguration {
+  final String? keyTransportDecryptionKeyId;
+  final bool? enabled;
+
+  SAMLv2AssertionDecryptionConfiguration({
+    this.keyTransportDecryptionKeyId,
+    this.enabled,
+  });
+
+  factory SAMLv2AssertionDecryptionConfiguration.fromJson(
+    Map<String, Object?> json,
+  ) {
+    return SAMLv2AssertionDecryptionConfiguration(
+      keyTransportDecryptionKeyId:
+          json[r'keyTransportDecryptionKeyId'] as String?,
+      enabled: json[r'enabled'] as bool?,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var keyTransportDecryptionKeyId = this.keyTransportDecryptionKeyId;
+    var enabled = this.enabled;
+
+    final json = <String, Object?>{};
+    if (keyTransportDecryptionKeyId != null) {
+      json[r'keyTransportDecryptionKeyId'] = keyTransportDecryptionKeyId;
+    }
+    if (enabled != null) {
+      json[r'enabled'] = enabled;
+    }
+    return json;
+  }
+
+  SAMLv2AssertionDecryptionConfiguration copyWith({
+    String? keyTransportDecryptionKeyId,
+    bool? enabled,
+  }) {
+    return SAMLv2AssertionDecryptionConfiguration(
+      keyTransportDecryptionKeyId:
+          keyTransportDecryptionKeyId ?? this.keyTransportDecryptionKeyId,
+      enabled: enabled ?? this.enabled,
     );
   }
 }
@@ -30899,6 +31066,8 @@ class SAMLv2IdPInitiatedApplicationConfiguration {
 /// SAML v2 IdP Initiated identity provider configuration.
 class SAMLv2IdPInitiatedIdentityProvider {
   final String? issuer;
+  final SAMLv2AssertionDecryptionConfiguration?
+  assertionDecryptionConfiguration;
   final String? emailClaim;
   final String? keyId;
   final String? uniqueIdClaim;
@@ -30907,6 +31076,7 @@ class SAMLv2IdPInitiatedIdentityProvider {
 
   SAMLv2IdPInitiatedIdentityProvider({
     this.issuer,
+    this.assertionDecryptionConfiguration,
     this.emailClaim,
     this.keyId,
     this.uniqueIdClaim,
@@ -30919,6 +31089,13 @@ class SAMLv2IdPInitiatedIdentityProvider {
   ) {
     return SAMLv2IdPInitiatedIdentityProvider(
       issuer: json[r'issuer'] as String?,
+      assertionDecryptionConfiguration:
+          json[r'assertionDecryptionConfiguration'] != null
+              ? SAMLv2AssertionDecryptionConfiguration.fromJson(
+                json[r'assertionDecryptionConfiguration']!
+                    as Map<String, Object?>,
+              )
+              : null,
       emailClaim: json[r'emailClaim'] as String?,
       keyId: json[r'keyId'] as String?,
       uniqueIdClaim: json[r'uniqueIdClaim'] as String?,
@@ -30929,6 +31106,8 @@ class SAMLv2IdPInitiatedIdentityProvider {
 
   Map<String, Object?> toJson() {
     var issuer = this.issuer;
+    var assertionDecryptionConfiguration =
+        this.assertionDecryptionConfiguration;
     var emailClaim = this.emailClaim;
     var keyId = this.keyId;
     var uniqueIdClaim = this.uniqueIdClaim;
@@ -30938,6 +31117,10 @@ class SAMLv2IdPInitiatedIdentityProvider {
     final json = <String, Object?>{};
     if (issuer != null) {
       json[r'issuer'] = issuer;
+    }
+    if (assertionDecryptionConfiguration != null) {
+      json[r'assertionDecryptionConfiguration'] =
+          assertionDecryptionConfiguration.toJson();
     }
     if (emailClaim != null) {
       json[r'emailClaim'] = emailClaim;
@@ -30959,6 +31142,7 @@ class SAMLv2IdPInitiatedIdentityProvider {
 
   SAMLv2IdPInitiatedIdentityProvider copyWith({
     String? issuer,
+    SAMLv2AssertionDecryptionConfiguration? assertionDecryptionConfiguration,
     String? emailClaim,
     String? keyId,
     String? uniqueIdClaim,
@@ -30967,6 +31151,9 @@ class SAMLv2IdPInitiatedIdentityProvider {
   }) {
     return SAMLv2IdPInitiatedIdentityProvider(
       issuer: issuer ?? this.issuer,
+      assertionDecryptionConfiguration:
+          assertionDecryptionConfiguration ??
+          this.assertionDecryptionConfiguration,
       emailClaim: emailClaim ?? this.emailClaim,
       keyId: keyId ?? this.keyId,
       uniqueIdClaim: uniqueIdClaim ?? this.uniqueIdClaim,
@@ -31032,6 +31219,8 @@ class SAMLv2IdentityProvider {
   final String? requestSigningKeyId;
   final bool? signRequest;
   final CanonicalizationMethod? xmlSignatureC14nMethod;
+  final SAMLv2AssertionDecryptionConfiguration?
+  assertionDecryptionConfiguration;
   final String? emailClaim;
   final String? keyId;
   final String? uniqueIdClaim;
@@ -31052,6 +31241,7 @@ class SAMLv2IdentityProvider {
     this.requestSigningKeyId,
     this.signRequest,
     this.xmlSignatureC14nMethod,
+    this.assertionDecryptionConfiguration,
     this.emailClaim,
     this.keyId,
     this.uniqueIdClaim,
@@ -31094,6 +31284,13 @@ class SAMLv2IdentityProvider {
                 json[r'xmlSignatureC14nMethod']! as String,
               )
               : null,
+      assertionDecryptionConfiguration:
+          json[r'assertionDecryptionConfiguration'] != null
+              ? SAMLv2AssertionDecryptionConfiguration.fromJson(
+                json[r'assertionDecryptionConfiguration']!
+                    as Map<String, Object?>,
+              )
+              : null,
       emailClaim: json[r'emailClaim'] as String?,
       keyId: json[r'keyId'] as String?,
       uniqueIdClaim: json[r'uniqueIdClaim'] as String?,
@@ -31116,6 +31313,8 @@ class SAMLv2IdentityProvider {
     var requestSigningKeyId = this.requestSigningKeyId;
     var signRequest = this.signRequest;
     var xmlSignatureC14nMethod = this.xmlSignatureC14nMethod;
+    var assertionDecryptionConfiguration =
+        this.assertionDecryptionConfiguration;
     var emailClaim = this.emailClaim;
     var keyId = this.keyId;
     var uniqueIdClaim = this.uniqueIdClaim;
@@ -31162,6 +31361,10 @@ class SAMLv2IdentityProvider {
     if (xmlSignatureC14nMethod != null) {
       json[r'xmlSignatureC14nMethod'] = xmlSignatureC14nMethod.value;
     }
+    if (assertionDecryptionConfiguration != null) {
+      json[r'assertionDecryptionConfiguration'] =
+          assertionDecryptionConfiguration.toJson();
+    }
     if (emailClaim != null) {
       json[r'emailClaim'] = emailClaim;
     }
@@ -31194,6 +31397,7 @@ class SAMLv2IdentityProvider {
     String? requestSigningKeyId,
     bool? signRequest,
     CanonicalizationMethod? xmlSignatureC14nMethod,
+    SAMLv2AssertionDecryptionConfiguration? assertionDecryptionConfiguration,
     String? emailClaim,
     String? keyId,
     String? uniqueIdClaim,
@@ -31218,6 +31422,9 @@ class SAMLv2IdentityProvider {
       signRequest: signRequest ?? this.signRequest,
       xmlSignatureC14nMethod:
           xmlSignatureC14nMethod ?? this.xmlSignatureC14nMethod,
+      assertionDecryptionConfiguration:
+          assertionDecryptionConfiguration ??
+          this.assertionDecryptionConfiguration,
       emailClaim: emailClaim ?? this.emailClaim,
       keyId: keyId ?? this.keyId,
       uniqueIdClaim: uniqueIdClaim ?? this.uniqueIdClaim,
@@ -33064,6 +33271,7 @@ class SystemConfiguration {
   final ZoneId? reportTimezone;
   final SystemTrustedProxyConfiguration? trustedProxyConfiguration;
   final UIConfiguration? uiConfiguration;
+  final UsageDataConfiguration? usageDataConfiguration;
   final WebhookEventLogConfiguration? webhookEventLogConfiguration;
 
   SystemConfiguration({
@@ -33077,6 +33285,7 @@ class SystemConfiguration {
     this.reportTimezone,
     this.trustedProxyConfiguration,
     this.uiConfiguration,
+    this.usageDataConfiguration,
     this.webhookEventLogConfiguration,
   });
 
@@ -33124,6 +33333,12 @@ class SystemConfiguration {
                 json[r'uiConfiguration']! as Map<String, Object?>,
               )
               : null,
+      usageDataConfiguration:
+          json[r'usageDataConfiguration'] != null
+              ? UsageDataConfiguration.fromJson(
+                json[r'usageDataConfiguration']! as Map<String, Object?>,
+              )
+              : null,
       webhookEventLogConfiguration:
           json[r'webhookEventLogConfiguration'] != null
               ? WebhookEventLogConfiguration.fromJson(
@@ -33144,6 +33359,7 @@ class SystemConfiguration {
     var reportTimezone = this.reportTimezone;
     var trustedProxyConfiguration = this.trustedProxyConfiguration;
     var uiConfiguration = this.uiConfiguration;
+    var usageDataConfiguration = this.usageDataConfiguration;
     var webhookEventLogConfiguration = this.webhookEventLogConfiguration;
 
     final json = <String, Object?>{};
@@ -33177,6 +33393,9 @@ class SystemConfiguration {
     if (uiConfiguration != null) {
       json[r'uiConfiguration'] = uiConfiguration.toJson();
     }
+    if (usageDataConfiguration != null) {
+      json[r'usageDataConfiguration'] = usageDataConfiguration.toJson();
+    }
     if (webhookEventLogConfiguration != null) {
       json[r'webhookEventLogConfiguration'] =
           webhookEventLogConfiguration.toJson();
@@ -33195,6 +33414,7 @@ class SystemConfiguration {
     ZoneId? reportTimezone,
     SystemTrustedProxyConfiguration? trustedProxyConfiguration,
     UIConfiguration? uiConfiguration,
+    UsageDataConfiguration? usageDataConfiguration,
     WebhookEventLogConfiguration? webhookEventLogConfiguration,
   }) {
     return SystemConfiguration(
@@ -33212,6 +33432,8 @@ class SystemConfiguration {
       trustedProxyConfiguration:
           trustedProxyConfiguration ?? this.trustedProxyConfiguration,
       uiConfiguration: uiConfiguration ?? this.uiConfiguration,
+      usageDataConfiguration:
+          usageDataConfiguration ?? this.usageDataConfiguration,
       webhookEventLogConfiguration:
           webhookEventLogConfiguration ?? this.webhookEventLogConfiguration,
     );
@@ -37693,6 +37915,42 @@ class UniqueUsernameConfiguration {
       numberOfDigits: numberOfDigits ?? this.numberOfDigits,
       separator: separator ?? this.separator,
       strategy: strategy ?? this.strategy,
+      enabled: enabled ?? this.enabled,
+    );
+  }
+}
+
+/// Config for Usage Data  Stats
+class UsageDataConfiguration {
+  final int? numberOfDaysToRetain;
+  final bool? enabled;
+
+  UsageDataConfiguration({this.numberOfDaysToRetain, this.enabled});
+
+  factory UsageDataConfiguration.fromJson(Map<String, Object?> json) {
+    return UsageDataConfiguration(
+      numberOfDaysToRetain: (json[r'numberOfDaysToRetain'] as num?)?.toInt(),
+      enabled: json[r'enabled'] as bool?,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    var numberOfDaysToRetain = this.numberOfDaysToRetain;
+    var enabled = this.enabled;
+
+    final json = <String, Object?>{};
+    if (numberOfDaysToRetain != null) {
+      json[r'numberOfDaysToRetain'] = numberOfDaysToRetain;
+    }
+    if (enabled != null) {
+      json[r'enabled'] = enabled;
+    }
+    return json;
+  }
+
+  UsageDataConfiguration copyWith({int? numberOfDaysToRetain, bool? enabled}) {
+    return UsageDataConfiguration(
+      numberOfDaysToRetain: numberOfDaysToRetain ?? this.numberOfDaysToRetain,
       enabled: enabled ?? this.enabled,
     );
   }
