@@ -1,7 +1,10 @@
 import 'dart:convert';
 
-String documentationComment(String documentation,
-    {String? argumentName, required int indent}) {
+String documentationComment(
+  String documentation, {
+  String? argumentName,
+  required int indent,
+}) {
   documentation = documentation
       .replaceAll('\u2028', '\n')
       .replaceAll(RegExp(r'<br[ /]*>'), '\n');
@@ -24,8 +27,10 @@ String _toComment(String? comment, {int indent = 0, int lineLength = 80}) {
     var commentLines = <String>[];
 
     comment = comment
-        .replaceAllMapped(_bracketExtractor,
-            (match) => match.group(0)!.replaceAll(' ', _nonBreakingSpace))
+        .replaceAllMapped(
+          _bracketExtractor,
+          (match) => match.group(0)!.replaceAll(' ', _nonBreakingSpace),
+        )
         .replaceAll('<code>', '`')
         .replaceAll('</code>', '`');
 

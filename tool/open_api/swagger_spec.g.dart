@@ -7,26 +7,26 @@ part of 'swagger_spec.dart';
 // **************************************************************************
 
 Spec _$SpecFromJson(Map<String, dynamic> json) => Spec(
-      Info.fromJson(json['info'] as Map<String, dynamic>),
-      (json['tags'] as List<dynamic>?)
-          ?.map((e) => Tag.fromJson(e as Map<String, dynamic>))
-          .toList(),
-      Components.fromJson(json['components'] as Map<String, dynamic>),
-      (json['paths'] as Map<String, dynamic>).map(
-        (k, e) => MapEntry(k, e as Map<String, dynamic>),
-      ),
-    );
+  Info.fromJson(json['info'] as Map<String, dynamic>),
+  (json['tags'] as List<dynamic>?)
+      ?.map((e) => Tag.fromJson(e as Map<String, dynamic>))
+      .toList(),
+  Components.fromJson(json['components'] as Map<String, dynamic>),
+  (json['paths'] as Map<String, dynamic>).map(
+    (k, e) => MapEntry(k, e as Map<String, dynamic>),
+  ),
+);
 
 Info _$InfoFromJson(Map<String, dynamic> json) => Info(
-      title: json['title'] as String,
-      description: json['description'] as String?,
-      version: json['version'] as String?,
-    );
+  title: json['title'] as String,
+  description: json['description'] as String?,
+  version: json['version'] as String?,
+);
 
 Tag _$TagFromJson(Map<String, dynamic> json) => Tag(
-      name: json['name'] as String,
-      description: json['description'] as String?,
-    );
+  name: json['name'] as String,
+  description: json['description'] as String?,
+);
 
 Components _$ComponentsFromJson(Map<String, dynamic> json) {
   $checkKeys(
@@ -36,7 +36,7 @@ Components _$ComponentsFromJson(Map<String, dynamic> json) {
       'securitySchemes',
       'requestBodies',
       'parameters',
-      'responses'
+      'responses',
     ],
   );
   return Components(
@@ -59,21 +59,23 @@ Components _$ComponentsFromJson(Map<String, dynamic> json) {
 }
 
 Path _$PathFromJson(Map<String, dynamic> json) => Path(
-      description: json['description'] as String,
-      operationId: json['operationId'] as String?,
-      tags: (json['tags'] as List<dynamic>?)?.map((e) => e as String).toList(),
-      summary: json['summary'] as String?,
-      deprecated: json['deprecated'] as bool?,
-      parameters: (json['parameters'] as List<dynamic>?)
+  description: json['description'] as String,
+  operationId: json['operationId'] as String?,
+  tags: (json['tags'] as List<dynamic>?)?.map((e) => e as String).toList(),
+  summary: json['summary'] as String?,
+  deprecated: json['deprecated'] as bool?,
+  parameters:
+      (json['parameters'] as List<dynamic>?)
           ?.map((e) => Parameter.fromJson(e as Map<String, dynamic>))
           .toList(),
-      requestBody: json['requestBody'] == null
+  requestBody:
+      json['requestBody'] == null
           ? null
           : Request.fromJson(json['requestBody'] as Map<String, dynamic>),
-      responses: (json['responses'] as Map<String, dynamic>?)?.map(
-        (k, e) => MapEntry(k, Response.fromJson(e as Map<String, dynamic>)),
-      ),
-    );
+  responses: (json['responses'] as Map<String, dynamic>?)?.map(
+    (k, e) => MapEntry(k, Response.fromJson(e as Map<String, dynamic>)),
+  ),
+);
 
 Request _$RequestFromJson(Map<String, dynamic> json) {
   $checkKeys(
@@ -83,7 +85,7 @@ Request _$RequestFromJson(Map<String, dynamic> json) {
       'required',
       'description',
       r'$ref',
-      'x-examples'
+      'x-examples',
     ],
   );
   return Request(
@@ -97,11 +99,11 @@ Request _$RequestFromJson(Map<String, dynamic> json) {
 }
 
 Response _$ResponseFromJson(Map<String, dynamic> json) => Response(
-      description: json['description'] as String?,
-      content: (json['content'] as Map<String, dynamic>?)?.map(
-        (k, e) => MapEntry(k, Content.fromJson(e as Map<String, dynamic>)),
-      ),
-    );
+  description: json['description'] as String?,
+  content: (json['content'] as Map<String, dynamic>?)?.map(
+    (k, e) => MapEntry(k, Content.fromJson(e as Map<String, dynamic>)),
+  ),
+);
 
 Content _$ContentFromJson(Map<String, dynamic> json) {
   $checkKeys(
@@ -110,9 +112,10 @@ Content _$ContentFromJson(Map<String, dynamic> json) {
   );
   return Content(
     description: json['description'] as String?,
-    schema: json['schema'] == null
-        ? null
-        : Schema.fromJson(json['schema'] as Map<String, dynamic>),
+    schema:
+        json['schema'] == null
+            ? null
+            : Schema.fromJson(json['schema'] as Map<String, dynamic>),
     example: json['example'],
     examples: json['examples'],
   );
@@ -135,27 +138,27 @@ Parameter _$ParameterFromJson(Map<String, dynamic> json) {
       'x-showInExample',
       'example',
       'x-changes',
-      r'$ref'
+      r'$ref',
     ],
   );
   return Parameter(
-    $enumDecodeNullable(_$ParameterLocationEnumMap, json['in']) ??
-        ParameterLocation.query,
-    json['name'] as String?,
-    json['description'] as String?,
-    json['required'] as bool?,
-    json['type'] as String?,
-    json['schema'] == null
-        ? null
-        : Schema.fromJson(json['schema'] as Map<String, dynamic>),
-    json['items'] == null
-        ? null
-        : Schema.fromJson(json['items'] as Map<String, dynamic>),
-    json['style'] as String?,
-    json['explode'] as bool?,
-    json[r'$ref'] as String?,
-    json['deprecated'] as bool? ?? false,
-  )
+      $enumDecodeNullable(_$ParameterLocationEnumMap, json['in']) ??
+          ParameterLocation.query,
+      json['name'] as String?,
+      json['description'] as String?,
+      json['required'] as bool?,
+      json['type'] as String?,
+      json['schema'] == null
+          ? null
+          : Schema.fromJson(json['schema'] as Map<String, dynamic>),
+      json['items'] == null
+          ? null
+          : Schema.fromJson(json['items'] as Map<String, dynamic>),
+      json['style'] as String?,
+      json['explode'] as bool?,
+      json[r'$ref'] as String?,
+      json['deprecated'] as bool? ?? false,
+    )
     ..showInExample = json['x-showInExample']
     ..example = json['example']
     ..changes = json['x-changes'];
@@ -202,7 +205,7 @@ Schema _$SchemaFromJson(Map<String, dynamic> json) {
       'default',
       'enum',
       r'$ref',
-      'items'
+      'items',
     ],
   );
   return Schema(

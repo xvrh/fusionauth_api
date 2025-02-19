@@ -21,12 +21,9 @@ void main() {
         'body': {
           'sendSetPasswordEmail': false,
           'skipVerification': true,
-          'user': {
-            'email': 'user@email.com',
-            'password': 'Bonjour99',
-          }
-        }
-      }
+          'user': {'email': 'user@email.com', 'password': 'Bonjour99'},
+        },
+      },
     ]);
   });
 }

@@ -22,12 +22,7 @@ class Spec {
   final Components components;
   final Map<String, Map<String, Object?>> paths;
 
-  Spec(
-    this.info,
-    this.tags,
-    this.components,
-    this.paths,
-  );
+  Spec(this.info, this.tags, this.components, this.paths);
 
   factory Spec.fromJson(Map<String, dynamic> json) => _$SpecFromJson(json);
 }
@@ -39,7 +34,7 @@ class Info {
   final String? version;
 
   Info({required this.title, String? description, this.version})
-      : description = description ?? '';
+    : description = description ?? '';
 
   factory Info.fromJson(Map<String, dynamic> json) => _$InfoFromJson(json);
 }
@@ -50,7 +45,7 @@ class Tag {
   final String description;
 
   Tag({required this.name, String? description})
-      : description = description ?? '';
+    : description = description ?? '';
 
   factory Tag.fromJson(Map<String, dynamic> json) => _$TagFromJson(json);
 }
@@ -63,13 +58,15 @@ class Components {
   final Map<String, Parameter> parameters;
   final Map<String, Response> responses;
 
-  Components(this.schemas, this.securitySchemes,
-      {Map<String, Request>? requestBodies,
-      Map<String, Parameter>? parameters,
-      Map<String, Response>? responses})
-      : requestBodies = requestBodies ?? {},
-        parameters = parameters ?? {},
-        responses = responses ?? {};
+  Components(
+    this.schemas,
+    this.securitySchemes, {
+    Map<String, Request>? requestBodies,
+    Map<String, Parameter>? parameters,
+    Map<String, Response>? responses,
+  }) : requestBodies = requestBodies ?? {},
+       parameters = parameters ?? {},
+       responses = responses ?? {};
 
   factory Components.fromJson(Map<String, dynamic> json) =>
       _$ComponentsFromJson(json);
@@ -86,20 +83,20 @@ class Path {
   final Map<String, Response> responses;
   final Request? requestBody;
 
-  Path(
-      {required this.description,
-      this.operationId,
-      List<String>? tags,
-      String? summary,
-      bool? deprecated,
-      List<Parameter>? parameters,
-      this.requestBody,
-      Map<String, Response>? responses})
-      : summary = summary ?? '',
-        tags = tags ?? const [],
-        deprecated = deprecated ?? false,
-        parameters = parameters ?? const [],
-        responses = responses ?? const {};
+  Path({
+    required this.description,
+    this.operationId,
+    List<String>? tags,
+    String? summary,
+    bool? deprecated,
+    List<Parameter>? parameters,
+    this.requestBody,
+    Map<String, Response>? responses,
+  }) : summary = summary ?? '',
+       tags = tags ?? const [],
+       deprecated = deprecated ?? false,
+       parameters = parameters ?? const [],
+       responses = responses ?? const {};
 
   factory Path.fromJson(Map<String, dynamic> json) => _$PathFromJson(json);
 }
@@ -117,7 +114,7 @@ class Request {
   Object? examples;
 
   Request(this.content, {bool? required, this.description, this.ref})
-      : required = required ?? false;
+    : required = required ?? false;
 
   factory Request.fromJson(Map<String, dynamic> json) =>
       _$RequestFromJson(json);
@@ -129,8 +126,8 @@ class Response {
   final Map<String, Content> content;
 
   Response({String? description, Map<String, Content>? content})
-      : content = content ?? {},
-        description = description ?? '';
+    : content = content ?? {},
+      description = description ?? '';
 
   factory Response.fromJson(Map<String, dynamic> json) =>
       _$ResponseFromJson(json);
@@ -196,9 +193,9 @@ class Parameter {
     this.explode,
     this.ref,
     this.deprecated,
-  )   : name = name ?? '',
-        description = description ?? '',
-        required = required ?? false;
+  ) : name = name ?? '',
+      description = description ?? '',
+      required = required ?? false;
 
   factory Parameter.fromJson(Map<String, dynamic> json) =>
       _$ParameterFromJson(json);
@@ -287,13 +284,12 @@ class Schema {
     this.example,
     this.discriminator,
     this.title,
-  )   : properties = properties ?? const {},
-        required = required ?? const [],
-        description = description ?? '',
-        enums = _nullIfEmpty(enums?.nonNulls
-            .map((s) => '$s')
-            .where((e) => e.isNotEmpty)
-            .toList());
+  ) : properties = properties ?? const {},
+      required = required ?? const [],
+      description = description ?? '',
+      enums = _nullIfEmpty(
+        enums?.nonNulls.map((s) => '$s').where((e) => e.isNotEmpty).toList(),
+      );
 
   factory Schema.fromJson(Map<String, dynamic> json) => _$SchemaFromJson(json);
 

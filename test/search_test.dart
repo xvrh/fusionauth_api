@@ -10,11 +10,7 @@ void main() {
 
   setUp(() {
     httpClient = Client();
-    api = FusionauthClient(
-      httpClient,
-      server,
-      apiKey: apiKey,
-    );
+    api = FusionauthClient(httpClient, server, apiKey: apiKey);
   });
 
   tearDown(() {
