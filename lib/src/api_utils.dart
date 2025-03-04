@@ -68,6 +68,10 @@ class ApiClient {
     ApiException.checkResponse(response);
 
     var decoded = _decode(response);
+    if (decoded is Map<String, dynamic>) {
+      decoded['httpStatusCode'] = response.statusCode;
+    }
+
     return decoded as T;
   }
 
@@ -164,4 +168,10 @@ class KickstartClient {
       if (tenantId != null) 'tenantId': tenantId,
     });
   }
+}
+
+abstract class BaseResponse {
+  final int httpStatus;
+
+  BaseResponse({required this.httpStatus});
 }
