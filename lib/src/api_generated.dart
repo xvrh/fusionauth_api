@@ -7208,10 +7208,10 @@ class APIKeyRequest {
 }
 
 /// Authentication key response object.
-class APIKeyResponse {
+class APIKeyResponse extends BaseResponse {
   final APIKey? apiKey;
 
-  APIKeyResponse({this.apiKey});
+  APIKeyResponse({this.apiKey, required super.httpStatus});
 
   factory APIKeyResponse.fromJson(Map<String, Object?> json) {
     return APIKeyResponse(
@@ -7219,6 +7219,7 @@ class APIKeyResponse {
           json[r'apiKey'] != null
               ? APIKey.fromJson(json[r'apiKey']! as Map<String, Object?>)
               : null,
+      httpStatus: json['httpStatusCode'] as int? ?? 200,
     );
   }
 
@@ -7233,11 +7234,14 @@ class APIKeyResponse {
   }
 
   APIKeyResponse copyWith({APIKey? apiKey}) {
-    return APIKeyResponse(apiKey: apiKey ?? this.apiKey);
+    return APIKeyResponse(
+      apiKey: apiKey ?? this.apiKey,
+      httpStatus: httpStatus,
+    );
   }
 }
 
-class AccessToken {
+class AccessToken extends BaseResponse {
   final int? expiresIn;
   final String? idToken;
   final String? refreshToken;
@@ -7256,6 +7260,7 @@ class AccessToken {
     this.accessToken,
     this.tokenType,
     this.userId,
+    required super.httpStatus,
   });
 
   factory AccessToken.fromJson(Map<String, Object?> json) {
@@ -7271,6 +7276,7 @@ class AccessToken {
               ? TokenType.fromValue(json[r'token_type']! as String)
               : null,
       userId: json[r'userId'] as String?,
+      httpStatus: json['httpStatusCode'] as int? ?? 200,
     );
   }
 
@@ -7331,6 +7337,7 @@ class AccessToken {
       accessToken: accessToken ?? this.accessToken,
       tokenType: tokenType ?? this.tokenType,
       userId: userId ?? this.userId,
+      httpStatus: httpStatus,
     );
   }
 }
@@ -7505,11 +7512,11 @@ class ActionRequest {
 }
 
 /// The user action response object.
-class ActionResponse {
+class ActionResponse extends BaseResponse {
   final UserActionLog? action;
   final List<UserActionLog>? actions;
 
-  ActionResponse({this.action, this.actions});
+  ActionResponse({this.action, this.actions, required super.httpStatus});
 
   factory ActionResponse.fromJson(Map<String, Object?> json) {
     return ActionResponse(
@@ -7525,6 +7532,7 @@ class ActionResponse {
                 ),
               )
               .toList(),
+      httpStatus: json['httpStatusCode'] as int? ?? 200,
     );
   }
 
@@ -7549,6 +7557,7 @@ class ActionResponse {
     return ActionResponse(
       action: action ?? this.action,
       actions: actions ?? this.actions,
+      httpStatus: httpStatus,
     );
   }
 }
@@ -8836,10 +8845,10 @@ class ApplicationOAuthScopeRequest {
 }
 
 /// The Application Scope API response.
-class ApplicationOAuthScopeResponse {
+class ApplicationOAuthScopeResponse extends BaseResponse {
   final ApplicationOAuthScope? scope;
 
-  ApplicationOAuthScopeResponse({this.scope});
+  ApplicationOAuthScopeResponse({this.scope, required super.httpStatus});
 
   factory ApplicationOAuthScopeResponse.fromJson(Map<String, Object?> json) {
     return ApplicationOAuthScopeResponse(
@@ -8849,6 +8858,7 @@ class ApplicationOAuthScopeResponse {
                 json[r'scope']! as Map<String, Object?>,
               )
               : null,
+      httpStatus: json['httpStatusCode'] as int? ?? 200,
     );
   }
 
@@ -8863,7 +8873,10 @@ class ApplicationOAuthScopeResponse {
   }
 
   ApplicationOAuthScopeResponse copyWith({ApplicationOAuthScope? scope}) {
-    return ApplicationOAuthScopeResponse(scope: scope ?? this.scope);
+    return ApplicationOAuthScopeResponse(
+      scope: scope ?? this.scope,
+      httpStatus: httpStatus,
+    );
   }
 }
 
@@ -8977,12 +8990,17 @@ class ApplicationRequest {
 }
 
 /// The Application API response.
-class ApplicationResponse {
+class ApplicationResponse extends BaseResponse {
   final Application? application;
   final List<Application>? applications;
   final ApplicationRole? role;
 
-  ApplicationResponse({this.application, this.applications, this.role});
+  ApplicationResponse({
+    this.application,
+    this.applications,
+    this.role,
+    required super.httpStatus,
+  });
 
   factory ApplicationResponse.fromJson(Map<String, Object?> json) {
     return ApplicationResponse(
@@ -9004,6 +9022,7 @@ class ApplicationResponse {
           json[r'role'] != null
               ? ApplicationRole.fromJson(json[r'role']! as Map<String, Object?>)
               : null,
+      httpStatus: json['httpStatusCode'] as int? ?? 200,
     );
   }
 
@@ -9034,6 +9053,7 @@ class ApplicationResponse {
       application: application ?? this.application,
       applications: applications ?? this.applications,
       role: role ?? this.role,
+      httpStatus: httpStatus,
     );
   }
 }
@@ -9256,12 +9276,17 @@ class ApplicationSearchRequest {
 }
 
 /// Application search response
-class ApplicationSearchResponse {
+class ApplicationSearchResponse extends BaseResponse {
   final List<Application>? applications;
   final int? total;
   final List<String>? expandable;
 
-  ApplicationSearchResponse({this.applications, this.total, this.expandable});
+  ApplicationSearchResponse({
+    this.applications,
+    this.total,
+    this.expandable,
+    required super.httpStatus,
+  });
 
   factory ApplicationSearchResponse.fromJson(Map<String, Object?> json) {
     return ApplicationSearchResponse(
@@ -9278,6 +9303,7 @@ class ApplicationSearchResponse {
           (json[r'expandable'] as List<Object?>?)
               ?.map((i) => i as String? ?? '')
               .toList(),
+      httpStatus: json['httpStatusCode'] as int? ?? 200,
     );
   }
 
@@ -9308,6 +9334,7 @@ class ApplicationSearchResponse {
       applications: applications ?? this.applications,
       total: total ?? this.total,
       expandable: expandable ?? this.expandable,
+      httpStatus: httpStatus,
     );
   }
 }
@@ -9761,10 +9788,10 @@ class AuditLogRequest {
 }
 
 /// Audit log response.
-class AuditLogResponse {
+class AuditLogResponse extends BaseResponse {
   final AuditLog? auditLog;
 
-  AuditLogResponse({this.auditLog});
+  AuditLogResponse({this.auditLog, required super.httpStatus});
 
   factory AuditLogResponse.fromJson(Map<String, Object?> json) {
     return AuditLogResponse(
@@ -9772,6 +9799,7 @@ class AuditLogResponse {
           json[r'auditLog'] != null
               ? AuditLog.fromJson(json[r'auditLog']! as Map<String, Object?>)
               : null,
+      httpStatus: json['httpStatusCode'] as int? ?? 200,
     );
   }
 
@@ -9786,7 +9814,10 @@ class AuditLogResponse {
   }
 
   AuditLogResponse copyWith({AuditLog? auditLog}) {
-    return AuditLogResponse(auditLog: auditLog ?? this.auditLog);
+    return AuditLogResponse(
+      auditLog: auditLog ?? this.auditLog,
+      httpStatus: httpStatus,
+    );
   }
 }
 
@@ -9935,11 +9966,15 @@ class AuditLogSearchRequest {
 }
 
 /// Audit log response.
-class AuditLogSearchResponse {
+class AuditLogSearchResponse extends BaseResponse {
   final List<AuditLog>? auditLogs;
   final int? total;
 
-  AuditLogSearchResponse({this.auditLogs, this.total});
+  AuditLogSearchResponse({
+    this.auditLogs,
+    this.total,
+    required super.httpStatus,
+  });
 
   factory AuditLogSearchResponse.fromJson(Map<String, Object?> json) {
     return AuditLogSearchResponse(
@@ -9951,6 +9986,7 @@ class AuditLogSearchResponse {
               )
               .toList(),
       total: (json[r'total'] as num?)?.toInt(),
+      httpStatus: json['httpStatusCode'] as int? ?? 200,
     );
   }
 
@@ -9972,6 +10008,7 @@ class AuditLogSearchResponse {
     return AuditLogSearchResponse(
       auditLogs: auditLogs ?? this.auditLogs,
       total: total ?? this.total,
+      httpStatus: httpStatus,
     );
   }
 }
@@ -11345,16 +11382,21 @@ class ChangePasswordRequest {
 }
 
 /// Change password response object.
-class ChangePasswordResponse {
+class ChangePasswordResponse extends BaseResponse {
   final String? oneTimePassword;
   final Map<String, dynamic>? state;
 
-  ChangePasswordResponse({this.oneTimePassword, this.state});
+  ChangePasswordResponse({
+    this.oneTimePassword,
+    this.state,
+    required super.httpStatus,
+  });
 
   factory ChangePasswordResponse.fromJson(Map<String, Object?> json) {
     return ChangePasswordResponse(
       oneTimePassword: json[r'oneTimePassword'] as String?,
       state: json[r'state'] as Map<String, Object?>?,
+      httpStatus: json['httpStatusCode'] as int? ?? 200,
     );
   }
 
@@ -11379,6 +11421,7 @@ class ChangePasswordResponse {
     return ChangePasswordResponse(
       oneTimePassword: oneTimePassword ?? this.oneTimePassword,
       state: state ?? this.state,
+      httpStatus: httpStatus,
     );
   }
 }
@@ -11573,11 +11616,15 @@ class ConnectorRequest {
   }
 }
 
-class ConnectorResponse {
+class ConnectorResponse extends BaseResponse {
   final BaseConnectorConfiguration? connector;
   final List<BaseConnectorConfiguration>? connectors;
 
-  ConnectorResponse({this.connector, this.connectors});
+  ConnectorResponse({
+    this.connector,
+    this.connectors,
+    required super.httpStatus,
+  });
 
   factory ConnectorResponse.fromJson(Map<String, Object?> json) {
     return ConnectorResponse(
@@ -11595,6 +11642,7 @@ class ConnectorResponse {
                 ),
               )
               .toList(),
+      httpStatus: json['httpStatusCode'] as int? ?? 200,
     );
   }
 
@@ -11619,6 +11667,7 @@ class ConnectorResponse {
     return ConnectorResponse(
       connector: connector ?? this.connector,
       connectors: connectors ?? this.connectors,
+      httpStatus: httpStatus,
     );
   }
 }
@@ -11800,11 +11849,11 @@ class ConsentRequest {
 }
 
 /// API response for consent.
-class ConsentResponse {
+class ConsentResponse extends BaseResponse {
   final Consent? consent;
   final List<Consent>? consents;
 
-  ConsentResponse({this.consent, this.consents});
+  ConsentResponse({this.consent, this.consents, required super.httpStatus});
 
   factory ConsentResponse.fromJson(Map<String, Object?> json) {
     return ConsentResponse(
@@ -11818,6 +11867,7 @@ class ConsentResponse {
                 (i) => Consent.fromJson(i as Map<String, Object?>? ?? const {}),
               )
               .toList(),
+      httpStatus: json['httpStatusCode'] as int? ?? 200,
     );
   }
 
@@ -11839,6 +11889,7 @@ class ConsentResponse {
     return ConsentResponse(
       consent: consent ?? this.consent,
       consents: consents ?? this.consents,
+      httpStatus: httpStatus,
     );
   }
 }
@@ -11936,11 +11987,11 @@ class ConsentSearchRequest {
 }
 
 /// Consent search response
-class ConsentSearchResponse {
+class ConsentSearchResponse extends BaseResponse {
   final List<Consent>? consents;
   final int? total;
 
-  ConsentSearchResponse({this.consents, this.total});
+  ConsentSearchResponse({this.consents, this.total, required super.httpStatus});
 
   factory ConsentSearchResponse.fromJson(Map<String, Object?> json) {
     return ConsentSearchResponse(
@@ -11951,6 +12002,7 @@ class ConsentSearchResponse {
               )
               .toList(),
       total: (json[r'total'] as num?)?.toInt(),
+      httpStatus: json['httpStatusCode'] as int? ?? 200,
     );
   }
 
@@ -11972,6 +12024,7 @@ class ConsentSearchResponse {
     return ConsentSearchResponse(
       consents: consents ?? this.consents,
       total: total ?? this.total,
+      httpStatus: httpStatus,
     );
   }
 }
@@ -12037,11 +12090,15 @@ class CredentialPropertiesOutput {
 }
 
 /// Response for the daily active user report.
-class DailyActiveUserReportResponse {
+class DailyActiveUserReportResponse extends BaseResponse {
   final List<Count>? dailyActiveUsers;
   final int? total;
 
-  DailyActiveUserReportResponse({this.dailyActiveUsers, this.total});
+  DailyActiveUserReportResponse({
+    this.dailyActiveUsers,
+    this.total,
+    required super.httpStatus,
+  });
 
   factory DailyActiveUserReportResponse.fromJson(Map<String, Object?> json) {
     return DailyActiveUserReportResponse(
@@ -12052,6 +12109,7 @@ class DailyActiveUserReportResponse {
               )
               .toList(),
       total: (json[r'total'] as num?)?.toInt(),
+      httpStatus: json['httpStatusCode'] as int? ?? 200,
     );
   }
 
@@ -12077,6 +12135,7 @@ class DailyActiveUserReportResponse {
     return DailyActiveUserReportResponse(
       dailyActiveUsers: dailyActiveUsers ?? this.dailyActiveUsers,
       total: total ?? this.total,
+      httpStatus: httpStatus,
     );
   }
 }
@@ -12116,7 +12175,7 @@ class DeleteConfiguration {
   }
 }
 
-class DeviceApprovalResponse {
+class DeviceApprovalResponse extends BaseResponse {
   final String? deviceGrantStatus;
   final DeviceInfo? deviceInfo;
   final IdentityProviderLink? identityProviderLink;
@@ -12129,6 +12188,7 @@ class DeviceApprovalResponse {
     this.identityProviderLink,
     this.tenantId,
     this.userId,
+    required super.httpStatus,
   });
 
   factory DeviceApprovalResponse.fromJson(Map<String, Object?> json) {
@@ -12148,6 +12208,7 @@ class DeviceApprovalResponse {
               : null,
       tenantId: json[r'tenantId'] as String?,
       userId: json[r'userId'] as String?,
+      httpStatus: json['httpStatusCode'] as int? ?? 200,
     );
   }
 
@@ -12190,6 +12251,7 @@ class DeviceApprovalResponse {
       identityProviderLink: identityProviderLink ?? this.identityProviderLink,
       tenantId: tenantId ?? this.tenantId,
       userId: userId ?? this.userId,
+      httpStatus: httpStatus,
     );
   }
 }
@@ -13396,11 +13458,15 @@ class EmailTemplateRequest {
 }
 
 /// Email template response.
-class EmailTemplateResponse {
+class EmailTemplateResponse extends BaseResponse {
   final EmailTemplate? emailTemplate;
   final List<EmailTemplate>? emailTemplates;
 
-  EmailTemplateResponse({this.emailTemplate, this.emailTemplates});
+  EmailTemplateResponse({
+    this.emailTemplate,
+    this.emailTemplates,
+    required super.httpStatus,
+  });
 
   factory EmailTemplateResponse.fromJson(Map<String, Object?> json) {
     return EmailTemplateResponse(
@@ -13418,6 +13484,7 @@ class EmailTemplateResponse {
                 ),
               )
               .toList(),
+      httpStatus: json['httpStatusCode'] as int? ?? 200,
     );
   }
 
@@ -13442,6 +13509,7 @@ class EmailTemplateResponse {
     return EmailTemplateResponse(
       emailTemplate: emailTemplate ?? this.emailTemplate,
       emailTemplates: emailTemplates ?? this.emailTemplates,
+      httpStatus: httpStatus,
     );
   }
 }
@@ -13539,11 +13607,15 @@ class EmailTemplateSearchRequest {
 }
 
 /// Email template search response
-class EmailTemplateSearchResponse {
+class EmailTemplateSearchResponse extends BaseResponse {
   final List<EmailTemplate>? emailTemplates;
   final int? total;
 
-  EmailTemplateSearchResponse({this.emailTemplates, this.total});
+  EmailTemplateSearchResponse({
+    this.emailTemplates,
+    this.total,
+    required super.httpStatus,
+  });
 
   factory EmailTemplateSearchResponse.fromJson(Map<String, Object?> json) {
     return EmailTemplateSearchResponse(
@@ -13556,6 +13628,7 @@ class EmailTemplateSearchResponse {
               )
               .toList(),
       total: (json[r'total'] as num?)?.toInt(),
+      httpStatus: json['httpStatusCode'] as int? ?? 200,
     );
   }
 
@@ -13580,6 +13653,7 @@ class EmailTemplateSearchResponse {
     return EmailTemplateSearchResponse(
       emailTemplates: emailTemplates ?? this.emailTemplates,
       total: total ?? this.total,
+      httpStatus: httpStatus,
     );
   }
 }
@@ -13904,11 +13978,11 @@ class EntityGrantRequest {
 }
 
 /// Entity grant API response object.
-class EntityGrantResponse {
+class EntityGrantResponse extends BaseResponse {
   final List<EntityGrant>? grants;
   final EntityGrant? grant;
 
-  EntityGrantResponse({this.grants, this.grant});
+  EntityGrantResponse({this.grants, this.grant, required super.httpStatus});
 
   factory EntityGrantResponse.fromJson(Map<String, Object?> json) {
     return EntityGrantResponse(
@@ -13924,6 +13998,7 @@ class EntityGrantResponse {
           json[r'grant'] != null
               ? EntityGrant.fromJson(json[r'grant']! as Map<String, Object?>)
               : null,
+      httpStatus: json['httpStatusCode'] as int? ?? 200,
     );
   }
 
@@ -13948,6 +14023,7 @@ class EntityGrantResponse {
     return EntityGrantResponse(
       grants: grants ?? this.grants,
       grant: grant ?? this.grant,
+      httpStatus: httpStatus,
     );
   }
 }
@@ -14063,11 +14139,15 @@ class EntityGrantSearchRequest {
 }
 
 /// Search request for entity grants.
-class EntityGrantSearchResponse {
+class EntityGrantSearchResponse extends BaseResponse {
   final List<EntityGrant>? grants;
   final int? total;
 
-  EntityGrantSearchResponse({this.grants, this.total});
+  EntityGrantSearchResponse({
+    this.grants,
+    this.total,
+    required super.httpStatus,
+  });
 
   factory EntityGrantSearchResponse.fromJson(Map<String, Object?> json) {
     return EntityGrantSearchResponse(
@@ -14080,6 +14160,7 @@ class EntityGrantSearchResponse {
               )
               .toList(),
       total: (json[r'total'] as num?)?.toInt(),
+      httpStatus: json['httpStatusCode'] as int? ?? 200,
     );
   }
 
@@ -14101,6 +14182,7 @@ class EntityGrantSearchResponse {
     return EntityGrantSearchResponse(
       grants: grants ?? this.grants,
       total: total ?? this.total,
+      httpStatus: httpStatus,
     );
   }
 }
@@ -14187,10 +14269,10 @@ class EntityRequest {
 }
 
 /// Entity API response object.
-class EntityResponse {
+class EntityResponse extends BaseResponse {
   final Entity? entity;
 
-  EntityResponse({this.entity});
+  EntityResponse({this.entity, required super.httpStatus});
 
   factory EntityResponse.fromJson(Map<String, Object?> json) {
     return EntityResponse(
@@ -14198,6 +14280,7 @@ class EntityResponse {
           json[r'entity'] != null
               ? Entity.fromJson(json[r'entity']! as Map<String, Object?>)
               : null,
+      httpStatus: json['httpStatusCode'] as int? ?? 200,
     );
   }
 
@@ -14212,7 +14295,10 @@ class EntityResponse {
   }
 
   EntityResponse copyWith({Entity? entity}) {
-    return EntityResponse(entity: entity ?? this.entity);
+    return EntityResponse(
+      entity: entity ?? this.entity,
+      httpStatus: httpStatus,
+    );
   }
 }
 
@@ -14337,12 +14423,17 @@ class EntitySearchRequest {
 }
 
 /// Search request for entities
-class EntitySearchResponse {
+class EntitySearchResponse extends BaseResponse {
   final List<Entity>? entities;
   final String? nextResults;
   final int? total;
 
-  EntitySearchResponse({this.entities, this.nextResults, this.total});
+  EntitySearchResponse({
+    this.entities,
+    this.nextResults,
+    this.total,
+    required super.httpStatus,
+  });
 
   factory EntitySearchResponse.fromJson(Map<String, Object?> json) {
     return EntitySearchResponse(
@@ -14354,6 +14445,7 @@ class EntitySearchResponse {
               .toList(),
       nextResults: json[r'nextResults'] as String?,
       total: (json[r'total'] as num?)?.toInt(),
+      httpStatus: json['httpStatusCode'] as int? ?? 200,
     );
   }
 
@@ -14384,6 +14476,7 @@ class EntitySearchResponse {
       entities: entities ?? this.entities,
       nextResults: nextResults ?? this.nextResults,
       total: total ?? this.total,
+      httpStatus: httpStatus,
     );
   }
 }
@@ -14630,12 +14723,17 @@ class EntityTypeRequest {
 }
 
 /// Entity Type API response object.
-class EntityTypeResponse {
+class EntityTypeResponse extends BaseResponse {
   final EntityType? entityType;
   final List<EntityType>? entityTypes;
   final EntityTypePermission? permission;
 
-  EntityTypeResponse({this.entityType, this.entityTypes, this.permission});
+  EntityTypeResponse({
+    this.entityType,
+    this.entityTypes,
+    this.permission,
+    required super.httpStatus,
+  });
 
   factory EntityTypeResponse.fromJson(Map<String, Object?> json) {
     return EntityTypeResponse(
@@ -14658,6 +14756,7 @@ class EntityTypeResponse {
                 json[r'permission']! as Map<String, Object?>,
               )
               : null,
+      httpStatus: json['httpStatusCode'] as int? ?? 200,
     );
   }
 
@@ -14688,6 +14787,7 @@ class EntityTypeResponse {
       entityType: entityType ?? this.entityType,
       entityTypes: entityTypes ?? this.entityTypes,
       permission: permission ?? this.permission,
+      httpStatus: httpStatus,
     );
   }
 }
@@ -14785,11 +14885,15 @@ class EntityTypeSearchRequest {
 }
 
 /// Search response for entity types.
-class EntityTypeSearchResponse {
+class EntityTypeSearchResponse extends BaseResponse {
   final List<EntityType>? entityTypes;
   final int? total;
 
-  EntityTypeSearchResponse({this.entityTypes, this.total});
+  EntityTypeSearchResponse({
+    this.entityTypes,
+    this.total,
+    required super.httpStatus,
+  });
 
   factory EntityTypeSearchResponse.fromJson(Map<String, Object?> json) {
     return EntityTypeSearchResponse(
@@ -14801,6 +14905,7 @@ class EntityTypeSearchResponse {
               )
               .toList(),
       total: (json[r'total'] as num?)?.toInt(),
+      httpStatus: json['httpStatusCode'] as int? ?? 200,
     );
   }
 
@@ -14825,6 +14930,7 @@ class EntityTypeSearchResponse {
     return EntityTypeSearchResponse(
       entityTypes: entityTypes ?? this.entityTypes,
       total: total ?? this.total,
+      httpStatus: httpStatus,
     );
   }
 }
@@ -15517,10 +15623,10 @@ class EventLogCreateEvent {
 }
 
 /// Event log response.
-class EventLogResponse {
+class EventLogResponse extends BaseResponse {
   final EventLog? eventLog;
 
-  EventLogResponse({this.eventLog});
+  EventLogResponse({this.eventLog, required super.httpStatus});
 
   factory EventLogResponse.fromJson(Map<String, Object?> json) {
     return EventLogResponse(
@@ -15528,6 +15634,7 @@ class EventLogResponse {
           json[r'eventLog'] != null
               ? EventLog.fromJson(json[r'eventLog']! as Map<String, Object?>)
               : null,
+      httpStatus: json['httpStatusCode'] as int? ?? 200,
     );
   }
 
@@ -15542,7 +15649,10 @@ class EventLogResponse {
   }
 
   EventLogResponse copyWith({EventLog? eventLog}) {
-    return EventLogResponse(eventLog: eventLog ?? this.eventLog);
+    return EventLogResponse(
+      eventLog: eventLog ?? this.eventLog,
+      httpStatus: httpStatus,
+    );
   }
 }
 
@@ -15668,11 +15778,15 @@ class EventLogSearchRequest {
 }
 
 /// Event log response.
-class EventLogSearchResponse {
+class EventLogSearchResponse extends BaseResponse {
   final List<EventLog>? eventLogs;
   final int? total;
 
-  EventLogSearchResponse({this.eventLogs, this.total});
+  EventLogSearchResponse({
+    this.eventLogs,
+    this.total,
+    required super.httpStatus,
+  });
 
   factory EventLogSearchResponse.fromJson(Map<String, Object?> json) {
     return EventLogSearchResponse(
@@ -15684,6 +15798,7 @@ class EventLogSearchResponse {
               )
               .toList(),
       total: (json[r'total'] as num?)?.toInt(),
+      httpStatus: json['httpStatusCode'] as int? ?? 200,
     );
   }
 
@@ -15705,6 +15820,7 @@ class EventLogSearchResponse {
     return EventLogSearchResponse(
       eventLogs: eventLogs ?? this.eventLogs,
       total: total ?? this.total,
+      httpStatus: httpStatus,
     );
   }
 }
@@ -17235,11 +17351,11 @@ class FamilyRequest {
 }
 
 /// API response for managing families and members.
-class FamilyResponse {
+class FamilyResponse extends BaseResponse {
   final List<Family>? families;
   final Family? family;
 
-  FamilyResponse({this.families, this.family});
+  FamilyResponse({this.families, this.family, required super.httpStatus});
 
   factory FamilyResponse.fromJson(Map<String, Object?> json) {
     return FamilyResponse(
@@ -17253,6 +17369,7 @@ class FamilyResponse {
           json[r'family'] != null
               ? Family.fromJson(json[r'family']! as Map<String, Object?>)
               : null,
+      httpStatus: json['httpStatusCode'] as int? ?? 200,
     );
   }
 
@@ -17274,6 +17391,7 @@ class FamilyResponse {
     return FamilyResponse(
       families: families ?? this.families,
       family: family ?? this.family,
+      httpStatus: httpStatus,
     );
   }
 }
@@ -17379,14 +17497,15 @@ class ForgotPasswordRequest {
 }
 
 /// Forgot password response object.
-class ForgotPasswordResponse {
+class ForgotPasswordResponse extends BaseResponse {
   final String? changePasswordId;
 
-  ForgotPasswordResponse({this.changePasswordId});
+  ForgotPasswordResponse({this.changePasswordId, required super.httpStatus});
 
   factory ForgotPasswordResponse.fromJson(Map<String, Object?> json) {
     return ForgotPasswordResponse(
       changePasswordId: json[r'changePasswordId'] as String?,
+      httpStatus: json['httpStatusCode'] as int? ?? 200,
     );
   }
 
@@ -17403,6 +17522,7 @@ class ForgotPasswordResponse {
   ForgotPasswordResponse copyWith({String? changePasswordId}) {
     return ForgotPasswordResponse(
       changePasswordId: changePasswordId ?? this.changePasswordId,
+      httpStatus: httpStatus,
     );
   }
 }
@@ -17715,11 +17835,11 @@ class FormFieldRequest {
 }
 
 /// Form field response.
-class FormFieldResponse {
+class FormFieldResponse extends BaseResponse {
   final FormField? field;
   final List<FormField>? fields;
 
-  FormFieldResponse({this.field, this.fields});
+  FormFieldResponse({this.field, this.fields, required super.httpStatus});
 
   factory FormFieldResponse.fromJson(Map<String, Object?> json) {
     return FormFieldResponse(
@@ -17734,6 +17854,7 @@ class FormFieldResponse {
                     FormField.fromJson(i as Map<String, Object?>? ?? const {}),
               )
               .toList(),
+      httpStatus: json['httpStatusCode'] as int? ?? 200,
     );
   }
 
@@ -17755,6 +17876,7 @@ class FormFieldResponse {
     return FormFieldResponse(
       field: field ?? this.field,
       fields: fields ?? this.fields,
+      httpStatus: httpStatus,
     );
   }
 }
@@ -17825,11 +17947,11 @@ class FormRequest {
 }
 
 /// Form response.
-class FormResponse {
+class FormResponse extends BaseResponse {
   final Form? form;
   final List<Form>? forms;
 
-  FormResponse({this.form, this.forms});
+  FormResponse({this.form, this.forms, required super.httpStatus});
 
   factory FormResponse.fromJson(Map<String, Object?> json) {
     return FormResponse(
@@ -17843,6 +17965,7 @@ class FormResponse {
                 (i) => Form.fromJson(i as Map<String, Object?>? ?? const {}),
               )
               .toList(),
+      httpStatus: json['httpStatusCode'] as int? ?? 200,
     );
   }
 
@@ -17861,7 +17984,11 @@ class FormResponse {
   }
 
   FormResponse copyWith({Form? form, List<Form>? forms}) {
-    return FormResponse(form: form ?? this.form, forms: forms ?? this.forms);
+    return FormResponse(
+      form: form ?? this.form,
+      forms: forms ?? this.forms,
+      httpStatus: httpStatus,
+    );
   }
 }
 
@@ -19262,11 +19389,15 @@ class GroupMemberSearchRequest {
 }
 
 /// Search response for Group Members
-class GroupMemberSearchResponse {
+class GroupMemberSearchResponse extends BaseResponse {
   final List<GroupMember>? members;
   final int? total;
 
-  GroupMemberSearchResponse({this.members, this.total});
+  GroupMemberSearchResponse({
+    this.members,
+    this.total,
+    required super.httpStatus,
+  });
 
   factory GroupMemberSearchResponse.fromJson(Map<String, Object?> json) {
     return GroupMemberSearchResponse(
@@ -19279,6 +19410,7 @@ class GroupMemberSearchResponse {
               )
               .toList(),
       total: (json[r'total'] as num?)?.toInt(),
+      httpStatus: json['httpStatusCode'] as int? ?? 200,
     );
   }
 
@@ -19300,6 +19432,7 @@ class GroupMemberSearchResponse {
     return GroupMemberSearchResponse(
       members: members ?? this.members,
       total: total ?? this.total,
+      httpStatus: httpStatus,
     );
   }
 }
@@ -19442,11 +19575,11 @@ class GroupRequest {
 }
 
 /// Group API response object.
-class GroupResponse {
+class GroupResponse extends BaseResponse {
   final Group? group;
   final List<Group>? groups;
 
-  GroupResponse({this.group, this.groups});
+  GroupResponse({this.group, this.groups, required super.httpStatus});
 
   factory GroupResponse.fromJson(Map<String, Object?> json) {
     return GroupResponse(
@@ -19460,6 +19593,7 @@ class GroupResponse {
                 (i) => Group.fromJson(i as Map<String, Object?>? ?? const {}),
               )
               .toList(),
+      httpStatus: json['httpStatusCode'] as int? ?? 200,
     );
   }
 
@@ -19481,6 +19615,7 @@ class GroupResponse {
     return GroupResponse(
       group: group ?? this.group,
       groups: groups ?? this.groups,
+      httpStatus: httpStatus,
     );
   }
 }
@@ -19587,11 +19722,11 @@ class GroupSearchRequest {
 }
 
 /// Search response for Groups
-class GroupSearchResponse {
+class GroupSearchResponse extends BaseResponse {
   final List<Group>? groups;
   final int? total;
 
-  GroupSearchResponse({this.groups, this.total});
+  GroupSearchResponse({this.groups, this.total, required super.httpStatus});
 
   factory GroupSearchResponse.fromJson(Map<String, Object?> json) {
     return GroupSearchResponse(
@@ -19602,6 +19737,7 @@ class GroupSearchResponse {
               )
               .toList(),
       total: (json[r'total'] as num?)?.toInt(),
+      httpStatus: json['httpStatusCode'] as int? ?? 200,
     );
   }
 
@@ -19623,6 +19759,7 @@ class GroupSearchResponse {
     return GroupSearchResponse(
       groups: groups ?? this.groups,
       total: total ?? this.total,
+      httpStatus: httpStatus,
     );
   }
 }
@@ -20167,13 +20304,14 @@ class IPAccessControlListRequest {
   }
 }
 
-class IPAccessControlListResponse {
+class IPAccessControlListResponse extends BaseResponse {
   final IPAccessControlList? ipAccessControlList;
   final List<IPAccessControlList>? ipAccessControlLists;
 
   IPAccessControlListResponse({
     this.ipAccessControlList,
     this.ipAccessControlLists,
+    required super.httpStatus,
   });
 
   factory IPAccessControlListResponse.fromJson(Map<String, Object?> json) {
@@ -20192,6 +20330,7 @@ class IPAccessControlListResponse {
                 ),
               )
               .toList(),
+      httpStatus: json['httpStatusCode'] as int? ?? 200,
     );
   }
 
@@ -20217,6 +20356,7 @@ class IPAccessControlListResponse {
     return IPAccessControlListResponse(
       ipAccessControlList: ipAccessControlList ?? this.ipAccessControlList,
       ipAccessControlLists: ipAccessControlLists ?? this.ipAccessControlLists,
+      httpStatus: httpStatus,
     );
   }
 }
@@ -20316,11 +20456,15 @@ class IPAccessControlListSearchRequest {
   }
 }
 
-class IPAccessControlListSearchResponse {
+class IPAccessControlListSearchResponse extends BaseResponse {
   final List<IPAccessControlList>? ipAccessControlLists;
   final int? total;
 
-  IPAccessControlListSearchResponse({this.ipAccessControlLists, this.total});
+  IPAccessControlListSearchResponse({
+    this.ipAccessControlLists,
+    this.total,
+    required super.httpStatus,
+  });
 
   factory IPAccessControlListSearchResponse.fromJson(
     Map<String, Object?> json,
@@ -20335,6 +20479,7 @@ class IPAccessControlListSearchResponse {
               )
               .toList(),
       total: (json[r'total'] as num?)?.toInt(),
+      httpStatus: json['httpStatusCode'] as int? ?? 200,
     );
   }
 
@@ -20360,6 +20505,7 @@ class IPAccessControlListSearchResponse {
     return IPAccessControlListSearchResponse(
       ipAccessControlLists: ipAccessControlLists ?? this.ipAccessControlLists,
       total: total ?? this.total,
+      httpStatus: httpStatus,
     );
   }
 }
@@ -20687,13 +20833,14 @@ class IdentityProviderLinkRequest {
   }
 }
 
-class IdentityProviderLinkResponse {
+class IdentityProviderLinkResponse extends BaseResponse {
   final IdentityProviderLink? identityProviderLink;
   final List<IdentityProviderLink>? identityProviderLinks;
 
   IdentityProviderLinkResponse({
     this.identityProviderLink,
     this.identityProviderLinks,
+    required super.httpStatus,
   });
 
   factory IdentityProviderLinkResponse.fromJson(Map<String, Object?> json) {
@@ -20712,6 +20859,7 @@ class IdentityProviderLinkResponse {
                 ),
               )
               .toList(),
+      httpStatus: json['httpStatusCode'] as int? ?? 200,
     );
   }
 
@@ -20738,6 +20886,7 @@ class IdentityProviderLinkResponse {
       identityProviderLink: identityProviderLink ?? this.identityProviderLink,
       identityProviderLinks:
           identityProviderLinks ?? this.identityProviderLinks,
+      httpStatus: httpStatus,
     );
   }
 }
@@ -20991,7 +21140,7 @@ class IdentityProviderOauth2Configuration {
   }
 }
 
-class IdentityProviderPendingLinkResponse {
+class IdentityProviderPendingLinkResponse extends BaseResponse {
   final IdentityProviderTenantConfiguration?
   identityProviderTenantConfiguration;
   final int? linkCount;
@@ -21001,6 +21150,7 @@ class IdentityProviderPendingLinkResponse {
     this.identityProviderTenantConfiguration,
     this.linkCount,
     this.pendingIdpLink,
+    required super.httpStatus,
   });
 
   factory IdentityProviderPendingLinkResponse.fromJson(
@@ -21021,6 +21171,7 @@ class IdentityProviderPendingLinkResponse {
                 json[r'pendingIdPLink']! as Map<String, Object?>,
               )
               : null,
+      httpStatus: json['httpStatusCode'] as int? ?? 200,
     );
   }
 
@@ -21055,6 +21206,7 @@ class IdentityProviderPendingLinkResponse {
           this.identityProviderTenantConfiguration,
       linkCount: linkCount ?? this.linkCount,
       pendingIdpLink: pendingIdpLink ?? this.pendingIdpLink,
+      httpStatus: httpStatus,
     );
   }
 }
@@ -21092,11 +21244,15 @@ class IdentityProviderRequest {
   }
 }
 
-class IdentityProviderResponse {
+class IdentityProviderResponse extends BaseResponse {
   final IdentityProviderField? identityProvider;
   final List<IdentityProviderField>? identityProviders;
 
-  IdentityProviderResponse({this.identityProvider, this.identityProviders});
+  IdentityProviderResponse({
+    this.identityProvider,
+    this.identityProviders,
+    required super.httpStatus,
+  });
 
   factory IdentityProviderResponse.fromJson(Map<String, Object?> json) {
     return IdentityProviderResponse(
@@ -21114,6 +21270,7 @@ class IdentityProviderResponse {
                 ),
               )
               .toList(),
+      httpStatus: json['httpStatusCode'] as int? ?? 200,
     );
   }
 
@@ -21139,6 +21296,7 @@ class IdentityProviderResponse {
     return IdentityProviderResponse(
       identityProvider: identityProvider ?? this.identityProvider,
       identityProviders: identityProviders ?? this.identityProviders,
+      httpStatus: httpStatus,
     );
   }
 }
@@ -21259,11 +21417,15 @@ class IdentityProviderSearchRequest {
 }
 
 /// Identity Provider response.
-class IdentityProviderSearchResponse {
+class IdentityProviderSearchResponse extends BaseResponse {
   final List<IdentityProviderField>? identityProviders;
   final int? total;
 
-  IdentityProviderSearchResponse({this.identityProviders, this.total});
+  IdentityProviderSearchResponse({
+    this.identityProviders,
+    this.total,
+    required super.httpStatus,
+  });
 
   factory IdentityProviderSearchResponse.fromJson(Map<String, Object?> json) {
     return IdentityProviderSearchResponse(
@@ -21276,6 +21438,7 @@ class IdentityProviderSearchResponse {
               )
               .toList(),
       total: (json[r'total'] as num?)?.toInt(),
+      httpStatus: json['httpStatusCode'] as int? ?? 200,
     );
   }
 
@@ -21301,6 +21464,7 @@ class IdentityProviderSearchResponse {
     return IdentityProviderSearchResponse(
       identityProviders: identityProviders ?? this.identityProviders,
       total: total ?? this.total,
+      httpStatus: httpStatus,
     );
   }
 }
@@ -21414,15 +21578,18 @@ class IdentityProviderStartLoginRequest {
   }
 }
 
-class IdentityProviderStartLoginResponse {
+class IdentityProviderStartLoginResponse extends BaseResponse {
   final String? code;
 
-  IdentityProviderStartLoginResponse({this.code});
+  IdentityProviderStartLoginResponse({this.code, required super.httpStatus});
 
   factory IdentityProviderStartLoginResponse.fromJson(
     Map<String, Object?> json,
   ) {
-    return IdentityProviderStartLoginResponse(code: json[r'code'] as String?);
+    return IdentityProviderStartLoginResponse(
+      code: json[r'code'] as String?,
+      httpStatus: json['httpStatusCode'] as int? ?? 200,
+    );
   }
 
   Map<String, Object?> toJson() {
@@ -21436,7 +21603,10 @@ class IdentityProviderStartLoginResponse {
   }
 
   IdentityProviderStartLoginResponse copyWith({String? code}) {
-    return IdentityProviderStartLoginResponse(code: code ?? this.code);
+    return IdentityProviderStartLoginResponse(
+      code: code ?? this.code,
+      httpStatus: httpStatus,
+    );
   }
 }
 
@@ -21605,10 +21775,10 @@ class IntegrationRequest {
 }
 
 /// The Integration Response
-class IntegrationResponse {
+class IntegrationResponse extends BaseResponse {
   final Integrations? integrations;
 
-  IntegrationResponse({this.integrations});
+  IntegrationResponse({this.integrations, required super.httpStatus});
 
   factory IntegrationResponse.fromJson(Map<String, Object?> json) {
     return IntegrationResponse(
@@ -21618,6 +21788,7 @@ class IntegrationResponse {
                 json[r'integrations']! as Map<String, Object?>,
               )
               : null,
+      httpStatus: json['httpStatusCode'] as int? ?? 200,
     );
   }
 
@@ -21632,7 +21803,10 @@ class IntegrationResponse {
   }
 
   IntegrationResponse copyWith({Integrations? integrations}) {
-    return IntegrationResponse(integrations: integrations ?? this.integrations);
+    return IntegrationResponse(
+      integrations: integrations ?? this.integrations,
+      httpStatus: httpStatus,
+    );
   }
 }
 
@@ -21692,16 +21866,17 @@ extension type IntrospectResponse(Map<String, dynamic> map)
   Map<String, dynamic> toJson() => map;
 }
 
-class IssueResponse {
+class IssueResponse extends BaseResponse {
   final String? refreshToken;
   final String? token;
 
-  IssueResponse({this.refreshToken, this.token});
+  IssueResponse({this.refreshToken, this.token, required super.httpStatus});
 
   factory IssueResponse.fromJson(Map<String, Object?> json) {
     return IssueResponse(
       refreshToken: json[r'refreshToken'] as String?,
       token: json[r'token'] as String?,
+      httpStatus: json['httpStatusCode'] as int? ?? 200,
     );
   }
 
@@ -21723,6 +21898,7 @@ class IssueResponse {
     return IssueResponse(
       refreshToken: refreshToken ?? this.refreshToken,
       token: token ?? this.token,
+      httpStatus: httpStatus,
     );
   }
 }
@@ -21942,10 +22118,10 @@ extension type JSONWebKeyInfoProvider(Map<String, dynamic> map)
   Map<String, dynamic> toJson() => map;
 }
 
-class JWKSResponse {
+class JWKSResponse extends BaseResponse {
   final List<JSONWebKey>? keys;
 
-  JWKSResponse({this.keys});
+  JWKSResponse({this.keys, required super.httpStatus});
 
   factory JWKSResponse.fromJson(Map<String, Object?> json) {
     return JWKSResponse(
@@ -21956,6 +22132,7 @@ class JWKSResponse {
                     JSONWebKey.fromJson(i as Map<String, Object?>? ?? const {}),
               )
               .toList(),
+      httpStatus: json['httpStatusCode'] as int? ?? 200,
     );
   }
 
@@ -21970,7 +22147,7 @@ class JWKSResponse {
   }
 
   JWKSResponse copyWith({List<JSONWebKey>? keys}) {
-    return JWKSResponse(keys: keys ?? this.keys);
+    return JWKSResponse(keys: keys ?? this.keys, httpStatus: httpStatus);
   }
 }
 
@@ -22448,18 +22625,24 @@ class JWTRefreshEvent {
 /// API response for refreshing a JWT with a Refresh Token.  <p>  Using a
 /// different response object from RefreshTokenResponse because the retrieve
 /// response will return an object for refreshToken, and this is a  string.
-class JWTRefreshResponse {
+class JWTRefreshResponse extends BaseResponse {
   final String? refreshToken;
   final String? refreshTokenId;
   final String? token;
 
-  JWTRefreshResponse({this.refreshToken, this.refreshTokenId, this.token});
+  JWTRefreshResponse({
+    this.refreshToken,
+    this.refreshTokenId,
+    this.token,
+    required super.httpStatus,
+  });
 
   factory JWTRefreshResponse.fromJson(Map<String, Object?> json) {
     return JWTRefreshResponse(
       refreshToken: json[r'refreshToken'] as String?,
       refreshTokenId: json[r'refreshTokenId'] as String?,
       token: json[r'token'] as String?,
+      httpStatus: json['httpStatusCode'] as int? ?? 200,
     );
   }
 
@@ -22490,6 +22673,7 @@ class JWTRefreshResponse {
       refreshToken: refreshToken ?? this.refreshToken,
       refreshTokenId: refreshTokenId ?? this.refreshTokenId,
       token: token ?? this.token,
+      httpStatus: httpStatus,
     );
   }
 }
@@ -22672,13 +22856,16 @@ class JWTVendRequest {
   }
 }
 
-class JWTVendResponse {
+class JWTVendResponse extends BaseResponse {
   final String? token;
 
-  JWTVendResponse({this.token});
+  JWTVendResponse({this.token, required super.httpStatus});
 
   factory JWTVendResponse.fromJson(Map<String, Object?> json) {
-    return JWTVendResponse(token: json[r'token'] as String?);
+    return JWTVendResponse(
+      token: json[r'token'] as String?,
+      httpStatus: json['httpStatusCode'] as int? ?? 200,
+    );
   }
 
   Map<String, Object?> toJson() {
@@ -22692,7 +22879,7 @@ class JWTVendResponse {
   }
 
   JWTVendResponse copyWith({String? token}) {
-    return JWTVendResponse(token: token ?? this.token);
+    return JWTVendResponse(token: token ?? this.token, httpStatus: httpStatus);
   }
 }
 
@@ -23075,11 +23262,11 @@ class KeyRequest {
 }
 
 /// Key API response object.
-class KeyResponse {
+class KeyResponse extends BaseResponse {
   final Key? key;
   final List<Key>? keys;
 
-  KeyResponse({this.key, this.keys});
+  KeyResponse({this.key, this.keys, required super.httpStatus});
 
   factory KeyResponse.fromJson(Map<String, Object?> json) {
     return KeyResponse(
@@ -23091,6 +23278,7 @@ class KeyResponse {
           (json[r'keys'] as List<Object?>?)
               ?.map((i) => Key.fromJson(i as Map<String, Object?>? ?? const {}))
               .toList(),
+      httpStatus: json['httpStatusCode'] as int? ?? 200,
     );
   }
 
@@ -23109,7 +23297,11 @@ class KeyResponse {
   }
 
   KeyResponse copyWith({Key? key, List<Key>? keys}) {
-    return KeyResponse(key: key ?? this.key, keys: keys ?? this.keys);
+    return KeyResponse(
+      key: key ?? this.key,
+      keys: keys ?? this.keys,
+      httpStatus: httpStatus,
+    );
   }
 }
 
@@ -23230,11 +23422,11 @@ class KeySearchRequest {
 }
 
 /// Key search response
-class KeySearchResponse {
+class KeySearchResponse extends BaseResponse {
   final List<Key>? keys;
   final int? total;
 
-  KeySearchResponse({this.keys, this.total});
+  KeySearchResponse({this.keys, this.total, required super.httpStatus});
 
   factory KeySearchResponse.fromJson(Map<String, Object?> json) {
     return KeySearchResponse(
@@ -23243,6 +23435,7 @@ class KeySearchResponse {
               ?.map((i) => Key.fromJson(i as Map<String, Object?>? ?? const {}))
               .toList(),
       total: (json[r'total'] as num?)?.toInt(),
+      httpStatus: json['httpStatusCode'] as int? ?? 200,
     );
   }
 
@@ -23264,6 +23457,7 @@ class KeySearchResponse {
     return KeySearchResponse(
       keys: keys ?? this.keys,
       total: total ?? this.total,
+      httpStatus: httpStatus,
     );
   }
 }
@@ -23766,11 +23960,11 @@ class LambdaRequest {
 }
 
 /// Lambda API response object.
-class LambdaResponse {
+class LambdaResponse extends BaseResponse {
   final Lambda? lambda;
   final List<Lambda>? lambdas;
 
-  LambdaResponse({this.lambda, this.lambdas});
+  LambdaResponse({this.lambda, this.lambdas, required super.httpStatus});
 
   factory LambdaResponse.fromJson(Map<String, Object?> json) {
     return LambdaResponse(
@@ -23784,6 +23978,7 @@ class LambdaResponse {
                 (i) => Lambda.fromJson(i as Map<String, Object?>? ?? const {}),
               )
               .toList(),
+      httpStatus: json['httpStatusCode'] as int? ?? 200,
     );
   }
 
@@ -23805,6 +24000,7 @@ class LambdaResponse {
     return LambdaResponse(
       lambda: lambda ?? this.lambda,
       lambdas: lambdas ?? this.lambdas,
+      httpStatus: httpStatus,
     );
   }
 }
@@ -23923,11 +24119,11 @@ class LambdaSearchRequest {
 }
 
 /// Lambda search response
-class LambdaSearchResponse {
+class LambdaSearchResponse extends BaseResponse {
   final List<Lambda>? lambdas;
   final int? total;
 
-  LambdaSearchResponse({this.lambdas, this.total});
+  LambdaSearchResponse({this.lambdas, this.total, required super.httpStatus});
 
   factory LambdaSearchResponse.fromJson(Map<String, Object?> json) {
     return LambdaSearchResponse(
@@ -23938,6 +24134,7 @@ class LambdaSearchResponse {
               )
               .toList(),
       total: (json[r'total'] as num?)?.toInt(),
+      httpStatus: json['httpStatusCode'] as int? ?? 200,
     );
   }
 
@@ -23959,6 +24156,7 @@ class LambdaSearchResponse {
     return LambdaSearchResponse(
       lambdas: lambdas ?? this.lambdas,
       total: total ?? this.total,
+      httpStatus: httpStatus,
     );
   }
 }
@@ -24855,11 +25053,15 @@ class LoginRecordSearchRequest {
 }
 
 /// A raw login record response
-class LoginRecordSearchResponse {
+class LoginRecordSearchResponse extends BaseResponse {
   final List<DisplayableRawLogin>? logins;
   final int? total;
 
-  LoginRecordSearchResponse({this.logins, this.total});
+  LoginRecordSearchResponse({
+    this.logins,
+    this.total,
+    required super.httpStatus,
+  });
 
   factory LoginRecordSearchResponse.fromJson(Map<String, Object?> json) {
     return LoginRecordSearchResponse(
@@ -24872,6 +25074,7 @@ class LoginRecordSearchResponse {
               )
               .toList(),
       total: (json[r'total'] as num?)?.toInt(),
+      httpStatus: json['httpStatusCode'] as int? ?? 200,
     );
   }
 
@@ -24896,16 +25099,21 @@ class LoginRecordSearchResponse {
     return LoginRecordSearchResponse(
       logins: logins ?? this.logins,
       total: total ?? this.total,
+      httpStatus: httpStatus,
     );
   }
 }
 
 /// Response for the login report.
-class LoginReportResponse {
+class LoginReportResponse extends BaseResponse {
   final List<Count>? hourlyCounts;
   final int? total;
 
-  LoginReportResponse({this.hourlyCounts, this.total});
+  LoginReportResponse({
+    this.hourlyCounts,
+    this.total,
+    required super.httpStatus,
+  });
 
   factory LoginReportResponse.fromJson(Map<String, Object?> json) {
     return LoginReportResponse(
@@ -24916,6 +25124,7 @@ class LoginReportResponse {
               )
               .toList(),
       total: (json[r'total'] as num?)?.toInt(),
+      httpStatus: json['httpStatusCode'] as int? ?? 200,
     );
   }
 
@@ -24937,6 +25146,7 @@ class LoginReportResponse {
     return LoginReportResponse(
       hourlyCounts: hourlyCounts ?? this.hourlyCounts,
       total: total ?? this.total,
+      httpStatus: httpStatus,
     );
   }
 }
@@ -25049,7 +25259,7 @@ class LoginRequest {
   }
 }
 
-class LoginResponse {
+class LoginResponse extends BaseResponse {
   final List<LoginPreventedResponse>? actions;
   final String? changePasswordId;
   final ChangePasswordReason? changePasswordReason;
@@ -25088,6 +25298,7 @@ class LoginResponse {
     this.twoFactorId,
     this.twoFactorTrustId,
     this.user,
+    required super.httpStatus,
   });
 
   factory LoginResponse.fromJson(Map<String, Object?> json) {
@@ -25138,6 +25349,7 @@ class LoginResponse {
           json[r'user'] != null
               ? User.fromJson(json[r'user']! as Map<String, Object?>)
               : null,
+      httpStatus: json['httpStatusCode'] as int? ?? 200,
     );
   }
 
@@ -25260,6 +25472,7 @@ class LoginResponse {
       twoFactorId: twoFactorId ?? this.twoFactorId,
       twoFactorTrustId: twoFactorTrustId ?? this.twoFactorTrustId,
       user: user ?? this.user,
+      httpStatus: httpStatus,
     );
   }
 }
@@ -25315,10 +25528,10 @@ class LogoutRequest {
   }
 }
 
-class LookupResponse {
+class LookupResponse extends BaseResponse {
   final IdentityProviderDetails? identityProvider;
 
-  LookupResponse({this.identityProvider});
+  LookupResponse({this.identityProvider, required super.httpStatus});
 
   factory LookupResponse.fromJson(Map<String, Object?> json) {
     return LookupResponse(
@@ -25328,6 +25541,7 @@ class LookupResponse {
                 json[r'identityProvider']! as Map<String, Object?>,
               )
               : null,
+      httpStatus: json['httpStatusCode'] as int? ?? 200,
     );
   }
 
@@ -25344,6 +25558,7 @@ class LookupResponse {
   LookupResponse copyWith({IdentityProviderDetails? identityProvider}) {
     return LookupResponse(
       identityProvider: identityProvider ?? this.identityProvider,
+      httpStatus: httpStatus,
     );
   }
 }
@@ -25475,10 +25690,10 @@ class MemberRequest {
 }
 
 /// Group Member Response
-class MemberResponse {
+class MemberResponse extends BaseResponse {
   final List<GroupMember>? members;
 
-  MemberResponse({this.members});
+  MemberResponse({this.members, required super.httpStatus});
 
   factory MemberResponse.fromJson(Map<String, Object?> json) {
     return MemberResponse(
@@ -25490,6 +25705,7 @@ class MemberResponse {
                 ),
               )
               .toList(),
+      httpStatus: json['httpStatusCode'] as int? ?? 200,
     );
   }
 
@@ -25504,7 +25720,10 @@ class MemberResponse {
   }
 
   MemberResponse copyWith({List<GroupMember>? members}) {
-    return MemberResponse(members: members ?? this.members);
+    return MemberResponse(
+      members: members ?? this.members,
+      httpStatus: httpStatus,
+    );
   }
 }
 
@@ -25631,11 +25850,15 @@ class MessageTemplateRequest {
   }
 }
 
-class MessageTemplateResponse {
+class MessageTemplateResponse extends BaseResponse {
   final MessageTemplate? messageTemplate;
   final List<MessageTemplate>? messageTemplates;
 
-  MessageTemplateResponse({this.messageTemplate, this.messageTemplates});
+  MessageTemplateResponse({
+    this.messageTemplate,
+    this.messageTemplates,
+    required super.httpStatus,
+  });
 
   factory MessageTemplateResponse.fromJson(Map<String, Object?> json) {
     return MessageTemplateResponse(
@@ -25653,6 +25876,7 @@ class MessageTemplateResponse {
                 ),
               )
               .toList(),
+      httpStatus: json['httpStatusCode'] as int? ?? 200,
     );
   }
 
@@ -25678,6 +25902,7 @@ class MessageTemplateResponse {
     return MessageTemplateResponse(
       messageTemplate: messageTemplate ?? this.messageTemplate,
       messageTemplates: messageTemplates ?? this.messageTemplates,
+      httpStatus: httpStatus,
     );
   }
 }
@@ -25713,11 +25938,15 @@ class MessengerRequest {
   }
 }
 
-class MessengerResponse {
+class MessengerResponse extends BaseResponse {
   final BaseMessengerConfiguration? messenger;
   final List<BaseMessengerConfiguration>? messengers;
 
-  MessengerResponse({this.messenger, this.messengers});
+  MessengerResponse({
+    this.messenger,
+    this.messengers,
+    required super.httpStatus,
+  });
 
   factory MessengerResponse.fromJson(Map<String, Object?> json) {
     return MessengerResponse(
@@ -25735,6 +25964,7 @@ class MessengerResponse {
                 ),
               )
               .toList(),
+      httpStatus: json['httpStatusCode'] as int? ?? 200,
     );
   }
 
@@ -25759,6 +25989,7 @@ class MessengerResponse {
     return MessengerResponse(
       messenger: messenger ?? this.messenger,
       messengers: messengers ?? this.messengers,
+      httpStatus: httpStatus,
     );
   }
 }
@@ -25855,11 +26086,15 @@ class MinimumPasswordAge {
 }
 
 /// Response for the daily active user report.
-class MonthlyActiveUserReportResponse {
+class MonthlyActiveUserReportResponse extends BaseResponse {
   final List<Count>? monthlyActiveUsers;
   final int? total;
 
-  MonthlyActiveUserReportResponse({this.monthlyActiveUsers, this.total});
+  MonthlyActiveUserReportResponse({
+    this.monthlyActiveUsers,
+    this.total,
+    required super.httpStatus,
+  });
 
   factory MonthlyActiveUserReportResponse.fromJson(Map<String, Object?> json) {
     return MonthlyActiveUserReportResponse(
@@ -25870,6 +26105,7 @@ class MonthlyActiveUserReportResponse {
               )
               .toList(),
       total: (json[r'total'] as num?)?.toInt(),
+      httpStatus: json['httpStatusCode'] as int? ?? 200,
     );
   }
 
@@ -25895,6 +26131,7 @@ class MonthlyActiveUserReportResponse {
     return MonthlyActiveUserReportResponse(
       monthlyActiveUsers: monthlyActiveUsers ?? this.monthlyActiveUsers,
       total: total ?? this.total,
+      httpStatus: httpStatus,
     );
   }
 }
@@ -26667,7 +26904,7 @@ class OAuth2Configuration {
   }
 }
 
-class OAuthConfigurationResponse {
+class OAuthConfigurationResponse extends BaseResponse {
   final int? httpSessionMaxInactiveInterval;
   final String? logoutUrl;
   final OAuth2Configuration? oauthConfiguration;
@@ -26676,6 +26913,7 @@ class OAuthConfigurationResponse {
     this.httpSessionMaxInactiveInterval,
     this.logoutUrl,
     this.oauthConfiguration,
+    required super.httpStatus,
   });
 
   factory OAuthConfigurationResponse.fromJson(Map<String, Object?> json) {
@@ -26689,6 +26927,7 @@ class OAuthConfigurationResponse {
                 json[r'oauthConfiguration']! as Map<String, Object?>,
               )
               : null,
+      httpStatus: json['httpStatusCode'] as int? ?? 200,
     );
   }
 
@@ -26720,6 +26959,7 @@ class OAuthConfigurationResponse {
           httpSessionMaxInactiveInterval ?? this.httpSessionMaxInactiveInterval,
       logoutUrl: logoutUrl ?? this.logoutUrl,
       oauthConfiguration: oauthConfiguration ?? this.oauthConfiguration,
+      httpStatus: httpStatus,
     );
   }
 }
@@ -26843,7 +27083,7 @@ extension type ObjectIdentifiable(Map<String, dynamic> map)
 /// OpenID Connect Configuration as described by the <a
 /// href="https:openid.netspecsopenid-connect-discovery-1_0.html#ProviderMetadata">OpenID
 ///  Provider Metadata<a>.
-class OpenIdConfiguration {
+class OpenIdConfiguration extends BaseResponse {
   final String? authorizationEndpoint;
   final bool? backchannelLogoutSupported;
   final List<String>? claimsSupported;
@@ -26882,6 +27122,7 @@ class OpenIdConfiguration {
     this.tokenEndpointAuthMethodsSupported,
     this.userinfoEndpoint,
     this.userinfoSigningAlgValuesSupported,
+    required super.httpStatus,
   });
 
   factory OpenIdConfiguration.fromJson(Map<String, Object?> json) {
@@ -26934,6 +27175,7 @@ class OpenIdConfiguration {
           (json[r'userinfo_signing_alg_values_supported'] as List<Object?>?)
               ?.map((i) => i as String? ?? '')
               .toList(),
+      httpStatus: json['httpStatusCode'] as int? ?? 200,
     );
   }
 
@@ -27073,6 +27315,7 @@ class OpenIdConfiguration {
       userinfoSigningAlgValuesSupported:
           userinfoSigningAlgValuesSupported ??
           this.userinfoSigningAlgValuesSupported,
+      httpStatus: httpStatus,
     );
   }
 }
@@ -27569,10 +27812,13 @@ class PasswordValidationRules {
   }
 }
 
-class PasswordValidationRulesResponse {
+class PasswordValidationRulesResponse extends BaseResponse {
   final PasswordValidationRules? passwordValidationRules;
 
-  PasswordValidationRulesResponse({this.passwordValidationRules});
+  PasswordValidationRulesResponse({
+    this.passwordValidationRules,
+    required super.httpStatus,
+  });
 
   factory PasswordValidationRulesResponse.fromJson(Map<String, Object?> json) {
     return PasswordValidationRulesResponse(
@@ -27582,6 +27828,7 @@ class PasswordValidationRulesResponse {
                 json[r'passwordValidationRules']! as Map<String, Object?>,
               )
               : null,
+      httpStatus: json['httpStatusCode'] as int? ?? 200,
     );
   }
 
@@ -27601,6 +27848,7 @@ class PasswordValidationRulesResponse {
     return PasswordValidationRulesResponse(
       passwordValidationRules:
           passwordValidationRules ?? this.passwordValidationRules,
+      httpStatus: httpStatus,
     );
   }
 }
@@ -27832,13 +28080,16 @@ class PasswordlessStartRequest {
   }
 }
 
-class PasswordlessStartResponse {
+class PasswordlessStartResponse extends BaseResponse {
   final String? code;
 
-  PasswordlessStartResponse({this.code});
+  PasswordlessStartResponse({this.code, required super.httpStatus});
 
   factory PasswordlessStartResponse.fromJson(Map<String, Object?> json) {
-    return PasswordlessStartResponse(code: json[r'code'] as String?);
+    return PasswordlessStartResponse(
+      code: json[r'code'] as String?,
+      httpStatus: json['httpStatusCode'] as int? ?? 200,
+    );
   }
 
   Map<String, Object?> toJson() {
@@ -27852,7 +28103,10 @@ class PasswordlessStartResponse {
   }
 
   PasswordlessStartResponse copyWith({String? code}) {
-    return PasswordlessStartResponse(code: code ?? this.code);
+    return PasswordlessStartResponse(
+      code: code ?? this.code,
+      httpStatus: httpStatus,
+    );
   }
 }
 
@@ -27998,10 +28252,10 @@ class PendingIdPLink {
   }
 }
 
-class PendingResponse {
+class PendingResponse extends BaseResponse {
   final List<User>? users;
 
-  PendingResponse({this.users});
+  PendingResponse({this.users, required super.httpStatus});
 
   factory PendingResponse.fromJson(Map<String, Object?> json) {
     return PendingResponse(
@@ -28011,6 +28265,7 @@ class PendingResponse {
                 (i) => User.fromJson(i as Map<String, Object?>? ?? const {}),
               )
               .toList(),
+      httpStatus: json['httpStatusCode'] as int? ?? 200,
     );
   }
 
@@ -28025,7 +28280,7 @@ class PendingResponse {
   }
 
   PendingResponse copyWith({List<User>? users}) {
-    return PendingResponse(users: users ?? this.users);
+    return PendingResponse(users: users ?? this.users, httpStatus: httpStatus);
   }
 }
 
@@ -28072,11 +28327,15 @@ class PreviewMessageTemplateRequest {
   }
 }
 
-class PreviewMessageTemplateResponse {
+class PreviewMessageTemplateResponse extends BaseResponse {
   final Errors? errors;
   final SMSMessage? message;
 
-  PreviewMessageTemplateResponse({this.errors, this.message});
+  PreviewMessageTemplateResponse({
+    this.errors,
+    this.message,
+    required super.httpStatus,
+  });
 
   factory PreviewMessageTemplateResponse.fromJson(Map<String, Object?> json) {
     return PreviewMessageTemplateResponse(
@@ -28088,6 +28347,7 @@ class PreviewMessageTemplateResponse {
           json[r'message'] != null
               ? SMSMessage.fromJson(json[r'message']! as Map<String, Object?>)
               : null,
+      httpStatus: json['httpStatusCode'] as int? ?? 200,
     );
   }
 
@@ -28112,6 +28372,7 @@ class PreviewMessageTemplateResponse {
     return PreviewMessageTemplateResponse(
       errors: errors ?? this.errors,
       message: message ?? this.message,
+      httpStatus: httpStatus,
     );
   }
 }
@@ -28156,11 +28417,11 @@ class PreviewRequest {
   }
 }
 
-class PreviewResponse {
+class PreviewResponse extends BaseResponse {
   final Email? email;
   final Errors? errors;
 
-  PreviewResponse({this.email, this.errors});
+  PreviewResponse({this.email, this.errors, required super.httpStatus});
 
   factory PreviewResponse.fromJson(Map<String, Object?> json) {
     return PreviewResponse(
@@ -28172,6 +28433,7 @@ class PreviewResponse {
           json[r'errors'] != null
               ? Errors.fromJson(json[r'errors']! as Map<String, Object?>)
               : null,
+      httpStatus: json['httpStatusCode'] as int? ?? 200,
     );
   }
 
@@ -28193,6 +28455,7 @@ class PreviewResponse {
     return PreviewResponse(
       email: email ?? this.email,
       errors: errors ?? this.errors,
+      httpStatus: httpStatus,
     );
   }
 }
@@ -28740,16 +29003,21 @@ class PublicKeyCredentialUserEntity {
 }
 
 /// JWT Public Key Response Object
-class PublicKeyResponse {
+class PublicKeyResponse extends BaseResponse {
   final String? publicKey;
   final Map<String, dynamic>? publicKeys;
 
-  PublicKeyResponse({this.publicKey, this.publicKeys});
+  PublicKeyResponse({
+    this.publicKey,
+    this.publicKeys,
+    required super.httpStatus,
+  });
 
   factory PublicKeyResponse.fromJson(Map<String, Object?> json) {
     return PublicKeyResponse(
       publicKey: json[r'publicKey'] as String?,
       publicKeys: json[r'publicKeys'] as Map<String, Object?>?,
+      httpStatus: json['httpStatusCode'] as int? ?? 200,
     );
   }
 
@@ -28774,6 +29042,7 @@ class PublicKeyResponse {
     return PublicKeyResponse(
       publicKey: publicKey ?? this.publicKey,
       publicKeys: publicKeys ?? this.publicKeys,
+      httpStatus: httpStatus,
     );
   }
 }
@@ -28913,10 +29182,10 @@ class ReactorMetrics {
   }
 }
 
-class ReactorMetricsResponse {
+class ReactorMetricsResponse extends BaseResponse {
   final ReactorMetrics? metrics;
 
-  ReactorMetricsResponse({this.metrics});
+  ReactorMetricsResponse({this.metrics, required super.httpStatus});
 
   factory ReactorMetricsResponse.fromJson(Map<String, Object?> json) {
     return ReactorMetricsResponse(
@@ -28926,6 +29195,7 @@ class ReactorMetricsResponse {
                 json[r'metrics']! as Map<String, Object?>,
               )
               : null,
+      httpStatus: json['httpStatusCode'] as int? ?? 200,
     );
   }
 
@@ -28940,7 +29210,10 @@ class ReactorMetricsResponse {
   }
 
   ReactorMetricsResponse copyWith({ReactorMetrics? metrics}) {
-    return ReactorMetricsResponse(metrics: metrics ?? this.metrics);
+    return ReactorMetricsResponse(
+      metrics: metrics ?? this.metrics,
+      httpStatus: httpStatus,
+    );
   }
 }
 
@@ -29313,10 +29586,10 @@ class ReactorStatus {
 }
 
 /// Response for the user login report.
-class RecentLoginResponse {
+class RecentLoginResponse extends BaseResponse {
   final List<DisplayableRawLogin>? logins;
 
-  RecentLoginResponse({this.logins});
+  RecentLoginResponse({this.logins, required super.httpStatus});
 
   factory RecentLoginResponse.fromJson(Map<String, Object?> json) {
     return RecentLoginResponse(
@@ -29328,6 +29601,7 @@ class RecentLoginResponse {
                 ),
               )
               .toList(),
+      httpStatus: json['httpStatusCode'] as int? ?? 200,
     );
   }
 
@@ -29342,7 +29616,10 @@ class RecentLoginResponse {
   }
 
   RecentLoginResponse copyWith({List<DisplayableRawLogin>? logins}) {
-    return RecentLoginResponse(logins: logins ?? this.logins);
+    return RecentLoginResponse(
+      logins: logins ?? this.logins,
+      httpStatus: httpStatus,
+    );
   }
 }
 
@@ -29591,11 +29868,15 @@ class RefreshTokenOneTimeUseConfiguration {
 }
 
 /// API response for retrieving Refresh Tokens
-class RefreshTokenResponse {
+class RefreshTokenResponse extends BaseResponse {
   final RefreshToken? refreshToken;
   final List<RefreshToken>? refreshTokens;
 
-  RefreshTokenResponse({this.refreshToken, this.refreshTokens});
+  RefreshTokenResponse({
+    this.refreshToken,
+    this.refreshTokens,
+    required super.httpStatus,
+  });
 
   factory RefreshTokenResponse.fromJson(Map<String, Object?> json) {
     return RefreshTokenResponse(
@@ -29613,6 +29894,7 @@ class RefreshTokenResponse {
                 ),
               )
               .toList(),
+      httpStatus: json['httpStatusCode'] as int? ?? 200,
     );
   }
 
@@ -29637,6 +29919,7 @@ class RefreshTokenResponse {
     return RefreshTokenResponse(
       refreshToken: refreshToken ?? this.refreshToken,
       refreshTokens: refreshTokens ?? this.refreshTokens,
+      httpStatus: httpStatus,
     );
   }
 }
@@ -29993,11 +30276,15 @@ class RegistrationDeleteRequest {
 }
 
 /// Response for the registration report.
-class RegistrationReportResponse {
+class RegistrationReportResponse extends BaseResponse {
   final List<Count>? hourlyCounts;
   final int? total;
 
-  RegistrationReportResponse({this.hourlyCounts, this.total});
+  RegistrationReportResponse({
+    this.hourlyCounts,
+    this.total,
+    required super.httpStatus,
+  });
 
   factory RegistrationReportResponse.fromJson(Map<String, Object?> json) {
     return RegistrationReportResponse(
@@ -30008,6 +30295,7 @@ class RegistrationReportResponse {
               )
               .toList(),
       total: (json[r'total'] as num?)?.toInt(),
+      httpStatus: json['httpStatusCode'] as int? ?? 200,
     );
   }
 
@@ -30029,6 +30317,7 @@ class RegistrationReportResponse {
     return RegistrationReportResponse(
       hourlyCounts: hourlyCounts ?? this.hourlyCounts,
       total: total ?? this.total,
+      httpStatus: httpStatus,
     );
   }
 }
@@ -30145,7 +30434,7 @@ class RegistrationRequest {
 }
 
 /// Registration API request object.
-class RegistrationResponse {
+class RegistrationResponse extends BaseResponse {
   final String? refreshToken;
   final String? refreshTokenId;
   final UserRegistration? registration;
@@ -30164,6 +30453,7 @@ class RegistrationResponse {
     this.token,
     this.tokenExpirationInstant,
     this.user,
+    required super.httpStatus,
   });
 
   factory RegistrationResponse.fromJson(Map<String, Object?> json) {
@@ -30187,6 +30477,7 @@ class RegistrationResponse {
           json[r'user'] != null
               ? User.fromJson(json[r'user']! as Map<String, Object?>)
               : null,
+      httpStatus: json['httpStatusCode'] as int? ?? 200,
     );
   }
 
@@ -30253,6 +30544,7 @@ class RegistrationResponse {
       tokenExpirationInstant:
           tokenExpirationInstant ?? this.tokenExpirationInstant,
       user: user ?? this.user,
+      httpStatus: httpStatus,
     );
   }
 }
@@ -31642,13 +31934,19 @@ class SearchRequest {
 }
 
 /// Search API response.
-class SearchResponse {
+class SearchResponse extends BaseResponse {
   final int? total;
   final String? nextResults;
   final List<User>? users;
   final List<String>? expandable;
 
-  SearchResponse({this.total, this.nextResults, this.users, this.expandable});
+  SearchResponse({
+    this.total,
+    this.nextResults,
+    this.users,
+    this.expandable,
+    required super.httpStatus,
+  });
 
   factory SearchResponse.fromJson(Map<String, Object?> json) {
     return SearchResponse(
@@ -31664,6 +31962,7 @@ class SearchResponse {
           (json[r'expandable'] as List<Object?>?)
               ?.map((i) => i as String? ?? '')
               .toList(),
+      httpStatus: json['httpStatusCode'] as int? ?? 200,
     );
   }
 
@@ -31700,6 +31999,7 @@ class SearchResponse {
       nextResults: nextResults ?? this.nextResults,
       users: users ?? this.users,
       expandable: expandable ?? this.expandable,
+      httpStatus: httpStatus,
     );
   }
 }
@@ -31767,16 +32067,21 @@ class SearchResults {
   }
 }
 
-class SecretResponse {
+class SecretResponse extends BaseResponse {
   final String? secret;
   final String? secretBase32Encoded;
 
-  SecretResponse({this.secret, this.secretBase32Encoded});
+  SecretResponse({
+    this.secret,
+    this.secretBase32Encoded,
+    required super.httpStatus,
+  });
 
   factory SecretResponse.fromJson(Map<String, Object?> json) {
     return SecretResponse(
       secret: json[r'secret'] as String?,
       secretBase32Encoded: json[r'secretBase32Encoded'] as String?,
+      httpStatus: json['httpStatusCode'] as int? ?? 200,
     );
   }
 
@@ -31798,6 +32103,7 @@ class SecretResponse {
     return SecretResponse(
       secret: secret ?? this.secret,
       secretBase32Encoded: secretBase32Encoded ?? this.secretBase32Encoded,
+      httpStatus: httpStatus,
     );
   }
 }
@@ -32186,16 +32492,21 @@ class SendRequest {
   }
 }
 
-class SendResponse {
+class SendResponse extends BaseResponse {
   final Map<String, dynamic>? anonymousResults;
   final Map<String, dynamic>? results;
 
-  SendResponse({this.anonymousResults, this.results});
+  SendResponse({
+    this.anonymousResults,
+    this.results,
+    required super.httpStatus,
+  });
 
   factory SendResponse.fromJson(Map<String, Object?> json) {
     return SendResponse(
       anonymousResults: json[r'anonymousResults'] as Map<String, Object?>?,
       results: json[r'results'] as Map<String, Object?>?,
+      httpStatus: json['httpStatusCode'] as int? ?? 200,
     );
   }
 
@@ -32220,6 +32531,7 @@ class SendResponse {
     return SendResponse(
       anonymousResults: anonymousResults ?? this.anonymousResults,
       results: results ?? this.results,
+      httpStatus: httpStatus,
     );
   }
 }
@@ -33355,10 +33667,13 @@ class SystemConfigurationRequest {
 }
 
 /// Response for the system configuration API.
-class SystemConfigurationResponse {
+class SystemConfigurationResponse extends BaseResponse {
   final SystemConfiguration? systemConfiguration;
 
-  SystemConfigurationResponse({this.systemConfiguration});
+  SystemConfigurationResponse({
+    this.systemConfiguration,
+    required super.httpStatus,
+  });
 
   factory SystemConfigurationResponse.fromJson(Map<String, Object?> json) {
     return SystemConfigurationResponse(
@@ -33368,6 +33683,7 @@ class SystemConfigurationResponse {
                 json[r'systemConfiguration']! as Map<String, Object?>,
               )
               : null,
+      httpStatus: json['httpStatusCode'] as int? ?? 200,
     );
   }
 
@@ -33386,6 +33702,7 @@ class SystemConfigurationResponse {
   }) {
     return SystemConfigurationResponse(
       systemConfiguration: systemConfiguration ?? this.systemConfiguration,
+      httpStatus: httpStatus,
     );
   }
 }
@@ -35108,11 +35425,11 @@ class TenantRequest {
   }
 }
 
-class TenantResponse {
+class TenantResponse extends BaseResponse {
   final Tenant? tenant;
   final List<Tenant>? tenants;
 
-  TenantResponse({this.tenant, this.tenants});
+  TenantResponse({this.tenant, this.tenants, required super.httpStatus});
 
   factory TenantResponse.fromJson(Map<String, Object?> json) {
     return TenantResponse(
@@ -35126,6 +35443,7 @@ class TenantResponse {
                 (i) => Tenant.fromJson(i as Map<String, Object?>? ?? const {}),
               )
               .toList(),
+      httpStatus: json['httpStatusCode'] as int? ?? 200,
     );
   }
 
@@ -35147,6 +35465,7 @@ class TenantResponse {
     return TenantResponse(
       tenant: tenant ?? this.tenant,
       tenants: tenants ?? this.tenants,
+      httpStatus: httpStatus,
     );
   }
 }
@@ -35333,11 +35652,11 @@ class TenantSearchRequest {
 }
 
 /// Tenant search response
-class TenantSearchResponse {
+class TenantSearchResponse extends BaseResponse {
   final List<Tenant>? tenants;
   final int? total;
 
-  TenantSearchResponse({this.tenants, this.total});
+  TenantSearchResponse({this.tenants, this.total, required super.httpStatus});
 
   factory TenantSearchResponse.fromJson(Map<String, Object?> json) {
     return TenantSearchResponse(
@@ -35348,6 +35667,7 @@ class TenantSearchResponse {
               )
               .toList(),
       total: (json[r'total'] as num?)?.toInt(),
+      httpStatus: json['httpStatusCode'] as int? ?? 200,
     );
   }
 
@@ -35369,6 +35689,7 @@ class TenantSearchResponse {
     return TenantSearchResponse(
       tenants: tenants ?? this.tenants,
       total: total ?? this.total,
+      httpStatus: httpStatus,
     );
   }
 }
@@ -35908,11 +36229,11 @@ class ThemeRequest {
 }
 
 /// Theme API response object.
-class ThemeResponse {
+class ThemeResponse extends BaseResponse {
   final Theme? theme;
   final List<Theme>? themes;
 
-  ThemeResponse({this.theme, this.themes});
+  ThemeResponse({this.theme, this.themes, required super.httpStatus});
 
   factory ThemeResponse.fromJson(Map<String, Object?> json) {
     return ThemeResponse(
@@ -35926,6 +36247,7 @@ class ThemeResponse {
                 (i) => Theme.fromJson(i as Map<String, Object?>? ?? const {}),
               )
               .toList(),
+      httpStatus: json['httpStatusCode'] as int? ?? 200,
     );
   }
 
@@ -35947,6 +36269,7 @@ class ThemeResponse {
     return ThemeResponse(
       theme: theme ?? this.theme,
       themes: themes ?? this.themes,
+      httpStatus: httpStatus,
     );
   }
 }
@@ -36056,11 +36379,11 @@ class ThemeSearchRequest {
 }
 
 /// Search response for Themes
-class ThemeSearchResponse {
+class ThemeSearchResponse extends BaseResponse {
   final List<Theme>? themes;
   final int? total;
 
-  ThemeSearchResponse({this.themes, this.total});
+  ThemeSearchResponse({this.themes, this.total, required super.httpStatus});
 
   factory ThemeSearchResponse.fromJson(Map<String, Object?> json) {
     return ThemeSearchResponse(
@@ -36071,6 +36394,7 @@ class ThemeSearchResponse {
               )
               .toList(),
       total: (json[r'total'] as num?)?.toInt(),
+      httpStatus: json['httpStatusCode'] as int? ?? 200,
     );
   }
 
@@ -36092,6 +36416,7 @@ class ThemeSearchResponse {
     return ThemeSearchResponse(
       themes: themes ?? this.themes,
       total: total ?? this.total,
+      httpStatus: httpStatus,
     );
   }
 }
@@ -36192,7 +36517,7 @@ class Totals {
 
 /// The response from the total report. This report stores the total numbers for
 /// each application.
-class TotalsReportResponse {
+class TotalsReportResponse extends BaseResponse {
   final Map<String, dynamic>? applicationTotals;
   final int? globalRegistrations;
   final int? totalGlobalRegistrations;
@@ -36201,6 +36526,7 @@ class TotalsReportResponse {
     this.applicationTotals,
     this.globalRegistrations,
     this.totalGlobalRegistrations,
+    required super.httpStatus,
   });
 
   factory TotalsReportResponse.fromJson(Map<String, Object?> json) {
@@ -36209,6 +36535,7 @@ class TotalsReportResponse {
       globalRegistrations: (json[r'globalRegistrations'] as num?)?.toInt(),
       totalGlobalRegistrations:
           (json[r'totalGlobalRegistrations'] as num?)?.toInt(),
+      httpStatus: json['httpStatusCode'] as int? ?? 200,
     );
   }
 
@@ -36240,6 +36567,7 @@ class TotalsReportResponse {
       globalRegistrations: globalRegistrations ?? this.globalRegistrations,
       totalGlobalRegistrations:
           totalGlobalRegistrations ?? this.totalGlobalRegistrations,
+      httpStatus: httpStatus,
     );
   }
 }
@@ -37200,10 +37528,13 @@ class TwoFactorMethod {
   }
 }
 
-class TwoFactorRecoveryCodeResponse {
+class TwoFactorRecoveryCodeResponse extends BaseResponse {
   final List<String>? recoveryCodes;
 
-  TwoFactorRecoveryCodeResponse({this.recoveryCodes});
+  TwoFactorRecoveryCodeResponse({
+    this.recoveryCodes,
+    required super.httpStatus,
+  });
 
   factory TwoFactorRecoveryCodeResponse.fromJson(Map<String, Object?> json) {
     return TwoFactorRecoveryCodeResponse(
@@ -37211,6 +37542,7 @@ class TwoFactorRecoveryCodeResponse {
           (json[r'recoveryCodes'] as List<Object?>?)
               ?.map((i) => i as String? ?? '')
               .toList(),
+      httpStatus: json['httpStatusCode'] as int? ?? 200,
     );
   }
 
@@ -37227,6 +37559,7 @@ class TwoFactorRecoveryCodeResponse {
   TwoFactorRecoveryCodeResponse copyWith({List<String>? recoveryCodes}) {
     return TwoFactorRecoveryCodeResponse(
       recoveryCodes: recoveryCodes ?? this.recoveryCodes,
+      httpStatus: httpStatus,
     );
   }
 }
@@ -37347,11 +37680,11 @@ class TwoFactorRequest {
   }
 }
 
-class TwoFactorResponse {
+class TwoFactorResponse extends BaseResponse {
   final String? code;
   final List<String>? recoveryCodes;
 
-  TwoFactorResponse({this.code, this.recoveryCodes});
+  TwoFactorResponse({this.code, this.recoveryCodes, required super.httpStatus});
 
   factory TwoFactorResponse.fromJson(Map<String, Object?> json) {
     return TwoFactorResponse(
@@ -37360,6 +37693,7 @@ class TwoFactorResponse {
           (json[r'recoveryCodes'] as List<Object?>?)
               ?.map((i) => i as String? ?? '')
               .toList(),
+      httpStatus: json['httpStatusCode'] as int? ?? 200,
     );
   }
 
@@ -37381,6 +37715,7 @@ class TwoFactorResponse {
     return TwoFactorResponse(
       code: code ?? this.code,
       recoveryCodes: recoveryCodes ?? this.recoveryCodes,
+      httpStatus: httpStatus,
     );
   }
 }
@@ -37539,12 +37874,17 @@ class TwoFactorStartRequest {
   }
 }
 
-class TwoFactorStartResponse {
+class TwoFactorStartResponse extends BaseResponse {
   final String? code;
   final List<TwoFactorMethod>? methods;
   final String? twoFactorId;
 
-  TwoFactorStartResponse({this.code, this.methods, this.twoFactorId});
+  TwoFactorStartResponse({
+    this.code,
+    this.methods,
+    this.twoFactorId,
+    required super.httpStatus,
+  });
 
   factory TwoFactorStartResponse.fromJson(Map<String, Object?> json) {
     return TwoFactorStartResponse(
@@ -37558,6 +37898,7 @@ class TwoFactorStartResponse {
               )
               .toList(),
       twoFactorId: json[r'twoFactorId'] as String?,
+      httpStatus: json['httpStatusCode'] as int? ?? 200,
     );
   }
 
@@ -37588,15 +37929,20 @@ class TwoFactorStartResponse {
       code: code ?? this.code,
       methods: methods ?? this.methods,
       twoFactorId: twoFactorId ?? this.twoFactorId,
+      httpStatus: httpStatus,
     );
   }
 }
 
-class TwoFactorStatusResponse {
+class TwoFactorStatusResponse extends BaseResponse {
   final List<TwoFactorTrust>? trusts;
   final String? twoFactorTrustId;
 
-  TwoFactorStatusResponse({this.trusts, this.twoFactorTrustId});
+  TwoFactorStatusResponse({
+    this.trusts,
+    this.twoFactorTrustId,
+    required super.httpStatus,
+  });
 
   factory TwoFactorStatusResponse.fromJson(Map<String, Object?> json) {
     return TwoFactorStatusResponse(
@@ -37609,6 +37955,7 @@ class TwoFactorStatusResponse {
               )
               .toList(),
       twoFactorTrustId: json[r'twoFactorTrustId'] as String?,
+      httpStatus: json['httpStatusCode'] as int? ?? 200,
     );
   }
 
@@ -37633,6 +37980,7 @@ class TwoFactorStatusResponse {
     return TwoFactorStatusResponse(
       trusts: trusts ?? this.trusts,
       twoFactorTrustId: twoFactorTrustId ?? this.twoFactorTrustId,
+      httpStatus: httpStatus,
     );
   }
 }
@@ -39063,11 +39411,15 @@ class UserActionReasonRequest {
 }
 
 /// User Action Reason API response object.
-class UserActionReasonResponse {
+class UserActionReasonResponse extends BaseResponse {
   final UserActionReason? userActionReason;
   final List<UserActionReason>? userActionReasons;
 
-  UserActionReasonResponse({this.userActionReason, this.userActionReasons});
+  UserActionReasonResponse({
+    this.userActionReason,
+    this.userActionReasons,
+    required super.httpStatus,
+  });
 
   factory UserActionReasonResponse.fromJson(Map<String, Object?> json) {
     return UserActionReasonResponse(
@@ -39085,6 +39437,7 @@ class UserActionReasonResponse {
                 ),
               )
               .toList(),
+      httpStatus: json['httpStatusCode'] as int? ?? 200,
     );
   }
 
@@ -39110,6 +39463,7 @@ class UserActionReasonResponse {
     return UserActionReasonResponse(
       userActionReason: userActionReason ?? this.userActionReason,
       userActionReasons: userActionReasons ?? this.userActionReasons,
+      httpStatus: httpStatus,
     );
   }
 }
@@ -39147,11 +39501,15 @@ class UserActionRequest {
 }
 
 /// User Action API response object.
-class UserActionResponse {
+class UserActionResponse extends BaseResponse {
   final UserAction? userAction;
   final List<UserAction>? userActions;
 
-  UserActionResponse({this.userAction, this.userActions});
+  UserActionResponse({
+    this.userAction,
+    this.userActions,
+    required super.httpStatus,
+  });
 
   factory UserActionResponse.fromJson(Map<String, Object?> json) {
     return UserActionResponse(
@@ -39168,6 +39526,7 @@ class UserActionResponse {
                     UserAction.fromJson(i as Map<String, Object?>? ?? const {}),
               )
               .toList(),
+      httpStatus: json['httpStatusCode'] as int? ?? 200,
     );
   }
 
@@ -39192,6 +39551,7 @@ class UserActionResponse {
     return UserActionResponse(
       userAction: userAction ?? this.userAction,
       userActions: userActions ?? this.userActions,
+      httpStatus: httpStatus,
     );
   }
 }
@@ -39388,11 +39748,15 @@ class UserCommentRequest {
 }
 
 /// User Comment Response
-class UserCommentResponse {
+class UserCommentResponse extends BaseResponse {
   final UserComment? userComment;
   final List<UserComment>? userComments;
 
-  UserCommentResponse({this.userComment, this.userComments});
+  UserCommentResponse({
+    this.userComment,
+    this.userComments,
+    required super.httpStatus,
+  });
 
   factory UserCommentResponse.fromJson(Map<String, Object?> json) {
     return UserCommentResponse(
@@ -39410,6 +39774,7 @@ class UserCommentResponse {
                 ),
               )
               .toList(),
+      httpStatus: json['httpStatusCode'] as int? ?? 200,
     );
   }
 
@@ -39434,6 +39799,7 @@ class UserCommentResponse {
     return UserCommentResponse(
       userComment: userComment ?? this.userComment,
       userComments: userComments ?? this.userComments,
+      httpStatus: httpStatus,
     );
   }
 }
@@ -39558,11 +39924,15 @@ class UserCommentSearchRequest {
 }
 
 /// User comment search response
-class UserCommentSearchResponse {
+class UserCommentSearchResponse extends BaseResponse {
   final int? total;
   final List<UserComment>? userComments;
 
-  UserCommentSearchResponse({this.total, this.userComments});
+  UserCommentSearchResponse({
+    this.total,
+    this.userComments,
+    required super.httpStatus,
+  });
 
   factory UserCommentSearchResponse.fromJson(Map<String, Object?> json) {
     return UserCommentSearchResponse(
@@ -39575,6 +39945,7 @@ class UserCommentSearchResponse {
                 ),
               )
               .toList(),
+      httpStatus: json['httpStatusCode'] as int? ?? 200,
     );
   }
 
@@ -39599,6 +39970,7 @@ class UserCommentSearchResponse {
     return UserCommentSearchResponse(
       total: total ?? this.total,
       userComments: userComments ?? this.userComments,
+      httpStatus: httpStatus,
     );
   }
 }
@@ -39761,11 +40133,15 @@ class UserConsentRequest {
 }
 
 /// API response for User consent.
-class UserConsentResponse {
+class UserConsentResponse extends BaseResponse {
   final UserConsent? userConsent;
   final List<UserConsent>? userConsents;
 
-  UserConsentResponse({this.userConsent, this.userConsents});
+  UserConsentResponse({
+    this.userConsent,
+    this.userConsents,
+    required super.httpStatus,
+  });
 
   factory UserConsentResponse.fromJson(Map<String, Object?> json) {
     return UserConsentResponse(
@@ -39783,6 +40159,7 @@ class UserConsentResponse {
                 ),
               )
               .toList(),
+      httpStatus: json['httpStatusCode'] as int? ?? 200,
     );
   }
 
@@ -39807,6 +40184,7 @@ class UserConsentResponse {
     return UserConsentResponse(
       userConsent: userConsent ?? this.userConsent,
       userConsents: userConsents ?? this.userConsents,
+      httpStatus: httpStatus,
     );
   }
 }
@@ -40061,13 +40439,19 @@ class UserDeleteRequest {
 }
 
 /// User API bulk response object.
-class UserDeleteResponse {
+class UserDeleteResponse extends BaseResponse {
   final bool? dryRun;
   final bool? hardDelete;
   final int? total;
   final List<String>? userIds;
 
-  UserDeleteResponse({this.dryRun, this.hardDelete, this.total, this.userIds});
+  UserDeleteResponse({
+    this.dryRun,
+    this.hardDelete,
+    this.total,
+    this.userIds,
+    required super.httpStatus,
+  });
 
   factory UserDeleteResponse.fromJson(Map<String, Object?> json) {
     return UserDeleteResponse(
@@ -40078,6 +40462,7 @@ class UserDeleteResponse {
           (json[r'userIds'] as List<Object?>?)
               ?.map((i) => i as String? ?? '')
               .toList(),
+      httpStatus: json['httpStatusCode'] as int? ?? 200,
     );
   }
 
@@ -40114,6 +40499,7 @@ class UserDeleteResponse {
       hardDelete: hardDelete ?? this.hardDelete,
       total: total ?? this.total,
       userIds: userIds ?? this.userIds,
+      httpStatus: httpStatus,
     );
   }
 }
@@ -41744,7 +42130,7 @@ class UserRequest {
 }
 
 /// User API response object.
-class UserResponse {
+class UserResponse extends BaseResponse {
   final String? emailVerificationId;
   final String? emailVerificationOneTimeCode;
   final Map<String, dynamic>? registrationVerificationIds;
@@ -41761,6 +42147,7 @@ class UserResponse {
     this.token,
     this.tokenExpirationInstant,
     this.user,
+    required super.httpStatus,
   });
 
   factory UserResponse.fromJson(Map<String, Object?> json) {
@@ -41780,6 +42167,7 @@ class UserResponse {
           json[r'user'] != null
               ? User.fromJson(json[r'user']! as Map<String, Object?>)
               : null,
+      httpStatus: json['httpStatusCode'] as int? ?? 200,
     );
   }
 
@@ -41841,6 +42229,7 @@ class UserResponse {
       tokenExpirationInstant:
           tokenExpirationInstant ?? this.tokenExpirationInstant,
       user: user ?? this.user,
+      httpStatus: httpStatus,
     );
   }
 }
@@ -42217,10 +42606,10 @@ class UsernameModeration {
   }
 }
 
-class ValidateResponse {
+class ValidateResponse extends BaseResponse {
   final JWT? jwt;
 
-  ValidateResponse({this.jwt});
+  ValidateResponse({this.jwt, required super.httpStatus});
 
   factory ValidateResponse.fromJson(Map<String, Object?> json) {
     return ValidateResponse(
@@ -42228,6 +42617,7 @@ class ValidateResponse {
           json[r'jwt'] != null
               ? JWT.fromJson(json[r'jwt']! as Map<String, Object?>)
               : null,
+      httpStatus: json['httpStatusCode'] as int? ?? 200,
     );
   }
 
@@ -42242,7 +42632,7 @@ class ValidateResponse {
   }
 
   ValidateResponse copyWith({JWT? jwt}) {
-    return ValidateResponse(jwt: jwt ?? this.jwt);
+    return ValidateResponse(jwt: jwt ?? this.jwt, httpStatus: httpStatus);
   }
 }
 
@@ -42308,16 +42698,21 @@ class VerifyEmailRequest {
   }
 }
 
-class VerifyEmailResponse {
+class VerifyEmailResponse extends BaseResponse {
   final String? oneTimeCode;
   final String? verificationId;
 
-  VerifyEmailResponse({this.oneTimeCode, this.verificationId});
+  VerifyEmailResponse({
+    this.oneTimeCode,
+    this.verificationId,
+    required super.httpStatus,
+  });
 
   factory VerifyEmailResponse.fromJson(Map<String, Object?> json) {
     return VerifyEmailResponse(
       oneTimeCode: json[r'oneTimeCode'] as String?,
       verificationId: json[r'verificationId'] as String?,
+      httpStatus: json['httpStatusCode'] as int? ?? 200,
     );
   }
 
@@ -42339,6 +42734,7 @@ class VerifyEmailResponse {
     return VerifyEmailResponse(
       oneTimeCode: oneTimeCode ?? this.oneTimeCode,
       verificationId: verificationId ?? this.verificationId,
+      httpStatus: httpStatus,
     );
   }
 }
@@ -42396,16 +42792,21 @@ class VerifyRegistrationRequest {
   }
 }
 
-class VerifyRegistrationResponse {
+class VerifyRegistrationResponse extends BaseResponse {
   final String? oneTimeCode;
   final String? verificationId;
 
-  VerifyRegistrationResponse({this.oneTimeCode, this.verificationId});
+  VerifyRegistrationResponse({
+    this.oneTimeCode,
+    this.verificationId,
+    required super.httpStatus,
+  });
 
   factory VerifyRegistrationResponse.fromJson(Map<String, Object?> json) {
     return VerifyRegistrationResponse(
       oneTimeCode: json[r'oneTimeCode'] as String?,
       verificationId: json[r'verificationId'] as String?,
+      httpStatus: json['httpStatusCode'] as int? ?? 200,
     );
   }
 
@@ -42430,17 +42831,21 @@ class VerifyRegistrationResponse {
     return VerifyRegistrationResponse(
       oneTimeCode: oneTimeCode ?? this.oneTimeCode,
       verificationId: verificationId ?? this.verificationId,
+      httpStatus: httpStatus,
     );
   }
 }
 
-class VersionResponse {
+class VersionResponse extends BaseResponse {
   final String? version;
 
-  VersionResponse({this.version});
+  VersionResponse({this.version, required super.httpStatus});
 
   factory VersionResponse.fromJson(Map<String, Object?> json) {
-    return VersionResponse(version: json[r'version'] as String?);
+    return VersionResponse(
+      version: json[r'version'] as String?,
+      httpStatus: json['httpStatusCode'] as int? ?? 200,
+    );
   }
 
   Map<String, Object?> toJson() {
@@ -42454,15 +42859,18 @@ class VersionResponse {
   }
 
   VersionResponse copyWith({String? version}) {
-    return VersionResponse(version: version ?? this.version);
+    return VersionResponse(
+      version: version ?? this.version,
+      httpStatus: httpStatus,
+    );
   }
 }
 
 /// API response for completing WebAuthn assertion
-class WebAuthnAssertResponse {
+class WebAuthnAssertResponse extends BaseResponse {
   final WebAuthnCredential? credential;
 
-  WebAuthnAssertResponse({this.credential});
+  WebAuthnAssertResponse({this.credential, required super.httpStatus});
 
   factory WebAuthnAssertResponse.fromJson(Map<String, Object?> json) {
     return WebAuthnAssertResponse(
@@ -42472,6 +42880,7 @@ class WebAuthnAssertResponse {
                 json[r'credential']! as Map<String, Object?>,
               )
               : null,
+      httpStatus: json['httpStatusCode'] as int? ?? 200,
     );
   }
 
@@ -42486,7 +42895,10 @@ class WebAuthnAssertResponse {
   }
 
   WebAuthnAssertResponse copyWith({WebAuthnCredential? credential}) {
-    return WebAuthnAssertResponse(credential: credential ?? this.credential);
+    return WebAuthnAssertResponse(
+      credential: credential ?? this.credential,
+      httpStatus: httpStatus,
+    );
   }
 }
 
@@ -42852,11 +43264,15 @@ class WebAuthnCredentialImportRequest {
 }
 
 /// WebAuthn Credential API response
-class WebAuthnCredentialResponse {
+class WebAuthnCredentialResponse extends BaseResponse {
   final WebAuthnCredential? credential;
   final List<WebAuthnCredential>? credentials;
 
-  WebAuthnCredentialResponse({this.credential, this.credentials});
+  WebAuthnCredentialResponse({
+    this.credential,
+    this.credentials,
+    required super.httpStatus,
+  });
 
   factory WebAuthnCredentialResponse.fromJson(Map<String, Object?> json) {
     return WebAuthnCredentialResponse(
@@ -42874,6 +43290,7 @@ class WebAuthnCredentialResponse {
                 ),
               )
               .toList(),
+      httpStatus: json['httpStatusCode'] as int? ?? 200,
     );
   }
 
@@ -42898,6 +43315,7 @@ class WebAuthnCredentialResponse {
     return WebAuthnCredentialResponse(
       credential: credential ?? this.credential,
       credentials: credentials ?? this.credentials,
+      httpStatus: httpStatus,
     );
   }
 }
@@ -43295,10 +43713,13 @@ class WebAuthnRegisterCompleteRequest {
 }
 
 /// API response for completing WebAuthn credential registration or assertion
-class WebAuthnRegisterCompleteResponse {
+class WebAuthnRegisterCompleteResponse extends BaseResponse {
   final WebAuthnCredential? credential;
 
-  WebAuthnRegisterCompleteResponse({this.credential});
+  WebAuthnRegisterCompleteResponse({
+    this.credential,
+    required super.httpStatus,
+  });
 
   factory WebAuthnRegisterCompleteResponse.fromJson(Map<String, Object?> json) {
     return WebAuthnRegisterCompleteResponse(
@@ -43308,6 +43729,7 @@ class WebAuthnRegisterCompleteResponse {
                 json[r'credential']! as Map<String, Object?>,
               )
               : null,
+      httpStatus: json['httpStatusCode'] as int? ?? 200,
     );
   }
 
@@ -43324,6 +43746,7 @@ class WebAuthnRegisterCompleteResponse {
   WebAuthnRegisterCompleteResponse copyWith({WebAuthnCredential? credential}) {
     return WebAuthnRegisterCompleteResponse(
       credential: credential ?? this.credential,
+      httpStatus: httpStatus,
     );
   }
 }
@@ -43401,10 +43824,10 @@ class WebAuthnRegisterStartRequest {
 }
 
 /// API response for starting a WebAuthn registration ceremony
-class WebAuthnRegisterStartResponse {
+class WebAuthnRegisterStartResponse extends BaseResponse {
   final PublicKeyCredentialCreationOptions? options;
 
-  WebAuthnRegisterStartResponse({this.options});
+  WebAuthnRegisterStartResponse({this.options, required super.httpStatus});
 
   factory WebAuthnRegisterStartResponse.fromJson(Map<String, Object?> json) {
     return WebAuthnRegisterStartResponse(
@@ -43414,6 +43837,7 @@ class WebAuthnRegisterStartResponse {
                 json[r'options']! as Map<String, Object?>,
               )
               : null,
+      httpStatus: json['httpStatusCode'] as int? ?? 200,
     );
   }
 
@@ -43430,7 +43854,10 @@ class WebAuthnRegisterStartResponse {
   WebAuthnRegisterStartResponse copyWith({
     PublicKeyCredentialCreationOptions? options,
   }) {
-    return WebAuthnRegisterStartResponse(options: options ?? this.options);
+    return WebAuthnRegisterStartResponse(
+      options: options ?? this.options,
+      httpStatus: httpStatus,
+    );
   }
 }
 
@@ -43547,10 +43974,10 @@ class WebAuthnStartRequest {
 }
 
 /// API response for starting a WebAuthn authentication ceremony
-class WebAuthnStartResponse {
+class WebAuthnStartResponse extends BaseResponse {
   final PublicKeyCredentialRequestOptions? options;
 
-  WebAuthnStartResponse({this.options});
+  WebAuthnStartResponse({this.options, required super.httpStatus});
 
   factory WebAuthnStartResponse.fromJson(Map<String, Object?> json) {
     return WebAuthnStartResponse(
@@ -43560,6 +43987,7 @@ class WebAuthnStartResponse {
                 json[r'options']! as Map<String, Object?>,
               )
               : null,
+      httpStatus: json['httpStatusCode'] as int? ?? 200,
     );
   }
 
@@ -43574,7 +44002,10 @@ class WebAuthnStartResponse {
   }
 
   WebAuthnStartResponse copyWith({PublicKeyCredentialRequestOptions? options}) {
-    return WebAuthnStartResponse(options: options ?? this.options);
+    return WebAuthnStartResponse(
+      options: options ?? this.options,
+      httpStatus: httpStatus,
+    );
   }
 }
 
@@ -43881,10 +44312,13 @@ class WebhookAttemptLog {
 }
 
 /// Webhook attempt log response.
-class WebhookAttemptLogResponse {
+class WebhookAttemptLogResponse extends BaseResponse {
   final WebhookAttemptLog? webhookAttemptLog;
 
-  WebhookAttemptLogResponse({this.webhookAttemptLog});
+  WebhookAttemptLogResponse({
+    this.webhookAttemptLog,
+    required super.httpStatus,
+  });
 
   factory WebhookAttemptLogResponse.fromJson(Map<String, Object?> json) {
     return WebhookAttemptLogResponse(
@@ -43894,6 +44328,7 @@ class WebhookAttemptLogResponse {
                 json[r'webhookAttemptLog']! as Map<String, Object?>,
               )
               : null,
+      httpStatus: json['httpStatusCode'] as int? ?? 200,
     );
   }
 
@@ -43910,6 +44345,7 @@ class WebhookAttemptLogResponse {
   WebhookAttemptLogResponse copyWith({WebhookAttemptLog? webhookAttemptLog}) {
     return WebhookAttemptLogResponse(
       webhookAttemptLog: webhookAttemptLog ?? this.webhookAttemptLog,
+      httpStatus: httpStatus,
     );
   }
 }
@@ -44153,10 +44589,10 @@ class WebhookEventLogConfiguration {
 }
 
 /// Webhook event log response.
-class WebhookEventLogResponse {
+class WebhookEventLogResponse extends BaseResponse {
   final WebhookEventLog? webhookEventLog;
 
-  WebhookEventLogResponse({this.webhookEventLog});
+  WebhookEventLogResponse({this.webhookEventLog, required super.httpStatus});
 
   factory WebhookEventLogResponse.fromJson(Map<String, Object?> json) {
     return WebhookEventLogResponse(
@@ -44166,6 +44602,7 @@ class WebhookEventLogResponse {
                 json[r'webhookEventLog']! as Map<String, Object?>,
               )
               : null,
+      httpStatus: json['httpStatusCode'] as int? ?? 200,
     );
   }
 
@@ -44182,6 +44619,7 @@ class WebhookEventLogResponse {
   WebhookEventLogResponse copyWith({WebhookEventLog? webhookEventLog}) {
     return WebhookEventLogResponse(
       webhookEventLog: webhookEventLog ?? this.webhookEventLog,
+      httpStatus: httpStatus,
     );
   }
 }
@@ -44323,11 +44761,15 @@ class WebhookEventLogSearchRequest {
 }
 
 /// Webhook event log search response.
-class WebhookEventLogSearchResponse {
+class WebhookEventLogSearchResponse extends BaseResponse {
   final int? total;
   final List<WebhookEventLog>? webhookEventLogs;
 
-  WebhookEventLogSearchResponse({this.total, this.webhookEventLogs});
+  WebhookEventLogSearchResponse({
+    this.total,
+    this.webhookEventLogs,
+    required super.httpStatus,
+  });
 
   factory WebhookEventLogSearchResponse.fromJson(Map<String, Object?> json) {
     return WebhookEventLogSearchResponse(
@@ -44340,6 +44782,7 @@ class WebhookEventLogSearchResponse {
                 ),
               )
               .toList(),
+      httpStatus: json['httpStatusCode'] as int? ?? 200,
     );
   }
 
@@ -44365,6 +44808,7 @@ class WebhookEventLogSearchResponse {
     return WebhookEventLogSearchResponse(
       total: total ?? this.total,
       webhookEventLogs: webhookEventLogs ?? this.webhookEventLogs,
+      httpStatus: httpStatus,
     );
   }
 }
@@ -44400,11 +44844,11 @@ class WebhookRequest {
 }
 
 /// Webhook API response object.
-class WebhookResponse {
+class WebhookResponse extends BaseResponse {
   final Webhook? webhook;
   final List<Webhook>? webhooks;
 
-  WebhookResponse({this.webhook, this.webhooks});
+  WebhookResponse({this.webhook, this.webhooks, required super.httpStatus});
 
   factory WebhookResponse.fromJson(Map<String, Object?> json) {
     return WebhookResponse(
@@ -44418,6 +44862,7 @@ class WebhookResponse {
                 (i) => Webhook.fromJson(i as Map<String, Object?>? ?? const {}),
               )
               .toList(),
+      httpStatus: json['httpStatusCode'] as int? ?? 200,
     );
   }
 
@@ -44439,6 +44884,7 @@ class WebhookResponse {
     return WebhookResponse(
       webhook: webhook ?? this.webhook,
       webhooks: webhooks ?? this.webhooks,
+      httpStatus: httpStatus,
     );
   }
 }
@@ -44554,11 +45000,11 @@ class WebhookSearchRequest {
 }
 
 /// Webhook search response
-class WebhookSearchResponse {
+class WebhookSearchResponse extends BaseResponse {
   final int? total;
   final List<Webhook>? webhooks;
 
-  WebhookSearchResponse({this.total, this.webhooks});
+  WebhookSearchResponse({this.total, this.webhooks, required super.httpStatus});
 
   factory WebhookSearchResponse.fromJson(Map<String, Object?> json) {
     return WebhookSearchResponse(
@@ -44569,6 +45015,7 @@ class WebhookSearchResponse {
                 (i) => Webhook.fromJson(i as Map<String, Object?>? ?? const {}),
               )
               .toList(),
+      httpStatus: json['httpStatusCode'] as int? ?? 200,
     );
   }
 
@@ -44590,6 +45037,7 @@ class WebhookSearchResponse {
     return WebhookSearchResponse(
       total: total ?? this.total,
       webhooks: webhooks ?? this.webhooks,
+      httpStatus: httpStatus,
     );
   }
 }

@@ -595,6 +595,7 @@ class RequestBody {
 class ComplexType extends DartType {
   final sw.Schema definition;
   late final List<Property> _properties;
+  bool isResponse = false;
 
   ComplexType(Api api, String name, this.definition)
     : super(api, _toClassName(name)) {
@@ -671,7 +672,12 @@ class ComplexType extends DartType {
       return buffer.toString();
     }
 
-    buffer.writeln('class $className {');
+    var extendsClause = '';
+    if (isResponse) {
+      extendsClause = ' extends BaseResponse';
+    }
+
+    buffer.writeln('class $className$extendsClause {');
     for (final property in _properties) {
       var typeName = property.type.toDeclarationString({});
 
@@ -705,6 +711,9 @@ class ComplexType extends DartType {
             })
             .join(', '),
       );
+      if (isResponse) {
+        buffer.write(', required super.httpStatus');
+      }
       buffer.writeln('})');
 
       var propertiesWithDefault =
@@ -742,6 +751,9 @@ class ComplexType extends DartType {
         targetIsNullable: !_isPropertyRequired(property),
       );
       buffer.writeln('${property.name.camelCased}: $fromJsonCode,');
+    }
+    if (isResponse) {
+      buffer.writeln("httpStatus: json['httpStatusCode'] as int? ?? 200,");
     }
     buffer.writeln(');');
 
@@ -788,6 +800,9 @@ class ComplexType extends DartType {
         buffer.writeln(
           ' ${p.name.camelCased}: ${p.name.camelCased} ?? this.${p.name.camelCased},',
         );
+      }
+      if (isResponse) {
+        buffer.writeln('httpStatus: httpStatus,');
       }
       buffer.writeln(');}');
     }
@@ -919,6 +934,7 @@ String _fromJsonCodeForComplexType(
       targetIsNullable: targetIsNullable,
     );
   }
+  complexType.isResponse = true;
 
   return '$type.fromJson($accessor)';
 }

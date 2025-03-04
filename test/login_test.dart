@@ -36,6 +36,23 @@ void main() {
     );
 
     expect(user.user!.email, email);
+    expect(user.httpStatus, 200);
+  });
+
+  test('Login user', () async {
+    var email = randomEmail();
+    var user = await api.createUser(
+      body: UserRequest(
+        skipVerification: false,
+        sendSetPasswordEmail: false,
+        user: User(email: email, password: 'Bonjour99'),
+      ),
+    );
+
+    await api.loginWithId(
+      body: LoginRequest(loginId: email, password: 'Bonjour99'),
+    );
+    expect(user.httpStatus, 200);
   });
 
   test('List users', () async {
